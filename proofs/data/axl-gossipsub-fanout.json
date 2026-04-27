@@ -1,0 +1,27 @@
+{
+  "capturedAt": "2026-05-02T16:27:22.040Z",
+  "topic": "#ledger-jobs",
+  "nonce": "gossipsub-2026-05-02T16:27:17.404Z-c126fa37e8c5a8",
+  "publisher": "bootstrap",
+  "setupMs": 2718,
+  "received": {
+    "local": {
+      "latencyMs": 567,
+      "fromPeerId": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff",
+      "originPeerId": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+      "messageId": "a560b12f:1",
+      "hop": 0,
+      "payload": "{\"type\":\"TASK_POSTED\",\"topic\":\"#ledger-jobs\",\"nonce\":\"gossipsub-2026-05-02T16:27:17.404Z-c126fa37e8c5a8\"}"
+    },
+    "worker": {
+      "latencyMs": 601,
+      "fromPeerId": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff",
+      "originPeerId": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+      "messageId": "a560b12f:1",
+      "hop": 0,
+      "payload": "{\"type\":\"TASK_POSTED\",\"topic\":\"#ledger-jobs\",\"nonce\":\"gossipsub-2026-05-02T16:27:17.404Z-c126fa37e8c5a8\"}"
+    }
+  },
+  "pass": true,
+  "withinOneSecond": true
+}

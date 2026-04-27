@@ -23,10 +23,12 @@ contracts/broadcast/
 .env*.local
 !.env.example
 
-# Logs
+# Logs (but allow proofs/data/ logs)
 *.log
 *.log.*
 logs/
+!proofs/data/*.log
+!proofs/data/*.log.*
 
 # Lockfiles (committed for reproducibility — uncomment if needed)
 # pnpm-lock.yaml

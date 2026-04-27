@@ -1,0 +1,130 @@
+{
+  "capturedAt": "2026-05-02T16:28:18.914Z",
+  "taskId": "0x6c65646765722d66756c6c2d6379636c652d31373737373339323838303737",
+  "pass": true,
+  "events": [
+    {
+      "at": "2026-05-02T16:28:12.597Z",
+      "event": "TASK_POSTED_PUBLISHED",
+      "node": "bootstrap",
+      "topic": "#ledger-jobs"
+    },
+    {
+      "at": "2026-05-02T16:28:13.184Z",
+      "event": "TASK_POSTED_RECEIVED",
+      "node": "local",
+      "topic": "#ledger-jobs",
+      "messageId": "a560b12f:1",
+      "latencySourcePeer": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "at": "2026-05-02T16:28:13.199Z",
+      "event": "TASK_POSTED_RECEIVED",
+      "node": "worker",
+      "topic": "#ledger-jobs",
+      "messageId": "a560b12f:1",
+      "latencySourcePeer": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "at": "2026-05-02T16:28:13.552Z",
+      "event": "BID_SENT",
+      "from": "worker",
+      "to": "bootstrap"
+    },
+    {
+      "at": "2026-05-02T16:28:13.848Z",
+      "event": "BID_SENT",
+      "from": "local",
+      "to": "bootstrap"
+    },
+    {
+      "at": "2026-05-02T16:28:14.064Z",
+      "event": "BID_RECEIVED",
+      "node": "bootstrap",
+      "fromPeerId": "f274bf0f8dadfa028b75f73cf7b2ffffffffffffffffffffffffffffffffffff",
+      "payload": {
+        "type": "BID",
+        "version": "1.0",
+        "taskId": "0x6c65646765722d66756c6c2d6379636c652d31373737373339323838303737",
+        "worker": "0xWorkerFra",
+        "workerINFTId": "1",
+        "bidAmount": "4500000"
+      }
+    },
+    {
+      "at": "2026-05-02T16:28:14.280Z",
+      "event": "BID_RECEIVED",
+      "node": "bootstrap",
+      "fromPeerId": "590fa3b614da78d5e50939f708debfffffffffffffffffffffffffffffffffff",
+      "payload": {
+        "type": "BID",
+        "version": "1.0",
+        "taskId": "0x6c65646765722d66756c6c2d6379636c652d31373737373339323838303737",
+        "worker": "0xWorkerLocal",
+        "workerINFTId": "2",
+        "bidAmount": "4700000"
+      }
+    },
+    {
+      "at": "2026-05-02T16:28:14.639Z",
+      "event": "BID_ACCEPTED_SENT",
+      "from": "bootstrap",
+      "to": "worker"
+    },
+    {
+      "at": "2026-05-02T16:28:15.024Z",
+      "event": "BID_ACCEPTED_RECEIVED",
+      "node": "worker",
+      "fromPeerId": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff",
+      "payload": {
+        "type": "BID_ACCEPTED",
+        "version": "1.0",
+        "taskId": "0x6c65646765722d66756c6c2d6379636c652d31373737373339323838303737",
+        "selectedWorker": "0xWorkerFra",
+        "acceptedBidAmount": "4500000"
+      }
+    },
+    {
+      "at": "2026-05-02T16:28:17.741Z",
+      "event": "AUCTION_CLOSED_PUBLISHED",
+      "node": "bootstrap",
+      "topic": "#ledger-auction-closed"
+    },
+    {
+      "at": "2026-05-02T16:28:18.351Z",
+      "event": "AUCTION_CLOSED_RECEIVED",
+      "node": "worker",
+      "topic": "#ledger-auction-closed",
+      "messageId": "a560b12f:1",
+      "latencySourcePeer": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "at": "2026-05-02T16:28:18.352Z",
+      "event": "AUCTION_CLOSED_RECEIVED",
+      "node": "local",
+      "topic": "#ledger-auction-closed",
+      "messageId": "a560b12f:1",
+      "latencySourcePeer": "a560b12fe6e16b1c8a94bb99b301ffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "at": "2026-05-02T16:28:18.693Z",
+      "event": "RESULT_SENT",
+      "from": "worker",
+      "to": "bootstrap"
+    },
+    {
+      "at": "2026-05-02T16:28:18.914Z",
+      "event": "RESULT_RECEIVED",
+      "node": "bootstrap",
+      "fromPeerId": "f274bf0f8dadfa028b75f73cf7b2ffffffffffffffffffffffffffffffffffff",
+      "payload": {
+        "type": "RESULT",
+        "version": "1.0",
+        "taskId": "0x6c65646765722d66756c6c2d6379636c652d31373737373339323838303737",
+        "worker": "0xWorkerFra",
+        "resultHash": "0xResultHash",
+        "resultPointer": "0G-storage://phase1-proof"
+      }
+    }
+  ]
+}
