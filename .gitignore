@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+.yarn/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+contracts/cache/
+contracts/out/
+contracts/broadcast/
+
+# Editor
+.DS_Store
+.idea/
+.vscode/
+
+# Env / secrets
+.env.local
+.env.master
+.env*.local
+!.env.example
+
+# Logs
+*.log
+*.log.*
+logs/
+
+# Lockfiles (committed for reproducibility — uncomment if needed)
+# pnpm-lock.yaml
+# package-lock.json
+
+# Forge / Foundry
+contracts/lib/
+forge-cache/
+
+# Misc
+.codex/
+.tmp/
+*.swp
