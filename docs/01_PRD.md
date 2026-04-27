@@ -95,3 +95,28 @@ Resolution is via a custom CCIP-Read offchain resolver (ENSIP-10) — see `02_AR
 - [ ] Demo shows live `ownerOf()` resolution flip post-transfer (`who.worker-001.<team>.eth` resolves to old owner pre-transfer, new owner post-transfer, with zero ENS transactions)
 - [ ] Custom Capability Tree Viewer page (since the official ENS app may not render our text records nicely)
 - [ ] HD-derivation verifier UI for `pay.<agent>` rotating addresses (Fluidkey-inspired)
+
+## 5. Acceptance Criteria
+
+| # | Criterion | How to verify |
+|---|---|---|
+| 1 | 3 AXL nodes communicate cross-machine | Topology view shows 3 nodes, packets flow between all 3 |
+| 2 | Worker iNFT minted on 0G Galileo Testnet (ChainID 16602, native 0G token) | Token visible on 0G Galileo explorer with metadata pointing to 0G Storage |
+| 3 | iNFT transfer flow works | Transfer to second wallet, second wallet receives next earnings |
+| 4 | Job cycle completes in under 3 minutes | Stopwatch from "Post" click to "Payment landed" |
+| 5 | ENS resolution flips post-transfer | `who.worker-001.<team>.eth` resolves to current iNFT owner; address flips within 30s of `transferFrom` settlement on 0G Galileo, with zero ENS transactions |
+| 6 | Public dashboard live | URL accessible without authentication |
+| 7 | Repo public on GitHub | All commits dated April 24 or later |
+| 8 | 4-minute demo video uploaded | Linked in submission |
+| 9 | Proof Matrix and `/docs/ens-proof.md`, `/docs/0g-proof.md`, `/docs/axl-proof.md` filed | Files present in repo |
+
+## 6. Non-Goals (Explicitly Out of Scope)
+
+- Uniswap or any DEX
+- Mobile UI
+- More than one task type
+- Real-money / mainnet
+- Agent training UI
+- KYC for human owners
+
+**Considered for v2:** 100 delegated users per token without transfer (per Gautam's 0G workshop comment).
