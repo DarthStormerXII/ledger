@@ -179,3 +179,108 @@ Components:
 - **Settlement Status Strip** (Screen 5) — thin component showing per-leg settlement: USDC paid on Base ✓ / ERC-8004 feedback recorded on Base ✓ / 0G Storage CID updated ✓ — with `pending_reconcile` state if any leg lags.
 
 Real-time data via Server-Sent Events from a small Node service that proxies AXL events.
+
+## 3. Message Schemas (AXL)
+
+### 3.1 Task Announcement
+
+Channel: `#ledger-jobs`
+
+```json
+{
+  "type": "TASK_POSTED",
+  "version": "1.0",
+  "taskId": "0x...",
+  "buyer": "0x... (EVM address)",
+  "buyerSignature": "0x... (EIP-712 over the rest of this message)",
+  "task": {
+    "title": "Base Yield Scout",
+    "description": "...",
+    "outputSchema": "...",
+    "deadlineSeconds": 120
+  },
+  "payment": {
+    "amount": "5000000",
+    "token": "USDC",
+    "chain": "base-sepolia"
+  },
+  "bondRequirement": {
+    "amount": "500000",
+    "token": "USDC"
+  },
+  "minReputation": 4.0,
+  "postedAt": 1714000000
+}
+```
+
+### 3.2 Bid Submission
+
+Direct AXL message from worker to buyer's peer ID.
+
+```json
+{
+  "type": "BID",
+  "version": "1.0",
+  "taskId": "0x...",
+  "worker": "0x... (EVM address)",
+  "workerINFTId": "12345",
+  "bidAmount": "4500000",
+  "estimatedCompletionSeconds": 90,
+  "reputationProof": {
+    "registry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+    "chain": "base-sepolia",
+    "jobCount": 47,
+    "avgRating": 4.7
+  },
+  "workerSignature": "0x... (EIP-712 over the rest)",
+  "bidExpiresAt": 1714000060
+}
+```
+
+### 3.3 Bid Acceptance
+
+Direct AXL message from buyer to selected worker.
+
+```json
+{
+  "type": "BID_ACCEPTED",
+  "version": "1.0",
+  "taskId": "0x...",
+  "selectedWorker": "0x...",
+  "acceptedBidAmount": "4500000",
+  "buyerSignature": "0x...",
+  "escrowTxHash": "0x... (the buyer's onchain post)"
+}
+```
+
+### 3.4 Result Submission
+
+Direct AXL message from worker to buyer.
+
+```json
+{
+  "type": "RESULT",
+  "version": "1.0",
+  "taskId": "0x...",
+  "worker": "0x...",
+  "resultHash": "0x... (keccak256 of result blob)",
+  "resultPointer": "0G-storage://...",
+  "workerSignature": "0x..."
+}
+```
+
+### 3.5 Auction Closed
+
+Channel: `#ledger-auction-closed` (pubsub). Sent by the buyer immediately after `BID_ACCEPTED`. Lets losing workers free their bond commitment locally and stop spinning on this `taskId`.
+
+```json
+{
+  "type": "AUCTION_CLOSED",
+  "version": "1.0",
+  "taskId": "0x...",
+  "buyer": "0x...",
+  "selectedWorker": "0x...",
+  "buyerSignature": "0x... (EIP-712 over the rest)",
+  "closedAt": 1714000060
+}
+```
