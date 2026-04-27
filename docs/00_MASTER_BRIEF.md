@@ -16,3 +16,15 @@ ETHGlobal Open Agents 2026
 - Build period: April 24 – May 3, 2026
 - Finalist judging: May 6, 2026
 - Win condition: ETHGlobal Finalist + 3 sponsor bounties
+
+## Team
+
+4 people total. Solo lead (Gabriel) + 3 friends. Distributed work, AI-assisted coding throughout (Claude Code Max + Codex Max).
+
+## Sponsor Targets (locked, no scope creep)
+
+1. **0G Labs** (Track A + Track B via single slot, $15K pool) — iNFT-minted swarm of worker agents on 0G Galileo
+2. **Gensyn AXL** ($5,000) — real cross-node P2P comms between bidding agents
+3. **ENS** (ENS-AI $2,500 + ENS-Creative $2,500) — capability-tree subnames + CCIP-Read offchain resolver tracking `ownerOf()` cross-chain
+
+Realistic cash target: $5,000–9,000 in sponsor placements + $4,000 in finalist pack (4 team members × $1,000) = **$9,000–13,000 expected.**
