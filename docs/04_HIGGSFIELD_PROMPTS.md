@@ -6,3 +6,83 @@
 **Pipeline:** Two-stage — Stage A image gen (multi-model comparison) → Stage B image-to-video (Cinema Studio with explicit camera/lens + camera move from menu)
 
 ---
+
+## Two-Stage Pipeline (Apply To Every Shot)
+
+Per the YouTube workshop learnings, native text-to-video produces inconsistent results and Cling 3 has a strong bias to inject auto-dialogue and foley. The fix: **never go straight to text-to-video**. Always produce a hero start frame as a still first, then drive Higgsfield image-to-video off that frame with explicit cinematic controls.
+
+### Stage A — Start Frame (image generation, multi-model comparison)
+
+For each shot, generate the start frame in **4–5 different image models** and pick the best one as the input to Stage B:
+
+1. **Soul 2** — sharpest cinematic lens emulation, strongest for locked-off frames
+2. **Nano Banana Pro** — best for warm, atmospheric lighting on figures
+3. **Seedream 4.0** — strongest for abstract geometric forms and crystalline surfaces
+4. **GPT Image** — strongest for compositional clarity (rule-of-thirds adherence)
+5. **Cinema Studio (image tab)** — best for matching the in-app Cinema Studio look you'll inherit in Stage B
+
+Generate 3–5 seeds per model. Curate 1 winner per model. Compare side-by-side. Pick the one with the strongest light direction, cleanest negative space, and highest perceived production value. **That winning frame is the input to Stage B.**
+
+### Stage B — Image-to-Video (Higgsfield Cinema Studio)
+
+Drop the winning Stage A frame into Cinema Studio's image-to-video tab. Use explicit controls — never free-text the camera move:
+
+- **Camera/lens:** select from the dropdown (e.g. "full-frame cine + 24mm" or "anamorphic + 50mm")
+- **Camera move:** select from the menu (e.g. "slow dolly in," "locked-off," "slow push down")
+- **Audio specification (mandatory in every video prompt):** `no dialogue, no foley, low ambient drone only` — Cling 3's audio engine will inject voice and sound effects unless you suppress them explicitly
+
+### Gemini Prompt-Helper Checkpoint
+
+Before submitting any Stage B generation, paste your chosen Stage A frame into Gemini, describe the animation you want (camera move, focal point, particle behavior, ambient mood), and ask Gemini to write a refined Higgsfield video prompt for that exact frame. **Append the literal suffix `DO NOT GENERATE — JUST GIVE ME THE PROMPT`** so Gemini doesn't try to generate the video itself. Use Gemini's output as your Stage B prompt.
+
+---
+
+## Shot 1 — Cinematic Open (0:00–0:15, 15 seconds)
+
+### Stage A — Start frame prompt
+
+```
+Cinematic aerial frame, midnight earth from low orbit. Bioluminescent
+data trails arcing between three glowing nodes — one in San Francisco,
+one in Berlin, one in Tokyo. The trails read like fiber-optic veins at
+30% opacity. Atmosphere of quiet technological sublime. Color palette:
+deep navy, electric cyan, warm gold accents. Frame composed for a slow
+descent toward the San Francisco node — that node sits at the lower
+golden-ratio intersection. Style: Blade Runner 2049 meets Apple keynote.
+16:9. The San Francisco node lit with a warm gold pulse #E8D4A0.
+```
+
+Run this in Soul 2, Nano Banana Pro, Seedream 4.0, GPT Image, and Cinema Studio image tab. Pick the strongest single frame.
+
+### Stage B — Image-to-video controls
+
+- **Lens:** Cinema Studio → full-frame cine + 24mm
+- **Camera move:** slow dolly down + slight push in
+- **Duration:** 15s
+- **Audio:** `no dialogue, no foley, low ambient drone only`
+
+### Stage B prompt (paste into Cinema Studio i2v after Gemini refinement)
+
+```
+Hold the framing of the input image. Slow dolly down toward the
+San Francisco node, with a gentle push in over 15 seconds. The bioluminescent
+fiber-optic trails subtly pulse at 30% opacity throughout. End on the
+San Francisco node lighting up with a single warm gold pulse #E8D4A0
+at frame 14.5s, holding through 15s. No dialogue, no foley, low ambient
+drone only.
+```
+
+### Negative prompt
+```
+no logos, no text overlays, no rocket ships, no humans, no neon green,
+no glitchy crypto aesthetics, no 3D wireframe globe cliches, no glow
+particles overload, no chromatic aberration, no auto-generated voice,
+no synthetic dialogue, no UI sound effects
+```
+
+### Iteration tips
+- If first generation feels too generic "tech globe," push the Stage A prompt toward "Ridley Scott blockbuster opening shot."
+- If the trails look like garish neon, replace "bioluminescent" with "fiber-optic glow at 30% opacity" in Stage A.
+- Goal: someone watching this should not immediately think "crypto demo."
+
+---
