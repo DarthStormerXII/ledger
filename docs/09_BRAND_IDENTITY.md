@@ -263,3 +263,104 @@ After first generation:
 5. **Letter-spacing tightens with size.** Bigger text = tighter letter-spacing, all the way down to -0.03em on `display-xl`.
 
 ---
+
+## 5. Color System
+
+### Tokens
+
+```css
+/* Backgrounds */
+--ink-deep:        #0A0E1A;  /* Page background */
+--ink-warm:        #13151C;  /* Section backgrounds, zebra rows */
+--ink-elevated:    #1A1D26;  /* Cards, modals, surfaces */
+--ink-border:      #272A35;  /* Subtle borders, dividers */
+
+/* Text */
+--text-primary:    #F5F2EB;  /* Body text, headings */
+--text-muted:      #7A8290;  /* Labels, captions, secondary info */
+--text-disabled:   #4A5060;  /* Placeholders, disabled states */
+
+/* Brand */
+--gold:            #E8D4A0;  /* Money. Earnings. Brand wordmark. */
+--gold-dim:        #B8A578;  /* Hover/pressed states for gold */
+
+/* Accent */
+--cyan:            #5FB3D4;  /* Live activity, primary buttons, links */
+--cyan-dim:        #4A8DAB;  /* Hover/pressed states for cyan */
+
+/* Semantic */
+--success:         #4A8B6F;  /* Confirmed, paid, positive */
+--warning:         #D4A347;  /* Pending, caution */
+--danger:          #C97064;  /* Failed, slashed, negative */
+```
+
+### Usage rules (strict)
+
+| Color | Used for | Forbidden uses |
+|---|---|---|
+| **Gold #E8D4A0** | Money values only. The wordmark. Earnings totals. USDC amounts. | Never as button color. Never in body text. Never in icons. |
+| **Cyan #5FB3D4** | Live activity. Active states. Primary buttons. AXL packets. Live links. | Never for money. Never for branding. Never for static decorative elements. |
+| **White #F5F2EB** | Body text. Worker names. Default text on dark. | Never bright pure white #FFFFFF — always use the warm off-white. |
+| **Muted slate #7A8290** | Secondary text. Labels. Helper text. Inactive states. | Never for primary content. |
+| **Success/Warning/Danger** | Status badges, confirmation indicators only. | Never as decorative accents. |
+
+### "Money is sacred" rule
+
+Gold #E8D4A0 only appears in three places on any given screen:
+1. The single most important monetary value (e.g., the hero "12,847.50 USDC")
+2. The brand wordmark in the nav
+3. Specific scoped earnings values where contrast is needed
+
+If you find yourself using gold for buttons, accents, or decoration — stop and use cyan or white instead.
+
+---
+
+## 6. Voice & Tone
+
+### Brand voice principles
+
+1. **Spare** — Use 50% fewer words than feels comfortable. Cut adjectives.
+2. **Precise** — Numbers over adjectives. "5 USDC" not "small payment."
+3. **Cold** — No exclamation marks. No emojis. No "we're so excited!" energy.
+4. **Confident without bravado** — State facts. Don't sell.
+5. **Technical but not jargon-soaked** — Use ERC-7857 once, then "the iNFT." Use AXL once, then "the mesh."
+
+### Voice exemplars
+
+| Bad voice (don't write this) | Good voice (write this) |
+|---|---|
+| "🚀 Launch your AI agent today and start earning rewards!" | "Mint a worker. Bid on jobs. Get paid in USDC." |
+| "We're thrilled to announce that Ledger is the first-ever..." | "Ledger is the first secondary market for working AI agents." |
+| "Our amazing reputation system makes everything trustable!" | "Reputation is signed by employers. Verifiable on-chain." |
+| "Join thousands of builders shaping the future of agentic finance!" | "247 active workers. 89 jobs completed today." |
+
+### Status message patterns
+
+These appear constantly in the UI. Lock the patterns:
+
+| Pattern | Example |
+|---|---|
+| `[Subject] [verb-past-tense].` | "Worker accepted." |
+| `[Action] in [duration].` | "Payment landed in 4s." |
+| `[Stat] [delta].` | "Reputation +1." |
+| `[State] · [detail]` | "Bidding · 3 bids" |
+
+Never:
+- "🎉 Yay! Your worker just won a bid!"
+- "Successfully completed transaction"
+- "We've updated your reputation, congratulations!"
+
+Always:
+- "Bid won."
+- "Payment landed."
+- "Reputation +1."
+
+### Demo voiceover patterns (already in 03_DEMO_SCRIPT.md)
+
+The voiceover follows the same rules. Calm. Stating facts. Pauses for weight. No vocal hype.
+
+### README and submission copy
+
+Same voice. Cold, precise, confident. Read your submission text aloud — if it sounds like a press release, rewrite it.
+
+---
