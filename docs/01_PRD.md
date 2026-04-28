@@ -120,3 +120,53 @@ Resolution is via a custom CCIP-Read offchain resolver (ENSIP-10) — see `02_AR
 - KYC for human owners
 
 **Considered for v2:** 100 delegated users per token without transfer (per Gautam's 0G workshop comment).
+
+## 7. Timeline
+
+| Day | Date | Milestone |
+|---|---|---|
+| 0 | Apr 24 | Open questions filed in sponsor Discords. Repo init. Team kickoff. |
+| 1 | Apr 25 | AXL nodes installed on 2 VMs + 1 laptop. Cross-node "hello" verified. |
+| 2 | Apr 26 | 0G Galileo connection live. ERC-8004 IdentityRegistry deployed; live audited ReputationRegistry on Base Sepolia confirmed. |
+| 3 | Apr 27 | Bidding protocol over AXL pubsub (gossipsub fork). Escrow contract on Base Sepolia. |
+| 4 | Apr 28 | Settlement contract integration. On-chain bid bonds. |
+| 5 | Apr 29 | 0G Compute reasoning loop. Worker completes Base Yield Scout end-to-end. |
+| 6 | Apr 30 | ERC-7857 (0G iNFT draft) minting. iNFT carries reputation reference + 0G Storage memory CID. |
+| 7 | May 1 | iNFT transfer flow. Frontend dashboard MVP. |
+| 8 | May 2 (evening) | Pre-baked reputation seeded. Contract deploys finalized. AXL mesh + ENS resolver verified. Higgsfield Shot 1 + Shot 3 generated. Recording starts evening of May 2. |
+| 9 | May 3 | Morning record + edit; afternoon README + Proof Matrix + sponsor proof docs (`/docs/0g-proof.md`, `/docs/axl-proof.md`, `/docs/ens-proof.md`); submit by **21:30 IST = 12:00 PM EDT** hard deadline. |
+
+## 8. Team Roles
+
+| Person | Owns | Active days |
+|---|---|---|
+| Gabriel (lead) | Architecture, AXL nodes, ERC-8004 + 0G integration, demo direction | 0–10 |
+| Friend 1 (backend) | Bidding protocol, escrow + settlement contracts | 1–7 |
+| Friend 2 (frontend) | Dashboard, AXL topology viz, iNFT transfer UI, Capability Tree Viewer, Settlement Status Strip | 3–9 |
+| Friend 3 (full-stack) | CCIP-Read offchain resolver, 0G Compute reasoning, video production | 2–9 |
+
+## 9. Dependencies & Risks
+
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+| ERC-7857 (0G iNFT draft) doesn't actually transfer encrypted intelligence | Low | ✅ Confirmed via 0G workshop. TEE oracle re-keys metadata on transfer per spec. Reference impl at `0glabs/0g-agent-nft@eip-7857-draft`. |
+| AXL fails on residential NAT | Low | ✅ Confirmed via Gensyn workshop. Outbound TCP/TLS to bootstrap is sufficient. Fallback: 3 cloud VMs. |
+| ENS parent name acquisition friction | Medium | Mitigation: register tonight (May 2) on `sepolia.app.ens.domains`. Need Sepolia faucet ETH. |
+| ENS app rendering of custom text records | Medium | Mitigation: ship custom Capability Tree Viewer page; do not rely on the official ENS app UI. |
+| HD-derivation verifier UI confusing | Medium | Mitigation: explicit "verify derivation" button on `pay.<agent>` view; show parent address + derivation index + result. |
+| ENS resolver gateway uptime | Medium | Mitigation: deploy on Vercel/Cloudflare; cache `ownerOf()` reads with 30s TTL; pre-cached `cast resolve` outputs in /tmp captured during dress rehearsal. |
+| 0G Compute requires enterprise contract | Low | ✅ Confirmed accessible during hackathon. 6 mainnet models open. |
+| Demo fails live | Low | Pre-recorded canonical run as backup B-roll. |
+
+## 10. Submission Checklist (Day 9 — May 3, by 21:30 IST)
+
+- [ ] Repo public, all commits within window
+- [ ] README.md with Pull Quote + Proof Matrix + architecture diagram + demo URL + video URL + sponsor integration sections (0G / Gensyn / ENS)
+- [ ] `/docs/0g-proof.md`, `/docs/axl-proof.md`, `/docs/ens-proof.md` filed
+- [ ] 4-minute demo video uploaded (and 3-minute cut for 0G if separate)
+- [ ] 30-second elevator cut available as a separate link
+- [ ] Submission form filled, partner prizes selected: 0G + Gensyn + ENS
+- [ ] Architecture diagram exported as PNG and embedded in README
+- [ ] Live deployment URL verified working
+- [ ] All contract addresses listed in README, verified on explorers (0G Galileo + Base Sepolia + Sepolia L1)
+- [ ] ENS parent name + 1–2 demo workers' subnames resolve correctly via `cast resolve` and via `app.ens.domains/sepolia/<name>`
