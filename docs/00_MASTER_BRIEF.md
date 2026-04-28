@@ -45,3 +45,44 @@ Three identity primitives wired into a working two-sided market: **ERC-8004 (alr
 - **Identity layer:** ENS via custom CCIP-Read offchain resolver under team-owned parent name on Sepolia. Each worker iNFT becomes `worker-NNN.<team>.eth` with capability subnames `who`, `pay`, `tx`, `rep`, `mem`.
 - **Frontend:** Next.js 14 + shadcn/ui + Tailwind
 - **Smart contracts:** Solidity, Foundry
+
+## Non-Goals (explicitly out of scope)
+
+- Uniswap or any DEX integration (not a target sponsor)
+- Mobile UI
+- Multiple task types — one task only: "Base Yield Scout"
+- Real-money exposure — testnet only
+- Agent training UI — agents come pre-baked
+- Onboarding for human users beyond a connect wallet flow
+
+## Demo Concept
+
+The demo identity is **The Inheritance.**
+
+Hero moment: a worker iNFT with 47 jobs and 4.7 reputation gets transferred mid-demo to a new owner. The new owner's worker immediately bids on a fresh task using the same agent, same reputation — but the earnings stream now flows to the new wallet, and `who.worker-001.<team>.eth` resolves to the new owner address with zero ENS transactions (CCIP-Read picks up the new `ownerOf()` on 0G Galileo). Time anchors: **preview at 0:04 (inverted hook), tease at 1:30, payoff at 2:30–3:00 split-screen + live ENS resolution flip.** This is the punchline that wins finalist.
+
+## Demo Task (the only task type we support)
+
+**Task:** "Base Yield Scout"
+**Body:** "Identify the 3 highest-APY USDC vaults on Base with TVL > $10M and audit history. Return JSON with vault address, APY, TVL, audit firm, and a 1-line risk assessment per vault. Cite sources."
+**Deadline:** 120s from acceptance
+**Payment:** 5 USDC + 0.5 USDC bid bond (refunded on completion)
+
+## Voice & Aesthetic
+
+Confident, restrained, slightly futuristic. Linear meets Polymarket meets a luxury watch boutique. Absolutely no crypto clichés — no neon greens, no gradients, no "rocket ship" iconography.
+
+- Background: deep ink #0A0E1A
+- Primary: pale gold #E8D4A0 (sparingly, for value/earnings)
+- Accent: electric cyan #5FB3D4 (for live activity)
+- Display font: Fraunces (serif)
+- Body font: Inter
+- Mono: JetBrains Mono
+
+## Critical Confirmations (resolved via research briefs + sponsor workshops)
+
+1. **ERC-7857 (0G iNFT draft standard) transfers encrypted memory** — ✅ Confirmed via 0G workshop + ENS deep research. TEE oracle re-keys metadata on transfer per spec; reference impl at `0glabs/0g-agent-nft@eip-7857-draft`.
+2. **AXL Yggdrasil mesh forms from residential NAT** — ✅ Confirmed. Outbound TCP/TLS to bootstrap is sufficient. No port forwarding needed. Source: Gensyn workshop.
+3. **0G Compute hackathon access** — ✅ Confirmed. Fully open. 6 mainnet models available (GLM-5, GLM-5.1, Qwen3.6+, GPT-OS, 30C, 27B). Source: 0G workshop.
+4. **ETHGlobal max-3-partner-prizes rule** — ✅ Confirmed. Multiple tracks per sponsor count as one partner-prize slot. 0G Track A + Track B = 1 slot; ENS-AI + ENS-Creative = 1 slot. Source: KeeperHub research brief.
+5. **ENS deep-research Path C (CCIP-Read with live `ownerOf()` on 0G Galileo) feasibility** — ✅ Confirmed feasible per `0xFlicker/tod-offchain-resolver` reference. Source: ENS deep-research brief.
