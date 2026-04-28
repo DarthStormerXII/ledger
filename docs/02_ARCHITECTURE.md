@@ -284,3 +284,45 @@ Channel: `#ledger-auction-closed` (pubsub). Sent by the buyer immediately after 
   "closedAt": 1714000060
 }
 ```
+
+## 4. Data Flow — One Full Cycle
+
+```
+T-1    Buyer derives taskId = keccak256(abi.encodePacked(buyer, nonce, block.timestamp))
+T+0    Buyer calls LedgerEscrow.postTask(taskId, ...) on Base Sepolia
+       -> escrow holds 5 USDC payment, taskId is now chain-anchored
+T+1    Buyer posts TASK_POSTED to #ledger-jobs (AXL pubsub) carrying the chain-anchored taskId
+T+2    Worker A and Worker B see task, decide to bid
+T+3    Both submit BID messages (AXL direct) to buyer
+T+4    Buyer auto-selects cheapest with rep >= 4.0
+T+5    Buyer sends BID_ACCEPTED (AXL direct) to winner
+T+5b   Buyer broadcasts AUCTION_CLOSED (AXL pubsub) so losing workers terminate cleanly
+T+6    Winner calls LedgerEscrow.acceptBid
+       -> worker locks 0.5 USDC bond
+T+7    Worker calls 0G Compute /chat/completions with task prompt
+T+8    Worker generates result (Base Yield Scout JSON report)
+T+9    Worker writes result blob to 0G Storage via uploadFile, gets CID
+T+10   Worker sends RESULT (AXL direct) to buyer
+T+11   Buyer verifies result schema, signs approval
+T+12   Buyer calls LedgerEscrow.releasePayment(taskId, resultHash, buyerSig) on Base Sepolia
+       -> two-phase commit, eventually consistent within ~10s:
+          - leg 1: transfer 4.5 USDC to worker + return 0.5 USDC bond
+          - leg 2: call feedback() on ERC-8004 ReputationRegistry @0x8004B663… with buyer signature
+       Both transactions guaranteed to fire; the dashboard surfaces a `pending_reconcile`
+       state if one leg lags.
+T+13   Frontend updates: Settlement Status Strip shows ✓/✓/✓ across all legs
+```
+
+### 4.1 Settlement consistency model
+
+Cross-chain settlement is **NOT atomic.** USDC movement on Base Sepolia and any 0G Galileo state changes (e.g. `mem.*` CID updates) cannot share a single transaction. Resolution: **two-phase commit, eventually consistent within ~10s.** Both transactions are guaranteed to fire (guaranteed-but-not-atomic via a small daemon retrying any lagging leg with idempotency keys); the dashboard's Settlement Status Strip surfaces a `pending_reconcile` state if a leg lags. A leg cannot be silently dropped — it either succeeds within the SLA or surfaces as `pending_reconcile` for the demo operator to address.
+
+### 4.2 Mid-flight transfer semantics
+
+If `transferFrom` lands DURING an in-flight job (between `acceptBid` and `releasePayment`), the next payment release flows to the **new owner** because `LedgerEscrow.releasePayment` looks up the iNFT's current `ownerOf()` at settlement time, not at acceptance time. This matches the demo VO claim ("the next payment lands in the new owner's wallet"). Engineering implication: `LedgerEscrow.acceptBid` records the worker iNFT's tokenId, NOT the worker EOA address; payment is dispatched at release time to whichever address `ownerOf(tokenId)` returns on 0G Galileo.
+
+### 4.3 `taskId` derivation
+
+`taskId = keccak256(abi.encodePacked(buyer, nonce, block.timestamp))`
+
+The buyer **must** call `LedgerEscrow.postTask(taskId, ...)` BEFORE broadcasting `TASK_POSTED` on AXL, so the AXL pubsub message carries a chain-anchored ID. This prevents a class of confused-deputy attacks where a malicious buyer broadcasts a `TASK_POSTED` without a matching escrow post and worker bonds get locked against a non-existent task.
