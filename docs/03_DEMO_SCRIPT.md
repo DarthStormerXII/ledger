@@ -183,3 +183,21 @@ Then transition to title card: **LEDGER** in Fraunces, with subtitle "The trustl
 [No VO. Let the visual close the film. End on the new owner's hand holding the iNFT artifact, golden particles flowing in the new direction.]
 
 ---
+
+## Recording Day Checklist
+
+- [ ] Two laptops set up side by side, both visible to camera if doing physical handoff
+- [ ] Both wallets pre-funded with testnet USDC + 0G Galileo native OG
+- [ ] Three AXL nodes running, topology view confirmed before recording
+- [ ] AXL bootstrap-kill demo rehearsed — confirm topology stays connected
+- [ ] Demo task pre-staged in dashboard
+- [ ] ENS parent name registered and CCIP-Read resolver gateway live (HTTPS, signed responses)
+- [ ] `who.*`, `pay.*`, `tx.*`, `rep.*`, `mem.*` namespaces resolving correctly against the live deployment
+- [ ] 47 ERC-8004 feedback records seeded to `0x8004B663…` on Base Sepolia from 47 distinct employer signers (disclose seeding in README "How it's made")
+- [ ] Worker iNFT minted on 0G Galileo Testnet (ChainID 16602, native 0G token); ERC-7857 (0G iNFT draft standard) confirmed on the deployed contract
+- [ ] 0G Compute TEE attestation digest reachable via `broker.inference.verifyService`
+- [ ] Higgsfield clips generated and timed (Shot 1: 15s open, Shot 3: 12s close — Shot 2 has been cut)
+- [ ] Voiceover recorded separately in clean audio environment, then synced
+- [ ] Backup: full canonical run pre-recorded as B-roll in case live demo fails
+- [ ] Multiple takes — commit to at least 3 full passes before picking the best
+- [ ] Muted 5-second test of Shot 1 before each full take (color/grade/audio sync gate)
