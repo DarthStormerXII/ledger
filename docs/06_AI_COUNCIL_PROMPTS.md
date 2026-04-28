@@ -120,3 +120,132 @@ assumption holds, and suggest the simplest verification test.
 ```
 
 ---
+
+## Prompt 4 — The Inheritance Mechanics Check
+
+**When to run:** Day 4 (when contracts are being designed).
+
+```
+[Paste relevant sections of 02_ARCHITECTURE.md, especially section 5]
+
+Walk through the inheritance flow step by step. The critical question 
+is: when the worker iNFT transfers from Owner_A to Owner_B mid-flight, 
+how does the system ensure that the NEXT earned payment flows to 
+Owner_B, not Owner_A?
+
+There are three plausible designs:
+1. The worker agent process listens for Transfer events and updates 
+   its payout address in-memory
+2. The smart contract escrow looks up the current iNFT owner at 
+   payment time using ownerOf()
+3. The buyer agent sends payment directly to the worker's address, 
+   not the iNFT owner — and the worker forwards earnings to its 
+   current owner via a separate flow
+
+Which design is correct for our use case? What are the failure modes 
+of each? What's the simplest implementation that's robust enough for 
+a 3-minute demo without being naive enough to break in Q&A?
+
+Specifically address: race conditions if the transfer happens during 
+an in-flight job, MEV/frontrunning concerns, and whether to use the 
+ERC-7857 (0G iNFT draft standard) memory pointer or a separate registry.
+```
+
+---
+
+## Prompt 5 — What's Missing That Should Concern Us
+
+**When to run:** Day 0 and Day 7.
+
+```
+[Paste 00_MASTER_BRIEF.md and 01_PRD.md]
+
+This is a hackathon project plan for ETHGlobal Open Agents 2026, 
+targeting finalist + 3 sponsor bounties (0G, Gensyn AXL, ENS).
+
+What is MISSING from this plan that an experienced hackathon judge 
+or an experienced founder would notice?
+
+Consider:
+- Things that should be in the PRD but aren't
+- Sponsor integration requirements that are under-specified
+- Demo scenarios that haven't been thought through
+- "Boring" infrastructure work that's been hand-waved (deployment, 
+  monitoring, testnet faucet logistics)
+- Edge cases in the user flow that judges will ask about
+- Story / pitch elements that aren't strong enough to win finalist
+- Claims in the demo that aren't backed by the actual implementation
+
+Produce a list of 10 specific gaps, ordered by severity. For each, 
+state how to close the gap.
+```
+
+---
+
+## Prompt 6 — Competitive Field Modeling
+
+**When to run:** Day 1.
+
+```
+[Paste 00_MASTER_BRIEF.md]
+
+ETHGlobal Open Agents 2026 will likely have 200-500 submissions. 
+Model the competitive field:
+
+1. What FRACTION of submissions will be:
+   a. LLM-wrapper-with-a-wallet (no real on-chain execution)
+   b. Single-agent DeFi tools
+   c. Multi-agent prediction-market projects (the DIVE clone)
+   d. Memecoin-launch agents
+   e. Generic AgentKit + Base demos
+   f. Genuinely novel multi-agent coordination projects
+
+2. Of the genuinely novel projects (your category f), what FRACTION 
+   will likely:
+   - Use AXL across separate nodes (the Gensyn DQ filter)
+   - Mint actual iNFTs (ERC-7857, 0G iNFT draft standard) with embedded intelligence
+   - Have a memorable demo moment that judges remember at deliberation
+
+3. Where does Ledger sit in this distribution? What are the 1-3 
+   projects most likely to be similar to Ledger, and how should we 
+   differentiate?
+
+4. Given that finalist selection is roughly top 5% (10 finalists out 
+   of 200-500), what specific elements does Ledger need to nail to 
+   end up in that top 5%?
+```
+
+---
+
+## Prompt 7 — Final Demo Polish Check
+
+**When to run:** Day 9 (after demo recording, before submission).
+
+```
+[Paste 03_DEMO_SCRIPT.md and the actual recorded video transcript]
+
+You are watching the Ledger demo for the first time. You have 4 
+minutes of attention and you are tired (you've watched 30 demos 
+today).
+
+1. In the first 15 seconds, do you understand what this product is? 
+   What's clear, what's confusing?
+
+2. By the 1-minute mark, do you trust that this is real (not a 
+   mockup)? What signals trust, what undermines it?
+
+3. At the inheritance moment (around 2:30), does the punchline land? 
+   Does it feel novel and important, or does it feel like a feature 
+   the product just happens to have?
+
+4. By 4:00, what's the one thing you remember? If you had to summarize 
+   this project in a sentence to your fellow judge, what would you 
+   say?
+
+5. What are the 3 most impactful edits to make before submission?
+
+Be a tough critic. Hackathon demo videos win or lose at the 15-second 
+mark and at the punchline. Tell us if either is failing.
+```
+
+---
