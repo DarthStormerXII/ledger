@@ -201,3 +201,18 @@ Then transition to title card: **LEDGER** in Fraunces, with subtitle "The trustl
 - [ ] Backup: full canonical run pre-recorded as B-roll in case live demo fails
 - [ ] Multiple takes — commit to at least 3 full passes before picking the best
 - [ ] Muted 5-second test of Shot 1 before each full take (color/grade/audio sync gate)
+
+## Pre-Production
+
+- The reputation history of "47 jobs, 4.7 rating, 12,847 USDC earned" — pre-bake this into the **live audited ERC-8004 ReputationRegistry at `0x8004B663…` on Base Sepolia** on Day 8 evening. Have a one-shot script that fires 47 fake completion feedback records signed by 47 distinct employer-agent keys. **Disclose this seeding step in the README "How it's made" section** — non-negotiable, prevents any judge perception of fraudulent claims.
+- Reputation registry stays on Base Sepolia (it is a different chain from the iNFT host); the iNFT and 0G Compute attestations live on 0G Galileo Testnet (ChainID 16602, native 0G token).
+- ENS parent name (`<team>.eth` or sub-issued) registered first thing on May 2 evening via `sepolia.app.ens.domains` — do not leave for Day 9.
+- CCIP-Read offchain resolver gateway must be live by Day 9 hour 18 for Builder C / Builder D integration.
+
+## What Could Go Wrong On Recording Day
+
+1. **AXL drops a node mid-take** — restart, retake. Build in 30 minutes of buffer.
+2. **0G Compute is slow** — pre-cache the reasoning output. Have a "reasoning replay" mode in worker code that streams pre-recorded tokens at realistic pace.
+3. **ENS resolver gateway downtime** — have a hot-spare gateway on a second region; resolver code defaults to a 30s TTL cache during the recording window so a single dropped request doesn't break the `who.*` flip. Pre-warm the cache 60s before each take.
+4. **0G Galileo public RPC unreliable** — Builder C runs a private Galileo node for the recording window; resolver also caches `ownerOf()` reads with 30s TTL.
+5. **Voiceover doesn't fit timing** — record VO first, edit visuals to VO, not the other way around.
