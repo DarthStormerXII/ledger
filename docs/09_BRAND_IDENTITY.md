@@ -150,3 +150,116 @@ LEDGER
 - ❌ Never recolor outside the approved palette
 
 ---
+
+## 3. Logo Generation Prompts
+
+### For your image gen tool (DALL-E, Midjourney, Imagen, Higgsfield image, Flux)
+
+#### Prompt for the standalone mark
+
+```
+Minimalist vector logo mark on deep navy black background. Three small 
+filled circles arranged in an equilateral triangle, point facing up. 
+The two top connections (left circle to top circle, right circle to top 
+circle) are solid thin lines. The bottom edge connecting the two lower 
+circles is a dashed line. The top circle is pale gold #E8D4A0, the two 
+lower circles are warm off-white #F5F2EB, the solid lines are off-white 
+at 60% opacity, the dashed line is electric cyan #5FB3D4. Geometric, 
+precise, mathematical. Reference: Massimo Vignelli logo design, Pentagram 
+graphic identity, Bauhaus geometric purity. Square format 1024x1024. 
+Vector aesthetic, NO photorealism, NO 3D effects, NO gradients, NO 
+shadows, NO glow effects.
+```
+
+#### Prompt for the horizontal lockup
+
+```
+Premium minimalist logo lockup. Left side: a small geometric mark — 
+three circles in an upward triangle, two solid lines on the upper 
+edges, one dashed line on the bottom edge. Right side: the wordmark 
+"LEDGER" in a chunky modern serif font (Fraunces Black or similar), 
+all uppercase, tight letterspacing. Both rendered in pale gold 
+#E8D4A0 on a deep navy black #0A0E1A background. Generous clear space 
+around the lockup. Reference: the Stripe Press logo, the Substack 
+wordmark, the Robinhood Gold lockup. Wide horizontal format 1920x600. 
+NO gradients, NO shadows, NO 3D, NO additional graphics or 
+embellishments.
+```
+
+#### Prompt for the app icon
+
+```
+Square app icon, 1024x1024. Centered on a deep navy black #0A0E1A 
+background: three small filled circles arranged in an equilateral 
+upward triangle, with two solid thin lines on the upper edges and 
+one dashed line on the bottom edge. All three circles and lines 
+rendered in pale gold #E8D4A0. Geometric, precise, no other elements. 
+Slightly rounded corners on the icon background (iOS-style 22% radius). 
+Reference: the Linear app icon, the Notion icon, the Things icon. 
+Premium, restrained, institutional. NO text, NO additional graphics.
+```
+
+#### If those don't land — alternative concept (the L-monogram)
+
+If the three-node mark doesn't generate well, fall back to a typographic monogram:
+
+```
+Premium typographic monogram. The capital letter "L" rendered in a 
+chunky modern serif (Fraunces Black weight), but with a small detail: 
+the horizontal serif at the base of the L extends rightward and 
+terminates in three small filled dots forming a triangle pattern. 
+Pale gold #E8D4A0 on deep navy black #0A0E1A. Square format 1024x1024. 
+Reference: the Mailchimp Freddie monogram, the Stripe S, the New York 
+Times T. Geometric, refined. NO gradients, NO 3D, NO shadows.
+```
+
+### Iteration tips
+
+After first generation:
+1. **Reject anything cute, friendly, or playful.** Push toward "institutional luxury."
+2. **Reject anything with extra elements.** If it adds sparkles, gradients, glow — re-prompt with "remove all decorative effects, pure geometric forms only."
+3. **The mark should pass the squint test.** Squint at the result; if it looks like generic abstract art, the geometry isn't disciplined enough.
+
+---
+
+## 4. Typography System
+
+### Type stack
+
+| Use | Font | Weight | Source |
+|---|---|---|---|
+| Display (wordmark, hero numbers) | **Fraunces** | Black, ExtraBold | Google Fonts (free) |
+| Body (paragraphs, labels, buttons) | **Inter** | Regular, Medium, SemiBold | Google Fonts (free) |
+| Monospace (addresses, hashes, code) | **JetBrains Mono** | Regular, Bold | Google Fonts (free) |
+
+### Why these specific fonts
+
+- **Fraunces** — A Google-Fonts variable serif by Phaedra Charles. It has a "9pt" optical size axis at small sizes that's perfect for the wordmark, plus a "soft" axis that lets you control how friendly vs. severe the letters feel. Set softness to 0 (severe) for institutional vibes. Free, open-source, won't have licensing issues.
+- **Inter** — Rasmus Andersson's grotesque designed for screens. The default for serious crypto / fintech UIs. Massive weight range, perfect screen rendering, free.
+- **JetBrains Mono** — Mono with high legibility for hex addresses and tx hashes. Distinguishes 0/O, 1/l/I clearly. The mono font of choice for crypto.
+
+### Type scale
+
+| Token | Size | Use |
+|---|---|---|
+| `display-xl` | 96px / Fraunces Black / -0.03em | The "12,847.50 USDC" hero number on the Hall |
+| `display-lg` | 64px / Fraunces ExtraBold / -0.02em | Worker name on Worker Profile |
+| `display-md` | 48px / Fraunces ExtraBold / -0.02em | Stats grid values |
+| `display-sm` | 32px / Fraunces SemiBold / -0.01em | Card titles, modal headers |
+| `body-lg` | 18px / Inter Medium / -0.005em | Job titles, prominent labels |
+| `body-md` | 14px / Inter Regular | Default body text, paragraph copy |
+| `body-sm` | 12px / Inter Regular | Captions, metadata |
+| `mono-md` | 14px / JetBrains Mono Regular | Addresses (full), tx hashes |
+| `mono-sm` | 12px / JetBrains Mono Regular | Truncated addresses, log lines |
+| `caps-md` | 12px / Inter SemiBold / 0.08em / uppercase | Section headers ("LIVE JOBS") |
+| `caps-sm` | 10px / Inter SemiBold / 0.1em / uppercase | Pill labels, status badges |
+
+### Typography rules
+
+1. **Numbers in Fraunces, words in Inter.** Discipline this religiously. Money, counts, ratings → serif. Everything else → grotesque.
+2. **Tabular figures everywhere a number could change.** Use the `tabular-nums` Tailwind class or `font-feature-settings: 'tnum'` so `9.99` and `10.00` align.
+3. **Monospace for anything copy-pasteable.** Addresses, hashes, contract IDs, seed phrases (never display, but in code samples).
+4. **Never underline links.** Use color (cyan) and hover state instead.
+5. **Letter-spacing tightens with size.** Bigger text = tighter letter-spacing, all the way down to -0.03em on `display-xl`.
+
+---
