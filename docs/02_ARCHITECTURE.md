@@ -326,3 +326,104 @@ If `transferFrom` lands DURING an in-flight job (between `acceptBid` and `releas
 `taskId = keccak256(abi.encodePacked(buyer, nonce, block.timestamp))`
 
 The buyer **must** call `LedgerEscrow.postTask(taskId, ...)` BEFORE broadcasting `TASK_POSTED` on AXL, so the AXL pubsub message carries a chain-anchored ID. This prevents a class of confused-deputy attacks where a malicious buyer broadcasts a `TASK_POSTED` without a matching escrow post and worker bonds get locked against a non-existent task.
+
+## 5. The Inheritance Flow
+
+```
+T+0    Owner_A clicks "List for Sale" on workerINFT.tokenId=12345
+T+1    Listing posted (off-chain or via marketplace contract)
+T+2    Owner_B clicks "Buy"
+T+3    Owner_B calls WorkerINFT.transferFrom on 0G Galileo
+T+4    iNFT now in Owner_B wallet; TEE oracle re-keys memory metadata per ERC-7857 spec
+T+5    ENS who.<agent>.ledger.eth next resolution returns Owner_B address
+       -> zero ENS transactions; CCIP-Read offchain resolver picks up new ownerOf()
+       -> 30s TTL cache means resolution flips within ≤30s
+T+6    No agent-runtime state change needed: LedgerEscrow.releasePayment looks up
+       ownerOf(tokenId) at settlement time
+T+7    Next earned payment flows to Owner_B (current ownerOf at the moment of release)
+```
+
+Key engineering point: the smart contract looks up the current owner at payment time (`ownerOf(tokenId)` at release), so no agent-runtime ownership tracking is needed. ENS resolution flips as a natural consequence of the CCIP-Read resolver reading the same `ownerOf()` value.
+
+## 6. Demo Triggers (for the recorded video)
+
+These are scripted controls in the dashboard that the demo operator uses:
+
+1. **Post Task** button — fires a pre-baked Base Yield Scout task
+2. **Show Attestation** button — surfaces the attestation digest from `broker.inference.verifyService` as a UI badge on the worker profile (replaces the old gas-spike beat)
+3. **List for Sale** button on the worker iNFT
+4. **Buy** button (on second wallet's view) — triggers the inheritance moment
+5. **Refresh ENS** button — forces re-resolution of `who.<agent>.<team>.eth` to demonstrate the post-transfer flip
+
+Pre-bake these into the UI as "Demo Mode" toggles. Hide them in production view.
+
+## 7. Repository Layout (proposed)
+
+```
+ledger/
+├── README.md
+├── docs/
+│   ├── 00_MASTER_BRIEF.md
+│   ├── 01_PRD.md
+│   ├── 02_ARCHITECTURE.md (this doc)
+│   ├── 0g-proof.md
+│   ├── axl-proof.md
+│   ├── ens-proof.md
+│   └── architecture-diagram.png
+├── contracts/                  # Foundry workspace
+│   ├── src/
+│   │   ├── LedgerEscrow.sol            # Base Sepolia
+│   │   ├── WorkerINFT.sol              # 0G Galileo
+│   │   └── LedgerIdentityRegistry.sol  # 0G Galileo
+│   └── test/
+│   # NOTE: ERC-8004 ReputationRegistry is NOT in this repo. We use the live
+│   #       audited deployment at 0x8004B663056A597Dffe9eCcC1965A193B7388713
+│   #       on Base Sepolia.
+├── resolver/                   # CCIP-Read offchain resolver (Vercel/Cloudflare)
+│   ├── api/
+│   ├── handlers/               # who, pay, tx, rep, mem
+│   └── lib/
+├── agents/                     # TS agent runtime
+│   ├── buyer/
+│   ├── worker/
+│   └── shared/
+├── axl/                        # AXL node configs + gossipsub fork
+│   ├── docker-compose.yml
+│   └── nodeconfig/
+├── frontend/                   # Next.js 14
+│   ├── app/
+│   ├── components/
+│   └── lib/
+├── tools/
+│   └── council/
+└── infra/
+    └── deploy/
+```
+
+## 8. Engineering Decisions
+
+Closed decisions:
+- ✅ **Agent runtime language: TypeScript** — AXL examples are HTTP-based; TS gives us tighter integration with the Next.js frontend and resolver layer.
+- ✅ **AXL pubsub: fork the AXL repo's `gossipsub` example** rather than writing our own thin client (Jud's workshop recommendation).
+- ✅ **iNFT ownership change detection: on-payment lookup in `LedgerEscrow.releasePayment`** — simpler, more correct, no agent-runtime state.
+- ✅ **ReputationRegistry: use live audited ERC-8004 deployment** at `0x8004B663…` on Base Sepolia — do NOT deploy our own.
+- ✅ **`taskId` derivation: `keccak256(abi.encodePacked(buyer, nonce, block.timestamp))`** with `postTask` called BEFORE AXL broadcast.
+- ✅ **Settlement model: two-phase commit, eventually consistent within ~10s**; Settlement Status Strip surfaces `pending_reconcile` if a leg lags.
+
+Still open:
+- [ ] Marketplace mechanic: simple on-chain `list + buy` contract, or off-chain order book with on-chain settlement?
+- [ ] Demo mode toggles: how to hide them from "production" view in screenshots
+- [ ] CCIP-Read resolver hosting: Vercel vs Cloudflare Workers (probably Vercel for stack consistency)
+
+## 9. Build Risks (Engineering)
+
+| Risk | Severity | Mitigation |
+|---|---|---|
+| AXL Yggdrasil mesh formation fails over residential NAT | Low | ✅ Confirmed feasible via Gensyn workshop. Fallback: 3 cloud VMs. |
+| ERC-7857 (0G iNFT draft) reference implementation incomplete | Low | ✅ Reference impl available at `0glabs/0g-agent-nft@eip-7857-draft`. |
+| 0G Compute rate limits | Medium | Cache prompts. Pre-record reasoning for demo if needed. |
+| ENS resolver gateway uptime | Medium | Deploy on Vercel/Cloudflare; cache `ownerOf()` reads with 30s TTL; pre-cached `cast resolve` outputs in /tmp captured during dress rehearsal. |
+| 0G Galileo public RPC unreliable | Medium | Builder C's private node + 30s TTL cache covers. |
+| HD-derivation verifier UI confusing | Medium | Explicit "verify derivation" button on `pay.<agent>` view; show parent xpub fingerprint + index + derived address. |
+| Cross-chain USDC (Base Sepolia) settlement is flaky | Medium | Pre-fund worker wallets. Use stable test faucets. Settlement Status Strip surfaces lag as `pending_reconcile`. |
+| TEE oracle re-key on transfer doesn't work in time for demo | Medium | Fallback: pre-record the post-transfer decrypt in dress rehearsal; if live re-key fails, the recorded artifact can stand in. |
