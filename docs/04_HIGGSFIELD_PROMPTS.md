@@ -150,3 +150,64 @@ dialogue, no UI sound effects
 - The particle direction reversal during the speed-up looks cleanest if the Stage A frame already shows the artifact at the center line (the moment of crossing).
 
 ---
+
+## Sponsor Sigil Sequence — CUT
+
+**Director's call: dropped entirely.** The original optional bonus shot (three abstract geometric symbols representing the sponsors) has been replaced with a hard-cut After Effects animation of the **real sponsor logos** — 0G, Gensyn AXL, ENS. Real logos communicate the integration faster than abstract sigils and don't burn Higgsfield budget. See `docs/03_DEMO_SCRIPT.md` 3:30–3:48.
+
+---
+
+## Image Generation (for static assets)
+
+Beyond video, you may want stills for:
+1. **Worker iNFT artwork** — 3-4 unique generated portraits (reduced from 10 — strategist's call: 3-4 hero portraits well-iterated beats 10 mediocre ones)
+2. **Hero image for README** — single composition combining the visual themes
+3. **OG / social preview image** — for the public deployment
+
+### Worker iNFT artwork prompt (reuse for each unique worker)
+```
+Abstract geometric portrait of an AI agent — concentric circles,
+hexagonal lattice patterns, fractal nested structures. No face, no
+human features. Treat like a precision watch dial. Background:
+deep ink #0A0E1A. Foreground: the geometric form rendered in cyan
+#5FB3D4 with pale gold #E8D4A0 accents at key intersections.
+Symmetrical, balanced, elegant. Style: Bauhaus design meets
+generative art. Square format, 1024×1024.
+```
+
+Generate 3-4 of these with seed variations. Use them for the worker leaderboard, the auction cards, and the iNFT detail pages. Run all 5 image models per portrait, pick the best.
+
+### Hero image for README
+```
+Wide cinematic composition, 16:9. Three glowing nodes connected by
+fiber-optic data trails in mid-foreground. In the foreground: an
+abstract geometric data form representing an iNFT (no crystal vessel —
+the form itself stands alone). Subtle grid receding to vanishing point
+in the background. Color: cyan and pale gold against deep ink. Mood:
+institutional, restrained, slightly futuristic. Style: cover image
+for a Stripe Press book about AI agents. 1920×1080.
+```
+
+---
+
+## Budget Check
+
+| Asset | Estimated cost |
+|---|---|
+| Shot 1 (15s) | ~10 generations × cost-per-15s (multi-model Stage A + Stage B retakes) |
+| Shot 2 | CUT — budget reallocated |
+| Shot 3 (12s, closing) | ~10 generations × cost-per-12s (multi-model Stage A + slow-mo Stage B retakes) |
+| Worker portraits (3-4 stills) | 3-4 × cost-per-image × 5 model comparison |
+| Hero / OG images | 2 × cost-per-image × 5 model comparison |
+
+Plan for ~25 generations across all assets. Don't accept the first take on any of them. The cinematic quality is what separates a finalist demo from a Round 1 elimination.
+
+---
+
+## Post-Production Notes
+
+- All Higgsfield clips render at fixed 30fps. If your screen recording is 60fps, downsample to 30 to match.
+- Color-grade all clips to the same LUT (warm shadow, cool highlight, slight desaturation). Free LUTs from FilmConvert or just a custom one in DaVinci Resolve.
+- Keep cuts hard between Higgsfield → screen recording. Don't crossfade — the contrast (cinematic to functional) is part of the demo's rhythm.
+- Audio: a single subtle low-frequency drone bed for the cinematic shots, ducking under the voiceover. **In every Higgsfield video prompt, the audio specification line `no dialogue, no foley, low ambient drone only` is mandatory** — without it, Cling 3 auto-injects synthetic voice and UI sounds. No music during screen recordings — let the UI sounds (transaction confirmations, bid alerts) do the work.
+- Shot 3 specifically: speed up the slow-motion source 2.5× in post to land at 12s — do NOT use Higgsfield's native direction reversal.
