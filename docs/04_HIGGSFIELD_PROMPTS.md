@@ -86,3 +86,67 @@ no synthetic dialogue, no UI sound effects
 - Goal: someone watching this should not immediately think "crypto demo."
 
 ---
+
+## Shot 2 — CUT
+
+**Director's call (Opus): the iNFT crystal cinematic has been removed entirely.**
+
+The reasoning: the actual iNFT IS the data. A cinematic crystal vessel adds nothing the worker profile UI doesn't already convey — and the contrast between the cinematic crystal and the literal data dashboard reads as inconsistent. The replacement (2:00–2:15) is a slow camera push on the worker profile UI itself, in 96px Fraunces, showing the ENS capability tree on the right. That happens in screen recording, not Higgsfield.
+
+**Budget reallocated:** Shot 2's generation budget is folded into additional Shot 1 and Shot 3 retakes — aim for ~10 generations on each remaining shot.
+
+---
+
+## Shot 3 — Inheritance Handoff (3:48–4:00, 12 seconds, closing cinematic)
+
+Trimmed from 20s → 12s. Moved from 3:15–3:35 → 3:48–4:00 (the demo's closing beat). Locked-off framing, almost still, particle reversal generated in slow-motion and **sped up in post-production** rather than direction-reversed natively (Higgsfield's native reverse looks artifacted; slow-mo source sped up gives a cleaner result).
+
+### Stage A — Start frame prompt
+
+```
+Two figures standing in a void of soft warm-white light, faceless and
+abstract — silhouettes only, no detailed features. Frame composed locked-off,
+the handoff happens at the golden ratio intersection. The figure on the
+left holds a glowing geometric data artifact extending across a center
+line of warm gold particles toward the figure on the right. The artifact
+emits a soft golden pulse. Color: warm gold #E8D4A0 against muted blue-grey.
+Style: Denis Villeneuve composition, Roger Deakins lighting. 16:9.
+```
+
+Run in all 5 models. Pick the cleanest silhouettes with strongest light direction.
+
+### Stage B — Image-to-video controls
+
+- **Lens:** Cinema Studio → anamorphic + 50mm
+- **Camera move:** locked-off (no movement)
+- **Duration:** generate at 12s, in slow-motion mode (effective ~30s of action), then speed up 2.5× in post to land at 12s
+- **Audio:** `no dialogue, no foley, low ambient drone only`
+
+### Stage B prompt (paste into Cinema Studio i2v after Gemini refinement)
+
+```
+Locked-off frame, almost still. Over the duration of the clip in slow-motion,
+the artifact transfers from the left figure's hand to the right figure's
+hand. Golden particles flow gradually — initially drifting toward the left
+figure, then pausing as the artifact crosses center, then resolving toward
+the right figure as the artifact fully lands. The artifact pulses brighter
+on contact with the new hand. Cinematic, slow-motion, emotional weight.
+No dialogue, no foley, low ambient drone only.
+```
+
+(Sped up 2.5× in post to land at 12s final duration.)
+
+### Negative prompt
+```
+no detailed faces, no specific clothing, no recognizable people, no
+text, no logos, no obvious crypto symbols, no money/dollar signs,
+no rapid cuts, no flashy effects, no auto-generated voice, no synthetic
+dialogue, no UI sound effects
+```
+
+### Iteration tips
+- Generate slow-motion natively, speed up 2.5× in After Effects/Resolve. Do NOT ask Higgsfield to reverse direction natively — the artifacting is visible.
+- The two figures must read as anonymous/universal. If they look too specific, push toward "abstract bipedal silhouettes" in Stage A.
+- The particle direction reversal during the speed-up looks cleanest if the Stage A frame already shows the artifact at the center line (the moment of crossing).
+
+---
