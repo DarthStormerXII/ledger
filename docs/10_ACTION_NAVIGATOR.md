@@ -372,3 +372,35 @@ Session opens →
 ```
 
 ---
+
+## Tools-to-Documents Map
+
+Quick reference of which tool consumes which document:
+
+| Tool | Documents to feed in |
+|---|---|
+| **Claude Code Max** (primary) | `docs/00`, `docs/01`, `docs/02`, `docs/09` + relevant code files |
+| **Codex Max** | `docs/00`, `docs/01`, `docs/02` (architecture only, for one-shot scripts) |
+| **AI Council** | `docs/00` + the specific prompt from `docs/06` + the relevant context document |
+| **Claude Design** | `docs/05` (and `docs/09` brand identity uploaded as assets) |
+| **Higgsfield (image)** | `docs/09` §3 (logo prompts), `docs/09` §10 (asset list) |
+| **Higgsfield (video)** | `docs/04` (cinematic shot prompts — Shot 1 + Shot 3 only; Shot 2 is cut) |
+| **Eleven Labs (voice)** | `docs/03` (demo script as voiceover input) |
+| **DaVinci Resolve / Editor** | `docs/03` (demo script as edit guide) + Higgsfield clips + screen recording |
+
+---
+
+## What to Do When Things Break
+
+| Symptom | Likely cause | Fix |
+|---|---|---|
+| Claude session forgets the project | Didn't paste `docs/00_MASTER_BRIEF.md` | Paste it. Always paste it. |
+| Claude suggests technologies you removed (KeeperHub, x402, Uniswap) | Brief outdated or not pasted | Paste `docs/00` + restate: "Sponsor slate is 0G + Gensyn + ENS. KeeperHub and x402 are removed. See `tools/council/STAGE3_CHAIRMAN.md`." |
+| Different AI tools give conflicting architecture advice | Each session built different mental models | Run AI Council Prompt 1 to surface conflicts, then make a decision and lock it in `docs/02_ARCHITECTURE.md` |
+| You're running out of time | Likely AXL multi-node or ENS resolver gateway flaky | Pivot to single-machine simulation for AXL; for ENS, use pre-cached `cast resolve` outputs in `/tmp` from dress rehearsal. Document honestly in submission. |
+| The video feels like a generic crypto demo | Higgsfield prompts not aggressive enough about restraint | Re-read `docs/09` §6 (voice) and `docs/04` (negative prompts) — push hard against neon, sparkles, "epic" |
+| Demo recording keeps failing | Not enough buffer time on May 3 | Always have a pre-recorded canonical run as B-roll fallback (captured during May 2 evening dress rehearsal) |
+| 0G Galileo public RPC unreliable | Public node congestion | Builder C's private node + 30s TTL cache on `ownerOf()` reads covers it |
+| ENS resolver gateway down | Vercel/Cloudflare blip | Fall back to pre-cached `cast resolve` outputs captured during dress rehearsal |
+
+---
