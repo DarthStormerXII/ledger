@@ -65,4 +65,57 @@ Use the links below as the supporting implementation/proof fanout for each ETHGl
 ```
 ledger/
 ├── README.md                ← you are here
-├── EXECUTI
+├── EXECUTION_PLAN.md        ← canonical 22-step build plan to submission
+├── AGENTS.md                ← project-level CLI/script reference
+│
+├── docs/                    ← all planning documents (11)
+│   ├── INDEX.md             ← navigation guide — start here
+│   ├── 00_MASTER_BRIEF.md   ← project context summary (paste at top of every AI session)
+│   ├── 01_PRD.md            ← product requirements
+│   ├── 02_ARCHITECTURE.md   ← technical design (contracts, message schemas, data flow)
+│   ├── 03_DEMO_SCRIPT.md    ← 4-min demo video script
+│   ├── 04_HIGGSFIELD_PROMPTS.md  ← cinematic shot prompts
+│   ├── 05_CLAUDE_DESIGN_BRIEF.md ← UI design system
+│   ├── 06_AI_COUNCIL_PROMPTS.md  ← multi-LLM brainstorm prompts
+│   ├── 07_SUBMISSION_PACK.md     ← form answers + READMEs
+│   ├── 08_DAY0_VERIFICATION.md   ← sponsor questions + Day 0 plan (now closed)
+│   ├── 09_BRAND_IDENTITY.md      ← logo, fonts, colors, voice
+│   └── 10_ACTION_NAVIGATOR.md    ← master execution map
+│
+├── proofs/                  ← sponsor-grade evidence (built during execution)
+│   ├── README.md
+│   ├── 0g-proof.md
+│   ├── axl-proof.md
+│   └── ens-proof.md
+│
+├── tools/                   ← research, council outputs, llm-council clone
+│   ├── council/             ← MAIN council (Architect/Strategist/Redteam/Director) Stage 1-3
+│   ├── council_alt/         ← ALT council (Whisperer/Pragmatist/Inventor) Stage 1-3
+│   ├── research/            ← deep sponsor research briefs
+│   └── llm-council/         ← Karpathy reference repo
+│
+└── (engineering scaffolding lives here once build starts — see EXECUTION_PLAN.md)
+    ├── contracts/           ← Solidity (Foundry)
+    ├── agents/              ← agent runtime (Node/TS)
+    ├── axl/                 ← AXL node configs
+    ├── frontend/            ← Next.js dashboard
+    ├── resolver/            ← CCIP-Read offchain resolver server
+    └── infra/
+```
+
+---
+
+## Where to start
+
+- **New AI session, any task** → paste `docs/00_MASTER_BRIEF.md` first
+- **What to build right now** → `EXECUTION_PLAN.md` at root
+- **Why this slate of 3 sponsors** → `tools/council/STAGE3_CHAIRMAN.md` and `tools/council_alt/STAGE3_CHAIRMAN.md`
+- **Architecture decisions and rationale** → `docs/02_ARCHITECTURE.md`
+- **Demo and recording** → `docs/03_DEMO_SCRIPT.md` + `docs/04_HIGGSFIELD_PROMPTS.md`
+- **Sponsor proof artifacts (the README judges grep)** → `proofs/`
+
+The canonical decisions on what to build live in **`tools/council/STAGE3_CHAIRMAN.md`** (the chairman's synthesis of two stages of cross-critique across 4 lenses, plus 4 sponsor research briefs and 5 sponsor workshop transcripts). All 11 planning docs were updated against that synthesis on May 2.
+
+---
+
+*Built at ETHGlobal Open Agents 2026 by Gabriel and team.*
