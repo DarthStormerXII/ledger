@@ -249,3 +249,154 @@ mark and at the punchline. Tell us if either is failing.
 ```
 
 ---
+
+## Prompt 8 — Watch the Demo with Audio Off (Director's Muted-Autoplay Test)
+
+**When to run:** Day 8 evening (May 2), as soon as a rough cut exists.
+
+```
+[Attach the Ledger demo video file or YouTube/Vimeo link.]
+
+You are scrolling a hackathon submission gallery on autoplay. Every 
+demo plays muted by default. You will decide whether to unmute and 
+keep watching within the first 3 seconds based on the visuals alone.
+
+Do this evaluation in two passes.
+
+PASS 1 — First frame only (no playback):
+1. What is the first thing your eye lands on?
+2. Without any other context, can you guess the product category in 
+   one word? (e.g. "marketplace", "wallet", "trading bot", 
+   "infrastructure")?
+3. Is the frame visually distinctive enough that, scrolling past 200 
+   submissions, you would stop on it? Yes / No / Maybe — and why.
+
+PASS 2 — First 3 seconds with audio OFF:
+1. After 3 seconds of muted playback, can you describe the product 
+   thesis in one sentence?
+2. Specifically: do the visuals communicate "an AI agent → transferred 
+   to a new owner → keeps earning" without any voiceover?
+3. If a typical hackathon judge gives 3 seconds before deciding to 
+   unmute or skip — does this earn the unmute? Yes / No.
+4. List the SINGLE most impactful change to the first 3 seconds that 
+   would convert a "skip" into an "unmute."
+
+Be ruthless. Most demo videos lose the judge in the first 3 seconds 
+of muted scroll. The first frame and the first 3 seconds of motion 
+must do all the heavy lifting before any VO arrives.
+```
+
+---
+
+## Prompt 9 — Sponsor Judge Grep Test (Strategist's Sponsor-Language Check)
+
+**When to run:** Day 9 morning (May 3), README near-final, before submission.
+
+```
+[Paste 07_SUBMISSION_PACK.md README template fully populated with 
+real artifacts — token IDs, CIDs, peer IDs, ENS names, contract 
+addresses.]
+
+You are a sponsor judge from one of the three Ledger partner sponsors. 
+You have 90 seconds with this README before deciding whether to put it 
+on your shortlist for the bounty. You will literally Cmd-F (grep) the 
+README for the language YOUR product uses internally — if the project 
+isn't speaking your dialect, you assume they didn't really integrate 
+deeply.
+
+Run this prompt three times, once per persona:
+
+PERSONA A — 0G Labs judge (think Gautam from the 0G workshop):
+1. What is the SINGLE sentence you would Cmd-F for in the README to 
+   confirm a real Track B integration? (Hint: think iNFT, ERC-7857 
+   draft, sealed inference, attestation digest, GLM-5 / Qwen3.6-Plus, 
+   Galileo Testnet ChainID 16602, uploadFile / downloadFile, TEE 
+   oracle re-keying.)
+2. Does the README contain that sentence verbatim or near-verbatim?
+3. What 0G-specific term, if missing from the README, would make you 
+   doubt the team actually used 0G beyond a logo?
+
+PERSONA B — Gensyn AXL judge (think Jud from the Gensyn workshop):
+1. What single sentence would you grep for? (Hint: cross-machine, 
+   gossipsub, Yggdrasil, peer IDs, residential NAT, no port 
+   forwarding, "service registry / tool marketplace" framing, 
+   end-to-end encrypted payload + hop-by-hop TLS.)
+2. Does the README contain it?
+3. What AXL-specific term, if missing, would tank your confidence?
+
+PERSONA C — ENS judge (think Greg from the ENS workshop):
+1. What single sentence would you grep for? (Hint: ENSIP-25 
+   agent-registration text records, ERC-8004 verification loop, 
+   CCIP-Read offchain resolver, wildcard resolution per ENSIP-10, 
+   `who/pay/tx/rep/mem` capability tree, live `ownerOf()` resolution 
+   flip post-transfer, Fluidkey-inspired rotating `pay.*` HD-derived 
+   addresses, Path C pattern.)
+2. Does the README contain it?
+3. What ENS-specific term, if missing, would tank your confidence?
+
+Output: 3 missing-or-weak sentences (one per sponsor) that, if added 
+verbatim to the README, would convert a "shortlist maybe" into a 
+"shortlist yes."
+```
+
+---
+
+## Prompt 10 — ENS Resolution Flip Beat — Real-Client Playback Check
+
+**When to run:** Day 9 morning (May 3), as soon as the resolver gateway is live.
+
+```
+[Paste 03_DEMO_SCRIPT.md sections covering 2:00–3:15 (the Inheritance 
+beat) AND the live URL of the deployed CCIP-Read resolver gateway 
+AND the parent ENS name on Sepolia.]
+
+The Inheritance moment depends on the ENS resolution flip — pre-transfer 
+`who.worker-001.<team>.eth` resolves to Owner_A's wallet, post-transfer 
+it resolves to Owner_B's wallet, with zero ENS transactions in between. 
+This must work in a real ENS-aware client at 1:1 playback speed during 
+the demo recording, not just in our custom viewer page.
+
+For each of the following clients, evaluate at 1:1 playback speed (no 
+edit cuts, no time skips):
+
+1. `cast resolve who.worker-001.<team>.eth` from the terminal 
+   (Foundry's CLI — judges with deep technical credentials may grep 
+   for this line in the demo).
+2. `app.ens.domains/sepolia/<team>.eth` — does the official ENS 
+   manager render the capability subnames at all, or does it choke 
+   on wildcard resolution?
+3. Rainbow Wallet (Sepolia mode) — does it resolve the subname for 
+   send-to-name?
+4. Our custom Capability Tree Viewer page — fallback if the official 
+   ENS app is unfriendly to our text records.
+
+For each client, confirm:
+- Does pre-transfer resolution complete in under 5 seconds at 1:1 
+  speed (CCIP-Read round trip latency is on the critical path of 
+  the demo)?
+- Does post-transfer resolution flip within 30 seconds of the 
+  `transferFrom` settlement on 0G Galileo (matching PRD acceptance 
+  criterion #5)?
+- Are the resolution responses cacheable enough that the demo doesn't 
+  show a second of blank state mid-cut?
+
+Identify the SINGLE client we should record in the demo for maximum 
+credibility. If the official ENS app is unreliable on Sepolia for 
+wildcard subnames, the custom viewer page is the right call — but 
+ALSO show `cast resolve` in a terminal as a 2-second cutaway for 
+the technical judges.
+```
+
+---
+
+## Reading the Council's Output
+
+For each prompt, after running across models:
+
+1. **Make a single combined doc** with each model's response side-by-side
+2. **Highlight in green:** points where 3+ models agree
+3. **Highlight in yellow:** points where models disagree (these need your judgment)
+4. **Highlight in red:** unique critical findings only one model raised (verify, then act)
+5. **Action items:** convert findings into specific tasks in your project tracker
+
+Don't drown in the responses. The point of AI Council is to surface blind spots, not to outsource the decision.
