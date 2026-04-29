@@ -356,3 +356,54 @@ provenance.
 Settlement is **two-phase commit, eventually consistent within ~10s.** Both transactions guaranteed to fire; the dashboard surfaces a `pending_reconcile` state if one lags. The Settlement Status Strip shows ✓/✓/⏳ per leg.
 
 ---
+
+## Sponsor integrations
+
+- **0G Labs (Track A + Track B)** — iNFT-minted worker swarm, sealed inference attestation, 0G Storage memory persistence, ERC-7857 TEE re-keying on transfer. [Details](#0g-integration) · [Proof](./proofs/0g-proof.md)
+- **Gensyn AXL** — 3-node cross-machine mesh (2 cloud + 1 residential CGNAT) with gossipsub pubsub, hop-by-hop TLS + end-to-end encrypted payloads. Service-registry / tool-marketplace pattern. [Details](#gensyn-integration) · [Proof](./proofs/axl-proof.md)
+- **ENS (ENS-AI + ENS-Creative)** — parent name on Sepolia + ENSIP-10 wildcard CCIP-Read resolver + capability tree (`who/pay/tx/rep/mem`) + ENSIP-25 ↔ ERC-8004 verification loop + live `ownerOf()` flip on transfer. [Details](#ens-integration) · [Proof](./proofs/ens-proof.md)
+
+---
+
+## Contract addresses
+
+**0G Galileo Testnet (ChainID 16602, native 0G token):**
+
+| Contract | Address |
+|---|---|
+| WorkerINFT | `0x...` |
+| LedgerEscrow | `0x...` |
+| LedgerIdentityRegistry | `0x...` |
+
+**Base Sepolia:**
+
+| Contract | Address | Note |
+|---|---|---|
+| ERC-8004 ReputationRegistry | `0x8004B663056A597Dffe9eCcC1965A193B7388713` | Audited deployment — we use, we do not deploy |
+| LedgerEscrow (settlement) | `0x...` | calls `feedback()` on the ERC-8004 above |
+
+**Sepolia (ENS):**
+
+| Resource | Address |
+|---|---|
+| Parent name | `<team>.eth` |
+| Wildcard CCIP-Read resolver contract | `0x...` |
+| Resolver gateway URL | `https://...` |
+
+---
+
+## How it's made
+
+Three layers, three sponsors. Workers run on 0G Compute with sealed inference (GLM-5 / Qwen3.6-Plus, attestation digests verified via `broker.inference.verifyService`) and persistent memory in 0G Storage via the `uploadFile` / `downloadFile` SDK. Each worker is an ERC-7857 (0G iNFT draft standard) iNFT on 0G Galileo Testnet; on transfer, the TEE oracle re-keys the AES-256-CTR memory blob to the new owner's pubkey per spec, using the reference implementation at [`0glabs/0g-agent-nft@eip-7857-draft`](https://github.com/0glabs/0g-agent-nft/tree/eip-7857-draft).
+
+All inter-agent communication runs over Gensyn AXL across three independent nodes — two cloud VMs and one residential laptop behind CGNAT — with no central broker. We forked AXL's gossipsub example for the pubsub layer (`TASK_POSTED` / `BID_PLACED` / `AUCTION_CLOSED`). Two layers of encryption: hop-by-hop TLS plus end-to-end encrypted payloads. Outbound TCP/TLS to bootstrap is sufficient — no port forwarding, no STUN, no hole-punching.
+
+Identity is ENS. Parent name on Sepolia + ENSIP-10 wildcard CCIP-Read offchain resolver (Path C, per `0xFlicker/tod-offchain-resolver`) serving a capability tree per worker: `who.*` resolves to live `ownerOf()` on 0G Galileo, `pay.*` rotates HD-derived receive addresses (**inspired by Fluidkey** — Greg's favorite hackathon project, mentioned in the ENS workshop), and `tx / rep / mem` complete the namespace. ENSIP-25 agent-registration text record on the parent points to the audited ERC-8004 ReputationRegistry on Base Sepolia — that's the verification loop Greg named in the workshop.
+
+Settlement is USDC on Base Sepolia. `LedgerEscrow.sol` calls `feedback()` on the live ERC-8004 ReputationRegistry on settlement. We deploy zero of our own reputation infrastructure; we use the audited deployment.
+
+> **Honest disclosure on demo data:** The hero worker's reputation history (47 jobs, 47 employer-signed feedback records on the audited ERC-8004 ReputationRegistry at `0x8004B663…` on Base Sepolia) is seeded for demonstration. The contract accepts any employer-signed feedback record per ERC-8004 spec; production deployments would derive history from real task settlements.
+
+The most interesting build problem was the inheritance flow: when a worker iNFT transfers mid-flight, the next earned payment must flow to the new owner. We solved this in three coordinated places — escrow checks `ownerOf()` at settlement time, the ERC-7857 TEE oracle re-keys the memory blob, and ENS resolution flips with zero ENS transactions because the resolver reads `ownerOf()` live.
+
+---
