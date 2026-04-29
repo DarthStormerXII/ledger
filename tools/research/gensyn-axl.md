@@ -117,3 +117,161 @@ This is HTTP long-poll territory — for an event-driven UI we'll wrap it in a 1
 - For Ledger's bidding flow this means: at-most-once delivery; we should add app-level dedupe keys and request-ack pairs on critical messages. Cheap to implement.
 
 ---
+
+## Identity + peer model
+
+### How peer IDs work
+
+- Each node holds an **ed25519 keypair** in a PEM file at `PrivateKeyPath` (default `private.pem`).
+- Generated with `openssl genpkey -algorithm ed25519 -out private.pem`. Or auto-generated in-memory if you skip the field (lost on restart — don't do this for a demo).
+- The **peer ID surfaced in the HTTP API is the 64-character hex of the public key.** Used as the destination address in `X-Destination-Peer-Id` and as the sender in `X-From-Peer-Id`.
+- The Yggdrasil layer also derives a **deterministic IPv6 address in the `200::/7` block** from the public key — visible as `our_ipv6` in `/topology`. Two equally valid identifiers; the IPv6 is the routing primitive, the hex pubkey is the API primitive.
+
+### Persistence across restarts
+
+**Stable iff you keep the PEM.** Same PEM → same pubkey → same peer ID → same IPv6 → same routing identity. Standard ed25519. We commit `private.pem` files **outside** the repo (or use one-shot deploy steps) and bake them into each node's working directory.
+
+### What's surfaceable in a UI for P2P proof
+
+The `GET /topology` response is gold for the dashboard. Per `docs/api.md` it returns:
+
+```json
+{
+  "our_ipv6": "200:abcd:...",
+  "our_public_key": "<64-hex>",
+  "peers": [ { "key": "<peer-pubkey>", "uri": "tls://1.2.3.4:9001", ... } ],
+  "tree": [ { "public_key": "<key>", "parent": "<parent-key>" }, ... ]
+}
+```
+
+For Ledger's "is this real P2P?" panel we render, per node:
+- The 64-hex public key (truncated `e3a4...c91f`, full on hover/click).
+- The Yggdrasil IPv6 (`200:abcd:...`).
+- The host IPv4/hostname (we self-report this from a sidecar field — it's not in `/topology`, but our wrapper attaches it).
+- The peer list with link arrows to the other 2 nodes.
+- The spanning tree visualized as a graph — three different parent/child relationships.
+- Live `/send` packets animating along the edges with `X-Sent-Bytes` and `X-From-Peer-Id` shown.
+
+A judge sees three distinct public keys, three distinct IPv6 addresses, three distinct host IPs (one of which is residential — a 192.168.x or a CGNAT 100.64.x will be obvious), and live cross-machine packets. That's irrefutable.
+
+---
+
+## SDK / wrapper
+
+### Languages supported
+
+- **Go**: the `node` binary itself. No published Go client for the HTTP API — you'd just `net/http`.
+- **Python**: reference client at `examples/python-client/client.py` with `get_topology()`, `send_msg_via_bridge(dest_key, data)`, `recv_msg_via_bridge()` plus `serialize_tensor` / `deserialize_tensor` helpers. Used by `convergecast.py` (tree aggregation example) and `gossipsub.py`.
+- **Node/TypeScript**: **none published**. We'll write our own — it's literally three `fetch` calls.
+- **Anything else**: any HTTP-capable language works.
+
+### Code samples
+
+The Python `convergecast.py` demonstrates the core pattern:
+
+```python
+topo = get_topology()
+parent = topo["tree"][...]["parent"]
+msg = msgpack.packb({"type": "convergecast_data", "from": our_key, "data": aggregated})
+send_msg_via_bridge(parent, msg)
+
+while time.time() < deadline:
+    msg = recv_msg_via_bridge()  # returns {'from_peer_id': str, 'data': bytes} or None
+    if msg is None:
+        time.sleep(0.01); continue
+    data = msgpack.unpackb(msg['data'], raw=False)
+    ...
+```
+
+The whole multi-node hello-world is ~30 lines.
+
+### HTTP wrapper availability
+
+**The AXL node IS the HTTP wrapper.** There is no separate HTTP-over-AXL service — `localhost:9002` is the official, documented surface. We don't need to write or run an additional wrapper.
+
+For Ledger we will write `tools/axl-client.ts` (and mirror to `axl_client.py` if needed) — a 50-line module exposing:
+
+```ts
+class AxlClient {
+  constructor(baseUrl = "http://127.0.0.1:9002") {}
+  async topology(): Promise<Topology>
+  async send(peerId: string, body: Uint8Array): Promise<{ sentBytes: number }>
+  async recv(): Promise<{ fromPeerId: string; body: Uint8Array } | null>
+  // pubsub layer on top:
+  publish(topic: string, payload: any): Promise<void>
+  subscribe(topic: string, cb: (msg) => void): void
+}
+```
+
+### What we'd have to build vs reuse
+
+| Component | Reuse | Build |
+|---|---|---|
+| Yggdrasil networking | ✅ AXL binary | — |
+| HTTP API | ✅ `127.0.0.1:9002` | — |
+| Python client (if we use Python anywhere) | ✅ `examples/python-client/client.py` | — |
+| TS client | — | ~50 LOC wrapper |
+| Pubsub topics | partial — copy `gossipsub.py` patterns | TS port: ~150 LOC |
+| Job announcement schema | — | App-level msgpack envelopes |
+| Dashboard topology viz | — | React + the `/topology` polling loop |
+
+---
+
+## Node setup (concrete)
+
+### Install
+
+Per AXL README:
+
+```bash
+git clone https://github.com/gensyn-ai/axl
+cd axl
+make build                                              # produces ./node
+openssl genpkey -algorithm ed25519 -out private.pem     # one per node
+./node -config node-config.json
+```
+
+Requires **Go 1.25.5+**. No Docker image is published in the repo at time of research — we'll likely write our own Dockerfile for the cloud VMs (5-line wrapper around the Go build).
+
+### Config
+
+**Bootstrap (cloud VM 1):** `node-config.json`
+```json
+{
+  "PrivateKeyPath": "private.pem",
+  "Peers": [],
+  "Listen": ["tls://0.0.0.0:9001"]
+}
+```
+
+**Cloud VM 2 (peer to bootstrap):**
+```json
+{
+  "PrivateKeyPath": "private.pem",
+  "Peers": ["tls://<bootstrap-public-ip>:9001"],
+  "Listen": []
+}
+```
+
+**Laptop (residential NAT, peer to bootstrap):**
+```json
+{
+  "PrivateKeyPath": "private.pem",
+  "Peers": ["tls://<bootstrap-public-ip>:9001"],
+  "Listen": []
+}
+```
+
+All three additionally accept the operational fields (`api_port: 9002`, `bridge_addr: 127.0.0.1`, `max_message_size`, etc.) — defaults are fine.
+
+### Verifying mesh formation
+
+1. **`curl http://127.0.0.1:9002/topology`** on each node. Confirm:
+   - Each `our_public_key` is unique.
+   - Each `peers[]` lists the other nodes' keys.
+   - The `tree[]` entries have parent/child relationships matching the bootstrap topology.
+2. **Round-trip ping test:** node A `POST /send` with `X-Destination-Peer-Id: <B-pubkey>`, body `"ping"`. Node B `GET /recv` returns `200 OK` with `X-From-Peer-Id: <A-pubkey>` and body `"ping"`. Then reverse.
+3. **`ping6 <B-ipv6>` from A's host** (if Yggdrasil IPv6 is exposed via the AXL gVisor stack to userspace tools — `[UNVERIFIED]`, may need the optional TUN mode; the HTTP-based ping in step 2 is the supported path).
+4. **Three-way fan-out:** A sends to B and C; both receive. Confirms the mesh is doing real routing.
+
+---
