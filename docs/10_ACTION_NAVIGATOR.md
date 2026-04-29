@@ -404,3 +404,56 @@ Quick reference of which tool consumes which document:
 | ENS resolver gateway down | Vercel/Cloudflare blip | Fall back to pre-cached `cast resolve` outputs captured during dress rehearsal |
 
 ---
+
+## Emergency Pivot Plans
+
+These are pre-decided pivots so you don't waste time deliberating mid-build:
+
+**Note (May 2):** All 5 Day-0 questions are now resolved per `docs/08_DAY0_VERIFICATION.md`. Q3 (KeeperHub testnet) is moot — KeeperHub is no longer in the slate. Pivots below cover late-stage failure modes.
+
+### If iNFT memory transfer fails (late discovery)
+**Pivot:** Implement a simple registry contract that maps `iNFT.tokenId → memoryKey`, where the memoryKey is stored as encrypted data accessible only to the current owner. Lose 1 day, keep the demo.
+
+### If 0G Compute access flickers
+**Pivot:** Pre-record the compute call output, replay deterministically in demo. Update `proofs/0g-proof.md` with the observed friction.
+
+### If AXL never meshes reliably
+**Pivot:** Use 3 cloud VMs only, no laptop. Demo uses screen-share view of 3 separate VPS terminals. Less authentic, still meets the cross-node requirement.
+
+### If ENS CCIP-Read resolver gateway flakes during recording
+**Pivot:** Use pre-cached `cast resolve` outputs captured during dress rehearsal. The owner-flip moment can be visualized via the Capability Tree Viewer reading from cached data. Document the flake honestly in the submission How-it's-made section.
+
+### If something major breaks late
+**Pivot:** Cut iNFT inheritance from the demo, ship without it. The demo becomes "agent labor market" instead of "agent labor market + secondary asset market." 0G Track B score drops significantly but Gensyn + ENS still in reach. **Avoid this. Inheritance is the punchline (and is the visible 5-second "oh" — the ENS resolution flip that makes the demo win).**
+
+---
+
+## What Success Looks Like
+
+Sponsor slate (post May 2 council): **0G** ($15K pool, dual-track) + **Gensyn AXL** ($5K) + **ENS** ($5K, dual-track). Total addressable pool: **$25K** (up from $20K under the prior KeeperHub slate).
+
+**Floor (no finalist, decent sponsor placements):** $3,000-4,000 in sponsor cash.
+
+**Median (target):** Finalist + 2 sponsor placements = $4,000 (4× $1,000 USDC) + $3,000–5,000 sponsor = **$7,000–9,000**.
+
+**Stretch:** Finalist + 3 strong sponsor placements = $4,000 + $5,500–9,000 sponsor = **$9,500–13,000**.
+
+**Ceiling (everything 1st place + finalist):** ~$12,000–15,000.
+
+Equally important: **portfolio piece, post-hackathon Gensyn Foundation grant fast-track, network of 4 teammates who shipped under pressure, and a working product on real testnet.** The cash is one of four prizes. Don't lose sight of the others.
+
+---
+
+## Final Note
+
+This is the **v3 plan** — the result of 4-lens council review (Architect, Strategist, Redteam, Director) across Stages 1-3 of the May 2 council pass, plus alt-council Stage 3 input. Pivots are logged in `tools/council/`. The architecture is the result of structured review, not a fresh draft. That's not the same as "locked" — surprises are still possible. But the structural decisions (sponsor slate, sponsor swap KeeperHub → ENS, schedule compression to a single May 3 day, "atomically" struck from cross-chain language, audited ERC-8004 instead of custom registry, Higgsfield Shot 2 cut) all have explicit rationale captured.
+
+The remaining time is about **execution discipline**:
+- Don't ideate when you should ship
+- Don't add scope when you should cut
+- Don't perfect when you should record
+- Don't wait when you should ask
+- Each day produces evidence artifacts, not just compiling code
+- When a council decision feels wrong in the moment, re-read `tools/council/STAGE3_CHAIRMAN.md` before re-litigating
+
+You have everything you need. **Go.**
