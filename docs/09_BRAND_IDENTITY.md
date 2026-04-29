@@ -364,3 +364,127 @@ The voiceover follows the same rules. Calm. Stating facts. Pauses for weight. No
 Same voice. Cold, precise, confident. Read your submission text aloud — if it sounds like a press release, rewrite it.
 
 ---
+
+## 7. Iconography
+
+### Approach
+
+**Use Lucide React for utility icons only** (close, search, settings, copy, external link, chevron). Set stroke width to 1.5, color to muted slate by default, white on hover.
+
+**Custom geometric forms for hero/identity contexts:**
+- Worker portraits (concentric circles, hex patterns)
+- Sponsor sigils (in the End Card)
+- Empty states
+- Success / failure illustrations
+
+### Forbidden icons
+
+- ❌ Any robot/brain emoji-style icons for "AI agent"
+- ❌ Sparkles, stars, magic wands for "AI features"
+- ❌ Rocket ships, moons for "launch"
+- ❌ Blockchain cube illustrations
+- ❌ Coin/dollar bill icons (use the typography in gold instead)
+- ❌ Lock icons for "secure" (overused, signals nothing)
+
+### Custom illustrations checklist
+
+For each of these, generate via image gen with consistent prompts:
+
+1. **3-4 Worker iNFT portraits (if time)** — abstract geometric, watch-dial style. Same prompt with seed variations. (Reduced from 10 per strategist's call — brand work serves the demo, not parallel project; ship 3-4 strong portraits over 10 mediocre ones.)
+2. **3 Sponsor logos** — for the end card sequence. Use real sponsor logos (0G, Gensyn, ENS) with hard-cut After Effects animation, NOT generated sigils. See `04_HIGGSFIELD_PROMPTS.md`.
+3. **1 Empty state illustration** — for "no jobs yet" / "no workers yet" screens. A single geometric form, suggested rather than literal.
+4. **1 OG/social preview image** — for when ledger.market gets shared on Twitter/Farcaster.
+5. **1 favicon** — derived from the standalone mark, optimized for 32×32 and 16×16.
+
+---
+
+## 8. Photography & Imagery (none — be deliberate about this)
+
+### Position: no photography in Ledger's identity.
+
+This is a contrarian choice and it matters.
+
+Most crypto products use stock photos of people pointing at laptops, abstract "data" photographs, gradient hero images. **Ledger uses none of this.** Every visual is either:
+- Custom geometric / generative
+- Cinematic (Higgsfield, used sparingly)
+- Pure typography
+- On-chain data rendered as UI
+
+This decision IS the brand. It signals: this product is software, not lifestyle. It's a tool for agents, not for humans browsing for inspiration.
+
+---
+
+## 9. Sound (for the demo video)
+
+### Music bed
+
+- **Cinematic shots:** A subtle low-frequency drone with gentle harmonic movement. **Spec:** ominous low-frequency drone, ~200Hz fundamental, ~400ms tail, slight reverb. **Source royalty-free** from FilmConvert or Artlist (search "ominous drone" / "cinematic low drone" / "200Hz pad"). **Not** epic build-up tracks.
+- ⚠️ **Avoid YouTube Content-ID flagged tracks.** The previously suggested Jóhann Jóhannsson "The Beast" (Arrival OST) and most Hans Zimmer cues are Content-ID flagged — they will auto-mute the audio in some regions on the demo upload, which means judges in those regions watch a silent video. Royalty-free libraries (FilmConvert, Artlist, Epidemic Sound, Musicbed) are safe.
+- **Screen recording sections:** No music. Let UI sounds carry it.
+
+### UI sounds (sparingly)
+
+- Bid arrival: a soft tone, ~440Hz, 80ms, slight reverb
+- Transaction confirmation: a slightly lower tone, ~330Hz, 120ms
+- Failure / warning: NEVER a buzzer. Use silence + visual red instead.
+
+### Voiceover
+
+- Single voice
+- Calm, neutral tone
+- Slight British or American Mid-Atlantic accent
+- **Use Eleven Labs voice "Brian" or "Adam"** if generating
+- Or record yourself if you have a clean mic and the right pacing
+
+---
+
+## 10. Visual Asset Generation Plan
+
+What to generate, in what order, with what tool:
+
+### Day 0 (today)
+
+**Image gen tool of choice (DALL-E 3, Midjourney, Flux, or Higgsfield image):**
+- [ ] Standalone mark — generate 4-6 variants, pick best
+- [ ] Horizontal lockup — generate 4-6 variants
+- [ ] App icon version — generate 2-3 variants
+- [ ] Favicon (derive from app icon, export at 32×32 and 16×16)
+
+### Day 6-7 (Apr 30 – May 1)
+
+**Image gen:**
+- [ ] 3-4 worker iNFT portraits with seed variations (if time — strategist reduced from 10; brand should serve the demo, not be a parallel project)
+- [ ] 1 OG/social preview image (for ledger.market when shared)
+- [ ] Empty state illustration
+
+### Day 8 (May 2 evening) — recording-day prep
+
+**Higgsfield:**
+- [ ] Cinematic Open clip (15s) — see `04_HIGGSFIELD_PROMPTS.md` Shot 1
+- [ ] Inheritance Handoff clip (12s) — Shot 3 (moves to final 3:48–4:00 of cut)
+- ❌ Shot 2 (iNFT crystal) — **CUT entirely** per council Stage 3. The iNFT is the data, not a crystal; replaced with slow camera push on the worker profile UI rendering the ENS capability tree.
+- ❌ Optional sponsor sigil sequence — **CUT.** Use real sponsor logos (0G + Gensyn + ENS) with hard-cut After Effects animation, no Higgsfield.
+
+**Voice gen (Eleven Labs):**
+- [ ] Full voiceover for demo script (record once, edit to fit)
+
+---
+
+## 11. Brand Quick-Reference Card
+
+```
+NAME            Ledger
+TAGLINE         The trustless hiring hall for AI agents.
+DOMAIN          ledger.market (priority), ledger.so, useledger.xyz
+COLORS          Ink #0A0E1A · Gold #E8D4A0 · Cyan #5FB3D4 · White #F5F2EB
+FONTS           Fraunces (display) · Inter (body) · JetBrains Mono (mono)
+LOGO            Three-node mark + LEDGER wordmark
+VOICE           Spare. Precise. Cold. Confident.
+ICONOGRAPHY     Lucide for utility · Custom geometric for identity
+PHOTOGRAPHY     None
+MUSIC           Subtle drone, no epic build-ups
+DON'TS          No emojis · No exclamation marks · No gradients · No 
+                glassmorphism · No "amazing" · No rocket ships
+```
+
+Pin this card somewhere visible during the build. When in doubt about a UI/copy/asset decision, check against the card.
