@@ -555,3 +555,70 @@ Demo references this URL in the closing card. README links to it.
 ```
 
 ---
+
+## Section C — Iterating Productively
+
+When the screens come back, never say "make it better." Use surgical edits:
+
+✅ Good edits:
+- "Make the hero number 50% larger and switch to Fraunces Light weight"
+- "Reduce auction card padding from 24px to 16px"
+- "Replace worker portraits with concentric-circle-only forms, no hex pattern"
+- "Slow the AXL packet animation by 50%"
+
+❌ Bad edits:
+- "Make it more cinematic"
+- "Make the hero pop more"
+- "Improve the layout"
+
+Claude Design responds to specifics. Vague feedback wastes turns.
+
+---
+
+## Section D — Export to Code
+
+Once screens are done, Claude Design can export to React/Tailwind. Use this:
+
+1. Connect your GitHub repo (the `ledger/` repo from your Architecture spec)
+2. Have Claude Design export each screen as a Next.js page component
+3. Drop the components into `frontend/app/`
+4. Refine in Claude Code Max from there
+
+You'll likely need to wire up real data sources (AXL events via SSE, on-chain reads via viem) — that work happens in Claude Code, not Claude Design.
+
+---
+
+## Section E — Common Pitfalls
+
+1. **Don't let it generate emoji-heavy or "playful" UI** — push back hard against any rounded blob shapes, gradient fills, or "fun" colors. Your aesthetic is institutional luxury, not consumer crypto.
+
+2. **Don't accept generic "AI agent" iconography** — robot heads, brain emojis, sparkle icons. Replace with your geometric portrait system.
+
+3. **Don't let it use Lucide React icons everywhere** — they're fine for utility (close, search, settings), but the worker portraits and main visuals should be custom abstract forms.
+
+4. **Demand mono typography for anything on-chain** — if it puts an address in body font, reject and ask again.
+
+5. **Numbers in Fraunces, words in Inter** — this is your typographic discipline. Money and counts get the serif treatment. Everything else stays neutral.
+
+---
+
+## Section F — Sound (for the demo + product UI)
+
+Audio is part of the design system, not an afterthought. The brief here governs what plays under the cinematic shots and what UI sounds the product surfaces during a screen recording.
+
+### Cinematic underscore (Higgsfield shots only)
+
+A single subtle low-frequency drone bed, ducked under voiceover.
+
+**Reference brief (royalty-free, search FilmConvert / Artlist with this descriptor):**
+> "ominous low-frequency drone, 200Hz, 400ms tail, slight reverb"
+
+(Previously this section pinned Jóhann Jóhannsson's "The Beast" as a reference. **Removed:** that track is Content-ID-flagged on YouTube and would mute audio in some regions of the submission upload. Royalty-free reference replaces it.)
+
+### UI sounds (screen recording only)
+
+Let the UI sounds (transaction confirmations, bid alerts, settlement-status leg flips) carry the screen recording. No music during the live-demo segments — the Bloomberg-terminal aesthetic prefers UI percussion to score.
+
+### Audio gates per Higgsfield shot
+
+Per `docs/04_HIGGSFIELD_PROMPTS.md`, every Higgsfield video prompt includes the literal audio specification `no dialogue, no foley, low ambient drone only` to suppress Cling 3's auto-dialogue and auto-foley tendencies. The drone bed is added in post — Higgsfield does not generate it.
