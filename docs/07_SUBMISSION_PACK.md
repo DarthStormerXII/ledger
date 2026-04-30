@@ -407,3 +407,65 @@ Settlement is USDC on Base Sepolia. `LedgerEscrow.sol` calls `feedback()` on the
 The most interesting build problem was the inheritance flow: when a worker iNFT transfers mid-flight, the next earned payment must flow to the new owner. We solved this in three coordinated places — escrow checks `ownerOf()` at settlement time, the ERC-7857 TEE oracle re-keys the memory blob, and ENS resolution flips with zero ENS transactions because the resolver reads `ownerOf()` live.
 
 ---
+
+## How to run locally
+
+```bash
+git clone ...
+cd ledger
+pnpm install
+# AXL nodes (2 cloud + 1 local)
+docker-compose -f axl/docker-compose.yml up
+# contracts
+cd contracts && forge build && forge script ... --rpc-url 0g-galileo
+# CCIP-Read resolver gateway (deployable to Vercel)
+cd resolver && pnpm dev
+# agents
+cd agents && pnpm buyer & pnpm worker
+# frontend
+cd frontend && pnpm dev
+```
+
+[Detailed setup instructions]
+
+---
+
+## Team
+
+- Gabriel — [@handle] — Architecture, AXL mesh, demo
+- [Friend 1] — [@handle] — Backend, contracts, CCIP-Read resolver
+- [Friend 2] — [@handle] — Frontend, Capability Tree Viewer
+- [Friend 3] — [@handle] — Agent reasoning, video, sealed inference
+
+## License
+
+MIT
+```
+
+---
+
+## Section D — Submission Final Checklist (final hour: 20:30 → 21:30 IST, May 3)
+
+Before clicking submit, verify:
+
+- [ ] Repo is public on GitHub
+- [ ] All commits dated April 24, 2026 or later (no pre-existing code)
+- [ ] README.md renders well on GitHub — pull quote ("The workers are the assets.") + Proof Matrix above the fold + What-it-is above the demo video embed
+- [ ] Architecture diagram embedded as PNG (not SVG, for GitHub compatibility)
+- [ ] Demo video uploaded to YouTube or Vimeo, link in README — **custom thumbnail set** (split-screen wallets, two laptops, worker stat card)
+- [ ] 4-minute video uploaded
+- [ ] **30-second elevator cut** also uploaded (judges sometimes only watch first 30s)
+- [ ] Live deployment URL works (test on a fresh browser, no localStorage)
+- [ ] All contract addresses listed and verified on explorers (0G Galileo + Base Sepolia + Sepolia for ENS)
+- [ ] `proofs/0g-proof.md` filed with real artifacts
+- [ ] `proofs/axl-proof.md` filed with real artifacts
+- [ ] `proofs/ens-proof.md` filed with real artifacts
+- [ ] `who.worker-001.<team>.eth` resolves correctly via `cast resolve` AND via the custom Capability Tree Viewer page (and via `app.ens.domains/sepolia/<name>` if the official app cooperates)
+- [ ] AXL `/topology` returns 3 distinct peer IDs from 3 distinct hosts
+- [ ] At least one full settlement flow has a verifiable on-chain tx hash on Base Sepolia for the ERC-8004 feedback record
+- [ ] ETHGlobal submission form completed
+- [ ] **Partner prizes selected: 0G + Gensyn + ENS** (NOT KeeperHub — swapped out May 2)
+- [ ] Project description ≤ 30 seconds when read aloud
+- [ ] All team members listed with valid wallets for prize disbursement
+- [ ] ETH stake unlocked / submission confirmed
+- [ ] Submitted ≥1h before 21:30 IST hard deadline (= 12:00 PM EDT)
