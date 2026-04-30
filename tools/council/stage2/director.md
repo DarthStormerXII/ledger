@@ -1,0 +1,45 @@
+# DIRECTOR — Stage 2 Cross-Critique
+
+I recognize Response D as my own Stage 1. I'm evaluating it with the same honesty as the others.
+
+---
+
+## Section 1 — Per-response evaluation
+
+**Response A (Architect).** The most important contribution is the cross-chain atomicity bug: USDC on Base Sepolia + escrow on 0G Sepolia cannot be made "atomic" through KeeperHub, and the spec uses the word anyway. A judge with EIP context demolishes this in 30 seconds, and the team has not noticed. The ERC-8004 misnaming and the mid-flight transfer semantics question (what if `transferFrom` lands at T+11.5 mid-payment) are equally load-bearing. The schedule reality check is project-saving — Day 9 and Day 10 are the same calendar date and the team is treating them as separate. Where this critic overstates: proposing to *cut* Base Sepolia entirely is a strategic miscalculation. Strategist correctly identifies USDC on a recognizable testnet as a credibility anchor for judges; removing it to fix a wording problem (use "two-phase, eventually consistent, ~10s window" + a Settlement Status Strip UI) trades a real asset for a docs fix. The architect also under-weights the demo-day fraud-smell of the simulated KeeperHub reroute, which Red Team named correctly. Document edits are mostly correct; the only one with a hidden cost is the Base Sepolia removal, which would degrade sponsor optics for a problem that's solvable with honest language.
+
+**Response B (Strategist).** The Proof Matrix table at the top of the README is the single best edit any response proposes — it solves the judge-skim problem and forces every other doc to optimize for evidence. The per-sponsor proof-doc files (`/docs/0g-proof.md`, `/docs/axl-proof.md`, `/docs/keeperhub-proof.md`) are a packaging move that changes reviewer behavior and costs maybe 3 hours total. The split-screen wallet visual at 2:50 (old wallet fading, new wallet incrementing `+4.50 USDC`, same tokenId in center) is the most concrete demo edit in the bundle and is the finalist-winning frame. Where this critic understates: the simulated KeeperHub reroute is treated as a "probability" issue ("if simulated or flaky") when Red Team correctly identifies it as radioactive — a credibility cliff that no amount of polish can survive once a judge sees the docs literally instructing the team to fake it. Strategist also doesn't push hard enough on the 47-fake-employer reputation laundering risk; that's a sponsor-facing landmine, not just a "tighten the messaging" issue. Document edits are correct and high-leverage; no hidden costs.
+
+**Response C (Red Team).** The most important contribution is the kill-shot sentence: *"This is a beautiful demo of an ERC-721 metadata pointer and a scripted dashboard, not a working market for intelligent agents."* That sentence is the criterion the team should defend every artifact against. Naming the simulated reroute as radioactive — and the 47 fake employer attestations as "reputation laundering" that "permanent on-chain makes worse, not better" — both find vulnerabilities the other lenses missed. The "kill the SSE proxy and one local process — do the other two remote nodes still exchange direct messages?" challenge is exactly how a Gensyn judge will probe, and the docs have no current answer. Where this critic falls short: zero constructive alternatives. Red Team identifies five existential vulnerabilities and prescribes "delete the claims" or "evidence them," but in 24 hours the team cannot rebuild ERC-7857 encrypted intelligence transfer. Without a decision tree of "which claim to soften vs. which to evidence vs. which to drop," the team gets a defense brief instead of a build plan. Document edits correctly map contradictions but stop short of fixes; applying them as written produces a more honest, less ambitious project — directionally right, but the team needs the strategist's "minimum viable evidence" overlay to know what to do tonight.
+
+**Response D (Director — my own).** Strong on the 4-second hook failure, the 90-second judge attention cliff, the "thumbnail and muted-autoplay" problem nobody else named, and the 30-second elevator cut as a separate deliverable. The "stillness" prescription for the Inheritance moment (cut "ERC-7857. An iNFT" from VO at the emotional peak, hold 3 seconds of silent UI on the stat card) is correct and complementary to strategist's split-screen idea. Rereading honestly: I treated the demo as a self-contained craft problem and missed three things the other lenses caught. (1) I cut Higgsfield Shot 2 entirely without considering that strategist's split-screen at 2:50 could *use* a hybrid Higgsfield+UI composite; my cut was too aggressive. (2) I did not name the cross-chain atomicity bug or the simulated reroute as demo-day risks even though both will be exploited in any live Q&A — those belong in my "hidden problem" section. (3) I missed the Proof Matrix as a structural fix that supports my "first 100 words of README before the video embed" point — they're the same fix, and strategist articulated it better. Document edits are useful for video craft but blind to architecture truth; applying them improves runtime and pacing without addressing the existential risks.
+
+---
+
+## Section 2 — Cross-cutting consensus
+
+1. **The Inheritance moment must combine split-screen wallet visual + stillness + the `ownerOf()` explanation + a real on-chain artifact.** Strategist (B) names the split-screen at 2:50, Director (D) names the stillness/VO cuts, Architect (A) supplies the one explanatory sentence ("the escrow checks the current owner at payment time"), and Red Team (C) demands real artifacts not assertions. Four-way convergence. **Concrete edit:** rewrite `03_DEMO_SCRIPT.md` 2:15–3:15 as a single sequence: cut "ERC-7857. An iNFT" line; insert 3-second silent hold on stat card in 96px Fraunces; at 2:50 split-screen with old wallet fading, new wallet `+4.50 USDC`, same `tokenId`/`47 jobs`/`4.7` in center; insert architect's `ownerOf()` line at 2:55; show real Base Sepolia tx hash and 0G explorer ownerOf result on screen.
+
+2. **Every claim in the README needs paired evidence.** Strategist (B) proposes a Proof Matrix table. Red Team (C) shows that without evidence the central claims collapse under any motivated review. Architect (A) repeatedly demands real artifacts (attestation hashes, contract addresses, request IDs). Three independent angles. **Concrete edit:** insert a Proof Matrix at the top of the README template in `07_SUBMISSION_PACK.md` (above architecture), with five rows: iNFT (token address, tokenId, explorer link), 0G Storage memory (CID before/after), AXL P2P (three node IDs, machine locations, log excerpt), KeeperHub (request IDs + tx hashes), Inheritance (ownerBefore/ownerAfter + payment recipient tx). Create three sponsor proof files in `/docs/`.
+
+3. **The simulated KeeperHub reroute UI is a credibility cliff and must be killed.** Red Team (C) names it radioactive and points to the literal docs telling the team to fake it. Strategist (B) names it a placement-killing risk if flaky. **Concrete edit:** delete the "manual override that simulates the reroute UI" instruction from `03_DEMO_SCRIPT.md` lines 812–816 and from `02_ARCHITECTURE.md` line 536–542. Replace with: if the gas spike doesn't trigger a real reroute on Day 9, demote the KeeperHub beat to a real tx hash + KeeperHub status panel showing a different real KeeperHub success (e.g., a retry on RPC failure), and rewrite the VO accordingly. Better to demo a smaller real KeeperHub moment than a faked big one.
+
+---
+
+## Section 3 — Conflicts the team must adjudicate
+
+**Conflict 1 — Base Sepolia: cut or keep?** Architect (A) recommends moving USDC to 0G Sepolia and dropping Base entirely to eliminate the cross-chain "atomicity" lie. Strategist (B) implicitly assumes Base USDC stays because it's the recognizable settlement layer judges parse instantly. **Criterion:** how much Base Sepolia integration code is already shipped. If Base is already wired and stable, keep it and rewrite the spec to "two-phase commit, eventually consistent, ~10s window" with a Settlement Status Strip UI (architect's own §4.1 proposal). If Base is incomplete or fragile as of EOD May 2, cut it — sponsor optics matter less than not breaking on demo day.
+
+**Conflict 2 — Higgsfield Shot 2 (iNFT crystal at 2:00–2:15): cut or keep?** Director (D — my own response) wants to cut it and replace with a slow camera-push on the worker profile UI. Architect (A) says keep all three shots and only cut the optional Shot 4. **Criterion:** Higgsfield credit budget and Shot 3 quality. Shot 3 (Inheritance Handoff) is the only cinematic doing real emotional work and must be perfect; if iterating Shot 2 burns 4–8 hours that should go to Shot 3 retakes, cut Shot 2. If Higgsfield credits are abundant and Shot 3 already lands, keep Shot 2 but trim to 8 seconds and overlay it as a transition wipe rather than a full beat.
+
+---
+
+## Section 4 — Final ranking
+
+```
+FINAL RANKING:
+1. Response B
+2. Response A
+3. Response C
+4. Response D
+```
