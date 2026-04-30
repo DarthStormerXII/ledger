@@ -5,3 +5,4 @@
 - ERC-7857 transfer signature questions: who can re-key?
 - decide TS vs Python for agent runtime — leaning TS
 - Foundry workspace layout (single workspace for all 4 contracts)
+- council prompts: focus on adversarial review + demo polish
