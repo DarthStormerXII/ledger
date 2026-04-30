@@ -30,6 +30,42 @@ There is no defensible answer in the current docs that satisfies a strict ERC-78
 
 ## 4. The AXL critique
 
-The "three processes on the same machine pretending" attack is obvious. The demo's planned proof is a topology view and log feed (03_DEMO_SCRIPT lines 665-674; 05_CLAUDE_DESIGN_BRIEF lines 1235-12
+The "three processes on the same machine pretending" attack is obvious. The demo's planned proof is a topology view and log feed (03_DEMO_SCRIPT lines 665-674; 05_CLAUDE_DESIGN_BRIEF lines 1235-1256). That is not convincing by itself. A UI can draw three nodes. A local SSE service can emit "us-west -> eu-central : BID" without a packet ever leaving localhost. The architecture does say two cloud VMs and a local laptop (02_ARCHITECTURE lines 366-372), and the master brief repeats that commitment (00_MASTER_BRIEF lines 47-52), but the demo evidence as written is visual, not forensic. The judge will ask for terminal logs, peer IDs, machine boundaries, and message correlation. The current docs do not require those to be shown.
 
-[continued in next commit]
+## 5. The KeeperHub critique
+
+The gas-spike demo has the highest fraud smell because the documents literally instruct the team to include a hidden Spike Gas button (02_ARCHITECTURE lines 536-542) and a manual override that simulates reroute UI if real conditions do not trigger it (03_DEMO_SCRIPT lines 812-816). The demo as written shows a gas chart spike and status text saying "Rerouting via private mempool" and "Confirmed in 4 seconds" (03_DEMO_SCRIPT lines 700-715). That proves nothing. The docs do not say how the gas chart is sourced, how fuzz transactions are linked to Base Sepolia, what KeeperHub response payload contains, or whether private mempool rerouting is even meaningful on the selected testnet. The verification doc explicitly asks if testnet gas-spike reroute can be demonstrated (08_DAY0_VERIFICATION lines 2154-2184), so the current proof is not convincing.
+
+## 6. The 47-jobs / 4.7-rating critique
+
+The team is currently papering over this unless the README is edited with brutal honesty. The demo checklist says the worker iNFT has "47 jobs of fake history pre-baked into reputation registry" (03_DEMO_SCRIPT lines 795-802). The pre-production note says to create those completions using 47 fake employer agents (03_DEMO_SCRIPT lines 808-810). The README template, however, says workers can be bought and inherited with their "full reputation, memory, and earnings history" (07_SUBMISSION_PACK lines 1954-1980) without disclosing that the hero worker's history is synthetic. A hostile reviewer will call it reputation laundering. If the chain contains 47 fake attestations, "on-chain" makes the theater permanent, not credible.
+
+## 7. Document-specific weaknesses
+
+**00_MASTER_BRIEF.md:** The "Core Thesis" claims nobody has wired ERC-8004, x402, and ERC-7857 into a working market and that Ledger does (lines 41-43). The bundle has not established that Ledger can actually implement ERC-7857 encrypted intelligence transfer or real x402.
+
+**01_PRD.md:** The inherit flow claims memory, reputation, earnings, and strategy weights transfer with the iNFT (lines 144-153), but the risk table admits the workaround is just a metadata pointer (lines 233-240). That is a central contradiction.
+
+**02_ARCHITECTURE.md:** WorkerINFT is described as "standard ERC-721 with memory pointer carried in metadata" (lines 346-351). That undercuts the ERC-7857/iNFT sponsor claim before implementation starts.
+
+**03_DEMO_SCRIPT.md:** The gas-reroute fallback explicitly allows a simulated reroute UI (lines 812-816). That is exactly the kind of line a judge would screenshot if they saw the repo.
+
+**04_HIGGSFIELD_PROMPTS.md:** The iNFT transformation shot includes atmospheric labels "47, 4.7, 12K" (lines 860-878). It visually amplifies numbers the docs say are fake.
+
+**05_CLAUDE_DESIGN_BRIEF.md:** It says the AXL topology visualization is what proves "this is really P2P" (lines 1235-1256). A visualization does not prove P2P. It proves the frontend can draw moving dots.
+
+**06_AI_COUNCIL_PROMPTS.md:** The hidden-vulnerabilities prompt already names the five assumptions that could be wrong, including AXL NAT, ERC-7857 memory transfer, KeeperHub chain support, 0G Compute access, and ownership-change mechanics (lines 1516-1547). The weakness is that these are not peripheral; they are the whole project.
+
+**07_SUBMISSION_PACK.md:** The 0G sponsor writeup says the iNFT "genuinely carries embedded intelligence, not just a name" (lines 1798-1804), but the architecture only shows metadata pointers. This is overclaiming.
+
+**08_DAY0_VERIFICATION.md:** It says do not start the build until Q1, Q3, and Q4 are confirmed (lines 2076-2085), but the action navigator simultaneously assigns code setup in hours 1-3 while answers are still pending (lines 2850-2868). That is process incoherence.
+
+**09_BRAND_IDENTITY.md:** The trademark note admits Ledger SAS risk and says to document the acknowledgment in README (lines 2319-2336). The README template later does not include that acknowledgment.
+
+**10_ACTION_NAVIGATOR.md:** The final note says "The plan is locked" and "The architecture is clean" (lines 3185-3195), while the same file contains emergency pivots for failed iNFT, KeeperHub, 0G Compute, and AXL foundations (lines 3150-3167). That confidence is unearned.
+
+## 8. The 30-second judge brutality
+
+The sentence that tanks the submission is: **"This is a beautiful demo of an ERC-721 metadata pointer and a scripted dashboard, not a working market for intelligent agents."**
+
+The current documents cannot fully defend against that sentence. They can defend ambition, visual quality, and a plausible architecture. They cannot yet defend the exact claims that matter: ERC-7857 encrypted intelligence transfer, real AXL cross-node communication, real KeeperHub gas-spike rerouting, real 0G Compute inference, and non-theatrical reputation history. Until those are evidenced directly in the repo and video, the project is vulnerable to being judged as polished slideware.
