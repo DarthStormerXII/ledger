@@ -62,6 +62,72 @@ Spend less time routing low-stakes actions through KeeperHub if it slows the bui
 
 The submission pack is directionally strong, but it currently reads like a polished plan. Judges need proof artifacts.
 
-Highest-leverage README edit: add a top-level `Proof Matrix` befo
+Highest-leverage README edit: add a top-level `Proof Matrix` before the architecture section:
 
-[continued in next commit]
+| Claim | Evidence |
+|---|---|
+| Worker is an ERC-7857 iNFT | token address, tokenId, explorer link |
+| Memory persists on 0G Storage | CID before/after, metadata link |
+| AXL is real P2P | three node IDs, machine locations, log excerpt |
+| KeeperHub submitted txs | request IDs, tx hashes, confirmation times |
+| Ownership changes earnings | ownerBefore/ownerAfter, payment recipient tx |
+
+Highest-leverage submission edit: replace generic "first secondary market" language with the demo sentence: "In the video, WorkerINFT #12345 completes 47 jobs under Owner A, transfers to Owner B, then earns the next payment into Owner B's wallet without changing agent identity." That is the hook.
+
+Highest-leverage video edit: reduce cinematic time if needed to give the inheritance proof an extra 10-15 seconds. Higgsfield helps finalist polish, but sponsor judges pay for proofs.
+
+## 5. Scope Cuts
+
+Delete the optional sponsor sigil sequence. It costs generation and editing time and does not move any bounty probability. Use actual sponsor logos or simple text callouts.
+
+Cut the full marketplace listing flow beyond the one demo sale. A generic marketplace UI is not rewarded. The only market interaction that matters is "List for Sale" then "Buy" for the inheritance moment.
+
+Cut elaborate worker portrait generation from 10 portraits to 3-4. The demo needs three credible workers, not ten collectibles.
+
+Cut residential NAT if it fails early. Do not spend a day debugging home networking. Use three cloud VMs and disclose the topology.
+
+Cut x402 purity if it becomes build drag. Bid bonds can be x402-style in the story, but the prizes are 0G, Gensyn, and KeeperHub. Do not let non-sponsor payment plumbing threaten sponsor proof.
+
+Cut the 4-minute-first mindset if 0G requires under 3 minutes. Make the tight 3-minute sponsor cut first; the 4-minute version can be secondary.
+
+## 6. Document-Specific Changes
+
+`00_MASTER_BRIEF.md`: add a "Sponsor Proofs Required" table with one concrete evidence artifact per sponsor. This forces every later doc to optimize for judging evidence.
+
+`01_PRD.md`: in Sponsor Integration Requirements, add "README evidence required" bullets for each sponsor: tx hash, node log, token ID, CID, request ID.
+
+`02_ARCHITECTURE.md`: mark non-sponsor complexities as "only if time": marketplace contract details, x402 facilitator purity, and residential NAT. This prevents engineering pride from stealing prize time.
+
+`03_DEMO_SCRIPT.md`: move the final payment-recipient switch into a named beat at 2:50 with split-screen wallet balances. This is the finalist moment; timestamp it explicitly.
+
+`04_HIGGSFIELD_PROMPTS.md`: label the optional sponsor sigil shot as "cut unless all sponsor proof footage is already recorded." It is nice-to-have, not strategic.
+
+`05_CLAUDE_DESIGN_BRIEF.md`: add a required "Evidence Mode" overlay for demo screens: node IDs, token ID, CID, KeeperHub request ID, tx hash. Tasteful, small, but visible.
+
+`06_AI_COUNCIL_PROMPTS.md`: add a sponsor-judge prompt that asks, "What proof would make you award this bounty?" The existing prompts are broad; add one that is explicitly prize-scoring.
+
+`07_SUBMISSION_PACK.md`: add the Proof Matrix to the README template and contract-address section. Judges skim; this should be above fold.
+
+`08_DAY0_VERIFICATION.md`: add a rule that Discord answers must be screenshotted or copied into `/docs/sponsor-confirmations.md`. Sponsor confirmation is submission evidence, not just team planning.
+
+`09_BRAND_IDENTITY.md`: reduce brand-generated asset ambition from 10 worker portraits to "3 required, 10 if time." The brand should serve the demo, not become a parallel project.
+
+`10_ACTION_NAVIGATOR.md`: move "record proof artifacts" into each day-end deliverable. Every day should produce evidence for submission, not just working code.
+
+## 7. What We're Missing
+
+The low-effort, high-payoff missing move is sponsor-specific proof documentation started on Day 0, not Day 10.
+
+Create three tiny files immediately:
+
+- `/docs/0g-proof.md`
+- `/docs/axl-proof.md`
+- `/docs/keeperhub-proof.md`
+
+Each file should have the same structure: what we used, why it matters, evidence links, screenshots/logs, known limitations. This is not new scope. It is packaging. It changes judge behavior because sponsor reviewers can jump straight to their section and verify fit in under 60 seconds.
+
+Second missing move: post sponsor-specific progress updates in Discord once, after there is real evidence. Not "look at our project." Instead: "We got three AXL nodes bidding over pubsub/direct messages; here are logs; any best-practice suggestions before final submission?" Sponsors remember teams that build in public and ask sharp implementation questions. This can move placement because the reviewer may already know the project before judging.
+
+Third missing move: add one metric to the demo: "Post to paid in 38 seconds across 3 AXL nodes." Judges remember numbers. If the demo only says "works," it blends in. If it says "3 nodes, 47 prior jobs, 4.7 reputation, payment landed in 4s, ownership switched before next payment," it becomes legible under fatigue.
+
+Here's what to fix: make sponsor proof visible, make the inheritance payment switch impossible to miss, cut anything that does not increase the odds of 0G, Gensyn, KeeperHub, or finalist placement.
