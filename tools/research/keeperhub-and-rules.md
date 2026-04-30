@@ -368,3 +368,61 @@ What "right" looks like for Ledger:
 If we keep a custom contract, we should call it something like "Ledger LegacyRatings (pre-8004 stub)" and not claim 8004 conformance.
 
 ---
+
+## Open questions for the team to decide / for sponsor confirmation
+
+1. **(Blocker, KeeperHub)** Is Base Sepolia chain ID `84532` supported in the Workflows engine? If not, what's the recommended testnet path? — ASK IN DISCORD DAY 1.
+2. **(Blocker, KeeperHub)** Is there ANY private-routing / Flashbots-equivalent feature on a testnet? Or is "guaranteed execution" purely retry + multi-RPC + gas-pricing on testnet? — ASK IN DISCORD; the answer dictates the demo script.
+3. **(Architecture)** If KeeperHub supports Base Sepolia: do we keep escrow + reputation on 0G and KeeperHub only sees the Base Sepolia USDC payment, or do we move escrow to Base Sepolia too? Trade-off: 0G storytelling vs KeeperHub-everywhere claim.
+4. **(ERC-8004)** Drop our custom ReputationRegistry and use the official `0x8004B663…` on Base Sepolia? Recommended yes — saves engineering time and strengthens claim.
+5. **(ETHGlobal slate)** Confirm the 3-prize slate is 0G + Gensyn AXL + KeeperHub. Anyone arguing for Uniswap or ENS should bring a specific feature, not a general fit.
+6. **(Demo)** Reframe the gas-spike scene from "private-mempool reroute" to "RPC failover + retry + gas-repricing under simulated RPC degradation." Get explicit team buy-in before the script is locked.
+7. **(README evidence)** Set up an `EVIDENCE.md` with at least 3 KeeperHub execution IDs from real runs by May 2 evening.
+8. **(Feedback bounty)** Assign a single owner to maintain `FEEDBACK.md` *during* the build, not at the end — the bounty rewards specificity, and specificity decays after the fact.
+9. **(Video)** Lock the 2–4 minute window in the production schedule; budget 90 seconds of buffer because under-2 / over-4 = auto-reject.
+10. **(0G role)** If 0G escrow stays, define exactly which 0G product is used: 0G Storage (for feedback URIs and off-chain artifacts) is a clean fit; 0G Compute / iNFT is a more ambitious fit aligned with Track B's "Best Autonomous Agents, Swarms & iNFT Innovations" framing.
+
+---
+
+## Direct URLs
+
+**KeeperHub:**
+- Landing: `https://keeperhub.com/`
+- Hackathon partnership blog: `https://keeperhub.com/blog/008-first-hackathon-openagents`
+- Docs root: `https://docs.keeperhub.com/`
+- MCP server docs: `https://docs.keeperhub.com/ai-tools/mcp-server`
+- MCP endpoint: `https://app.keeperhub.com/mcp`
+- Dashboard: `https://app.keeperhub.com/`
+- Main repo: `https://github.com/KeeperHub/keeperhub`
+- Archived MCP repo: `https://github.com/KeeperHub/mcp` (moved into main repo Mar 29 2026)
+- CLI: `https://github.com/KeeperHub/cli`
+- Claude plugins: `https://github.com/KeeperHub/claude-plugins`
+- Agentic wallet: `https://github.com/KeeperHub/agentic-wallet`
+- X: `https://x.com/KeeperHubApp`
+
+**ETHGlobal Open Agents:**
+- Event: `https://ethglobal.com/events/openagents`
+- Prizes: `https://ethglobal.com/events/openagents/prizes`
+- Info / details: `https://ethglobal.com/events/openagents/info/details`
+- KeeperHub bounty: `https://ethglobal.com/events/openagents/prizes/keeperhub`
+- (Other sponsor pages follow same pattern: `/prizes/0g`, `/prizes/gensyn`, `/prizes/uniswap-foundation`, `/prizes/ens`)
+- Kick-off Luma: `https://luma.com/aps612s1`
+- Cowork & feedback Luma: `https://luma.com/owsy13c1`
+
+**ERC-8004:**
+- Spec: `https://eips.ethereum.org/EIPS/eip-8004`
+- Magicians discussion: `https://ethereum-magicians.org/t/erc-8004-trustless-agents/25098`
+- Official contracts: `https://github.com/erc-8004/erc-8004-contracts`
+- Awesome list: `https://github.com/sudeepb02/awesome-erc8004`
+- ChaosChain reference impl: `https://github.com/ChaosChain/trustless-agents-erc-ri`
+- Phala TEE impl: `https://github.com/HashWarlock/erc-8004-ex-phala/`
+- Composable Security explainer: `https://composable-security.com/blog/erc-8004-a-practical-explainer-for-trustless-agents/`
+- BuildBear deep dive: `https://www.buildbear.io/blog/erc-8004`
+
+**0G:**
+- Testnet docs: `https://docs.0g.ai/developer-hub/testnet/testnet-overview`
+- Newton testnet chain (chainId 16600): `https://chainlist.org/chain/16600`
+
+---
+
+*End of brief. Word count: ~3,400.*
