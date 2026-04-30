@@ -187,3 +187,184 @@ This is KeeperHub's **first hackathon** ("Our first hackathon" — title of `kee
 3. **0G is no longer "where on-chain execution happens via KeeperHub."** 0G becomes a storage + inference layer; KeeperHub drives only the Base Sepolia flow. The README needs to say this clearly.
 
 ---
+
+## Part 2 — ETHGlobal Open Agents 2026
+
+### Official site URL + dates
+
+- Event hub: `https://ethglobal.com/events/openagents`
+- Prizes: `https://ethglobal.com/events/openagents/prizes`
+- Info / details: `https://ethglobal.com/events/openagents/info/details`
+- **Build window:** April 24 – May 3, 2026
+- **Submission deadline:** Sunday May 3, 2026 at 12:00 pm EDT
+- **Finalist judging:** May 6, 2026 (per team brief; the info page only confirms the close date and "judging shortly after")
+- Format: async, build-from-anywhere
+- Total pool: $50,000+
+
+### Bounty page (canonical)
+
+`https://ethglobal.com/events/openagents/prizes` is the canonical page. Per-sponsor pages live at `/prizes/<sponsor>` (e.g. `/prizes/keeperhub`).
+
+Confirmed sponsors and pools:
+
+| Sponsor | Pool | Tracks |
+|---|---|---|
+| 0G | $15,000 | Track A "Best Agent Framework, Tooling & Core Extensions" $7,500 (5 places); Track B "Best Autonomous Agents, Swarms & iNFT Innovations" $7,500 (up to 5 × $1,500) |
+| Uniswap Foundation | $5,000 | Best Uniswap API integration (3 places) |
+| Gensyn | $5,000 | Best Application of Agent eXchange Layer (AXL) (3 places) |
+| ENS | $5,000 | Best ENS Integration for AI Agents + Most Creative Use of ENS |
+| KeeperHub | $5,000 | Best Use of KeeperHub $4,500 + Builder Feedback Bounty $500 |
+
+Our targeted slate (0G Track B + Gensyn AXL + KeeperHub) sums to **$7,500 (0G B max as 1 of 5 winners) + $5,000 (Gensyn 1st) + $4,500 + $500 (KeeperHub) = up to $17,500** if we sweep — realistic upside more like $1,500 + $1,500 + $2,500 + $250 = **$5,750** for placing-but-not-winning across all four.
+
+### "Max 3 partner prizes" rule — definitive answer
+
+From the official info page (`/events/openagents/info/details`):
+
+> *"On the last step of the submission form, you can select up to 3 Partner Prizes to apply for. If a partner has multiple tracks, you can be eligible for all of them while only counting as 1 Partner Prize."*
+
+**Definitive answer for Ledger:** selecting "0G" *once* makes us eligible for both Track A and Track B. So our slate (0G + Gensyn + KeeperHub) consumes exactly 3 of 3 slots — fits perfectly, no headroom but no conflict.
+
+If we want a 4th sponsor (e.g. ENS for an agent-naming play), we'd have to drop one of the three. **Recommendation: don't dilute. Keep the focused 3.**
+
+### Submission form fields
+
+Per the info page (partial — full form only visible at submission time):
+- Project title
+- Project description
+- Public repository link
+- Demo video URL
+- Live demo link (where applicable)
+- Team members (names + Telegram + X)
+- Partner prize selections (up to 3, last step of the form)
+- Sponsor-specific fields (e.g. Uniswap requires a `FEEDBACK.md`, Gensyn requires evidence of cross-AXL-node communication, KeeperHub requires working demo)
+
+### Judging criteria (finalist + partner prize)
+
+**Overall hackathon (finalist round):**
+1. **Technicality** — problem complexity, solution sophistication
+2. **Originality** — novelty, creative problem-solving
+3. **Practicality** — functional, real-world usable
+4. **Usability** — intuitive UX
+5. **WOW factor** — distinctive, memorable
+
+**Partner prizes** — judged independently by each sponsor against their own criteria. KeeperHub: functional delivery, real-world utility, depth of integration, code quality. 0G: per-track (Track B emphasizes agent autonomy + iNFT innovation). Gensyn: cross-node AXL communication. There is no "partner prize council" — each sponsor scores their own pool separately, so optimizing for one sponsor doesn't help with another.
+
+### Video rules (max length, required content)
+
+- **Duration: 2–4 minutes.** Outside this range = **automatic rejection**. (This is stricter than the "under 3 minutes" assumption in the team docs — it's actually a *minimum* of 2 minutes too.)
+- **Resolution: 720p minimum.**
+- **Spoken narration required.** No TTS. No music-only. No silent screen-recording.
+- Avoid mobile recording (lower-quality flag).
+- Should cover: what it does, demo of working flow, brief tech overview, and (implicitly) which sponsor integrations are used.
+
+### Required README sections
+
+The info page does NOT pin a README template. Across sponsor pages, the *de facto* expectations are:
+- **Project description** — what + why
+- **Architecture** — diagram or prose, especially showing where each sponsor's tech sits
+- **Setup instructions** — how to run locally
+- **Demo evidence** — link to video + live URL + (for KeeperHub) execution IDs / replay links
+- **Sponsor-specific section** — per-sponsor: how we used 0G / Gensyn / KeeperHub, with file/contract references
+- **Contracts deployed** — addresses on each chain, with explorer links
+- **Team + contact**
+
+For our build, add a `FEEDBACK.md` (KeeperHub feedback bounty + Uniswap-style discipline even though we're not entering Uniswap), and an "Evidence" section in the main README with at least 2–3 sample KeeperHub execution IDs.
+
+---
+
+## Part 3 — ERC-8004
+
+### Spec status (EIP number, status)
+
+- **Number:** ERC-8004
+- **Title:** Trustless Agents
+- **Status:** **Draft** (Standards Track: ERC) — `https://eips.ethereum.org/EIPS/eip-8004`
+- **Created:** 2025-08-13
+- **Authors:** Marco De Rossi (`@MarcoMetaMask`), Davide Crapis (`@dcrapis`), Jordan Ellis, Erik Reppel
+- **Discussion:** `https://ethereum-magicians.org/t/erc-8004-trustless-agents/25098`
+
+**Implication for our claim:** "ERC-8004 conformant" is fine *as long as* we say "conformant to ERC-8004 (Draft, August 2025) at v0.x." Don't claim conformance to "the standard" without status — Draft means the spec can still change.
+
+### Components (IdentityRegistry, ReputationRegistry, ValidationRegistry)
+
+**IdentityRegistry** — ERC-721-based, makes every agent an NFT.
+- Functions: `register(agentURI, metadata[])` / `register(agentURI)` / `register()` → `agentId`; `setAgentURI`; `setMetadata` / `getMetadata`; `setAgentWallet(agentId, newWallet, deadline, signature)` / `getAgentWallet` / `unsetAgentWallet`.
+- Events: `Registered(agentId, agentURI, owner)`, `URIUpdated`, `MetadataSet`.
+- Agent ID format: `"{namespace}:{chainId}:{identityRegistry}"` e.g. `eip155:1:0x742…` so an agentId is portable across chains.
+
+**ReputationRegistry** — feedback ledger (NOT a star-rating db).
+- Functions: `giveFeedback(agentId, value:int128, valueDecimals:uint8, tag1, tag2, endpoint, feedbackURI, feedbackHash)`; `revokeFeedback(agentId, feedbackIndex)`; `appendResponse(agentId, clientAddress, feedbackIndex, responseURI, responseHash)`; read paths: `getSummary`, `readFeedback`, `readAllFeedback`, `getClients`, `getLastIndex`.
+- Events: `NewFeedback(agentId, clientAddress, feedbackIndex, value, decimals, tag1, tag2, endpoint, feedbackURI, feedbackHash)`, `FeedbackRevoked`, `ResponseAppended`.
+- **Pre-authorization:** before a client can `giveFeedback`, the *agent* must sign a feedback authorization (EIP-191 or ERC-1271). This stops feedback spam. **If our minimal ReputationRegistry has no auth check, it's not really 8004-conformant.**
+
+**ValidationRegistry** — independent verification (stake/zkML/TEE).
+- Functions: `validationRequest(validatorAddress, agentId, requestURI, requestHash)`; `validationResponse(requestHash, response:uint8, responseURI, responseHash, tag)`; `getValidationStatus`, `getSummary`, `getAgentValidations`, `getValidatorRequests`.
+- Response scale: 0–100 (0=fail, 100=pass, intermediate=spectrum).
+
+### What "reputation" means in the standard
+
+Per the spec text and the Composable Security explainer:
+
+Reputation is **NOT** a star rating, an aggregate score, a moving average, or a "reviews count." It is a **stream of signed feedback records**, each containing:
+
+- a bounded **score** (`int128 value` + `uint8 valueDecimals`)
+- two optional context **tags** (`tag1`, `tag2`)
+- an **endpoint** label (e.g. which API / interaction was rated)
+- a **feedbackURI** pointing to off-chain JSON (logs, artifacts, receipts)
+- a **feedbackHash** (KECCAK-256) so the off-chain payload is tamper-evident
+- the **clientAddress** (who rated)
+
+Reputation is intentionally **non-universal**: "Alice's trust for Bob differs from Charlie's trust for Bob, and Alice's trust varies by context." Aggregation is delegated to *consumers* — they can run `readAllFeedback` and compute their own score per their own policy (filter by tag, weight by client trust, time-decay, etc.).
+
+A canonical on-chain record looks like:
+```json
+{
+  "agentRegistry": "eip155:1:{identityRegistry}",
+  "agentId": 22,
+  "clientAddress": "eip155:1:{clientAddress}",
+  "createdAt": "2025-09-23T12:00:00Z",
+  "value": 87,
+  "valueDecimals": 0,
+  "tag1": "delivery-quality",
+  "tag2": "on-time"
+}
+```
+
+### Reference implementations
+
+- **Official:** `https://github.com/erc-8004/erc-8004-contracts` — audited by **Cyfrin, Nethermind, EF Security Team**, license CC0. Vanity-deployed at `0x8004A818BFB912233c491871b3d84c89A494BD9e` (IdentityRegistry) and `0x8004B663056A597Dffe9eCcC1965A193B7388713` (ReputationRegistry) on Ethereum Sepolia, Base Sepolia, Linea Sepolia, Hedera Testnet (and 20+ networks total when including mainnets).
+- **ChaosChain:** `https://github.com/ChaosChain/trustless-agents-erc-ri` — community implementation with end-to-end demo.
+- **Phala TEE-based:** `https://github.com/HashWarlock/erc-8004-ex-phala/`.
+- **M2M TRC-8004 for TRON:** `https://github.com/M2M-TRC8004-Registry/smart-contracts`.
+- Curated index: `https://github.com/sudeepb02/awesome-erc8004`.
+
+**For Ledger:** instead of building our own minimal ReputationRegistry, **use the official deployed contracts at `0x8004B663…` on Base Sepolia**. Cost is zero, audit story is automatic, and we can claim "we use the official ERC-8004 reference deployment" — much stronger narrative than "we wrote our own minimal version."
+
+### Known integrations
+
+From the awesome list:
+- **UFX Agentic Commerce** (uses ERC-8183 hooks on top)
+- **Azeth** (non-custodial smart accounts with guardian guardrails)
+- **Primev** (x402 payment facilitator)
+- **Helixa** (1,000+ agents minted with a Cred Score system)
+- **Agent Arena** (22,000+ indexed agents across 16 chains)
+- **Theagora** (atomic escrow with 4-tier verification — closest analog to Ledger's escrow concept)
+- **Verity Protocol** (on-chain reliability scoring)
+
+Mainnet went live **2026-01-29**. Total indexed agents across Base / BSC / Ethereum: **~107k** at time of writing.
+
+### Verdict: are we using ERC-8004 correctly?
+
+**No, the architect is right.** A "minimal ERC-8004 ReputationRegistry" implemented as a star-rating database is not 8004-conformant; it's a different thing wearing the standard's name.
+
+What "right" looks like for Ledger:
+
+1. **Drop the custom ReputationRegistry.** Use the official `0x8004B663…` deployment on Base Sepolia. Zero contract code to write, zero audit risk, zero standards-compliance argument.
+2. **Implement the feedback flow as the spec describes**: when a job completes, the WORKER signs a feedback-authorization (EIP-191), the CLIENT calls `giveFeedback(agentId, score, decimals, tag1='ledger-job', tag2=jobType, endpoint, feedbackURI=ipfs://…, feedbackHash)`, the URI points to a JSON blob with the job receipt + delivery hash.
+3. **Optional but high-value:** also use the IdentityRegistry — register every Ledger worker as an ERC-8004 agent. That gives them portable identity across other 8004-aware platforms.
+4. **README claim:** "Ledger uses the audited ERC-8004 reference deployment for worker reputation. Each completed job emits a `NewFeedback` event with an off-chain `feedbackURI` pinned on 0G storage." That's an honest, strong claim.
+
+If we keep a custom contract, we should call it something like "Ledger LegacyRatings (pre-8004 stub)" and not claim 8004 conformance.
+
+---
