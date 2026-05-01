@@ -15,3 +15,6 @@ contract LedgerIdentityRegistryTest {
         require(keccak256(bytes(identity.capabilities)) == keccak256("who,pay,tx,rep,mem"), "capabilities");
     }
 }
+
+    // TODO: more cases
+}
