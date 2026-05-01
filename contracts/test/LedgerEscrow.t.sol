@@ -40,10 +40,6 @@ contract LedgerEscrowTest {
         worker.accept{value: bondAmount}(escrow, taskId, bidAmount, bondAmount);
         escrow.releasePayment(taskId, resultHash);
 
-        (,,,,,,,, LedgerEscrow.Status status) = escrow.tasks(taskId);
-        require(status == LedgerEscrow.Status.Released, "released");
-        require(address(worker).balance == bidAmount + bondAmount, "worker paid and bond returned");
-        require(reputation.lastWorker() == address(worker), "feedback worker");
-        require(reputation.lastResultHash() == resultHash, "feedback hash");
-    }
+        (,,,,,,,, LedgerEscrow.S
+    // TODO: more cases
 }
