@@ -5,3 +5,4 @@
 - chainId 16601 vs 16602 — open question, will verify via live RPC
 - LedgerReputationRegistry deletion: removed from architecture, kept ERC-8004 audited
 - chainId verified live: 0x40da = 16602 (research brief had 16601 wrong)
+<!-- 2026-05-02 19:06 IST gabriel: notes: stage 3 chairman saved --> (1)
