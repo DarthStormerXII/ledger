@@ -33,3 +33,121 @@
 - **Whether to record solo or team-on-camera for the physical handoff scene.** Director's preference is two laptops + two hands in one shot. Fallback is single-laptop window-switch if team is not co-located.
 
 ---
+
+## Team roster + ownership
+
+(Adjust names to actual team. The 4-builder allocation below is from the alt-council's Stage 3 §4.)
+
+| Role | Owner | Owns |
+|---|---|---|
+| **Lead** | Gabriel | Architecture decisions, demo direction, README, submission, sponsor Discord posts |
+| **Builder A** (Resolver core) | TBD | CCIP-Read offchain resolver server, ENSIP-10 signed-response handler, label parser, deployment as stable HTTPS gateway |
+| **Builder B** (Capability backends) | TBD | The 5 namespace handlers (`who`, `pay`, `tx`, `rep`, `mem`); HD-derivation for `pay`; JSON-RPC clients for 0G Galileo + Base Sepolia; 0G Storage retrieval; ENSIP-5 text-record encoding; reputation seeding |
+| **Builder C** (On-chain) | TBD | Solidity contracts on 0G Galileo (LedgerEscrow, WorkerINFT, LedgerIdentityRegistry — NOT a custom reputation registry, we use the live audited ERC-8004); ENS parent name registration on Sepolia; ENSIP-25 text record; AXL nodes spin-up on 2 cloud VMs + local laptop |
+| **Builder D** (Frontend + demo) | TBD | Capability Tree Viewer page, Settlement Status Strip component, ENS-name display on worker profiles, demo recording, video edit, Higgsfield generations, README polish |
+
+**Rule:** if anything blocks you for >30 minutes, post in the team channel. Don't grind alone.
+
+---
+
+## The 22-step punch list
+
+Ordered by start time. Each step lists who owns, what it produces, and the hour budget.
+
+### Phase 1 — Tonight (May 2 evening, ~5h, 18:00–23:00 IST)
+
+| # | Step | Owner | Hours | Produces |
+|---|---|---|---|---|
+| 1 | Verify all 11 docs updated against `STAGE3_CHAIRMAN.md` (4 parallel agents finished). Spot-check 2-3 docs. | Lead | 0.5h | Confirmed v3 plan |
+| 2 | Register parent ENS name on Sepolia via `sepolia.app.ens.domains` (need Sepolia faucet ETH first) | Lead | 0.25h | `<team>.eth` on Sepolia |
+| 3 | Deploy `LedgerEscrow.sol` + `WorkerINFT.sol` + `LedgerIdentityRegistry.sol` on **0G Galileo (16602)**. Verify on explorer. | Builder C | 1h | 3 contract addresses + verified source |
+| 4 | Spin up 2 cloud VMs + local laptop running AXL nodes. Verify mesh formation: `/topology` returns 3 peers. Fork the `gossipsub` example from the AXL repo. | Builder A | 2h | 3 peer IDs + mesh up |
+| 5 | CCIP-Read offchain resolver server skeleton: bare `who.*` namespace handler proxying `ownerOf()` from 0G Galileo. Deploy to Vercel/Cloudflare. | Builder B | 1.5h | Resolver gateway URL |
+| 6 | Generate Higgsfield Shot 1 + Shot 3 start frames via multi-model comparison (Soul 2, Nano Banana Pro, Seedream, GPT Image, Cinema Studio image tab). Pick best per shot. | Builder D | 3h | 2 start-frame images |
+| 7 | Run AI Council Prompt 7 (final demo polish prompt) **tonight**, not Day 9 | Lead | 0.5h | Last-mile critique |
+
+### Phase 2 — May 3 morning (09:00–13:00 IST, ~4h)
+
+| # | Step | Owner | Hours | Produces |
+|---|---|---|---|---|
+| 8 | Add remaining namespace handlers to resolver: `pay` (HD-derivation), `tx`, `rep`, `mem` | Builder B | 3h | All 5 namespaces resolving |
+| 9 | Set ENSIP-25 `agent-registration` text record on parent name pointing to ERC-8004 deployment at `0x8004B663…` on Base Sepolia | Builder C | 0.5h | Verification text record live |
+| 10 | Build Capability Tree Viewer page (custom UI at `/agent/<ens-name>`, since official ENS app may not render our text records nicely) | Builder D | 2h | Demo viewer surface |
+| 11 | Wire Settlement Status Strip + AXL topology view + worker profile pages with ENS-name display | Builder A | 2h | Dashboard UI complete |
+| 12 | Seed 47 employer-signed feedback records to ERC-8004 ReputationRegistry on Base Sepolia (script + 47 deterministic employer wallets) | Builder B | 0.5h | Hero worker has reputation |
+| 13 | Sponsor Discord posts: 1-line update to 0G + Gensyn + ENS Discord channels with WIP repo link. *"Got X working, here are logs, any best-practice suggestions?"* | Lead | 0.5h | Sponsor visibility before judging |
+
+### Phase 3 — May 3 afternoon (13:00–18:00 IST, ~5h)
+
+| # | Step | Owner | Hours | Produces |
+|---|---|---|---|---|
+| 14 | Demo recording — 3+ takes minimum. Muted 5-second test on first take to decide cinematic-vs-inverted-hook. Pick best per scene, edit. | All | 3h | Raw demo footage |
+| 15 | Voiceover via Eleven Labs, synced to picture | Lead | 1h | VO sync'd |
+| 16 | Color grade, audio mix, hard-cut sponsor logo sequence (3 logos × 3 seconds each, hard cuts no crossfade) | Builder D | 1h | Final cut |
+
+### Phase 4 — May 3 evening (18:00–21:30 IST, ~3.5h)
+
+| # | Step | Owner | Hours | Produces |
+|---|---|---|---|---|
+| 17 | Build 30-second elevator cut alongside the 4-min cut (Director's call — judges sometimes only watch first 30s) | Lead | 0.5h | Short cut |
+| 18 | README final pass: Proof Matrix populated with **real** artifacts (token IDs, CIDs, attestation digests, peer IDs, contract addresses, ENS names) | Lead | 1h | Production README |
+| 19 | `/proofs/0g-proof.md`, `/proofs/axl-proof.md`, `/proofs/ens-proof.md` finalize. Each ≤1 screen, evidence inline | Lead | 0.5h | 3 sponsor proof files |
+| 20 | Custom YouTube/Vimeo thumbnail composite (split-screen, two laptops, wallet→wallet, worker stat card). Director's call — nobody else's submission solves this. | Builder D | 0.5h | Custom thumbnail |
+| 21 | Submission form filled. Partner prizes: **0G + Gensyn + ENS**. Submit by **20:30 IST** (1 hour buffer before deadline at 21:30 IST) | Lead | 0.5h | Submitted |
+| 22 | Iterate README until cutoff at 21:30 IST | Lead | until cutoff | Polished submission |
+
+---
+
+## Gates (do NOT proceed past these without verification)
+
+### Gate A — End of Phase 1 (May 2 ~23:00 IST)
+
+Before going to sleep, confirm:
+
+- [ ] 3 contracts deployed on 0G Galileo, addresses verified on explorer
+- [ ] AXL `/topology` returns 3 distinct peer IDs from 3 hosts
+- [ ] CCIP-Read resolver returns a valid response for `cast resolve who.<test>.eth` (even if test data)
+- [ ] ENS parent name registered on Sepolia (transaction confirmed)
+- [ ] 2 Higgsfield start frames in hand
+- [ ] AI Council Prompt 7 findings addressed or noted
+
+**If ANY of these fail, surface in team channel before anyone sleeps.**
+
+### Gate B — End of Phase 2 (May 3 ~13:00 IST)
+
+Before recording starts, confirm:
+
+- [ ] All 5 ENS namespaces resolve correctly via `cast resolve` for `worker-001.<team>.eth`
+- [ ] `who.worker-001.<team>.eth` returns the current `ownerOf(1)` from 0G Galileo (test by transferring iNFT and re-resolving — should flip live)
+- [ ] `pay.worker-001.<team>.eth` returns different addresses on consecutive resolutions
+- [ ] ERC-8004 ReputationRegistry on Base Sepolia shows 47 feedback records for our worker address
+- [ ] Capability Tree Viewer page renders all 5 namespaces visibly
+- [ ] AXL topology view shows 3 nodes with live packet flow
+- [ ] Settlement Status Strip works in dashboard
+
+**If anything is missing, prioritize the Inheritance demo path (steps 8, 9, 12, 14) — those are the hero beat.**
+
+### Gate C — End of Phase 3 (May 3 ~18:00 IST)
+
+Before submission prep starts, confirm:
+
+- [ ] Final cut exists, plays end-to-end, audio synced
+- [ ] At least one take has the muted-5-second test passing (judges autoplay videos muted)
+- [ ] Inheritance moment (2:00–3:15) is legible at 1:1 playback at 1080p
+- [ ] Color grade applied uniformly (warm shadow, cool highlight)
+
+### Gate D — Submission (May 3 20:30 IST = 11:00 AM EDT)
+
+- [ ] Repo public on GitHub, all commits dated April 24 or later
+- [ ] README has Proof Matrix at top with real artifacts
+- [ ] All 3 proof docs filed (`proofs/{0g,axl,ens}-proof.md`)
+- [ ] Demo video uploaded, custom thumbnail set
+- [ ] 30-second elevator cut available as separate link
+- [ ] Architecture diagram exported as PNG, embedded in README
+- [ ] Live deployment URL verified working in incognito browser
+- [ ] All contract addresses listed in README, verified on explorers
+- [ ] ENS parent + 1-2 demo workers' subnames resolve via `cast resolve` and via `app.ens.domains/sepolia/<name>`
+- [ ] Submission form: partner prizes = **0G + Gensyn + ENS**
+- [ ] Submitted ≥1h before 21:30 IST hard deadline
+
+---
