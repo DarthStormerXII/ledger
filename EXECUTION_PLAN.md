@@ -151,3 +151,51 @@ Before submission prep starts, confirm:
 - [ ] Submitted ≥1h before 21:30 IST hard deadline
 
 ---
+
+## Risks + mitigations
+
+| Risk | Likelihood | Mitigation |
+|---|---|---|
+| 0G Galileo public RPC unreliable during demo | Medium | Builder C runs a private Galileo node OR resolver caches `ownerOf()` reads with 30s TTL during recording window |
+| ENS app's official UI doesn't render `pay.*`/`tx.*` text records nicely | High | Builder D ships custom viewer page (`/agent/<ens-name>`); demo uses this surface, not the official app. README links to both. |
+| `sepolia.app.ens.domains` registration friction | Low | Register parent name **first thing tonight (May 2 evening, step 2 above)** — should take 15 min with Sepolia faucet ETH. Don't leave for Day 9. |
+| HD-derivation verification UI looks like a hex dump | Medium | Builder D's viewer renders rotation as `[address A · derived from master @ nonce 0] [address B · derived from master @ nonce 1] ...` with a "Verify derivation" button (client-side check via ethers.HDNodeWallet) |
+| Demo recording fails / takes too long | Medium | Build buffer: 3+ takes, fall back to canonical pre-recorded run as B-roll for parts that don't land. Recording in afternoon (not evening) leaves 4h buffer. |
+| AXL drops a node mid-take | Medium | Use 3 cloud VMs (drop residential laptop) if NAT acts up. Disclose topology change in README. |
+| 0G Compute attestation surface is unstable | Low | Pre-cache one good attestation digest as a "canonical" sample; show it on screen with explorer link. If live attestation fails on demo day, use the cached one with disclosure. |
+| Higgsfield Shot 3 doesn't iterate to acceptable quality | Low | Fall back to a still-image cross-fade with particle overlay in DaVinci Resolve. Stop iterating Shot 3 by EOD May 2 if it's not converging. |
+| Submission form race condition at deadline minute | High (per ETHGlobal historical) | Submit at 20:30 IST (1h buffer). Iterate README until cutoff. |
+| Sponsor Discord post reads as needy at this stage | Medium | Don't post unless you have specific evidence + a sharp implementation question. Skip if uncertain. |
+
+---
+
+## What this plan does NOT include
+
+- Detailed Solidity / TypeScript / React code — see `docs/02_ARCHITECTURE.md` and the engineering scaffolding (created during Phase 1)
+- The submission form's natural-language project description — drafted during Phase 4 step 21
+- Final demo voiceover script — already in `docs/03_DEMO_SCRIPT.md` (apply final-cut adjustments during Phase 3)
+- Brand assets (logo, font files, color palette) — already in `docs/09_BRAND_IDENTITY.md`
+
+## When this plan changes
+
+If a step's hour budget is consistently overrun by ≥50%, surface in team channel BEFORE sinking another hour. Cut the next-lowest-priority step from Phase 4. The submission form at 20:30 IST is non-negotiable; everything else can be reduced.
+
+If a sponsor track integration becomes infeasible (e.g. ENS resolver gateway can't ship in time), demote to "future work" in README and recompose the demo around the 2 sponsors that did ship. **Never ship a fake / theatrical demo of a sponsor integration** — the redteam analysis showed that's the highest-fraud-smell behavior and disqualifies us cleanly.
+
+---
+
+## Reference
+
+| Need | File |
+|---|---|
+| Why these 3 sponsors | `tools/council/STAGE3_CHAIRMAN.md` §1 |
+| Per-doc rationale for May 2 changes | `tools/council/STAGE3_CHAIRMAN.md` §5 |
+| ENS integration code shape | `tools/council_alt/STAGE3_CHAIRMAN.md` §3 |
+| Sponsor research depth | `tools/research/{0g,gensyn-axl,keeperhub-and-rules,ens}.md` |
+| Sponsor judges' own framing | `/tmp/yt-transcripts/sponsor-workshops/{0g,axl,ens,uniswap,keeperhub}.txt` |
+| Per-document master plan | `docs/<NN>_<NAME>.md` (11 docs) |
+| Sponsor proofs (populated during build) | `proofs/{0g,axl,ens}-proof.md` |
+
+---
+
+*Locked May 2, 2026, 17:00 IST. Update only via PR with rationale, not in-flight.*
