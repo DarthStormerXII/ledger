@@ -7,3 +7,4 @@
 - AXL repo location: github.com/gensyn-ai/axl — need to confirm
 - council outputs are dense — saving structured rankings as JSON next time
 <!-- 2026-05-02 13:18 IST joel: wip: ngrok stability concern --> (1)
+<!-- 2026-05-02 14:03 IST joel: wip: launchd plist for AXL recovery --> (2)
