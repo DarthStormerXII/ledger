@@ -4,3 +4,4 @@
 - iNFT crystal motif: contained, ownable, transferable
 - council director self-corrected on Shot 2 cut
 - 96px Fraunces on worker profile is the new Tron Legacy moment
+- sound bed: Jóhann Jóhannsson = Content-ID risk; royalty-free instead
