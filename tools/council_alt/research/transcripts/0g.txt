@@ -1,0 +1,459 @@
+Hey everyone. I'm going to share with
+you all today. So, in this presentation,
+uh this is just like a short workshop. I
+know it's already been like a few days
+since you guys started. So, it's just a
+quick refresher on what we have. And
+also, I'll give you a quick walk-through
+on the builder hub. And we'll also be
+having like a quick office hours so that
+we can address any questions that you
+have. Our team will also be joining
+shortly, so we we could also help you
+with the office hours.
+And please do share any questions that
+you have over there so we can address it
+together. And this can benefit from the
+same question as well.
+So, before that, I'll just give you a
+quick dive deep. I think you guys should
+be much more familiar now starting off
+with once you since you've started
+building. So, it would have been a good
+refresher of the topics that you might
+have missed during your onboarding to
+Zero G as well.
+So, myself Gautam and developer at Zero
+G. I just this just a quick presentation
+on what Zero G is and what you can build
+with Zero G and a quick rundown on our
+infrastructure.
+So.
+The the biggest problem that we are
+currently solving is the agent economy
+where like the trust is the biggest
+vulnerability. And there are like
+damages, whether it may be like
+exploits, whether it may be malicious
+attacks, or like the trust that we are
+currently putting in autonomous AI,
+which is causing a big backlash because
+the trust system doesn't work as
+intended as the all the existing AI
+solutions are completely centralized and
+that acts as a black box. And you don't
+get like a full context of what is
+happening behind. What is the censorship
+resistance mechanism?
+Like how do you even trust the ex-
+outputs that are given by these AI
+models. So, there are like a lot of
+things that are like hidden from the
+users' endpoint. And it also is a single
+point of failure when it comes to like a
+centralized organization. So, in this
+presentation, I'll just give you like
+how Zero G is trying to solve this
+problem using our stack, which is
+dedicated for on-chain AI.
+What is Zero G?
+Just give me a second.
+Yes. So, Zero G is the decentralized AI
+operating system which acts as like a
+foundation for the largest AI L1 chain.
+So, this is like a layer one chain for
+on-chain AI. So, we have a complete
+stack from like an infinitely scalable
+chain, which is EVM compatible. And we
+have three core pillars on top, which is
+like the storage, the DA, the compute.
+And on top of that, we have the service
+marketplace.
+So, other than these, we have like few
+other features like giving agentic ID.
+So, where you can view your agent
+identity, which I will dive deep into in
+the upcoming section. And just moving on
+with storage and DA.
+So, the chain acts like a base layer
+where all the transactions get settled.
+It is completely fast. We have achieved
+block time of like less than
+one one second. And for the storage, DA,
+and compute. So, the storage, you might
+question like why do you need a storage
+when there are other storage providers
+in the market? Why do you need us like
+to have your own storage into the
+ecosystem? So, here the thing is that
+the existing storage providers are
+really expensive. And also, they they
+are not meant to handle the throughput
+of large-scale AI models uploading huge
+datasets of GBs and TBs of data
+onto like the uh
+and giving them like an on-chain
+verifiability. So, that is not what
+other chains or like other storage
+solution providers are intended to do.
+But here, with Zero G, we have our
+storage uh dedicated for you to upload
+large-scale datasets, models, assets,
+metadata, anything that you might need
+to train and use that use those models
+to get like verifiable inferencing. Next
+comes like the DA layer. And with the DA
+layer, it acts like an off-chain data
+storage where you can just check for
+like proofs. Later like once uh for
+example, you're training some datasets
+and the model is released. And like a
+lot of people are using that models with
+verifiable inferencing. If someone wants
+to verify the history of like the
+training data, they could use this
+off-chain storage or like the data
+availability layer to get access of like
+the historical data.
+Next is like the compute, which is like
+the cream on top of the cookie that we
+have.
+So, with this, you will be able to get
+verifiable inferencing from AI models.
+All we have, we call it like a sealed
+inference. So, the complete execution of
+like the input-output stream that you do
+a request for an AI model happens in a
+TEE environment or a trusted execution
+environment where like the input-output
+system is not tampered by any external
+agents.
+And now, the training part will be live
+soon. Currently, we have like the
+verifiable inferencing live. And also,
+we have the fine-tuning live. So, you
+will be able to fine-tune the existing
+models that are available on Zero G. And
+if you want to like upload your own like
+use your own model, then you would
+require a H100 or H200 GPU. And using
+this service marketplace, you will be
+able to register your
+AI model and use it as a provider and
+get like the input-output usage or
+Currently, we have like open-source
+models like GLM 5.1. We just uh had it
+live today. And other than that, we have
+like 23.6. We have GLM 5. We have GPT
+OS. Uh we have uh 30C. We have
+uh 27B on the testnet. So, these are
+like different models. And we have a few
+other models as well, which you could
+find on the docs uh to get like the
+upgrade models list.
+Moving forward,
+uh just give me a second.
+Yeah. These are the problems that are
+you are facing the existing
+uh the AI today. So, which I just gave a
+quick brief before. So, it's like a
+complete black box. You can't get the
+data or the models.
+And with vendor lock-in, apps depend on
+closed APIs for pricing. So, you have
+like no idea what was actually
+inferencing cost and how much you are
+being charged for the same thing.
+But Zero G provides like open
+decentralized storage and compute
+markets that has no single vendor that
+controls your complete infrastructure.
+Next comes the ownership. So, users
+don't own their agents or our open
+system. It is owned by the centralized
+organization. But here, with the
+verifiable AI like attestations that you
+receive, you'd have the ownership and
+accountability that that model performed
+as intended. And that also gives much
+more confidence for like the DApp users
+that you build using this AI
+inference.
+So, Zero G supports on-chain AI agents,
+NFTs, which we have recently rebranded
+to as agentic IDs. As I mentioned, I'll
+just dive deep into the upcoming slide
+on this topic.
+And centralized control and censorship
+is another big issue when it comes to
+like centralized AI.
+This comes into incentives. Yes, this is
+the one thing like everyone are aware of
+like what the platform charges and what
+the builders
+will be able to like get as an incentive
+for like contributing to like whether it
+may be like training these models or
+whether it may be providing your own
+GPUs for like the computation.
+So, there's not a proper structure for
+incentives.
+With Zero G, as I mentioned, we have
+like the four core components: the
+chain, compute, storage, and DA. That's
+it. I'll just keep just keep that in
+mind. And let's pretty start with the
+Zero G storage. So, just in this, so we
+have like an inbuilt block layer
+storage. The other storage that we have,
+which we saw a lot of people having
+questions in the hackathon, is the KV
+storage. For KV storage, you can
+actually need to run your own nodes. But
+for other 51 for KV storage, you will be
+able to achieve it with the existing
+storage, the large storage that is
+available. And for that, you don't need
+to run any nodes. You could just start
+with the SDKs and starter kits that we
+have. And with the upload of function,
+there's no requirement for flow
+contracts that you previously used to
+have. So, with these latest updates in
+the SDKs, which I will solve clear a lot
+of questions that you had in the office
+hours.
+So, with these latest version of SDKs,
+it's all about using the upload of
+function and download of function. And
+this is how the process goes. So, when
+you upload your data, so that data is
+split into multiple chunks using a a
+system called as erasure coding. And
+that chunks of data are distributed into
+the decentralized nodes. And once these
+are uh like distributed, so that is one
+part that is like the data storage. And
+the other lane of data publishing
+happens like simultaneously. So, that
+what happens is when these nodes receive
+these data chunks, it signs that signs
+that it has received this data. And that
+signed attestation is stored on the Zero
+G contract. So, that is like that forms
+up like a Merkle tree. So, the Merkle
+rate gives you the complete system of
+like how the data chunks are distributed
+in between these nodes and you will
+return back from zero G storage network.
+All you All you All that is returned
+back is like a root hash. So, with this
+root hash you will be able to like
+download the data uh back from the
+network.
+So, I currently we have uh recently
+launched uh encryption and you'll be
+able to get our encryption uh you you'll
+be able to encrypt your data before
+you're uploading it to zero G storage.
+And this is a quick cost comparison that
+you could see with AWS [clears throat]
+S3 and with zero G storage and you could
+see that you'll be able to achieve like
+80 to 90% of cost saving even with
+giving in the decentralization aspect
+into it along with the verifiable
+performance, tamper-proof, that is like
+a decentralized redundancy. So,
+for example, if node A is having chunk
+A, there will be a there will be another
+uh copy of that chunk in one other node.
+So, there will be a redundancy in uh it
+will avoid redundancy and you will also
+have like a fallback mechanism. So, even
+if a few nodes fail, there will be like
+an alternative node from which that some
+data chunk can be fetched.
+So, uh all the like elaborate details
+are available on the documentation. So,
+please do check it out if you're
+interested to learn much more technical
+details before you start building.
+Uh yes, this is GLM 5 that is live and
+GLM 5.1 is live today. So, yeah, this is
+like the 50 and the 30. You can you can
+see KML proofs of like the that ZKML
+proof that output that you received was
+completely verified.
+And uh next goes to like the zero G DA
+and chain. So, this is the DA throughput
+we have achieved of like 50 GBPS. Our
+chain TPS is 11K and for the block
+finality time we have given achieved
+like a fine grain release uh second
+block time which gives you the latency
+similar to you utilizing like
+centralized sources.
+And this is one interesting thing that
+you can utilize to build which is called
+as agent ID.
+So, with agent ID or like the standard
+that our team has developed which like
+the ERC-7857
+uh is that you will be able to give like
+a own like an identity to your AI
+agents. So, I'll just give you a quick
+down brief. So, why ERC-721
+and 1155 falls short for AI? Because
+it's static metadata, you can't like
+that's incomplete transfer a transfer.
+So, just the ownership moves, there's no
+like connection between an agent and the
+NFT and that doesn't mean that
+when you're transferring an NFT, uh here
+with agent ID or like this ERC-7857
+if you transfer an NFT, it means that
+you're transferring the ownership of the
+agent to the other person.
+Here with agent ID, you'll be able to
+encrypt the model data and other details
+of the model that is being used. So,
+re-encryption on transfer. So, this is
+what I mentioned. That's like a T oracle
+that re-keys the metadata for the new
+owner and there's like T and ZK proofs.
+There's like 100 delegated users per
+token. So, without transferring like the
+NFTs, you can also like delegate like
+access to different users who can
+utilize that NFT without like completely
+transferring the ownership to that
+person.
+So, yeah, these are like a few points of
+like how agent ID solves this problem.
+You could use this in your application
+when you can use this as an identity to
+your agents.
+So, this gives like a quick details on
+like how you can do this flow and uh
+Yes, this is a quick brief on our
+Aristotle mainnet uh as well. So, this
+is live since September 2025. Aristotle
+mainnet is uh like the main chain and
+for like the testnet we have Galileo.
+And we have 3.5 million dollars raised
+from day one investors. We have 400
+integration of our full stack and also
+I'm proud to mention that we have the
+largest ecosystem for on-chain AI
+projects and uh please feel free to let
+us know if you need any support from
+other ecosystem projects and we can help
+you get connected and we want you to
+grow as an ecosystem and build for
+on-chain AI, then you can get educated
+with zero G, you can understand how we
+can do it efficiently with zero G and
+you can utilize all the ecosystem
+partners' product and uh just start
+building with and make AI trustless and
+also decentralized.
+And one other thing that I would like to
+introduce is we have a ecosystem grant
+program called build on zero G and we
+have the 2.0 version that is currently
+live.
+So, what you can do is once you're done
+building in this hackathon and you're
+like looking forward to get personalized
+assistance to scale the product for you
+to like launch in the market, whether it
+may be go to market support, whether it
+may be like uh development support,
+integration support, financial support,
+we will be able to like provide the
+necessary support for you post the
+hackathon. So, please I'll share the
+links once you're like once there's like
+the details for the hackathon. So,
+otherwise you could also check now it's
+build.0gfoundation.ai.
+So, that is a good place for for us to
+like give like personalized support for
+you to build on top of zero G.
+And this is like the alignment nodes
+that you might have seen when I showed
+the architecture diagram. So, these are
+like the nodes that we distributed over
+a node sale to our community members.
+So, this gives uh access all the power
+to users to uh like have ownership or
+like be part of the governance of zero
+G's uh network in the future. So, yeah,
+this uh
+for like the development stage this has
+no impact right now, but please do keep
+in mind about like the alignment nodes
+that we have and you could even like
+have this to be part of the governance
+of the zero G chain.
+And uh yeah, just give a quick dive deep
+on the price pool. Uh we have like two
+tracks
+it's halfway and you might have all
+planned what you're planning to build.
+So, by just giving a quick rundown,
+first one is 7.5K dollars, second one is
+also 7.5K dollars.
+The first is for the framework and
+tooling, the second is for like the
+agents you build with the existing
+frameworks and how you leverage zero G
+with it. So, that is the core
+difference, but both through gives you
+like a complete generic space for you to
+build
+any idea that you have with any uh
+domain expertise. So, you'll be able to
+build that uh and And uh here are the
+ideas that were shared with these
+tracks. So, these are just like for uh
+a small hint or like the idea bank for
+you to get started, but by this time you
+might have explored on few other ideas
+as well and we got a few other
+interesting ideas that uh
+builders validated with us which seemed
+pretty cool as well. So, we are really
+looking forward to see you execute and
+build this and get this idea live. So,
+can't wait to see the projects out and
+anytime if you need support with any MVP
+that you've completed and you want us to
+help get reviewed. Since it's an online
+hackathon, please do DM us with the demo
+link and we can review it as a team and
+we can give you some feedbacks before
+you go into the final demos.
+And yes, I would like to conclude by
+saying that uh this is the link to the
+zero G's build.com and this is one
+important thing most of you would have
+joined by now, but if you haven't,
+please do join the support TG channel.
+So, here you can get necessary support,
+whether it may be testnet tokens or
+whether if you have you might have any
+questions.
+Uh also to know what any other small
+office hours that we might connect in
+future before the hackathon ends. So,
+please do join this TG chat and if you
+want to get in touch with me, it's and
+at NT both on X and Telegram. So, please
+do DM me with any queries that you have
+as well. Uh so, thank you so much
+everyone. Uh it was it was a pleasure
+giving this presentation to you all and
+I'm looking forward to jump to the
+office hours section right now.

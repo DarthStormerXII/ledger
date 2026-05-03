@@ -1,0 +1,849 @@
+Without any further ado, let's get
+started. So, everyone, I am Greg from
+ENS Labs.
+And today I'm going to be talking about
+identity for apps, agents, and more with
+ENS.
+Um and so, let's get into it.
+First of all, I'm going to start pretty
+high-level. And I'm going to go through
+what is ENS and then some things you can
+use it for and maybe ideas of what to
+build and then finally prizes. But,
+first, what is ENS?
+ENS, or the Ethereum Name Service, is a
+decentralized, permissionless naming
+protocol that lives on Ethereum, but
+scales to the entire internet.
+At a high level, we just turn complex
+hex addresses into human-readable names.
+And this is kind of the most simple use
+of ENS. So, instead of having your
+address be 0x19a886,
+so on, and that is my Ethereum address,
+um instead, my Ethereum account is just
+gregsgrull.eth. Very easy
+and much more usable.
+And speaking of usable, ENS really
+considers ourselves as a user experience
+protocol. Yes, there's all this cool
+tech and um smart contracts and code and
+stuff, but ultimately we exist to make
+the user experience of um Ethereum and
+of crypto easier and better.
+Um and I'll walk you through maybe an
+example of that. So,
+if I was at a cafe and got something
+with a friend and I they they paid for
+me, I would say, "Pay me back. Send $5
+to 0x179a88627."
+And I'm not going to read the whole
+thing to bore you, but obviously that is
+um not good. You that is hard to
+understand, hard to hear, uh hard to
+write, and even hard to copy and paste
+or just like annoying to copy and paste.
+Whereas the alternative is just saying,
+"Send $5 to gregsgrull.eth."
+Easy to understand,
+easy to write, um easy to share, and so
+on.
+And ultimately it goes to the same
+thing.
+And this kind of simple mapping of, you
+know, bringing a name to a hex address,
+just name to address mapping is is very
+simple. And that is what ENS started as,
+a a very simple username for your kind
+of Ethereum account.
+But over time, it's really become this
+profile rather than just a username.
+And so, what do I mean by that?
+I would say, um I mean that I can
+attach, yes, an address, but also
+any arbitrary data to my name. So, here,
+this is my ENS profile. I have an image.
+I have my name, a description of some
+things that I do, like baking and
+building apps on Web3 protocols.
+And I have a list of addresses. That's
+not just on one chain, but across many
+EVM chains and many non-EVM chains.
+I also have um
+records that point to my social
+accounts, like my X and GitHub, and so
+on. Really, there's all of this metadata
+associated with my name, which makes ENS
+into my kind of decentralized Web3
+portable profile.
+And the way you see this normally in
+applications, I guess like
+websites,
+is
+this connect wallet button is very
+common. You know, and when you press
+connect wallet, if you don't have some
+sort of identity associated with a
+wallet,
+the connected state might look like this
+on the right. Really just a gray circle
+and a pretty random set of characters,
+which is your address.
+And this is a bad experience. You know,
+it's kind of like getting an email
+where the intern forgets to fill out the
+uh templated name
+and it literally is just like, "Hey, um
+first name or our customer's name that
+we definitely care about." And this
+never feels good. And this is what
+crypto feels like without, you know,
+ENS.
+Um the alternative is you connect your
+wallet and the application is able to
+recognize your portable Web3 identity.
+It's your name and your avatar and maybe
+other metadata associated with your
+name.
+And this way, you feel kind of at home
+when you're going across Web3. Your
+profile is recognized immediately.
+And it's better for the app because they
+kind of know who they're working with
+and they can show you a better
+um view or give you a better user
+experience, if you want to tie back to
+the beginning.
+These are a few examples of where you
+might see it in the wild. Um ENS is
+integrated into
+hundreds of applications, but just a few
+that kind of came to mind when I was
+making this
+are Snapshot and Matcha, two very big
+apps, one in governance, one in DeFi,
+completely unrelated. But um they both
+support ENS to show you your profile
+when you connect your wallet.
+And this is just nice. It is a cohesive
+experience across the ecosystem for me.
+Um I should also say that if you have
+any questions throughout this, feel free
+to leave them in the chat and I will um
+either answer it in real time if it's
+relevant to whatever's on the screen or
+I will answer them at the end.
+So, should have said that at the
+beginning, but we got it now.
+Okay.
+So,
+where are we? More examples of using ENS
+for two things that it's, you know, most
+useful for.
+And one on the left is a view of what
+transaction history might look like
+before you have ENS, basically with and
+without. In the top two transactions,
+it's very easy to see what's happening.
+You can see that Greg is something is
+sending something out to this other
+name, zk.ens.gregsgrull.eth,
+which actually is a smart contract
+because, you know, ENS can name wallets,
+but ENS can also name smart contracts.
+And right below that,
+you see that realcameron.eth
+is sending something into
+gregsgrull.eth. Very easy to understand
+again. You can just glance at this and
+know what's happening.
+Whereas the bottom two are kind of just
+completely random.
+I have no idea what's happening here.
+It's just one address sending something
+to another.
+And so, if you look at the kind of
+before and after with and without ENS,
+here,
+um I think it's easy to draw a
+conclusion that ENS improves the user
+experience or improves the context of
+these transactions.
+And
+on the right side, we see the opposite.
+So, instead of,
+you know, reading past transactions, you
+are sending
+current transactions, I guess.
+And this is that whenever I'm sending
+assets to another address,
+I can simply type in a name
+instead of copying and pasting an
+address.
+And yes, this is better for all the
+reasons I described before, but also
+safer. There is
+less risk of just mistakenly typing one
+character in a huge string rather than
+typing a name that you probably already
+know.
+Okay. Quick water break.
+Great.
+So, the way we think about this overall
+is that users of crypto-powered
+experiences should never have to
+interact with a hex address.
+ENS is a user experience protocol, as I
+said before,
+and they should just be able to use
+names everywhere.
+And so, another way to say that is
+anywhere you read or write a hex
+address,
+you should be able to use an ENS name
+instead. And this is really what you
+want to keep in mind as you're building.
+Okay.
+So, now we know kind of what is ENS,
+let's cover how does it work?
+There are two core processes in ENS.
+There is forward resolution,
+which is the process of a name going to
+some sort of data.
+For this example, let's just use
+addresses.
+And so,
+this is showing that one name can point
+to different addresses on different
+chains, for example.
+And forward resolution is going from a
+name to data.
+Then the reverse, we call reverse
+resolution, um
+fancy naming,
+is the opposite of just going from an
+address to a name.
+And this mapping is also possible on a
+number of chains,
+um which is relevant for some sort of
+addresses that don't exist on all
+chains, like smart contracts. You can
+have one name on
+one chain for a given address and then
+another name on another. Or it can only
+apply on one overall.
+And
+the combination of these two things,
+reverse resolution and forward
+resolution, are what makes up a primary
+name, as we call it. And a primary name
+is what really is your identity across
+Web3. This is what we were seeing in the
+illustration before.
+Um this is the before on the left-hand
+side, the blank square
+with pieces of my random address
+going to my avatar with my name. This is
+what's possible because of a primary
+name.
+And the way we configure primary names
+is via these contracts that we call
+reverse registrars.
+And reverse registrars are available on
+all the chains that you see here for
+now.
+The reverse registrar is just a very
+simple contract that maps an address to
+a name on a given chain.
+And so, the interface, you know, very
+simple, set name and set name for
+address if you are doing it on behalf of
+somebody else.
+And this is kind of what enables the
+core identity piece of ENS.
+And so, that is basically what is ENS
+and how does it work? And now, let's get
+into the kind of how you use it um
+area.
+Which I had duplicate slides for, I
+guess.
+This is like how how do you how you can
+use ENS? So, in the spirit of, you know,
+ETHGlobal Open Agent Hackathon,
+let's start with using it for agents.
+Um
+there are a number of features in ENS
+that can be used obviously by humans or
+agents, but these are just some ideas
+specifically for agents.
+It's very common, um as we've seen in
+recent hackathons and are kind of seeing
+throughout the space, for agents to have
+their own name spaces or for people to
+have agents underneath the their name
+space. And so,
+Workman, for example, is a colleague of
+mine and he might have an agent that has
+a crypto wallet. And obviously any
+crypto wallet should have an ENS name.
+And so, his agent is just
+agent.workman.eth.
+And there can be versions of these
+agents or there could be sub agents to
+your agent or you could have multiple
+agents. So, it's like agent.workman.eth
+and then under that could be V1 or it
+could be like travel.agent.workman.eth
+and that is your travel agent that has
+access to book flights for you.
+And then you can have
+trade.agent.workman.eth
+and this is your trading agent has
+access to
+trade whatever you might want.
+And so on.
+And so, this is the idea of having
+agents as name spaces, basically. Um the
+another setup for this, instead of
+having agent under your own name, so
+agent.workman.eth,
+would be you have some app, so like your
+project name.eth, basically,
+and then under that you give you make it
+easy for agents to create their own
+name.
+So, it would be like Greg's
+agent.yourprojectname.eth for the sake
+of the hackathon.
+If your users come and don't already
+have an ENS name, then you can basically
+give them one on the spot.
+Another use case for agents is agent
+metadata. Um as I shared before with
+text records, there or with just
+ENS profiles in general, there are these
+things called text records, which are
+ways to store arbitrary data associated
+with a name. And I think I'll talk a
+little bit more about them in a minute.
+But we have a spec called ENSIP-25,
+um which you can find more about in this
+QR code. Well, it's on the screen for
+the next little while.
+Which is basically a way to verify your
+agent um is part of the 8004 agent
+registry on a number of chains.
+And this makes it possible to basically
+verify that a name is a registered agent
+and then therefore any of the records
+associated with it are kind of um
+confirmed in both directions. It closes
+the verification loop between the name
+and 8004.
+And so, this is kind of a new
+interesting thing that's worth looking
+at for the hackathon.
+Um
+and yes, this
+demo, ENSIP-25.ens.domains,
+is kind of an interactive walk-through
+of
+showing that verification with the 8004
+registry, if you're interested.
+Not going to do a live demo of that
+right now, though.
+Another new thing in ENS to play with
+that I think is increasingly important
+with agents is
+names for chains. And so,
+as I said before, ENS works
+um across the board, meaning that I can
+set a base address or an optimism
+address or a linea address on my ENS
+name
+and then when I'm sending assets to the
+name on different chains, it can
+basically know which addresses are
+available.
+But
+a lot of the time
+wallets or websites actually don't have
+a great way to indicate the chain that
+something is.
+And so, if you go back to the coffee
+example, if I say send me $5
+to gregscholl.eth, it's like what what
+chain do I want that on? What um
+does does that matter? Do I have a
+preference or do I not?
+And these sort of things can be resolved
+by interoperable names,
+which work on ENS.
+So, in ENS there's a special name called
+on.eth. Fun fact, it is the only
+two-character ENS name in existence.
+And
+the way it works is you append a name
+with the chain name. And so, this is
+effectively vitalik.eth at base.on.eth.
+And that indicates that I actually want
+you to send assets to Vitalik on base
+rather than just Vitalik and you pick an
+address from whatever's there.
+Um so, it's kind of a new way to encode
+addresses and a new way to have ENS be
+the friendly way to name those
+addresses. Um it is on the newer side
+and there's not great adoption for it
+now, but it's an interesting thing to
+think about and therefore a great thing
+to play around with at a hackathon.
+A few other ideas um for things you can
+build
+are one, decentralized websites.
+So, these are important because we're
+learning more and more that um website
+providers just go down. Between
+Cloudflare or DNS providers or um
+like domain issues,
+the kind of whole website stack can
+actually be pretty brittle and building
+decentralized websites on ENS
+is a way around this.
+And really,
+we're here to build protocols that live
+forever, but the layer on top, which is
+the front end, is often more brittle
+than we think.
+And so, I think it's an interesting
+thing to play around with for
+hackathons, how can your apps or agents
+have more decentralized rails?
+This is kind of a fancy diagram that is
+maybe a little bit too overwhelming, um
+that indicates the flow of building
+decentralized websites on ENS.
+There's this tool called Omnipin that is
+kind of the orchestrator of all of these
+things and so, I'm not going to bother
+going too deep into it here,
+but
+if it's something that you're interested
+in, please scan this QR code and I have
+a whole talk dedicated to building
+delete websites with ENS, where I talk
+about Omnipin and IPFS and ENS and how
+all of these things play together to
+build decentralized applications.
+I'll leave that up for a few more
+seconds.
+Okay, cool.
+And I do see that we have a few
+questions, but
+not super relevant to what I've gone
+over yet, so I'll answer them at the
+end.
+Um
+next is naming contracts. I kind of
+already mentioned this before, but when
+most people think of ENS, they think
+about naming wallets specifically or
+really even more narrowly naming EOAs,
+but ENS can be used to name any address
+and that includes EOAs, smart accounts
+and smart contracts of any sort. And
+this helps enrich contract history when
+looking at
+transactions on block explorers
+or using contracts as identity, if they
+are you know, smart accounts.
+So, this is an underexplored thing that
+we'd love to see people use at
+hackathons as well.
+Sub names, I also talked about in a few
+examples, like the agent registries,
+um but ENS names can have infinitely
+nested sub names.
+And this allows you to onboard your
+users to web3 in a simpler, cheaper way.
+Um and this could be with a name
+with a .eth name directly, like giving
+your users name.eth,
+or it could be by giving them sub names.
+So, again, you have project your project
+name.eth and then you give them
+greg.yourprojectname.eth
+or something like that.
+And that could be on L1, on L2 or
+entirely off chain.
+A good tool for building sub names,
+whether it's for issuing to your users
+or issuing to your agents or anything
+else,
+um we have a cool tool called Durin,
+which is basically a framework for
+issuing ENS subdomains on any EVM chain.
+Here's a QR code or the website is
+durin.dev, d u r i n .dev.
+This is a popular one at hackathons.
+People seem to really like it.
+I'm almost to the end, so thank you guys
+for sticking with me. My voice is kind
+of getting tired as well.
+Um another thing that you can use is
+custom text records to store metadata
+with a name. I also mentioned this in
+the agent section,
+but basically any sort of data can be
+persisted to an ENS name in the form of
+text records. And so, a lot of the time
+where you might think your decentralized
+web your decentralized application might
+need a database,
+it could actually be solved by just
+storing the data in ENS text records
+instead. And this way, the identity of
+your users is kind of the sole database
+and that can be stored in a
+decentralized way with ENS.
+So, this I always find to be a fun one
+to think about when you are kind of
+architecting your data.
+And so, with all of these building
+blocks, um there are a number of things
+that you can build, of course. And these
+are, you know, large categories, but
+features that might be applicable for
+each.
+So,
+if you are building agents, then you
+might want to give your agents a
+username, a name, you know, whether
+that's a sub name of your existing .eth
+name, like we showed initially,
+agent.workon.eth,
+or
+agent1.projectname.eth.
+Um, any of those are usernames for
+agents.
+Agents could use text records to store
+different types of metadata, like
+payment preferences, where they want to
+be paid, or what token they want to be
+paid in,
+or, um, when they were created, or what
+launcher they used, or any of these
+things.
+And subnames are basically a way to
+organize subagents or anything like
+that.
+For social, if you're building a social
+app, of course you need usernames. You
+want to show avatar images. In the
+profile section, you probably want to
+have metadata like a bio.
+Um, these are all features that you can
+build on top of ENS. And then you would
+use primary names, of course, as the
+identity of the app to show,
+you know, when a user has posted, you
+show their ENS name. Or when a user
+engages, you show their ENS name. Uh,
+the account ID is basically their EVM
+account, like their EVM wallet address,
+but the display name is effectively, or
+their username is effectively, the ENS
+name.
+Um,
+and wallet and con- uh, wallet is
+similar. You would give your
+use- you would give your users names,
+and show their avatar, and show their
+primary name.
+And then lastly, content is kind of the
+decentralized website conversation I was
+talking about before.
+Content hash is a record in ENS, which
+you use to store IPFS
+um, content pointers, and that is used
+ultimately to serve a decentralized
+website. This is stuff that I talk about
+in that talk, um, from before where I
+had the QR code.
+Okay.
+Um,
+the thing to take away from this is
+basically
+anywhere your app or agent
+interacts with a hex address, it should
+instead show ENS names.
+And so I think one of the questions here
+was like, what sort of use cases are you
+guys looking for? And really,
+ENS is used to improve the user
+experience of existing apps. It is less
+common to build something specifically
+on ENS, and more common to use it to
+improve your existing app. And so, as
+you're building your app, and you
+encounter things that are just like
+confusing, or have random addresses, or
+you're needing to add a database for
+each user, um, these are things that you
+should stop and think, "Hmm, how can ENS
+be used to improve this app, or to hide
+this this hex address, or to improve the
+user experience of my app, ultimately?"
+Um,
+those are the moments where ENS makes
+the most sense.
+And for building on ENS this weekend, we
+have a number of prizes for you, which
+I'm sure many of you have already looked
+at. Um,
+we have two tracks, the first of which
+is best ENS integration, specifically
+for AI agents.
+Um, first, there is, I guess third,
+there's a $500 prize, then a $750 prize,
+and then a $1250 prize.
+So, three winners for that track, and
+three winners for the second track,
+which is most creative use of ENS.
+Similarly, there is a $500 prize, 750,
+and 1250. And this could be anything
+that you build, even if it's outside of
+agents. There's a chance that most
+creative use
+and
+best agent use are actually kind of the
+same thing, in which case, um, there are
+just six winners overall.
+And so if they're all agents, then
+great.
+But there are six winners of ENS prizes,
+um, that win up to $1250.
+And that is my presentation. Perfect
+timing, I have 5 minutes left for
+questions. So, while I read through
+this, thank you all for listening.
+Okay.
+Let's go up. Somebody asked early on,
+um,
+is there a way to store encrypted data
+that only the address owner can see in
+the metadata?
+Um,
+I mean, built into ENS, no. I would say,
+similar to most of the Ethereum smart
+contracts, everything is public in ENS
+by default.
+There are interesting ways
+of doing privacy in ENS. Um, one of my
+favorite examples that I always like to
+share is Fluidkey. Um, and I know I'm
+not sharing my entire screen, so you
+can't see
+what I'm typing into the browser right
+now, but I will paste the link in the
+chat.
+Um,
+this
+Fluidkey is basically a privacy layer on
+top of ENS, that every time you resolve
+a name, it points to, or it resolves to
+a new address, and that address is a
+stealth address,
+so that the owner of the name can
+ultimately access all of the funds
+really seamlessly together.
+But from the outside, if I send
+something to a Fluidkey name, like if I
+send ETH to a Fluidkey
+ENS name,
+and then you send ETH to a Fluidkey ENS
+name, those will actually go to two
+different addresses on chain. And so we
+can't see that each other sent
+something, but ultimately the owner of
+the name
+can access both of the funds seamlessly.
+Uh, and so this is always like a super
+cool example that I like to share, and
+that is honestly one of my favorite
+hackathon projects of all time on ENS,
+and they've gone on to, um,
+build it out as as a business over time.
+Um, and so it's
+very cool. I I recommend looking at that
+one.
+Um, somebody else asked, "What are some
+examples of the killer use cases that
+ENS is looking to explore?"
+Yeah, I think this is, um, going back to
+here. It's like, most of the time, ENS
+is used to improve your existing app,
+and not be a super fancy thing just on
+top of ENS itself.
+Uh, and really the the killer use case
+of ENS is
+im- improving the user experience of
+crypto. And so, whatever that might mean
+to you, is, um, probably my best answer
+here. I don't have a specific thing of
+like, you should build this app where
+it's all about ENS. That's actually not
+the goal. Um, ENS is kind of like the
+integration layer. And so, I would say
+that answer very much depends on
+the app you're building.
+Um, Joel asked, "Is there a way to
+verify the ENS names on chain?"
+Hmm. I'm not entirely sure what you mean
+by verify the ENS names. Um, maybe you
+can
+m- send that in the message as a
+follow-up. But inherently, ENS is on
+chain, and so,
+um, I
+think my soft answer is going to be yes.
+And if you give more info, then I can
+and try and give a more specific answer.
+Um, can we set custom metadata for
+usernames?
+Yes. I think that is basically the text
+records that I was talking about. And if
+I go back
+all the way over
+here to my ENS profile,
+um,
+I don't have a great example, actually,
+but in this other records section,
+would show up anything that is not,
+um, kind of our default social records.
+So,
+for example, a text record is just a
+key-value pair of a string to a string.
+I could set the key to be
+blah,
+or like the key to be foo, if I want to
+have a better example, and the value to
+be bar. And that is custom metadata for
+ENS names,
+um,
+and this can kind of
+go to any extent. So, I can set like my
+payment preferences here, like I said
+before.
+For example, I could set that I always
+want my swaps to output to some certain
+pair on a certain chain, or a certain
+token on a certain chain. And then if
+you're building a DeFi app,
+you can look at the text record of the
+ENS name that's been connected to the
+website,
+and read those preferences, so that it's
+kind of a durable storage across
+um, DeFi websites. And if I go to
+another DeFi website, they can read the
+same records. And this is, um,
+kind of confirming the point that I was
+saying, ENS is your portable portable
+profile across Web3.
+You can set any metadata you want on any
+name, and then any app can access that.
+Um, so Amir, I hope that answers your
+question.
+Um,
+let's see.
+Arun asked, "Has ENS been used in the
+dance industry in large scale?"
+I don't
+believe so, not that I know of. Um,
+so if you're building something in the
+dance industry, you can you can be the
+first.
+Um,
+good example is Fluidkey. Great, I'm
+glad you guys like that.
+Here. Um, what is the recommended
+pattern for using CCIP read to write
+updates to off-chain names, or to write
+updates to off-chain storage that are
+then verified on chain?
+Okay, so
+um,
+there's probably more stuff to unpack
+there, so I'm going to, um, suggest that
+you message it in Discord, and and we
+can help. I think like,
+ultimately, CCIP read
+is a spec that allows you to have ENS
+data off-chain. And so, for example, my
+name could be gregsgould.eth, but all of
+the records, everything else that you
+see on this page, could be served from
+an L2, or from a centralized database,
+if you wanted it to, or anything like
+that. Um CCIP read is basically the
+protocol that allows you to do that.
+And there is no equivalent CCIP write,
+which it sounds like you might be asking
+about.
+Uh ultimately,
+yeah, there might not be a perfect
+solution for you,
+but happy to explore more in in Discord.
+Part of CCIP read is a verification
+flow, but again, that's just on the read
+part, not the write part. And so, I
+don't want to go too in-depth if that's
+not what you're asking about.
+Um
+Okay.
+Somebody asked if my personal website is
+decentralized. Um
+so,
+gregskril.com, which is what you linked,
+is not an example of a decentralized
+website.
+gregskril.eth
+would be my decentralized website. And
+the way you access decentralized
+websites, um without having any sort of
+special software on your computer, is
+through gateways like eth.limo or
+eth.link. And what these basically do is
+just um proxy the content. So,
+gregskril.eth.limo,
+eth.limo is a service that takes the
+bottom half, so gregskril.eth, it
+fetches the content hash, which I
+mentioned earlier is a pointer to IPFS
+content, and then just serves it under
+an easy domain, so that users don't have
+to install special software on their
+computer.
+And so, that would be an example of a
+decentralized website, not exactly my
+gregskril.com.
+And the biggest example of this is
+Vitalik uh himself. He shares blog posts
+as vitalik.eth.limo,
+which is his decentralized website, and
+the content for that is managed under
+his ENS name, vitalik.eth.
+Um are you doing I know we're getting
+over time, so I'll be done in just a
+second. Thank you, Pascal, for hanging
+around. Um Bruce asked, "Are you doing
+office hours to review projects, which
+is gregskril.eth?" Um we will be at the
+project feedback session tomorrow. I
+don't know exactly what time that is,
+but um I know it's coming up. And I
+don't think we have any specific office
+hours, but if you have questions or want
+feedback, please post it in the Discord,
+and we will get back to you there.

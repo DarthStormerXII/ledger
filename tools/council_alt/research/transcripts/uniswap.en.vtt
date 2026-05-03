@@ -1,0 +1,2704 @@
+WEBVTT
+Kind: captions
+Language: en
+
+00:00:10.760 --> 00:00:13.350 align:start position:0%
+ 
+And<00:00:11.160><c> welcome</c><00:00:11.800><c> all</c><00:00:11.960><c> of</c><00:00:12.080><c> you</c><00:00:12.200><c> guys</c><00:00:12.600><c> to</c><00:00:12.760><c> this</c><00:00:13.080><c> open</c>
+
+00:00:13.350 --> 00:00:13.360 align:start position:0%
+And welcome all of you guys to this open
+ 
+
+00:00:13.360 --> 00:00:15.270 align:start position:0%
+And welcome all of you guys to this open
+agent<00:00:13.720><c> hackathon</c><00:00:14.320><c> online</c><00:00:14.600><c> round</c><00:00:14.840><c> for</c><00:00:15.000><c> all</c><00:00:15.120><c> of</c>
+
+00:00:15.270 --> 00:00:15.280 align:start position:0%
+agent hackathon online round for all of
+ 
+
+00:00:15.280 --> 00:00:18.430 align:start position:0%
+agent hackathon online round for all of
+us.<00:00:16.040><c> Um</c><00:00:16.680><c> where</c><00:00:17.080><c> I</c><00:00:17.160><c> hopefully</c>
+
+00:00:18.430 --> 00:00:18.440 align:start position:0%
+us. Um where I hopefully
+ 
+
+00:00:18.440 --> 00:00:21.150 align:start position:0%
+us. Um where I hopefully
+you<00:00:18.640><c> can</c><00:00:18.920><c> all</c><00:00:19.280><c> integrate</c><00:00:19.880><c> the</c><00:00:20.040><c> Uniswap</c><00:00:20.480><c> API</c>
+
+00:00:21.150 --> 00:00:21.160 align:start position:0%
+you can all integrate the Uniswap API
+ 
+
+00:00:21.160 --> 00:00:23.190 align:start position:0%
+you can all integrate the Uniswap API
+and<00:00:21.440><c> just</c><00:00:21.680><c> like</c><00:00:21.920><c> you</c><00:00:22.000><c> know</c><00:00:22.200><c> use</c><00:00:22.480><c> us</c><00:00:22.720><c> and</c><00:00:22.840><c> LP</c>
+
+00:00:23.190 --> 00:00:23.200 align:start position:0%
+and just like you know use us and LP
+ 
+
+00:00:23.200 --> 00:00:25.790 align:start position:0%
+and just like you know use us and LP
+points<00:00:23.720><c> in</c><00:00:23.840><c> your</c><00:00:24.040><c> application</c><00:00:24.760><c> in</c><00:00:25.040><c> minutes.</c>
+
+00:00:25.790 --> 00:00:25.800 align:start position:0%
+points in your application in minutes.
+ 
+
+00:00:25.800 --> 00:00:28.590 align:start position:0%
+points in your application in minutes.
+My<00:00:25.960><c> name</c><00:00:26.120><c> is</c><00:00:26.240><c> Angela</c><00:00:26.720><c> as</c><00:00:27.040><c> Audrey</c><00:00:27.400><c> mentioned.</c>
+
+00:00:28.590 --> 00:00:28.600 align:start position:0%
+My name is Angela as Audrey mentioned.
+ 
+
+00:00:28.600 --> 00:00:30.590 align:start position:0%
+My name is Angela as Audrey mentioned.
+Um<00:00:28.680><c> I</c><00:00:28.840><c> do</c><00:00:29.000><c> developer</c><00:00:29.400><c> relations</c><00:00:30.040><c> at</c><00:00:30.160><c> Uniswap</c>
+
+00:00:30.590 --> 00:00:30.600 align:start position:0%
+Um I do developer relations at Uniswap
+ 
+
+00:00:30.600 --> 00:00:32.710 align:start position:0%
+Um I do developer relations at Uniswap
+Labs.<00:00:31.520><c> And</c>
+
+00:00:32.710 --> 00:00:32.720 align:start position:0%
+Labs. And
+ 
+
+00:00:32.720 --> 00:00:34.670 align:start position:0%
+Labs. And
+So<00:00:32.960><c> I</c><00:00:33.040><c> would</c><00:00:33.160><c> love</c><00:00:33.320><c> to</c><00:00:33.400><c> start</c><00:00:33.680><c> by</c><00:00:33.840><c> saying</c><00:00:34.440><c> most</c>
+
+00:00:34.670 --> 00:00:34.680 align:start position:0%
+So I would love to start by saying most
+ 
+
+00:00:34.680 --> 00:00:36.910 align:start position:0%
+So I would love to start by saying most
+of<00:00:34.760><c> the</c><00:00:34.840><c> crypto</c><00:00:35.200><c> and</c><00:00:35.320><c> fintech</c><00:00:35.640><c> products</c><00:00:36.480><c> needs</c>
+
+00:00:36.910 --> 00:00:36.920 align:start position:0%
+of the crypto and fintech products needs
+ 
+
+00:00:36.920 --> 00:00:38.990 align:start position:0%
+of the crypto and fintech products needs
+to<00:00:37.040><c> swap.</c><00:00:37.600><c> And</c><00:00:37.760><c> this</c><00:00:37.920><c> is</c><00:00:38.120><c> just</c><00:00:38.360><c> chatting</c><00:00:38.680><c> about</c>
+
+00:00:38.990 --> 00:00:39.000 align:start position:0%
+to swap. And this is just chatting about
+ 
+
+00:00:39.000 --> 00:00:40.830 align:start position:0%
+to swap. And this is just chatting about
+crypto<00:00:39.280><c> and</c><00:00:39.400><c> fintech</c><00:00:39.800><c> products,</c><00:00:40.240><c> but</c><00:00:40.600><c> if</c><00:00:40.760><c> we</c>
+
+00:00:40.830 --> 00:00:40.840 align:start position:0%
+crypto and fintech products, but if we
+ 
+
+00:00:40.840 --> 00:00:43.630 align:start position:0%
+crypto and fintech products, but if we
+talk<00:00:41.080><c> about</c><00:00:41.480><c> the</c><00:00:42.120><c> theme</c><00:00:42.560><c> of</c><00:00:42.680><c> this</c><00:00:42.920><c> hackathon,</c>
+
+00:00:43.630 --> 00:00:43.640 align:start position:0%
+talk about the theme of this hackathon,
+ 
+
+00:00:43.640 --> 00:00:46.670 align:start position:0%
+talk about the theme of this hackathon,
+agents<00:00:44.440><c> needs</c><00:00:44.880><c> to</c><00:00:45.000><c> swap.</c><00:00:45.520><c> Agents</c><00:00:46.200><c> needs</c><00:00:46.560><c> to</c>
+
+00:00:46.670 --> 00:00:46.680 align:start position:0%
+agents needs to swap. Agents needs to
+ 
+
+00:00:46.680 --> 00:00:48.830 align:start position:0%
+agents needs to swap. Agents needs to
+pay.<00:00:47.040><c> So</c><00:00:47.200><c> today</c><00:00:47.560><c> I</c><00:00:47.600><c> just</c><00:00:47.840><c> want</c><00:00:47.960><c> to</c><00:00:48.440><c> you</c><00:00:48.560><c> show</c>
+
+00:00:48.830 --> 00:00:48.840 align:start position:0%
+pay. So today I just want to you show
+ 
+
+00:00:48.840 --> 00:00:50.550 align:start position:0%
+pay. So today I just want to you show
+you<00:00:49.240><c> some</c><00:00:49.440><c> of</c><00:00:49.560><c> the</c><00:00:49.640><c> possibilities</c><00:00:50.320><c> that</c><00:00:50.440><c> we</c>
+
+00:00:50.550 --> 00:00:50.560 align:start position:0%
+you some of the possibilities that we
+ 
+
+00:00:50.560 --> 00:00:52.510 align:start position:0%
+you some of the possibilities that we
+can<00:00:51.080><c> you</c><00:00:51.160><c> know</c><00:00:51.280><c> allow</c><00:00:51.720><c> you</c><00:00:51.920><c> to</c><00:00:52.000><c> integrate</c><00:00:52.440><c> in</c>
+
+00:00:52.510 --> 00:00:52.520 align:start position:0%
+can you know allow you to integrate in
+ 
+
+00:00:52.520 --> 00:00:54.230 align:start position:0%
+can you know allow you to integrate in
+your<00:00:52.680><c> agent</c><00:00:52.960><c> without</c>
+
+00:00:54.230 --> 00:00:54.240 align:start position:0%
+your agent without
+ 
+
+00:00:54.240 --> 00:00:56.430 align:start position:0%
+your agent without
+you<00:00:54.360><c> know</c><00:00:54.560><c> like</c><00:00:55.040><c> creating</c><00:00:55.600><c> all</c><00:00:55.840><c> or</c><00:00:56.040><c> or</c>
+
+00:00:56.430 --> 00:00:56.440 align:start position:0%
+you know like creating all or or
+ 
+
+00:00:56.440 --> 00:00:57.750 align:start position:0%
+you know like creating all or or
+building<00:00:56.960><c> all</c><00:00:57.200><c> of</c><00:00:57.280><c> the</c><00:00:57.400><c> routing</c>
+
+00:00:57.750 --> 00:00:57.760 align:start position:0%
+building all of the routing
+ 
+
+00:00:57.760 --> 00:00:59.190 align:start position:0%
+building all of the routing
+infrastructure,<00:00:58.480><c> all</c><00:00:58.680><c> of</c><00:00:58.760><c> the</c><00:00:58.840><c> swap</c>
+
+00:00:59.190 --> 00:00:59.200 align:start position:0%
+infrastructure, all of the swap
+ 
+
+00:00:59.200 --> 00:01:00.990 align:start position:0%
+infrastructure, all of the swap
+infrastructure.<00:00:59.880><c> Just</c><00:01:00.120><c> like</c><00:01:00.600><c> couple</c><00:01:00.880><c> of</c>
+
+00:01:00.990 --> 00:01:01.000 align:start position:0%
+infrastructure. Just like couple of
+ 
+
+00:01:01.000 --> 00:01:03.230 align:start position:0%
+infrastructure. Just like couple of
+clicks<00:01:01.520><c> and</c><00:01:01.760><c> you're</c><00:01:01.880><c> set</c><00:01:02.160><c> to</c><00:01:02.240><c> go.</c><00:01:02.800><c> The</c><00:01:02.880><c> Uniswap</c>
+
+00:01:03.230 --> 00:01:03.240 align:start position:0%
+clicks and you're set to go. The Uniswap
+ 
+
+00:01:03.240 --> 00:01:05.990 align:start position:0%
+clicks and you're set to go. The Uniswap
+API<00:01:04.000><c> powers</c><00:01:04.480><c> on-chain</c><00:01:04.839><c> swaps</c><00:01:05.199><c> for</c><00:01:05.400><c> wallets,</c>
+
+00:01:05.990 --> 00:01:06.000 align:start position:0%
+API powers on-chain swaps for wallets,
+ 
+
+00:01:06.000 --> 00:01:08.270 align:start position:0%
+API powers on-chain swaps for wallets,
+exchanges,<00:01:06.640><c> fintechs,</c><00:01:07.320><c> AI</c><00:01:07.520><c> agents,</c><00:01:08.160><c> and</c>
+
+00:01:08.270 --> 00:01:08.280 align:start position:0%
+exchanges, fintechs, AI agents, and
+ 
+
+00:01:08.280 --> 00:01:09.190 align:start position:0%
+exchanges, fintechs, AI agents, and
+more.
+
+00:01:09.190 --> 00:01:09.200 align:start position:0%
+more.
+ 
+
+00:01:09.200 --> 00:01:10.990 align:start position:0%
+more.
+From<00:01:09.440><c> routing</c><00:01:09.840><c> to</c><00:01:09.960><c> liquidity</c><00:01:10.400><c> aggregation</c><00:01:10.880><c> as</c>
+
+00:01:10.990 --> 00:01:11.000 align:start position:0%
+From routing to liquidity aggregation as
+ 
+
+00:01:11.000 --> 00:01:12.710 align:start position:0%
+From routing to liquidity aggregation as
+I<00:01:11.080><c> mentioned</c><00:01:11.440><c> and</c><00:01:11.560><c> execution</c><00:01:12.080><c> price</c><00:01:12.560><c> should</c>
+
+00:01:12.710 --> 00:01:12.720 align:start position:0%
+I mentioned and execution price should
+ 
+
+00:01:12.720 --> 00:01:14.310 align:start position:0%
+I mentioned and execution price should
+be<00:01:12.840><c> super</c><00:01:13.160><c> easy</c><00:01:13.400><c> to</c><00:01:13.520><c> and</c><00:01:13.640><c> straightforward</c><00:01:14.240><c> to</c>
+
+00:01:14.310 --> 00:01:14.320 align:start position:0%
+be super easy to and straightforward to
+ 
+
+00:01:14.320 --> 00:01:15.230 align:start position:0%
+be super easy to and straightforward to
+app
+
+00:01:15.230 --> 00:01:15.240 align:start position:0%
+app
+ 
+
+00:01:15.240 --> 00:01:17.830 align:start position:0%
+app
+you<00:01:15.360><c> know</c><00:01:15.480><c> to</c><00:01:15.680><c> add</c><00:01:15.920><c> in</c><00:01:16.320><c> all</c><00:01:16.560><c> of</c><00:01:16.720><c> our</c><00:01:17.560><c> and</c><00:01:17.720><c> your</c>
+
+00:01:17.830 --> 00:01:17.840 align:start position:0%
+you know to add in all of our and your
+ 
+
+00:01:17.840 --> 00:01:19.350 align:start position:0%
+you know to add in all of our and your
+products.<00:01:18.280><c> The</c><00:01:18.360><c> reason</c><00:01:18.640><c> why</c><00:01:18.880><c> is</c><00:01:19.000><c> because</c><00:01:19.280><c> the</c>
+
+00:01:19.350 --> 00:01:19.360 align:start position:0%
+products. The reason why is because the
+ 
+
+00:01:19.360 --> 00:01:22.350 align:start position:0%
+products. The reason why is because the
+Uniswap<00:01:19.880><c> API</c><00:01:20.440><c> aggregates</c><00:01:21.480><c> on-chain</c><00:01:22.080><c> and</c>
+
+00:01:22.350 --> 00:01:22.360 align:start position:0%
+Uniswap API aggregates on-chain and
+ 
+
+00:01:22.360 --> 00:01:24.670 align:start position:0%
+Uniswap API aggregates on-chain and
+off-chain<00:01:22.880><c> liquidity</c><00:01:23.520><c> across</c><00:01:24.080><c> all</c><00:01:24.320><c> of</c><00:01:24.480><c> our</c>
+
+00:01:24.670 --> 00:01:24.680 align:start position:0%
+off-chain liquidity across all of our
+ 
+
+00:01:24.680 --> 00:01:27.430 align:start position:0%
+off-chain liquidity across all of our
+protocols.<00:01:25.240><c> Uniswap</c><00:01:26.280><c> V2,</c>
+
+00:01:27.430 --> 00:01:27.440 align:start position:0%
+protocols. Uniswap V2,
+ 
+
+00:01:27.440 --> 00:01:31.030 align:start position:0%
+protocols. Uniswap V2,
+Uniswap<00:01:27.920><c> V3,</c><00:01:28.680><c> Uniswap</c><00:01:29.120><c> V4,</c><00:01:29.640><c> but</c><00:01:29.960><c> also</c><00:01:30.400><c> Uniswap</c>
+
+00:01:31.030 --> 00:01:31.040 align:start position:0%
+Uniswap V3, Uniswap V4, but also Uniswap
+ 
+
+00:01:31.040 --> 00:01:35.350 align:start position:0%
+Uniswap V3, Uniswap V4, but also Uniswap
+X<00:01:31.480><c> and</c><00:01:31.760><c> more</c><00:01:32.000><c> than</c><00:01:32.160><c> 25</c><00:01:33.440><c> market</c><00:01:34.040><c> makers.</c><00:01:34.960><c> So</c>
+
+00:01:35.350 --> 00:01:35.360 align:start position:0%
+X and more than 25 market makers. So
+ 
+
+00:01:35.360 --> 00:01:37.110 align:start position:0%
+X and more than 25 market makers. So
+yeah,<00:01:35.600><c> this</c><00:01:35.760><c> gives</c><00:01:35.960><c> us</c><00:01:36.080><c> a</c><00:01:36.120><c> lot</c><00:01:36.280><c> of</c><00:01:36.400><c> like</c><00:01:36.600><c> space</c>
+
+00:01:37.110 --> 00:01:37.120 align:start position:0%
+yeah, this gives us a lot of like space
+ 
+
+00:01:37.120 --> 00:01:40.630 align:start position:0%
+yeah, this gives us a lot of like space
+and<00:01:37.320><c> room</c><00:01:38.200><c> for</c><00:01:38.360><c> you</c><00:01:38.520><c> guys</c><00:01:38.920><c> to</c><00:01:39.080><c> get</c><00:01:39.480><c> quotes</c>
+
+00:01:40.630 --> 00:01:40.640 align:start position:0%
+and room for you guys to get quotes
+ 
+
+00:01:40.640 --> 00:01:43.790 align:start position:0%
+and room for you guys to get quotes
+and<00:01:40.800><c> also</c><00:01:41.760><c> price</c><00:01:42.120><c> execution.</c><00:01:42.880><c> Some</c><00:01:43.280><c> like</c><00:01:43.560><c> key</c>
+
+00:01:43.790 --> 00:01:43.800 align:start position:0%
+and also price execution. Some like key
+ 
+
+00:01:43.800 --> 00:01:46.030 align:start position:0%
+and also price execution. Some like key
+stats<00:01:44.400><c> to</c><00:01:44.560><c> share</c><00:01:44.800><c> here</c><00:01:45.080><c> and</c><00:01:45.240><c> there.</c><00:01:45.960><c> The</c>
+
+00:01:46.030 --> 00:01:46.040 align:start position:0%
+stats to share here and there. The
+ 
+
+00:01:46.040 --> 00:01:48.670 align:start position:0%
+stats to share here and there. The
+Uniswap<00:01:46.440><c> protocol</c><00:01:47.280><c> cumulative</c><00:01:47.800><c> volume</c><00:01:48.480><c> more</c>
+
+00:01:48.670 --> 00:01:48.680 align:start position:0%
+Uniswap protocol cumulative volume more
+ 
+
+00:01:48.680 --> 00:01:50.550 align:start position:0%
+Uniswap protocol cumulative volume more
+than<00:01:49.040><c> four</c>
+
+00:01:50.550 --> 00:01:50.560 align:start position:0%
+than four
+ 
+
+00:01:50.560 --> 00:01:51.750 align:start position:0%
+than four
+trillion.
+
+00:01:51.750 --> 00:01:51.760 align:start position:0%
+trillion.
+ 
+
+00:01:51.760 --> 00:01:53.990 align:start position:0%
+trillion.
+Uniswap<00:01:52.200><c> protocol</c><00:01:52.680><c> all-time</c><00:01:53.200><c> trades</c><00:01:53.760><c> more</c>
+
+00:01:53.990 --> 00:01:54.000 align:start position:0%
+Uniswap protocol all-time trades more
+ 
+
+00:01:54.000 --> 00:01:56.750 align:start position:0%
+Uniswap protocol all-time trades more
+than<00:01:54.200><c> 2.7</c><00:01:55.120><c> billion.</c><00:01:55.800><c> Uniswap</c><00:01:56.280><c> protocol</c>
+
+00:01:56.750 --> 00:01:56.760 align:start position:0%
+than 2.7 billion. Uniswap protocol
+ 
+
+00:01:56.760 --> 00:01:58.990 align:start position:0%
+than 2.7 billion. Uniswap protocol
+assets<00:01:57.320><c> more</c><00:01:57.520><c> than</c><00:01:57.720><c> 10</c><00:01:58.000><c> billion</c><00:01:58.600><c> than</c><00:01:58.760><c> 10</c>
+
+00:01:58.990 --> 00:01:59.000 align:start position:0%
+assets more than 10 billion than 10
+ 
+
+00:01:59.000 --> 00:02:01.270 align:start position:0%
+assets more than 10 billion than 10
+million.<00:01:59.800><c> And</c><00:02:00.280><c> on</c><00:02:00.400><c> the</c><00:02:00.520><c> API</c><00:02:00.920><c> side</c><00:02:01.120><c> of</c><00:02:01.200><c> the</c>
+
+00:02:01.270 --> 00:02:01.280 align:start position:0%
+million. And on the API side of the
+ 
+
+00:02:01.280 --> 00:02:04.110 align:start position:0%
+million. And on the API side of the
+equation<00:02:01.760><c> you</c><00:02:01.880><c> have</c><00:02:02.080><c> more</c><00:02:02.240><c> than</c><00:02:02.480><c> 17</c><00:02:03.160><c> chains</c><00:02:03.880><c> to</c>
+
+00:02:04.110 --> 00:02:04.120 align:start position:0%
+equation you have more than 17 chains to
+ 
+
+00:02:04.120 --> 00:02:08.389 align:start position:0%
+equation you have more than 17 chains to
+integrate.<00:02:05.120><c> Um</c><00:02:05.680><c> and</c><00:02:05.960><c> yeah,</c><00:02:06.280><c> 97%</c>
+
+00:02:08.389 --> 00:02:08.399 align:start position:0%
+integrate. Um and yeah, 97%
+ 
+
+00:02:08.399 --> 00:02:09.870 align:start position:0%
+integrate. Um and yeah, 97%
+fill<00:02:08.640><c> rates</c><00:02:08.960><c> for</c><00:02:09.119><c> all</c><00:02:09.240><c> of</c><00:02:09.360><c> you.</c><00:02:09.640><c> As</c><00:02:09.800><c> I</c>
+
+00:02:09.870 --> 00:02:09.880 align:start position:0%
+fill rates for all of you. As I
+ 
+
+00:02:09.880 --> 00:02:11.470 align:start position:0%
+fill rates for all of you. As I
+mentioned,<00:02:10.360><c> there's</c><00:02:10.560><c> plenty</c><00:02:10.880><c> of</c><00:02:11.000><c> spaces</c><00:02:11.360><c> for</c>
+
+00:02:11.470 --> 00:02:11.480 align:start position:0%
+mentioned, there's plenty of spaces for
+ 
+
+00:02:11.480 --> 00:02:12.550 align:start position:0%
+mentioned, there's plenty of spaces for
+you<00:02:11.600><c> to</c>
+
+00:02:12.550 --> 00:02:12.560 align:start position:0%
+you to
+ 
+
+00:02:12.560 --> 00:02:15.390 align:start position:0%
+you to
+integrate,<00:02:13.120><c> but</c><00:02:13.800><c> the</c><00:02:14.080><c> reality</c><00:02:14.680><c> is</c><00:02:14.960><c> like</c><00:02:15.320><c> I</c>
+
+00:02:15.390 --> 00:02:15.400 align:start position:0%
+integrate, but the reality is like I
+ 
+
+00:02:15.400 --> 00:02:16.830 align:start position:0%
+integrate, but the reality is like I
+mentioned<00:02:15.760><c> at</c><00:02:15.800><c> the</c><00:02:15.880><c> beginning,</c><00:02:16.480><c> you</c><00:02:16.680><c> should</c>
+
+00:02:16.830 --> 00:02:16.840 align:start position:0%
+mentioned at the beginning, you should
+ 
+
+00:02:16.840 --> 00:02:18.310 align:start position:0%
+mentioned at the beginning, you should
+be<00:02:16.960><c> able</c><00:02:17.080><c> to</c><00:02:17.160><c> integrate</c><00:02:17.480><c> this</c><00:02:17.640><c> in</c><00:02:17.760><c> minutes</c><00:02:18.200><c> and</c>
+
+00:02:18.310 --> 00:02:18.320 align:start position:0%
+be able to integrate this in minutes and
+ 
+
+00:02:18.320 --> 00:02:19.590 align:start position:0%
+be able to integrate this in minutes and
+it's<00:02:18.440><c> that</c><00:02:18.600><c> easy</c><00:02:18.800><c> as</c><00:02:18.960><c> go</c><00:02:19.120><c> to</c>
+
+00:02:19.590 --> 00:02:19.600 align:start position:0%
+it's that easy as go to
+ 
+
+00:02:19.600 --> 00:02:21.710 align:start position:0%
+it's that easy as go to
+developers.uniswap.org
+
+00:02:21.710 --> 00:02:21.720 align:start position:0%
+developers.uniswap.org
+ 
+
+00:02:21.720 --> 00:02:24.070 align:start position:0%
+developers.uniswap.org
+that<00:02:21.920><c> org,</c><00:02:22.280><c> generate</c><00:02:22.720><c> your</c><00:02:22.840><c> API</c><00:02:23.160><c> key,</c><00:02:23.680><c> request</c>
+
+00:02:24.070 --> 00:02:24.080 align:start position:0%
+that org, generate your API key, request
+ 
+
+00:02:24.080 --> 00:02:25.990 align:start position:0%
+that org, generate your API key, request
+the<00:02:24.160><c> code,</c><00:02:24.880><c> get</c><00:02:25.080><c> the</c><00:02:25.160><c> best</c><00:02:25.480><c> price,</c><00:02:25.800><c> and</c>
+
+00:02:25.990 --> 00:02:26.000 align:start position:0%
+the code, get the best price, and
+ 
+
+00:02:26.000 --> 00:02:28.990 align:start position:0%
+the code, get the best price, and
+customize<00:02:26.840><c> your</c><00:02:27.040><c> full</c><00:02:27.480><c> model</c><00:02:27.920><c> because</c><00:02:28.880><c> we</c>
+
+00:02:28.990 --> 00:02:29.000 align:start position:0%
+customize your full model because we
+ 
+
+00:02:29.000 --> 00:02:31.630 align:start position:0%
+customize your full model because we
+don't<00:02:29.160><c> charge</c><00:02:29.480><c> any</c><00:02:29.720><c> fees,</c><00:02:30.080><c> but</c><00:02:30.280><c> you</c><00:02:30.640><c> set</c><00:02:31.360><c> all</c>
+
+00:02:31.630 --> 00:02:31.640 align:start position:0%
+don't charge any fees, but you set all
+ 
+
+00:02:31.640 --> 00:02:33.910 align:start position:0%
+don't charge any fees, but you set all
+of<00:02:31.760><c> the</c><00:02:31.920><c> rules.</c><00:02:32.440><c> And</c><00:02:32.840><c> yes,</c><00:02:33.280><c> when</c><00:02:33.440><c> I</c><00:02:33.520><c> said</c>
+
+00:02:33.910 --> 00:02:33.920 align:start position:0%
+of the rules. And yes, when I said
+ 
+
+00:02:33.920 --> 00:02:36.670 align:start position:0%
+of the rules. And yes, when I said
+request<00:02:34.400><c> the</c><00:02:34.480><c> code,</c><00:02:35.600><c> get</c><00:02:35.840><c> the</c><00:02:35.960><c> best</c><00:02:36.360><c> price,</c>
+
+00:02:36.670 --> 00:02:36.680 align:start position:0%
+request the code, get the best price,
+ 
+
+00:02:36.680 --> 00:02:38.190 align:start position:0%
+request the code, get the best price,
+you<00:02:36.760><c> can</c><00:02:36.920><c> do</c><00:02:37.080><c> this</c><00:02:37.280><c> manually,</c><00:02:37.760><c> but</c><00:02:37.920><c> you</c><00:02:38.040><c> can</c>
+
+00:02:38.190 --> 00:02:38.200 align:start position:0%
+you can do this manually, but you can
+ 
+
+00:02:38.200 --> 00:02:41.950 align:start position:0%
+you can do this manually, but you can
+also<00:02:38.520><c> use</c><00:02:39.000><c> Uniswap</c><00:02:40.120><c> AI</c><00:02:40.600><c> or</c><00:02:40.880><c> AI</c><00:02:41.160><c> these</c><00:02:41.440><c> days</c><00:02:41.840><c> to</c>
+
+00:02:41.950 --> 00:02:41.960 align:start position:0%
+also use Uniswap AI or AI these days to
+ 
+
+00:02:41.960 --> 00:02:44.590 align:start position:0%
+also use Uniswap AI or AI these days to
+make<00:02:42.240><c> this</c><00:02:42.600><c> even</c><00:02:43.040><c> easier.</c><00:02:43.720><c> As</c><00:02:43.880><c> some</c><00:02:44.040><c> ideas</c><00:02:44.520><c> or</c>
+
+00:02:44.590 --> 00:02:44.600 align:start position:0%
+make this even easier. As some ideas or
+ 
+
+00:02:44.600 --> 00:02:47.310 align:start position:0%
+make this even easier. As some ideas or
+use<00:02:44.840><c> cases,</c><00:02:45.480><c> our</c><00:02:45.920><c> bounty</c><00:02:46.400><c> for</c><00:02:46.600><c> this</c><00:02:46.840><c> hackathon</c>
+
+00:02:47.310 --> 00:02:47.320 align:start position:0%
+use cases, our bounty for this hackathon
+ 
+
+00:02:47.320 --> 00:02:50.710 align:start position:0%
+use cases, our bounty for this hackathon
+is<00:02:47.720><c> super</c><00:02:48.040><c> simple,</c><00:02:48.960><c> like</c><00:02:49.280><c> crazy</c><00:02:49.760><c> simple.</c><00:02:50.560><c> We</c>
+
+00:02:50.710 --> 00:02:50.720 align:start position:0%
+is super simple, like crazy simple. We
+ 
+
+00:02:50.720 --> 00:02:52.870 align:start position:0%
+is super simple, like crazy simple. We
+want<00:02:51.000><c> you</c><00:02:51.120><c> to</c><00:02:51.240><c> integrate</c><00:02:51.720><c> the</c><00:02:51.800><c> Uniswap</c><00:02:52.280><c> API</c>
+
+00:02:52.870 --> 00:02:52.880 align:start position:0%
+want you to integrate the Uniswap API
+ 
+
+00:02:52.880 --> 00:02:55.870 align:start position:0%
+want you to integrate the Uniswap API
+and<00:02:53.200><c> all</c><00:02:53.440><c> of</c><00:02:53.600><c> your</c><00:02:53.800><c> agents'</c><00:02:54.400><c> ideas.</c>
+
+00:02:55.870 --> 00:02:55.880 align:start position:0%
+and all of your agents' ideas.
+ 
+
+00:02:55.880 --> 00:02:59.150 align:start position:0%
+and all of your agents' ideas.
+And<00:02:56.000><c> yeah,</c><00:02:56.520><c> best</c><00:02:57.600><c> creative</c><00:02:58.120><c> case</c><00:02:58.560><c> wins</c><00:02:59.080><c> and</c>
+
+00:02:59.150 --> 00:02:59.160 align:start position:0%
+And yeah, best creative case wins and
+ 
+
+00:02:59.160 --> 00:03:01.190 align:start position:0%
+And yeah, best creative case wins and
+the<00:02:59.280><c> best</c><00:02:59.600><c> application</c><00:03:00.360><c> or</c><00:03:00.520><c> integration</c>
+
+00:03:01.190 --> 00:03:01.200 align:start position:0%
+the best application or integration
+ 
+
+00:03:01.200 --> 00:03:04.630 align:start position:0%
+the best application or integration
+wins.<00:03:02.040><c> What</c><00:03:02.240><c> I</c><00:03:02.360><c> would</c><00:03:02.560><c> love</c><00:03:02.840><c> to</c><00:03:03.040><c> ask</c><00:03:03.400><c> you</c><00:03:03.760><c> all</c>
+
+00:03:04.630 --> 00:03:04.640 align:start position:0%
+wins. What I would love to ask you all
+ 
+
+00:03:04.640 --> 00:03:07.510 align:start position:0%
+wins. What I would love to ask you all
+here<00:03:05.200><c> is</c><00:03:05.440><c> like</c><00:03:05.760><c> we're</c><00:03:05.920><c> looking</c><00:03:06.360><c> for</c><00:03:06.840><c> for</c><00:03:07.080><c> great</c>
+
+00:03:07.510 --> 00:03:07.520 align:start position:0%
+here is like we're looking for for great
+ 
+
+00:03:07.520 --> 00:03:10.390 align:start position:0%
+here is like we're looking for for great
+feedback.<00:03:08.040><c> So</c><00:03:08.760><c> we're</c><00:03:08.880><c> going</c><00:03:09.080><c> to</c><00:03:09.720><c> um</c>
+
+00:03:10.390 --> 00:03:10.400 align:start position:0%
+feedback. So we're going to um
+ 
+
+00:03:10.400 --> 00:03:12.150 align:start position:0%
+feedback. So we're going to um
+you<00:03:10.560><c> know</c><00:03:10.680><c> appreciate</c><00:03:11.360><c> if</c><00:03:11.520><c> you</c><00:03:11.680><c> add</c><00:03:11.880><c> any</c>
+
+00:03:12.150 --> 00:03:12.160 align:start position:0%
+you know appreciate if you add any
+ 
+
+00:03:12.160 --> 00:03:15.470 align:start position:0%
+you know appreciate if you add any
+feedback<00:03:12.720><c> MD</c><00:03:13.560><c> file</c><00:03:14.080><c> in</c><00:03:14.360><c> your</c><00:03:14.520><c> submissions</c><00:03:15.320><c> in</c>
+
+00:03:15.470 --> 00:03:15.480 align:start position:0%
+feedback MD file in your submissions in
+ 
+
+00:03:15.480 --> 00:03:17.790 align:start position:0%
+feedback MD file in your submissions in
+order<00:03:15.760><c> for</c><00:03:15.960><c> us</c><00:03:16.200><c> to</c><00:03:16.360><c> understand</c><00:03:17.280><c> how</c><00:03:17.520><c> was</c><00:03:17.680><c> your</c>
+
+00:03:17.790 --> 00:03:17.800 align:start position:0%
+order for us to understand how was your
+ 
+
+00:03:17.800 --> 00:03:19.990 align:start position:0%
+order for us to understand how was your
+experience,<00:03:18.600><c> how</c><00:03:18.800><c> can</c><00:03:19.000><c> we</c><00:03:19.120><c> improve,</c><00:03:19.640><c> is</c><00:03:19.800><c> there</c>
+
+00:03:19.990 --> 00:03:20.000 align:start position:0%
+experience, how can we improve, is there
+ 
+
+00:03:20.000 --> 00:03:23.110 align:start position:0%
+experience, how can we improve, is there
+something<00:03:20.520><c> that</c><00:03:20.720><c> you</c><00:03:20.840><c> missed</c><00:03:21.280><c> building</c><00:03:21.680><c> this</c>
+
+00:03:23.110 --> 00:03:23.120 align:start position:0%
+something that you missed building this
+ 
+
+00:03:23.120 --> 00:03:25.230 align:start position:0%
+something that you missed building this
+or<00:03:23.400><c> yeah,</c><00:03:23.720><c> anything</c><00:03:24.120><c> that</c><00:03:24.280><c> you</c><00:03:24.400><c> like</c><00:03:24.920><c> that</c><00:03:25.120><c> you</c>
+
+00:03:25.230 --> 00:03:25.240 align:start position:0%
+or yeah, anything that you like that you
+ 
+
+00:03:25.240 --> 00:03:28.070 align:start position:0%
+or yeah, anything that you like that you
+like<00:03:25.520><c> to</c><00:03:26.280><c> to</c><00:03:26.680><c> to</c><00:03:26.840><c> have</c><00:03:27.160><c> moving</c><00:03:27.480><c> forward.</c><00:03:27.960><c> For</c>
+
+00:03:28.070 --> 00:03:28.080 align:start position:0%
+like to to to have moving forward. For
+ 
+
+00:03:28.080 --> 00:03:29.870 align:start position:0%
+like to to to have moving forward. For
+example,<00:03:28.720><c> back</c><00:03:28.960><c> in</c><00:03:29.040><c> the</c><00:03:29.120><c> day</c><00:03:29.440><c> I</c><00:03:29.560><c> did</c><00:03:29.720><c> to</c><00:03:29.840><c> a</c>
+
+00:03:29.870 --> 00:03:29.880 align:start position:0%
+example, back in the day I did to a
+ 
+
+00:03:29.880 --> 00:03:33.870 align:start position:0%
+example, back in the day I did to a
+mobile<00:03:30.680><c> um</c><00:03:31.240><c> can</c><00:03:32.080><c> some</c><00:03:32.360><c> of</c><00:03:32.480><c> you</c><00:03:32.600><c> guys</c><00:03:33.400><c> asked</c><00:03:33.680><c> us</c>
+
+00:03:33.870 --> 00:03:33.880 align:start position:0%
+mobile um can some of you guys asked us
+ 
+
+00:03:33.880 --> 00:03:36.270 align:start position:0%
+mobile um can some of you guys asked us
+for<00:03:34.200><c> having</c><00:03:34.560><c> the</c><00:03:34.760><c> LP</c><00:03:35.160><c> endpoint.</c><00:03:35.640><c> This</c><00:03:35.840><c> is</c><00:03:35.960><c> now</c>
+
+00:03:36.270 --> 00:03:36.280 align:start position:0%
+for having the LP endpoint. This is now
+ 
+
+00:03:36.280 --> 00:03:39.190 align:start position:0%
+for having the LP endpoint. This is now
+live<00:03:36.800><c> just</c><00:03:37.040><c> a</c><00:03:37.120><c> few</c><00:03:37.880><c> weeks</c><00:03:38.160><c> after.</c><00:03:38.840><c> So</c><00:03:38.960><c> if</c><00:03:39.080><c> you</c>
+
+00:03:39.190 --> 00:03:39.200 align:start position:0%
+live just a few weeks after. So if you
+ 
+
+00:03:39.200 --> 00:03:41.830 align:start position:0%
+live just a few weeks after. So if you
+guys<00:03:39.480><c> keep</c><00:03:39.720><c> pushing</c><00:03:40.640><c> and</c><00:03:41.000><c> giving</c><00:03:41.280><c> us</c><00:03:41.480><c> a</c><00:03:41.520><c> lot</c><00:03:41.720><c> of</c>
+
+00:03:41.830 --> 00:03:41.840 align:start position:0%
+guys keep pushing and giving us a lot of
+ 
+
+00:03:41.840 --> 00:03:43.550 align:start position:0%
+guys keep pushing and giving us a lot of
+feedback,<00:03:42.360><c> we're</c><00:03:42.560><c> able</c><00:03:42.760><c> to</c><00:03:42.840><c> move</c><00:03:43.000><c> forward</c><00:03:43.440><c> and</c>
+
+00:03:43.550 --> 00:03:43.560 align:start position:0%
+feedback, we're able to move forward and
+ 
+
+00:03:43.560 --> 00:03:45.710 align:start position:0%
+feedback, we're able to move forward and
+add<00:03:43.720><c> all</c><00:03:43.880><c> of</c><00:03:44.000><c> these</c><00:03:44.760><c> features</c><00:03:45.280><c> in</c><00:03:45.440><c> our</c>
+
+00:03:45.710 --> 00:03:45.720 align:start position:0%
+add all of these features in our
+ 
+
+00:03:45.720 --> 00:03:47.590 align:start position:0%
+add all of these features in our
+ecosystem.<00:03:46.360><c> So</c><00:03:46.640><c> pretty</c><00:03:46.920><c> straightforward,</c>
+
+00:03:47.590 --> 00:03:47.600 align:start position:0%
+ecosystem. So pretty straightforward,
+ 
+
+00:03:47.600 --> 00:03:50.590 align:start position:0%
+ecosystem. So pretty straightforward,
+$5,000<00:03:48.360><c> in</c><00:03:48.480><c> prizes,</c><00:03:49.040><c> best</c><00:03:49.360><c> Uniswap</c><00:03:49.840><c> API</c>
+
+00:03:50.590 --> 00:03:50.600 align:start position:0%
+$5,000 in prizes, best Uniswap API
+ 
+
+00:03:50.600 --> 00:03:53.910 align:start position:0%
+$5,000 in prizes, best Uniswap API
+integration.<00:03:51.720><c> And</c><00:03:52.160><c> the</c><00:03:52.280><c> possibilities</c><00:03:53.120><c> are</c>
+
+00:03:53.910 --> 00:03:53.920 align:start position:0%
+integration. And the possibilities are
+ 
+
+00:03:53.920 --> 00:03:56.390 align:start position:0%
+integration. And the possibilities are
+you<00:03:54.040><c> know</c><00:03:54.400><c> honestly</c><00:03:54.880><c> infinite</c><00:03:55.800><c> from</c><00:03:56.080><c> trading</c>
+
+00:03:56.390 --> 00:03:56.400 align:start position:0%
+you know honestly infinite from trading
+ 
+
+00:03:56.400 --> 00:03:58.710 align:start position:0%
+you know honestly infinite from trading
+applications<00:03:57.160><c> to</c><00:03:57.320><c> agent-based</c><00:03:58.040><c> systems,</c>
+
+00:03:58.710 --> 00:03:58.720 align:start position:0%
+applications to agent-based systems,
+ 
+
+00:03:58.720 --> 00:04:00.790 align:start position:0%
+applications to agent-based systems,
+automated<00:03:59.200><c> strategies,</c><00:04:00.280><c> and</c><00:04:00.440><c> even</c><00:04:00.680><c> new</c>
+
+00:04:00.790 --> 00:04:00.800 align:start position:0%
+automated strategies, and even new
+ 
+
+00:04:00.800 --> 00:04:02.590 align:start position:0%
+automated strategies, and even new
+financial<00:04:01.280><c> primitives.</c><00:04:01.800><c> So</c><00:04:02.360><c> what</c><00:04:02.480><c> we're</c>
+
+00:04:02.590 --> 00:04:02.600 align:start position:0%
+financial primitives. So what we're
+ 
+
+00:04:02.600 --> 00:04:04.910 align:start position:0%
+financial primitives. So what we're
+looking<00:04:02.960><c> is</c><00:04:03.120><c> like</c><00:04:03.400><c> show</c><00:04:03.760><c> us</c><00:04:04.360><c> what</c><00:04:04.600><c> you</c><00:04:04.720><c> could</c>
+
+00:04:04.910 --> 00:04:04.920 align:start position:0%
+looking is like show us what you could
+ 
+
+00:04:04.920 --> 00:04:07.430 align:start position:0%
+looking is like show us what you could
+build<00:04:05.560><c> and</c><00:04:06.160><c> yeah,</c><00:04:06.440><c> moving</c><00:04:06.760><c> forward</c><00:04:07.080><c> from</c><00:04:07.240><c> this</c>
+
+00:04:07.430 --> 00:04:07.440 align:start position:0%
+build and yeah, moving forward from this
+ 
+
+00:04:07.440 --> 00:04:09.750 align:start position:0%
+build and yeah, moving forward from this
+hackathon,<00:04:08.080><c> what</c><00:04:08.240><c> is</c><00:04:08.400><c> something</c><00:04:09.280><c> that</c><00:04:09.640><c> you</c>
+
+00:04:09.750 --> 00:04:09.760 align:start position:0%
+hackathon, what is something that you
+ 
+
+00:04:09.760 --> 00:04:11.910 align:start position:0%
+hackathon, what is something that you
+like<00:04:10.000><c> to</c><00:04:10.160><c> see</c><00:04:10.440><c> out</c><00:04:10.680><c> there</c><00:04:11.400><c> and</c><00:04:11.600><c> that</c><00:04:11.720><c> your</c>
+
+00:04:11.910 --> 00:04:11.920 align:start position:0%
+like to see out there and that your
+ 
+
+00:04:11.920 --> 00:04:14.590 align:start position:0%
+like to see out there and that your
+agents<00:04:12.320><c> can</c><00:04:12.520><c> run</c><00:04:12.760><c> for</c><00:04:12.920><c> you.</c><00:04:13.480><c> So</c><00:04:13.960><c> yeah,</c><00:04:14.240><c> as</c><00:04:14.400><c> for</c>
+
+00:04:14.590 --> 00:04:14.600 align:start position:0%
+agents can run for you. So yeah, as for
+ 
+
+00:04:14.600 --> 00:04:16.390 align:start position:0%
+agents can run for you. So yeah, as for
+resources,<00:04:15.200><c> there</c><00:04:15.400><c> are</c><00:04:15.480><c> like</c><00:04:15.760><c> simple</c><00:04:16.120><c> stuff</c>
+
+00:04:16.390 --> 00:04:16.400 align:start position:0%
+resources, there are like simple stuff
+ 
+
+00:04:16.400 --> 00:04:17.910 align:start position:0%
+resources, there are like simple stuff
+that<00:04:16.560><c> I</c><00:04:16.640><c> like</c><00:04:16.920><c> to</c><00:04:17.040><c> share</c><00:04:17.280><c> the</c><00:04:17.400><c> developer</c>
+
+00:04:17.910 --> 00:04:17.920 align:start position:0%
+that I like to share the developer
+ 
+
+00:04:17.920 --> 00:04:20.190 align:start position:0%
+that I like to share the developer
+platform<00:04:18.359><c> developers.uniswap.org</c>
+
+00:04:20.190 --> 00:04:20.200 align:start position:0%
+platform developers.uniswap.org
+ 
+
+00:04:20.200 --> 00:04:22.830 align:start position:0%
+platform developers.uniswap.org
+which<00:04:20.400><c> is</c><00:04:20.560><c> launched</c><00:04:21.519><c> this</c><00:04:22.079><c> and</c><00:04:22.280><c> you</c><00:04:22.400><c> should</c><00:04:22.720><c> be</c>
+
+00:04:22.830 --> 00:04:22.840 align:start position:0%
+which is launched this and you should be
+ 
+
+00:04:22.840 --> 00:04:25.550 align:start position:0%
+which is launched this and you should be
+able<00:04:23.000><c> to</c><00:04:23.120><c> find</c><00:04:23.680><c> everything</c><00:04:24.480><c> you</c><00:04:24.640><c> need</c><00:04:25.000><c> there.</c>
+
+00:04:25.550 --> 00:04:25.560 align:start position:0%
+able to find everything you need there.
+ 
+
+00:04:25.560 --> 00:04:28.070 align:start position:0%
+able to find everything you need there.
+From<00:04:25.800><c> documentation</c><00:04:26.720><c> to</c><00:04:26.840><c> your</c><00:04:27.040><c> API</c><00:04:27.480><c> keys</c><00:04:27.880><c> to</c>
+
+00:04:28.070 --> 00:04:28.080 align:start position:0%
+From documentation to your API keys to
+ 
+
+00:04:28.080 --> 00:04:31.150 align:start position:0%
+From documentation to your API keys to
+API<00:04:28.480><c> references</c><00:04:29.200><c> to</c><00:04:29.400><c> a</c><00:04:29.480><c> lot</c><00:04:29.800><c> of</c><00:04:30.000><c> like</c><00:04:30.280><c> Uniswap</c>
+
+00:04:31.150 --> 00:04:31.160 align:start position:0%
+API references to a lot of like Uniswap
+ 
+
+00:04:31.160 --> 00:04:32.750 align:start position:0%
+API references to a lot of like Uniswap
+um<00:04:31.200><c> to</c><00:04:31.480><c> AI</c>
+
+00:04:32.750 --> 00:04:32.760 align:start position:0%
+um to AI
+ 
+
+00:04:32.760 --> 00:04:34.790 align:start position:0%
+um to AI
+features,<00:04:33.560><c> everything</c><00:04:33.920><c> should</c><00:04:34.080><c> be</c><00:04:34.200><c> there.</c><00:04:34.520><c> If</c>
+
+00:04:34.790 --> 00:04:34.800 align:start position:0%
+features, everything should be there. If
+ 
+
+00:04:34.800 --> 00:04:36.630 align:start position:0%
+features, everything should be there. If
+not,<00:04:35.320><c> let</c><00:04:35.560><c> me</c><00:04:35.640><c> know</c><00:04:35.800><c> in</c><00:04:35.880><c> the</c><00:04:35.960><c> feedback.</c><00:04:36.480><c> Hey</c>
+
+00:04:36.630 --> 00:04:36.640 align:start position:0%
+not, let me know in the feedback. Hey
+ 
+
+00:04:36.640 --> 00:04:38.190 align:start position:0%
+not, let me know in the feedback. Hey
+Angela,<00:04:37.040><c> you</c><00:04:37.200><c> know</c><00:04:37.360><c> what,</c><00:04:37.600><c> you</c><00:04:37.720><c> guys</c><00:04:37.960><c> missed</c>
+
+00:04:38.190 --> 00:04:38.200 align:start position:0%
+Angela, you know what, you guys missed
+ 
+
+00:04:38.200 --> 00:04:39.430 align:start position:0%
+Angela, you know what, you guys missed
+this.<00:04:38.800><c> Add</c><00:04:38.960><c> it</c><00:04:39.080><c> into</c><00:04:39.360><c> the</c>
+
+00:04:39.430 --> 00:04:39.440 align:start position:0%
+this. Add it into the
+ 
+
+00:04:39.440 --> 00:04:41.190 align:start position:0%
+this. Add it into the
+developers.uniswap.org.
+
+00:04:41.190 --> 00:04:41.200 align:start position:0%
+developers.uniswap.org.
+ 
+
+00:04:41.200 --> 00:04:43.750 align:start position:0%
+developers.uniswap.org.
+Here<00:04:41.400><c> or</c><00:04:41.560><c> here,</c><00:04:42.160><c> super</c><00:04:42.520><c> simple.</c><00:04:43.040><c> But</c><00:04:43.200><c> also</c><00:04:43.600><c> we</c>
+
+00:04:43.750 --> 00:04:43.760 align:start position:0%
+Here or here, super simple. But also we
+ 
+
+00:04:43.760 --> 00:04:46.150 align:start position:0%
+Here or here, super simple. But also we
+have<00:04:43.960><c> Uniswap</c><00:04:44.480><c> AI</c><00:04:44.840><c> skills.</c><00:04:45.640><c> This</c><00:04:45.800><c> is</c><00:04:45.920><c> what</c><00:04:46.080><c> I'm</c>
+
+00:04:46.150 --> 00:04:46.160 align:start position:0%
+have Uniswap AI skills. This is what I'm
+ 
+
+00:04:46.160 --> 00:04:48.470 align:start position:0%
+have Uniswap AI skills. This is what I'm
+going<00:04:46.280><c> to</c><00:04:46.360><c> show</c><00:04:46.600><c> you</c><00:04:47.440><c> right</c><00:04:47.680><c> after</c><00:04:48.040><c> this.</c>
+
+00:04:48.470 --> 00:04:48.480 align:start position:0%
+going to show you right after this.
+ 
+
+00:04:48.480 --> 00:04:50.510 align:start position:0%
+going to show you right after this.
+Super<00:04:48.800><c> simple.</c><00:04:49.320><c> Honestly,</c><00:04:49.800><c> I</c><00:04:49.880><c> just</c><00:04:50.080><c> created</c>
+
+00:04:50.510 --> 00:04:50.520 align:start position:0%
+Super simple. Honestly, I just created
+ 
+
+00:04:50.520 --> 00:04:52.790 align:start position:0%
+Super simple. Honestly, I just created
+like<00:04:50.800><c> a</c><00:04:51.120><c> like</c><00:04:51.320><c> a</c><00:04:51.400><c> small</c>
+
+00:04:52.790 --> 00:04:52.800 align:start position:0%
+like a like a small
+ 
+
+00:04:52.800 --> 00:04:55.110 align:start position:0%
+like a like a small
+mockup<00:04:53.360><c> in</c><00:04:53.520><c> order</c><00:04:53.720><c> for</c><00:04:53.920><c> me</c><00:04:54.080><c> to</c>
+
+00:04:55.110 --> 00:04:55.120 align:start position:0%
+mockup in order for me to
+ 
+
+00:04:55.120 --> 00:04:58.510 align:start position:0%
+mockup in order for me to
+add<00:04:55.320><c> in</c><00:04:55.480><c> my</c><00:04:55.760><c> Anthropic</c><00:04:56.800><c> API</c><00:04:57.200><c> key,</c><00:04:57.640><c> my</c><00:04:57.960><c> Uniswap</c>
+
+00:04:58.510 --> 00:04:58.520 align:start position:0%
+add in my Anthropic API key, my Uniswap
+ 
+
+00:04:58.520 --> 00:05:00.550 align:start position:0%
+add in my Anthropic API key, my Uniswap
+API<00:04:58.920><c> key,</c><00:04:59.200><c> and</c><00:04:59.400><c> also</c><00:04:59.640><c> like</c><00:04:59.920><c> of</c><00:05:00.080><c> course</c><00:05:00.360><c> my</c>
+
+00:05:00.550 --> 00:05:00.560 align:start position:0%
+API key, and also like of course my
+ 
+
+00:05:00.560 --> 00:05:04.190 align:start position:0%
+API key, and also like of course my
+wallet<00:05:00.920><c> key</c><00:05:01.200><c> using</c><00:05:01.560><c> base</c><00:05:02.400><c> mainnet</c><00:05:03.160><c> to</c><00:05:03.360><c> swap,</c>
+
+00:05:04.190 --> 00:05:04.200 align:start position:0%
+wallet key using base mainnet to swap,
+ 
+
+00:05:04.200 --> 00:05:06.350 align:start position:0%
+wallet key using base mainnet to swap,
+get<00:05:04.360><c> a</c><00:05:04.440><c> quote,</c><00:05:04.800><c> and</c><00:05:04.960><c> swap.</c><00:05:05.240><c> Super</c><00:05:05.520><c> simple.</c><00:05:06.240><c> But</c>
+
+00:05:06.350 --> 00:05:06.360 align:start position:0%
+get a quote, and swap. Super simple. But
+ 
+
+00:05:06.360 --> 00:05:10.190 align:start position:0%
+get a quote, and swap. Super simple. But
+yeah,<00:05:06.520><c> this</c><00:05:07.440><c> skill</c><00:05:07.800><c> should</c><00:05:08.040><c> be</c><00:05:08.680><c> able</c><00:05:09.360><c> to</c><00:05:09.960><c> let</c>
+
+00:05:10.190 --> 00:05:10.200 align:start position:0%
+yeah, this skill should be able to let
+ 
+
+00:05:10.200 --> 00:05:12.470 align:start position:0%
+yeah, this skill should be able to let
+you<00:05:10.320><c> build</c><00:05:10.680><c> even</c><00:05:10.920><c> faster</c><00:05:11.440><c> during</c><00:05:11.720><c> this</c><00:05:11.960><c> time.</c>
+
+00:05:12.470 --> 00:05:12.480 align:start position:0%
+you build even faster during this time.
+ 
+
+00:05:12.480 --> 00:05:14.590 align:start position:0%
+you build even faster during this time.
+So<00:05:13.000><c> yeah,</c><00:05:13.280><c> let's</c><00:05:13.520><c> try</c><00:05:13.680><c> it</c><00:05:13.800><c> out.</c><00:05:14.360><c> As</c><00:05:14.560><c> I</c>
+
+00:05:14.590 --> 00:05:14.600 align:start position:0%
+So yeah, let's try it out. As I
+ 
+
+00:05:14.600 --> 00:05:16.190 align:start position:0%
+So yeah, let's try it out. As I
+mentioned,<00:05:15.040><c> developer</c><00:05:15.520><c> platform</c><00:05:15.960><c> is</c><00:05:16.080><c> the</c>
+
+00:05:16.190 --> 00:05:16.200 align:start position:0%
+mentioned, developer platform is the
+ 
+
+00:05:16.200 --> 00:05:18.350 align:start position:0%
+mentioned, developer platform is the
+way.<00:05:16.520><c> So</c><00:05:17.160><c> if</c><00:05:17.280><c> this</c><00:05:17.440><c> is</c><00:05:17.560><c> the</c><00:05:17.680><c> best</c><00:05:17.960><c> place,</c>
+
+00:05:18.350 --> 00:05:18.360 align:start position:0%
+way. So if this is the best place,
+ 
+
+00:05:18.360 --> 00:05:20.190 align:start position:0%
+way. So if this is the best place,
+developers.uniswap.org,
+
+00:05:20.190 --> 00:05:20.200 align:start position:0%
+developers.uniswap.org,
+ 
+
+00:05:20.200 --> 00:05:21.670 align:start position:0%
+developers.uniswap.org,
+here<00:05:20.640><c> as</c><00:05:20.800><c> I</c><00:05:20.880><c> mentioned,</c><00:05:21.320><c> you're</c><00:05:21.440><c> going</c><00:05:21.600><c> to</c>
+
+00:05:21.670 --> 00:05:21.680 align:start position:0%
+here as I mentioned, you're going to
+ 
+
+00:05:21.680 --> 00:05:23.630 align:start position:0%
+here as I mentioned, you're going to
+find<00:05:22.080><c> Let</c><00:05:22.280><c> me</c><00:05:22.440><c> actually</c><00:05:22.960><c> share</c><00:05:23.240><c> my</c><00:05:23.400><c> screen</c>
+
+00:05:23.630 --> 00:05:23.640 align:start position:0%
+find Let me actually share my screen
+ 
+
+00:05:23.640 --> 00:05:25.070 align:start position:0%
+find Let me actually share my screen
+like<00:05:23.880><c> this.</c>
+
+00:05:25.070 --> 00:05:25.080 align:start position:0%
+like this.
+ 
+
+00:05:25.080 --> 00:05:26.910 align:start position:0%
+like this.
+Um<00:05:25.240><c> here</c><00:05:25.640><c> actually</c><00:05:26.080><c> you</c><00:05:26.240><c> should</c><00:05:26.440><c> be</c><00:05:26.600><c> able</c><00:05:26.800><c> to</c>
+
+00:05:26.910 --> 00:05:26.920 align:start position:0%
+Um here actually you should be able to
+ 
+
+00:05:26.920 --> 00:05:28.190 align:start position:0%
+Um here actually you should be able to
+find
+
+00:05:28.190 --> 00:05:28.200 align:start position:0%
+find
+ 
+
+00:05:28.200 --> 00:05:31.630 align:start position:0%
+find
+again<00:05:28.560><c> API</c><00:05:29.400><c> references</c><00:05:30.160><c> so</c><00:05:30.320><c> you</c><00:05:30.480><c> could</c><00:05:30.680><c> test</c>
+
+00:05:31.630 --> 00:05:31.640 align:start position:0%
+again API references so you could test
+ 
+
+00:05:31.640 --> 00:05:33.110 align:start position:0%
+again API references so you could test
+your<00:05:31.840><c> API</c>
+
+00:05:33.110 --> 00:05:33.120 align:start position:0%
+your API
+ 
+
+00:05:33.120 --> 00:05:35.630 align:start position:0%
+your API
+quotes<00:05:33.520><c> here,</c><00:05:33.920><c> set</c><00:05:34.240><c> all</c><00:05:34.360><c> of</c><00:05:34.480><c> your</c><00:05:34.640><c> parameters,</c>
+
+00:05:35.630 --> 00:05:35.640 align:start position:0%
+quotes here, set all of your parameters,
+ 
+
+00:05:35.640 --> 00:05:37.750 align:start position:0%
+quotes here, set all of your parameters,
+and<00:05:35.840><c> see</c><00:05:36.080><c> like</c><00:05:36.440><c> oh</c><00:05:36.640><c> yeah,</c><00:05:36.960><c> this</c><00:05:37.200><c> might</c><00:05:37.400><c> work</c><00:05:37.680><c> in</c>
+
+00:05:37.750 --> 00:05:37.760 align:start position:0%
+and see like oh yeah, this might work in
+ 
+
+00:05:37.760 --> 00:05:41.070 align:start position:0%
+and see like oh yeah, this might work in
+my<00:05:37.960><c> project</c><00:05:38.560><c> or</c><00:05:38.840><c> not.</c><00:05:39.480><c> We</c><00:05:39.720><c> have</c><00:05:40.040><c> LP</c><00:05:40.640><c> endpoint</c>
+
+00:05:41.070 --> 00:05:41.080 align:start position:0%
+my project or not. We have LP endpoint
+ 
+
+00:05:41.080 --> 00:05:42.910 align:start position:0%
+my project or not. We have LP endpoint
+as<00:05:41.280><c> I</c><00:05:41.360><c> mentioned</c><00:05:42.000><c> and</c>
+
+00:05:42.910 --> 00:05:42.920 align:start position:0%
+as I mentioned and
+ 
+
+00:05:42.920 --> 00:05:44.790 align:start position:0%
+as I mentioned and
+many<00:05:43.280><c> other</c><00:05:43.560><c> things.</c><00:05:44.120><c> We</c><00:05:44.240><c> have</c><00:05:44.360><c> plenty</c><00:05:44.720><c> of</c>
+
+00:05:44.790 --> 00:05:44.800 align:start position:0%
+many other things. We have plenty of
+ 
+
+00:05:44.800 --> 00:05:47.110 align:start position:0%
+many other things. We have plenty of
+resources<00:05:45.560><c> and</c><00:05:45.880><c> as</c><00:05:46.040><c> I</c><00:05:46.080><c> mentioned</c><00:05:46.600><c> like</c>
+
+00:05:47.110 --> 00:05:47.120 align:start position:0%
+resources and as I mentioned like
+ 
+
+00:05:47.120 --> 00:05:49.190 align:start position:0%
+resources and as I mentioned like
+different<00:05:47.960><c> content</c><00:05:48.400><c> for</c><00:05:48.520><c> all</c><00:05:48.640><c> of</c><00:05:48.760><c> you</c><00:05:48.880><c> guys</c><00:05:49.120><c> in</c>
+
+00:05:49.190 --> 00:05:49.200 align:start position:0%
+different content for all of you guys in
+ 
+
+00:05:49.200 --> 00:05:50.870 align:start position:0%
+different content for all of you guys in
+here.<00:05:49.560><c> Also</c><00:05:49.880><c> on</c><00:05:49.960><c> the</c><00:05:50.040><c> ecosystem</c><00:05:50.560><c> side</c><00:05:50.720><c> of</c><00:05:50.800><c> the</c>
+
+00:05:50.870 --> 00:05:50.880 align:start position:0%
+here. Also on the ecosystem side of the
+ 
+
+00:05:50.880 --> 00:05:52.870 align:start position:0%
+here. Also on the ecosystem side of the
+equation,<00:05:51.400><c> back</c><00:05:51.600><c> in</c><00:05:51.640><c> the</c><00:05:51.720><c> day</c><00:05:51.920><c> I</c><00:05:52.000><c> can</c><00:05:52.400><c> remember</c>
+
+00:05:52.870 --> 00:05:52.880 align:start position:0%
+equation, back in the day I can remember
+ 
+
+00:05:52.880 --> 00:05:54.350 align:start position:0%
+equation, back in the day I can remember
+some<00:05:53.120><c> of</c><00:05:53.280><c> you</c><00:05:53.400><c> guys</c>
+
+00:05:54.350 --> 00:05:54.360 align:start position:0%
+some of you guys
+ 
+
+00:05:54.360 --> 00:05:55.790 align:start position:0%
+some of you guys
+requesting<00:05:54.720><c> me</c><00:05:54.800><c> like</c><00:05:55.000><c> hey</c><00:05:55.120><c> Angela,</c><00:05:55.480><c> where</c><00:05:55.640><c> can</c>
+
+00:05:55.790 --> 00:05:55.800 align:start position:0%
+requesting me like hey Angela, where can
+ 
+
+00:05:55.800 --> 00:05:57.550 align:start position:0%
+requesting me like hey Angela, where can
+I<00:05:55.880><c> find</c><00:05:56.200><c> funding</c><00:05:56.680><c> information,</c><00:05:57.240><c> where</c><00:05:57.360><c> can</c><00:05:57.520><c> I</c>
+
+00:05:57.550 --> 00:05:57.560 align:start position:0%
+I find funding information, where can I
+ 
+
+00:05:57.560 --> 00:05:59.390 align:start position:0%
+I find funding information, where can I
+find<00:05:57.880><c> GTM</c><00:05:58.360><c> support,</c><00:05:58.760><c> where</c><00:05:58.880><c> can</c><00:05:59.040><c> I</c><00:05:59.120><c> find</c>
+
+00:05:59.390 --> 00:05:59.400 align:start position:0%
+find GTM support, where can I find
+ 
+
+00:05:59.400 --> 00:06:02.630 align:start position:0%
+find GTM support, where can I find
+security<00:05:59.920><c> resources?</c><00:06:00.880><c> Everything</c><00:06:01.320><c> in</c><00:06:01.440><c> here.</c>
+
+00:06:02.630 --> 00:06:02.640 align:start position:0%
+security resources? Everything in here.
+ 
+
+00:06:02.640 --> 00:06:04.590 align:start position:0%
+security resources? Everything in here.
+Um
+
+00:06:04.590 --> 00:06:04.600 align:start position:0%
+Um
+ 
+
+00:06:04.600 --> 00:06:06.590 align:start position:0%
+Um
+And<00:06:04.800><c> if</c><00:06:04.920><c> you</c><00:06:05.000><c> want</c><00:06:05.160><c> to</c><00:06:05.240><c> check</c><00:06:05.800><c> the</c><00:06:06.000><c> swapping</c><00:06:06.480><c> or</c>
+
+00:06:06.590 --> 00:06:06.600 align:start position:0%
+And if you want to check the swapping or
+ 
+
+00:06:06.600 --> 00:06:08.390 align:start position:0%
+And if you want to check the swapping or
+AI<00:06:06.840><c> content</c><00:06:07.360><c> should</c><00:06:07.520><c> be</c>
+
+00:06:08.390 --> 00:06:08.400 align:start position:0%
+AI content should be
+ 
+
+00:06:08.400 --> 00:06:10.190 align:start position:0%
+AI content should be
+here<00:06:08.600><c> pretty</c><00:06:08.840><c> straightforward.</c><00:06:09.520><c> Okay,</c><00:06:09.760><c> so</c><00:06:10.120><c> I</c>
+
+00:06:10.190 --> 00:06:10.200 align:start position:0%
+here pretty straightforward. Okay, so I
+ 
+
+00:06:10.200 --> 00:06:11.830 align:start position:0%
+here pretty straightforward. Okay, so I
+need<00:06:10.360><c> an</c><00:06:10.480><c> API</c><00:06:10.760><c> key.</c><00:06:10.960><c> That's</c><00:06:11.200><c> the</c><00:06:11.320><c> first</c><00:06:11.720><c> thing</c>
+
+00:06:11.830 --> 00:06:11.840 align:start position:0%
+need an API key. That's the first thing
+ 
+
+00:06:11.840 --> 00:06:13.590 align:start position:0%
+need an API key. That's the first thing
+that<00:06:11.920><c> I'm</c><00:06:12.000><c> going</c><00:06:12.120><c> to</c><00:06:12.160><c> do.</c><00:06:12.720><c> And</c><00:06:12.920><c> then</c><00:06:13.240><c> I</c><00:06:13.400><c> need</c>
+
+00:06:13.590 --> 00:06:13.600 align:start position:0%
+that I'm going to do. And then I need
+ 
+
+00:06:13.600 --> 00:06:15.830 align:start position:0%
+that I'm going to do. And then I need
+the<00:06:13.680><c> Uniswap</c><00:06:14.160><c> AI</c><00:06:14.320><c> skills</c><00:06:14.800><c> that</c><00:06:15.280><c> I</c><00:06:15.400><c> honestly</c>
+
+00:06:15.830 --> 00:06:15.840 align:start position:0%
+the Uniswap AI skills that I honestly
+ 
+
+00:06:15.840 --> 00:06:17.950 align:start position:0%
+the Uniswap AI skills that I honestly
+just<00:06:16.120><c> added</c><00:06:16.560><c> previous</c><00:06:16.920><c> to</c><00:06:17.040><c> this</c>
+
+00:06:17.950 --> 00:06:17.960 align:start position:0%
+just added previous to this
+ 
+
+00:06:17.960 --> 00:06:19.150 align:start position:0%
+just added previous to this
+which<00:06:18.120><c> should</c><00:06:18.240><c> be</c><00:06:18.320><c> because</c><00:06:18.520><c> I</c><00:06:18.600><c> wanted</c><00:06:18.800><c> to</c><00:06:19.040><c> you</c>
+
+00:06:19.150 --> 00:06:19.160 align:start position:0%
+which should be because I wanted to you
+ 
+
+00:06:19.160 --> 00:06:21.030 align:start position:0%
+which should be because I wanted to you
+know<00:06:19.280><c> spend</c><00:06:19.520><c> the</c><00:06:19.600><c> least</c><00:06:19.840><c> time</c><00:06:20.040><c> possible.</c><00:06:20.840><c> But</c>
+
+00:06:21.030 --> 00:06:21.040 align:start position:0%
+know spend the least time possible. But
+ 
+
+00:06:21.040 --> 00:06:22.750 align:start position:0%
+know spend the least time possible. But
+super<00:06:21.360><c> simple.</c>
+
+00:06:22.750 --> 00:06:22.760 align:start position:0%
+super simple.
+ 
+
+00:06:22.760 --> 00:06:23.350 align:start position:0%
+super simple.
+Um
+
+00:06:23.350 --> 00:06:23.360 align:start position:0%
+Um
+ 
+
+00:06:23.360 --> 00:06:25.830 align:start position:0%
+Um
+You<00:06:23.560><c> go</c><00:06:23.800><c> to</c><00:06:24.160><c> Claude</c><00:06:24.440><c> code</c><00:06:24.800><c> if</c><00:06:24.960><c> you</c><00:06:25.240><c> if</c><00:06:25.520><c> you</c><00:06:25.640><c> use</c>
+
+00:06:25.830 --> 00:06:25.840 align:start position:0%
+You go to Claude code if you if you use
+ 
+
+00:06:25.840 --> 00:06:27.550 align:start position:0%
+You go to Claude code if you if you use
+Claude<00:06:26.080><c> code</c><00:06:26.320><c> or</c><00:06:26.400><c> just</c><00:06:26.640><c> like</c><00:06:26.800><c> install</c><00:06:27.200><c> this</c><00:06:27.440><c> in</c>
+
+00:06:27.550 --> 00:06:27.560 align:start position:0%
+Claude code or just like install this in
+ 
+
+00:06:27.560 --> 00:06:29.070 align:start position:0%
+Claude code or just like install this in
+your<00:06:27.680><c> terminal</c><00:06:28.280><c> and</c><00:06:28.440><c> you</c><00:06:28.520><c> should</c><00:06:28.720><c> be</c><00:06:28.840><c> able</c><00:06:29.000><c> to</c>
+
+00:06:29.070 --> 00:06:29.080 align:start position:0%
+your terminal and you should be able to
+ 
+
+00:06:29.080 --> 00:06:31.270 align:start position:0%
+your terminal and you should be able to
+get<00:06:29.360><c> access</c><00:06:29.720><c> to</c><00:06:29.880><c> all</c><00:06:30.080><c> of</c><00:06:30.160><c> these</c><00:06:30.360><c> plugins.</c><00:06:31.120><c> The</c>
+
+00:06:31.270 --> 00:06:31.280 align:start position:0%
+get access to all of these plugins. The
+ 
+
+00:06:31.280 --> 00:06:32.910 align:start position:0%
+get access to all of these plugins. The
+one<00:06:31.480><c> that</c><00:06:31.640><c> I</c><00:06:31.680><c> recommend</c><00:06:32.200><c> you</c><00:06:32.280><c> guys</c><00:06:32.560><c> to</c><00:06:32.680><c> use</c>
+
+00:06:32.910 --> 00:06:32.920 align:start position:0%
+one that I recommend you guys to use
+ 
+
+00:06:32.920 --> 00:06:34.750 align:start position:0%
+one that I recommend you guys to use
+here<00:06:33.280><c> is</c><00:06:33.440><c> the</c><00:06:33.560><c> plugin</c>
+
+00:06:34.750 --> 00:06:34.760 align:start position:0%
+here is the plugin
+ 
+
+00:06:34.760 --> 00:06:36.910 align:start position:0%
+here is the plugin
+Uniswap<00:06:35.240><c> trading</c><00:06:35.800><c> that</c><00:06:35.960><c> integrates</c><00:06:36.600><c> all</c><00:06:36.760><c> of</c>
+
+00:06:36.910 --> 00:06:36.920 align:start position:0%
+Uniswap trading that integrates all of
+ 
+
+00:06:36.920 --> 00:06:38.910 align:start position:0%
+Uniswap trading that integrates all of
+the<00:06:37.160><c> swap</c><00:06:37.480><c> integration.</c><00:06:38.480><c> By</c><00:06:38.640><c> swap</c>
+
+00:06:38.910 --> 00:06:38.920 align:start position:0%
+the swap integration. By swap
+ 
+
+00:06:38.920 --> 00:06:41.630 align:start position:0%
+the swap integration. By swap
+integration<00:06:39.480><c> means</c><00:06:39.800><c> using</c><00:06:40.120><c> the</c><00:06:40.280><c> API.</c><00:06:41.360><c> Of</c>
+
+00:06:41.630 --> 00:06:41.640 align:start position:0%
+integration means using the API. Of
+ 
+
+00:06:41.640 --> 00:06:43.830 align:start position:0%
+integration means using the API. Of
+course<00:06:42.000><c> using</c><00:06:42.360><c> the</c><00:06:42.720><c> the</c><00:06:42.880><c> swap</c>
+
+00:06:43.830 --> 00:06:43.840 align:start position:0%
+course using the the swap
+ 
+
+00:06:43.840 --> 00:06:46.710 align:start position:0%
+course using the the swap
+endpoint,<00:06:44.360><c> the</c><00:06:44.480><c> LP</c><00:06:44.880><c> one,</c><00:06:45.200><c> but</c><00:06:45.440><c> also</c><00:06:46.360><c> pay</c><00:06:46.520><c> with</c>
+
+00:06:46.710 --> 00:06:46.720 align:start position:0%
+endpoint, the LP one, but also pay with
+ 
+
+00:06:46.720 --> 00:06:49.550 align:start position:0%
+endpoint, the LP one, but also pay with
+any<00:06:46.920><c> token</c><00:06:47.360><c> using</c><00:06:47.720><c> the</c><00:06:47.920><c> export</c><00:06:48.400><c> to.</c><00:06:49.240><c> So</c><00:06:49.400><c> if</c>
+
+00:06:49.550 --> 00:06:49.560 align:start position:0%
+any token using the export to. So if
+ 
+
+00:06:49.560 --> 00:06:50.950 align:start position:0%
+any token using the export to. So if
+your<00:06:49.760><c> agent</c><00:06:50.120><c> has</c><00:06:50.320><c> any</c><00:06:50.520><c> payment</c>
+
+00:06:50.950 --> 00:06:50.960 align:start position:0%
+your agent has any payment
+ 
+
+00:06:50.960 --> 00:06:53.030 align:start position:0%
+your agent has any payment
+possibilities,<00:06:51.600><c> this</c><00:06:51.760><c> is</c><00:06:51.920><c> also</c>
+
+00:06:53.030 --> 00:06:53.040 align:start position:0%
+possibilities, this is also
+ 
+
+00:06:53.040 --> 00:06:55.470 align:start position:0%
+possibilities, this is also
+a<00:06:53.160><c> great</c><00:06:53.560><c> chance</c><00:06:54.400><c> for</c><00:06:54.600><c> you.</c>
+
+00:06:55.470 --> 00:06:55.480 align:start position:0%
+a great chance for you.
+ 
+
+00:06:55.480 --> 00:06:58.430 align:start position:0%
+a great chance for you.
+I<00:06:55.600><c> set</c><00:06:55.840><c> up</c><00:06:55.960><c> a</c><00:06:56.040><c> wallet</c><00:06:56.480><c> before</c><00:06:56.920><c> this</c><00:06:57.280><c> using</c>
+
+00:06:58.430 --> 00:06:58.440 align:start position:0%
+I set up a wallet before this using
+ 
+
+00:06:58.440 --> 00:07:00.710 align:start position:0%
+I set up a wallet before this using
+base<00:06:58.840><c> mainnet</c><00:06:59.480><c> and</c><00:06:59.840><c> this</c><00:07:00.040><c> is</c><00:07:00.160><c> basically</c><00:07:00.600><c> the</c>
+
+00:07:00.710 --> 00:07:00.720 align:start position:0%
+base mainnet and this is basically the
+ 
+
+00:07:00.720 --> 00:07:02.710 align:start position:0%
+base mainnet and this is basically the
+developers.uniswap.org
+
+00:07:02.710 --> 00:07:02.720 align:start position:0%
+developers.uniswap.org
+ 
+
+00:07:02.720 --> 00:07:04.830 align:start position:0%
+developers.uniswap.org
+that<00:07:02.880><c> I</c><00:07:02.920><c> mentioned.</c><00:07:03.400><c> She</c><00:07:03.520><c> goes</c><00:07:04.120><c> here</c><00:07:04.600><c> on</c><00:07:04.720><c> the</c>
+
+00:07:04.830 --> 00:07:04.840 align:start position:0%
+that I mentioned. She goes here on the
+ 
+
+00:07:04.840 --> 00:07:07.630 align:start position:0%
+that I mentioned. She goes here on the
+API<00:07:05.240><c> key.</c><00:07:05.840><c> I</c><00:07:06.000><c> created</c><00:07:06.520><c> one</c><00:07:06.840><c> open</c><00:07:07.160><c> agent</c><00:07:07.480><c> for</c>
+
+00:07:07.630 --> 00:07:07.640 align:start position:0%
+API key. I created one open agent for
+ 
+
+00:07:07.640 --> 00:07:11.510 align:start position:0%
+API key. I created one open agent for
+sure<00:07:08.240><c> and</c><00:07:08.600><c> I</c><00:07:08.720><c> just</c><00:07:09.080><c> set</c><00:07:09.280><c> up</c><00:07:09.520><c> my</c>
+
+00:07:11.510 --> 00:07:11.520 align:start position:0%
+sure and I just set up my
+ 
+
+00:07:11.520 --> 00:07:14.790 align:start position:0%
+sure and I just set up my
+my<00:07:11.720><c> Claude</c><00:07:12.360><c> with</c><00:07:12.640><c> like</c><00:07:13.120><c> an</c><00:07:13.280><c> M</c><00:07:13.480><c> file</c><00:07:14.280><c> where</c><00:07:14.680><c> I</c>
+
+00:07:14.790 --> 00:07:14.800 align:start position:0%
+my Claude with like an M file where I
+ 
+
+00:07:14.800 --> 00:07:18.030 align:start position:0%
+my Claude with like an M file where I
+just<00:07:15.120><c> added</c><00:07:15.600><c> the</c><00:07:16.480><c> Anthropic</c><00:07:17.320><c> API</c><00:07:17.680><c> key,</c><00:07:17.920><c> the</c>
+
+00:07:18.030 --> 00:07:18.040 align:start position:0%
+just added the Anthropic API key, the
+ 
+
+00:07:18.040 --> 00:07:19.550 align:start position:0%
+just added the Anthropic API key, the
+Uniswap<00:07:18.520><c> API</c><00:07:18.800><c> key,</c><00:07:18.960><c> and</c><00:07:19.080><c> of</c><00:07:19.200><c> course</c><00:07:19.440><c> my</c>
+
+00:07:19.550 --> 00:07:19.560 align:start position:0%
+Uniswap API key, and of course my
+ 
+
+00:07:19.560 --> 00:07:21.910 align:start position:0%
+Uniswap API key, and of course my
+private<00:07:19.920><c> key</c><00:07:20.080><c> from</c><00:07:20.280><c> this</c><00:07:20.440><c> wallet</c><00:07:21.080><c> that</c><00:07:21.240><c> again</c>
+
+00:07:21.910 --> 00:07:21.920 align:start position:0%
+private key from this wallet that again
+ 
+
+00:07:21.920 --> 00:07:23.830 align:start position:0%
+private key from this wallet that again
+I'm<00:07:22.040><c> going</c><00:07:22.160><c> to</c><00:07:22.240><c> use</c><00:07:22.400><c> as</c><00:07:22.520><c> a</c><00:07:22.560><c> test.</c><00:07:23.360><c> Previous</c><00:07:23.720><c> to</c>
+
+00:07:23.830 --> 00:07:23.840 align:start position:0%
+I'm going to use as a test. Previous to
+ 
+
+00:07:23.840 --> 00:07:27.030 align:start position:0%
+I'm going to use as a test. Previous to
+this<00:07:24.720><c> talk,</c><00:07:25.280><c> I</c><00:07:25.400><c> just</c><00:07:26.000><c> charged</c><00:07:26.520><c> like</c><00:07:26.760><c> two</c><00:07:26.920><c> or</c>
+
+00:07:27.030 --> 00:07:27.040 align:start position:0%
+this talk, I just charged like two or
+ 
+
+00:07:27.040 --> 00:07:29.950 align:start position:0%
+this talk, I just charged like two or
+three<00:07:27.240><c> dollars</c><00:07:27.720><c> and</c><00:07:27.840><c> then</c><00:07:28.040><c> I</c><00:07:28.120><c> did</c><00:07:28.280><c> a</c><00:07:28.360><c> swap.</c>
+
+00:07:29.950 --> 00:07:29.960 align:start position:0%
+three dollars and then I did a swap.
+ 
+
+00:07:29.960 --> 00:07:34.190 align:start position:0%
+three dollars and then I did a swap.
+42<00:07:30.360><c> minutes.</c><00:07:30.720><c> I</c><00:07:30.920><c> honestly</c><00:07:31.360><c> chat</c><00:07:31.840><c> with</c><00:07:32.240><c> my</c><00:07:33.080><c> um</c>
+
+00:07:34.190 --> 00:07:34.200 align:start position:0%
+42 minutes. I honestly chat with my um
+ 
+
+00:07:34.200 --> 00:07:36.470 align:start position:0%
+42 minutes. I honestly chat with my um
+with<00:07:34.600><c> my</c>
+
+00:07:36.470 --> 00:07:36.480 align:start position:0%
+with my
+ 
+
+00:07:36.480 --> 00:07:38.630 align:start position:0%
+with my
+with<00:07:36.760><c> my</c><00:07:36.960><c> Claude</c><00:07:37.360><c> in</c><00:07:37.560><c> Spanish</c><00:07:38.120><c> just</c><00:07:38.320><c> because</c>
+
+00:07:38.630 --> 00:07:38.640 align:start position:0%
+with my Claude in Spanish just because
+ 
+
+00:07:38.640 --> 00:07:41.310 align:start position:0%
+with my Claude in Spanish just because
+it<00:07:38.720><c> is</c><00:07:38.880><c> like</c><00:07:39.080><c> my</c><00:07:39.280><c> native</c><00:07:39.760><c> language,</c><00:07:40.600><c> but</c><00:07:41.040><c> yeah,</c>
+
+00:07:41.310 --> 00:07:41.320 align:start position:0%
+it is like my native language, but yeah,
+ 
+
+00:07:41.320 --> 00:07:42.710 align:start position:0%
+it is like my native language, but yeah,
+it<00:07:41.480><c> should</c><00:07:41.640><c> be</c><00:07:41.800><c> pretty</c><00:07:42.040><c> straightforward.</c>
+
+00:07:42.710 --> 00:07:42.720 align:start position:0%
+it should be pretty straightforward.
+ 
+
+00:07:42.720 --> 00:07:48.110 align:start position:0%
+it should be pretty straightforward.
+It's<00:07:42.800><c> like</c><00:07:43.360><c> use</c><00:07:44.640><c> uh</c><00:07:45.440><c> let's</c><00:07:45.960><c> let's</c><00:07:46.400><c> I</c><00:07:46.720><c> want</c><00:07:47.720><c> to</c>
+
+00:07:48.110 --> 00:07:48.120 align:start position:0%
+It's like use uh let's let's I want to
+ 
+
+00:07:48.120 --> 00:07:54.110 align:start position:0%
+It's like use uh let's let's I want to
+swap<00:07:49.040><c> ETH</c><00:07:49.920><c> to</c><00:07:50.440><c> USDC</c><00:07:51.600><c> on</c><00:07:52.120><c> base</c><00:07:53.000><c> mainnet.</c><00:07:53.640><c> Let's</c>
+
+00:07:54.110 --> 00:07:54.120 align:start position:0%
+swap ETH to USDC on base mainnet. Let's
+ 
+
+00:07:54.120 --> 00:07:55.870 align:start position:0%
+swap ETH to USDC on base mainnet. Let's
+swap
+
+00:07:55.870 --> 00:07:55.880 align:start position:0%
+swap
+ 
+
+00:07:55.880 --> 00:07:57.870 align:start position:0%
+swap
+0.5
+
+00:07:57.870 --> 00:07:57.880 align:start position:0%
+0.5
+ 
+
+00:07:57.880 --> 00:08:00.910 align:start position:0%
+0.5
+uh<00:07:58.200><c> USD.</c><00:07:59.000><c> And</c><00:07:59.480><c> let's</c><00:07:59.680><c> see</c><00:07:59.800><c> how</c><00:07:59.960><c> it</c><00:08:00.120><c> goes.</c><00:08:00.640><c> As</c><00:08:00.840><c> I</c>
+
+00:08:00.910 --> 00:08:00.920 align:start position:0%
+uh USD. And let's see how it goes. As I
+ 
+
+00:08:00.920 --> 00:08:02.870 align:start position:0%
+uh USD. And let's see how it goes. As I
+mentioned,<00:08:01.560><c> what</c><00:08:01.760><c> I</c><00:08:01.840><c> requested</c><00:08:02.400><c> to</c><00:08:02.520><c> Claude</c>
+
+00:08:02.870 --> 00:08:02.880 align:start position:0%
+mentioned, what I requested to Claude
+ 
+
+00:08:02.880 --> 00:08:04.830 align:start position:0%
+mentioned, what I requested to Claude
+before<00:08:03.240><c> this</c><00:08:03.440><c> is</c><00:08:03.560><c> like</c><00:08:04.120><c> you</c><00:08:04.200><c> know</c><00:08:04.360><c> what,</c><00:08:04.760><c> I</c>
+
+00:08:04.830 --> 00:08:04.840 align:start position:0%
+before this is like you know what, I
+ 
+
+00:08:04.840 --> 00:08:07.310 align:start position:0%
+before this is like you know what, I
+want<00:08:05.000><c> an</c><00:08:05.120><c> MVP</c><00:08:06.000><c> where</c><00:08:06.360><c> I</c><00:08:06.440><c> can</c><00:08:06.680><c> just</c><00:08:06.880><c> give</c><00:08:07.120><c> you</c>
+
+00:08:07.310 --> 00:08:07.320 align:start position:0%
+want an MVP where I can just give you
+ 
+
+00:08:07.320 --> 00:08:10.590 align:start position:0%
+want an MVP where I can just give you
+these<00:08:07.640><c> keys</c><00:08:08.000><c> and</c><00:08:08.120><c> an</c><00:08:08.280><c> M</c><00:08:08.440><c> file</c><00:08:09.200><c> and</c><00:08:09.360><c> then</c>
+
+00:08:10.590 --> 00:08:10.600 align:start position:0%
+these keys and an M file and then
+ 
+
+00:08:10.600 --> 00:08:13.270 align:start position:0%
+these keys and an M file and then
+I<00:08:10.840><c> am</c><00:08:11.080><c> able</c><00:08:11.320><c> to</c><00:08:11.440><c> get</c><00:08:11.640><c> a</c><00:08:11.720><c> quote,</c><00:08:12.520><c> request</c><00:08:13.040><c> it,</c>
+
+00:08:13.270 --> 00:08:13.280 align:start position:0%
+I am able to get a quote, request it,
+ 
+
+00:08:13.280 --> 00:08:15.630 align:start position:0%
+I am able to get a quote, request it,
+and<00:08:13.400><c> then</c><00:08:13.600><c> swap,</c><00:08:14.320><c> and</c><00:08:14.720><c> you</c><00:08:14.800><c> know</c><00:08:14.960><c> visualize</c>
+
+00:08:15.630 --> 00:08:15.640 align:start position:0%
+and then swap, and you know visualize
+ 
+
+00:08:15.640 --> 00:08:18.350 align:start position:0%
+and then swap, and you know visualize
+this<00:08:15.960><c> here.</c><00:08:16.400><c> Of</c><00:08:16.600><c> course</c><00:08:16.960><c> you</c><00:08:17.120><c> can</c><00:08:17.760><c> add</c><00:08:18.040><c> more</c><00:08:18.280><c> of</c>
+
+00:08:18.350 --> 00:08:18.360 align:start position:0%
+this here. Of course you can add more of
+ 
+
+00:08:18.360 --> 00:08:20.030 align:start position:0%
+this here. Of course you can add more of
+these<00:08:18.560><c> things,</c><00:08:19.000><c> but</c><00:08:19.320><c> yeah,</c><00:08:19.560><c> it</c><00:08:19.680><c> should</c><00:08:19.880><c> be</c>
+
+00:08:20.030 --> 00:08:20.040 align:start position:0%
+these things, but yeah, it should be
+ 
+
+00:08:20.040 --> 00:08:21.710 align:start position:0%
+these things, but yeah, it should be
+pretty<00:08:20.320><c> straightforward.</c><00:08:21.000><c> To</c><00:08:21.160><c> add</c><00:08:21.560><c> the</c>
+
+00:08:21.710 --> 00:08:21.720 align:start position:0%
+pretty straightforward. To add the
+ 
+
+00:08:21.720 --> 00:08:24.590 align:start position:0%
+pretty straightforward. To add the
+plugins<00:08:22.160><c> that</c><00:08:22.320><c> I</c><00:08:22.400><c> mentioned,</c><00:08:23.240><c> you</c><00:08:23.320><c> just</c><00:08:23.560><c> go</c><00:08:24.320><c> to</c>
+
+00:08:24.590 --> 00:08:24.600 align:start position:0%
+plugins that I mentioned, you just go to
+ 
+
+00:08:24.600 --> 00:08:27.230 align:start position:0%
+plugins that I mentioned, you just go to
+/plugins<00:08:25.800><c> and</c><00:08:25.920><c> then</c><00:08:26.200><c> look</c><00:08:26.400><c> for</c><00:08:26.560><c> Uniswap.</c><00:08:27.160><c> I</c>
+
+00:08:27.230 --> 00:08:27.240 align:start position:0%
+/plugins and then look for Uniswap. I
+ 
+
+00:08:27.240 --> 00:08:28.870 align:start position:0%
+/plugins and then look for Uniswap. I
+already<00:08:27.520><c> have</c><00:08:27.720><c> all</c><00:08:27.800><c> of</c><00:08:27.920><c> these</c><00:08:28.080><c> installed,</c><00:08:28.680><c> but</c>
+
+00:08:28.870 --> 00:08:28.880 align:start position:0%
+already have all of these installed, but
+ 
+
+00:08:28.880 --> 00:08:30.950 align:start position:0%
+already have all of these installed, but
+this<00:08:29.040><c> is</c><00:08:29.160><c> for</c><00:08:29.320><c> you</c><00:08:29.440><c> to</c><00:08:30.000><c> um</c><00:08:30.400><c> have</c><00:08:30.600><c> a</c><00:08:30.640><c> little</c><00:08:30.840><c> bit</c>
+
+00:08:30.950 --> 00:08:30.960 align:start position:0%
+this is for you to um have a little bit
+ 
+
+00:08:30.960 --> 00:08:33.350 align:start position:0%
+this is for you to um have a little bit
+more<00:08:31.520><c> of</c><00:08:31.760><c> context</c><00:08:32.159><c> in</c><00:08:32.280><c> here.</c>
+
+00:08:33.350 --> 00:08:33.360 align:start position:0%
+more of context in here.
+ 
+
+00:08:33.360 --> 00:08:34.670 align:start position:0%
+more of context in here.
+Um
+
+00:08:34.670 --> 00:08:34.680 align:start position:0%
+Um
+ 
+
+00:08:34.680 --> 00:08:35.670 align:start position:0%
+Um
+Do<00:08:34.840><c> do</c><00:08:34.960><c> do.</c>
+
+00:08:35.670 --> 00:08:35.680 align:start position:0%
+Do do do.
+ 
+
+00:08:35.680 --> 00:08:39.190 align:start position:0%
+Do do do.
+So<00:08:36.280><c> okay.</c><00:08:37.039><c> Uh</c><00:08:37.440><c> I</c><00:08:37.640><c> am</c><00:08:37.919><c> asking</c><00:08:38.520><c> Claude</c><00:08:38.960><c> that</c><00:08:39.120><c> I</c>
+
+00:08:39.190 --> 00:08:39.200 align:start position:0%
+So okay. Uh I am asking Claude that I
+ 
+
+00:08:39.200 --> 00:08:43.190 align:start position:0%
+So okay. Uh I am asking Claude that I
+want<00:08:39.479><c> to</c><00:08:39.560><c> swap</c><00:08:39.919><c> ETH</c><00:08:40.240><c> to</c><00:08:40.400><c> USDC</c><00:08:41.599><c> on</c><00:08:41.800><c> mainnet</c>
+
+00:08:43.190 --> 00:08:43.200 align:start position:0%
+want to swap ETH to USDC on mainnet
+ 
+
+00:08:43.200 --> 00:08:45.030 align:start position:0%
+want to swap ETH to USDC on mainnet
+and<00:08:43.400><c> then</c><00:08:43.840><c> what</c><00:08:43.960><c> it's</c><00:08:44.159><c> doing</c><00:08:44.520><c> is</c><00:08:44.640><c> using</c><00:08:44.920><c> the</c>
+
+00:08:45.030 --> 00:08:45.040 align:start position:0%
+and then what it's doing is using the
+ 
+
+00:08:45.040 --> 00:08:47.310 align:start position:0%
+and then what it's doing is using the
+chain<00:08:45.240><c> ID</c><00:08:45.480><c> that</c><00:08:45.600><c> I</c><00:08:45.640><c> just</c><00:08:46.320><c> set</c><00:08:46.560><c> up</c><00:08:46.760><c> on</c><00:08:46.880><c> my</c><00:08:47.080><c> M</c>
+
+00:08:47.310 --> 00:08:47.320 align:start position:0%
+chain ID that I just set up on my M
+ 
+
+00:08:47.320 --> 00:08:49.870 align:start position:0%
+chain ID that I just set up on my M
+file.<00:08:48.080><c> It's</c><00:08:48.240><c> saying</c><00:08:48.600><c> like</c><00:08:48.880><c> yeah,</c><00:08:49.160><c> chain</c><00:08:49.720><c> is</c>
+
+00:08:49.870 --> 00:08:49.880 align:start position:0%
+file. It's saying like yeah, chain is
+ 
+
+00:08:49.880 --> 00:08:53.110 align:start position:0%
+file. It's saying like yeah, chain is
+the<00:08:49.960><c> base</c><00:08:50.800><c> mainnet.</c><00:08:51.480><c> I</c><00:08:51.560><c> set</c><00:08:51.720><c> up</c><00:08:51.880><c> this</c><00:08:52.160><c> like</c><00:08:52.880><c> dry</c>
+
+00:08:53.110 --> 00:08:53.120 align:start position:0%
+the base mainnet. I set up this like dry
+ 
+
+00:08:53.120 --> 00:08:55.030 align:start position:0%
+the base mainnet. I set up this like dry
+run<00:08:53.640><c> mode</c><00:08:53.960><c> just</c><00:08:54.160><c> because</c><00:08:54.480><c> I</c><00:08:54.520><c> didn't</c><00:08:54.800><c> want</c><00:08:54.960><c> it</c>
+
+00:08:55.030 --> 00:08:55.040 align:start position:0%
+run mode just because I didn't want it
+ 
+
+00:08:55.040 --> 00:08:57.110 align:start position:0%
+run mode just because I didn't want it
+the<00:08:55.160><c> agent</c><00:08:55.480><c> to</c><00:08:55.560><c> swap</c><00:08:56.320><c> because</c><00:08:56.600><c> they</c><00:08:56.760><c> allow</c><00:08:57.040><c> I</c>
+
+00:08:57.110 --> 00:08:57.120 align:start position:0%
+the agent to swap because they allow I
+ 
+
+00:08:57.120 --> 00:08:59.350 align:start position:0%
+the agent to swap because they allow I
+want<00:08:57.280><c> to</c><00:08:57.360><c> like</c><00:08:57.520><c> some</c><00:08:57.720><c> permit</c><00:08:58.120><c> to</c>
+
+00:08:59.350 --> 00:08:59.360 align:start position:0%
+want to like some permit to
+ 
+
+00:08:59.360 --> 00:09:01.830 align:start position:0%
+want to like some permit to
+issue<00:08:59.720><c> some</c><00:09:00.360><c> permissions</c><00:09:00.880><c> first</c><00:09:01.560><c> and</c><00:09:01.680><c> then</c>
+
+00:09:01.830 --> 00:09:01.840 align:start position:0%
+issue some permissions first and then
+ 
+
+00:09:01.840 --> 00:09:06.270 align:start position:0%
+issue some permissions first and then
+this<00:09:02.040><c> is</c><00:09:02.200><c> a</c><00:09:02.720><c> conversion.</c><00:09:03.840><c> Um</c><00:09:04.800><c> so</c><00:09:05.560><c> now</c><00:09:06.040><c> it's</c>
+
+00:09:06.270 --> 00:09:06.280 align:start position:0%
+this is a conversion. Um so now it's
+ 
+
+00:09:06.280 --> 00:09:10.910 align:start position:0%
+this is a conversion. Um so now it's
+getting<00:09:06.560><c> the</c><00:09:06.680><c> quote.</c><00:09:07.600><c> Use</c><00:09:08.160><c> the</c><00:09:09.160><c> Uniswap</c><00:09:10.040><c> API</c>
+
+00:09:10.910 --> 00:09:10.920 align:start position:0%
+getting the quote. Use the Uniswap API
+ 
+
+00:09:10.920 --> 00:09:15.470 align:start position:0%
+getting the quote. Use the Uniswap API
+to<00:09:11.840><c> get</c><00:09:12.200><c> the</c><00:09:12.400><c> quote</c><00:09:13.160><c> and</c><00:09:13.520><c> then</c><00:09:14.200><c> execute</c><00:09:15.240><c> the</c>
+
+00:09:15.470 --> 00:09:15.480 align:start position:0%
+to get the quote and then execute the
+ 
+
+00:09:15.480 --> 00:09:16.710 align:start position:0%
+to get the quote and then execute the
+trade.
+
+00:09:16.710 --> 00:09:16.720 align:start position:0%
+trade.
+ 
+
+00:09:16.720 --> 00:09:19.790 align:start position:0%
+trade.
+Um<00:09:17.760><c> and</c><00:09:17.880><c> yeah,</c><00:09:18.280><c> this</c><00:09:18.480><c> is</c><00:09:18.640><c> pretty</c><00:09:19.160><c> pretty</c><00:09:19.400><c> much</c>
+
+00:09:19.790 --> 00:09:19.800 align:start position:0%
+Um and yeah, this is pretty pretty much
+ 
+
+00:09:19.800 --> 00:09:22.070 align:start position:0%
+Um and yeah, this is pretty pretty much
+it.<00:09:20.560><c> Uh</c><00:09:20.880><c> should</c><00:09:21.160><c> be</c><00:09:21.400><c> again</c><00:09:21.800><c> pretty</c>
+
+00:09:22.070 --> 00:09:22.080 align:start position:0%
+it. Uh should be again pretty
+ 
+
+00:09:22.080 --> 00:09:23.910 align:start position:0%
+it. Uh should be again pretty
+straightforward<00:09:22.640><c> for</c><00:09:22.760><c> you</c><00:09:22.880><c> guys</c><00:09:23.200><c> to</c><00:09:23.360><c> interact</c>
+
+00:09:23.910 --> 00:09:23.920 align:start position:0%
+straightforward for you guys to interact
+ 
+
+00:09:23.920 --> 00:09:25.070 align:start position:0%
+straightforward for you guys to interact
+with.
+
+00:09:25.070 --> 00:09:25.080 align:start position:0%
+with.
+ 
+
+00:09:25.080 --> 00:09:26.990 align:start position:0%
+with.
+Um<00:09:25.120><c> and</c><00:09:25.280><c> if</c><00:09:25.440><c> you</c><00:09:25.600><c> have</c><00:09:25.880><c> any</c><00:09:26.080><c> questions</c><00:09:26.680><c> during</c>
+
+00:09:26.990 --> 00:09:27.000 align:start position:0%
+Um and if you have any questions during
+ 
+
+00:09:27.000 --> 00:09:29.150 align:start position:0%
+Um and if you have any questions during
+this<00:09:27.240><c> hackathon,</c><00:09:27.760><c> what</c><00:09:27.920><c> I'm</c><00:09:28.000><c> going</c><00:09:28.160><c> to</c><00:09:28.280><c> do</c><00:09:28.880><c> is</c>
+
+00:09:29.150 --> 00:09:29.160 align:start position:0%
+this hackathon, what I'm going to do is
+ 
+
+00:09:29.160 --> 00:09:31.510 align:start position:0%
+this hackathon, what I'm going to do is
+to<00:09:29.440><c> spend</c><00:09:29.760><c> all</c><00:09:29.880><c> of</c><00:09:29.960><c> my</c><00:09:30.160><c> time</c><00:09:30.600><c> on</c><00:09:30.800><c> Discord</c><00:09:31.280><c> from</c>
+
+00:09:31.510 --> 00:09:31.520 align:start position:0%
+to spend all of my time on Discord from
+ 
+
+00:09:31.520 --> 00:09:32.870 align:start position:0%
+to spend all of my time on Discord from
+now<00:09:31.680><c> on.</c>
+
+00:09:32.870 --> 00:09:32.880 align:start position:0%
+now on.
+ 
+
+00:09:32.880 --> 00:09:34.590 align:start position:0%
+now on.
+Um<00:09:32.920><c> and</c><00:09:33.040><c> yeah,</c><00:09:33.720><c> hopefully</c><00:09:34.080><c> guiding</c><00:09:34.440><c> you</c>
+
+00:09:34.590 --> 00:09:34.600 align:start position:0%
+Um and yeah, hopefully guiding you
+ 
+
+00:09:34.600 --> 00:09:36.510 align:start position:0%
+Um and yeah, hopefully guiding you
+throughout<00:09:34.960><c> the</c><00:09:35.080><c> whole</c><00:09:35.800><c> the</c><00:09:35.920><c> whole</c><00:09:36.160><c> the</c><00:09:36.280><c> whole</c>
+
+00:09:36.510 --> 00:09:36.520 align:start position:0%
+throughout the whole the whole the whole
+ 
+
+00:09:36.520 --> 00:09:40.390 align:start position:0%
+throughout the whole the whole the whole
+hackathon.<00:09:37.240><c> Um</c><00:09:38.040><c> and</c><00:09:38.880><c> if</c><00:09:39.240><c> I</c><00:09:39.400><c> have</c><00:09:39.760><c> more</c><00:09:40.000><c> info</c>
+
+00:09:40.390 --> 00:09:40.400 align:start position:0%
+hackathon. Um and if I have more info
+ 
+
+00:09:40.400 --> 00:09:43.350 align:start position:0%
+hackathon. Um and if I have more info
+here,<00:09:41.080><c> no,</c><00:09:41.400><c> just</c><00:09:41.680><c> honestly</c><00:09:42.200><c> my</c>
+
+00:09:43.350 --> 00:09:43.360 align:start position:0%
+here, no, just honestly my
+ 
+
+00:09:43.360 --> 00:09:44.190 align:start position:0%
+here, no, just honestly my
+um
+
+00:09:44.190 --> 00:09:44.200 align:start position:0%
+um
+ 
+
+00:09:44.200 --> 00:09:46.470 align:start position:0%
+um
+my<00:09:44.280><c> information</c><00:09:45.480><c> and</c><00:09:45.640><c> where</c><00:09:45.800><c> you</c><00:09:45.920><c> guys</c><00:09:46.240><c> can</c>
+
+00:09:46.470 --> 00:09:46.480 align:start position:0%
+my information and where you guys can
+ 
+
+00:09:46.480 --> 00:09:48.070 align:start position:0%
+my information and where you guys can
+find<00:09:46.800><c> me.</c><00:09:46.960><c> But</c><00:09:47.120><c> as</c><00:09:47.280><c> I</c><00:09:47.360><c> mentioned,</c><00:09:47.760><c> if</c><00:09:47.880><c> you</c><00:09:47.960><c> go</c>
+
+00:09:48.070 --> 00:09:48.080 align:start position:0%
+find me. But as I mentioned, if you go
+ 
+
+00:09:48.080 --> 00:09:50.790 align:start position:0%
+find me. But as I mentioned, if you go
+to<00:09:48.200><c> Discord,</c><00:09:49.120><c> uh</c><00:09:49.200><c> the</c><00:09:49.320><c> ETHGlobal</c><00:09:49.840><c> one</c><00:09:50.440><c> on</c><00:09:50.680><c> the</c>
+
+00:09:50.790 --> 00:09:50.800 align:start position:0%
+to Discord, uh the ETHGlobal one on the
+ 
+
+00:09:50.800 --> 00:09:53.110 align:start position:0%
+to Discord, uh the ETHGlobal one on the
+partners<00:09:51.440><c> Uniswap</c><00:09:51.920><c> Foundation</c><00:09:52.400><c> one,</c><00:09:52.960><c> I'll</c><00:09:53.040><c> be</c>
+
+00:09:53.110 --> 00:09:53.120 align:start position:0%
+partners Uniswap Foundation one, I'll be
+ 
+
+00:09:53.120 --> 00:09:55.110 align:start position:0%
+partners Uniswap Foundation one, I'll be
+there.<00:09:53.480><c> And</c><00:09:53.720><c> that</c><00:09:54.000><c> should</c><00:09:54.200><c> be</c><00:09:54.360><c> it.</c><00:09:54.480><c> Let</c><00:09:54.640><c> me</c><00:09:55.000><c> let</c>
+
+00:09:55.110 --> 00:09:55.120 align:start position:0%
+there. And that should be it. Let me let
+ 
+
+00:09:55.120 --> 00:09:57.390 align:start position:0%
+there. And that should be it. Let me let
+me<00:09:55.240><c> see</c><00:09:55.440><c> if</c><00:09:55.600><c> Claude</c><00:09:55.880><c> already</c><00:09:56.760><c> like</c><00:09:57.120><c> fits</c>
+
+00:09:57.390 --> 00:09:57.400 align:start position:0%
+me see if Claude already like fits
+ 
+
+00:09:57.400 --> 00:09:59.790 align:start position:0%
+me see if Claude already like fits
+thinking,<00:09:57.920><c> you</c><00:09:58.040><c> know,</c><00:09:58.480><c> sometimes</c><00:09:59.440><c> it</c><00:09:59.560><c> takes</c>
+
+00:09:59.790 --> 00:09:59.800 align:start position:0%
+thinking, you know, sometimes it takes
+ 
+
+00:09:59.800 --> 00:10:02.750 align:start position:0%
+thinking, you know, sometimes it takes
+some<00:10:00.560><c> time</c><00:10:01.040><c> here</c><00:10:01.200><c> and</c><00:10:01.320><c> there.</c>
+
+00:10:02.750 --> 00:10:02.760 align:start position:0%
+some time here and there.
+ 
+
+00:10:02.760 --> 00:10:04.910 align:start position:0%
+some time here and there.
+But<00:10:02.880><c> yeah,</c><00:10:03.280><c> use</c><00:10:03.680><c> all</c><00:10:03.880><c> of</c><00:10:04.000><c> these</c>
+
+00:10:04.910 --> 00:10:04.920 align:start position:0%
+But yeah, use all of these
+ 
+
+00:10:04.920 --> 00:10:06.070 align:start position:0%
+But yeah, use all of these
+AI
+
+00:10:06.070 --> 00:10:06.080 align:start position:0%
+AI
+ 
+
+00:10:06.080 --> 00:10:08.510 align:start position:0%
+AI
+features<00:10:06.480><c> that</c><00:10:06.640><c> we</c><00:10:06.760><c> now</c><00:10:07.000><c> have</c><00:10:07.520><c> to,</c><00:10:07.960><c> you</c><00:10:08.080><c> know,</c>
+
+00:10:08.510 --> 00:10:08.520 align:start position:0%
+features that we now have to, you know,
+ 
+
+00:10:08.520 --> 00:10:10.950 align:start position:0%
+features that we now have to, you know,
+empower<00:10:09.240><c> your</c><00:10:09.520><c> agent</c><00:10:09.880><c> to</c><00:10:10.280><c> to</c><00:10:10.440><c> swap</c><00:10:10.800><c> any</c>
+
+00:10:10.950 --> 00:10:10.960 align:start position:0%
+empower your agent to to swap any
+ 
+
+00:10:10.960 --> 00:10:13.510 align:start position:0%
+empower your agent to to swap any
+network<00:10:11.360><c> out</c><00:10:11.560><c> there.</c><00:10:12.240><c> So</c><00:10:12.600><c> now</c><00:10:12.800><c> it's</c><00:10:12.960><c> verifying</c>
+
+00:10:13.510 --> 00:10:13.520 align:start position:0%
+network out there. So now it's verifying
+ 
+
+00:10:13.520 --> 00:10:16.390 align:start position:0%
+network out there. So now it's verifying
+the<00:10:13.920><c> the</c><00:10:14.000><c> balance,</c><00:10:15.000><c> disabling</c><00:10:15.560><c> the</c><00:10:15.920><c> the</c><00:10:16.280><c> the</c>
+
+00:10:16.390 --> 00:10:16.400 align:start position:0%
+the the balance, disabling the the the
+ 
+
+00:10:16.400 --> 00:10:18.510 align:start position:0%
+the the balance, disabling the the the
+drive<00:10:16.640><c> on</c><00:10:17.040><c> block</c><00:10:17.320><c> that</c><00:10:17.480><c> I</c><00:10:17.560><c> just</c><00:10:17.800><c> did,</c><00:10:18.120><c> execute</c>
+
+00:10:18.510 --> 00:10:18.520 align:start position:0%
+drive on block that I just did, execute
+ 
+
+00:10:18.520 --> 00:10:20.430 align:start position:0%
+drive on block that I just did, execute
+the<00:10:18.600><c> swap</c><00:10:18.840><c> via</c><00:10:19.000><c> the</c><00:10:19.120><c> agent</c><00:10:19.720><c> and</c><00:10:20.040><c> stuff</c><00:10:20.280><c> like</c>
+
+00:10:20.430 --> 00:10:20.440 align:start position:0%
+the swap via the agent and stuff like
+ 
+
+00:10:20.440 --> 00:10:22.470 align:start position:0%
+the swap via the agent and stuff like
+that.<00:10:21.080><c> So</c>
+
+00:10:22.470 --> 00:10:22.480 align:start position:0%
+that. So
+ 
+
+00:10:22.480 --> 00:10:25.190 align:start position:0%
+that. So
+thank<00:10:22.760><c> you</c><00:10:22.960><c> all.</c><00:10:23.400><c> That's</c><00:10:24.040><c> that's</c><00:10:24.240><c> it</c><00:10:24.480><c> for</c><00:10:24.840><c> for</c>
+
+00:10:25.190 --> 00:10:25.200 align:start position:0%
+thank you all. That's that's it for for
+ 
+
+00:10:25.200 --> 00:10:29.070 align:start position:0%
+thank you all. That's that's it for for
+for<00:10:25.360><c> this</c><00:10:25.560><c> hackathon.</c>
+
+00:10:29.070 --> 00:10:29.080 align:start position:0%
+ 
+ 
+
+00:10:29.080 --> 00:10:32.870 align:start position:0%
+ 
+Amazing.<00:10:30.160><c> Um,</c><00:10:30.360><c> did</c><00:10:30.680><c> you</c><00:10:31.240><c> want</c><00:10:31.640><c> to</c><00:10:32.520><c> have</c><00:10:32.720><c> some</c>
+
+00:10:32.870 --> 00:10:32.880 align:start position:0%
+Amazing. Um, did you want to have some
+ 
+
+00:10:32.880 --> 00:10:34.470 align:start position:0%
+Amazing. Um, did you want to have some
+time<00:10:33.080><c> for</c><00:10:33.240><c> a</c><00:10:33.280><c> Q&amp;A?</c>
+
+00:10:34.470 --> 00:10:34.480 align:start position:0%
+time for a Q&amp;A?
+ 
+
+00:10:34.480 --> 00:10:36.870 align:start position:0%
+time for a Q&amp;A?
+For<00:10:34.560><c> like</c><00:10:34.760><c> maybe</c><00:10:34.960><c> the</c><00:10:35.080><c> final</c><00:10:35.320><c> 10</c><00:10:35.480><c> minutes?</c>
+
+00:10:36.870 --> 00:10:36.880 align:start position:0%
+For like maybe the final 10 minutes?
+ 
+
+00:10:36.880 --> 00:10:39.150 align:start position:0%
+For like maybe the final 10 minutes?
+Yeah,<00:10:37.440><c> if</c><00:10:37.600><c> anyone</c><00:10:37.960><c> has</c><00:10:38.160><c> any</c><00:10:38.360><c> questions,</c><00:10:38.880><c> happy</c>
+
+00:10:39.150 --> 00:10:39.160 align:start position:0%
+Yeah, if anyone has any questions, happy
+ 
+
+00:10:39.160 --> 00:10:41.310 align:start position:0%
+Yeah, if anyone has any questions, happy
+to<00:10:39.400><c> happy</c><00:10:39.600><c> to</c><00:10:39.680><c> jump.</c><00:10:40.520><c> And</c><00:10:40.680><c> for</c><00:10:40.760><c> now</c><00:10:40.880><c> I</c><00:10:40.920><c> can</c><00:10:41.120><c> show</c>
+
+00:10:41.310 --> 00:10:41.320 align:start position:0%
+to happy to jump. And for now I can show
+ 
+
+00:10:41.320 --> 00:10:43.430 align:start position:0%
+to happy to jump. And for now I can show
+this<00:10:41.600><c> if</c><00:10:41.800><c> like</c><00:10:42.040><c> the</c><00:10:42.160><c> cloud</c><00:10:42.480><c> is</c><00:10:42.640><c> making</c><00:10:43.040><c> is</c><00:10:43.280><c> able</c>
+
+00:10:43.430 --> 00:10:43.440 align:start position:0%
+this if like the cloud is making is able
+ 
+
+00:10:43.440 --> 00:10:45.190 align:start position:0%
+this if like the cloud is making is able
+to<00:10:43.560><c> do</c><00:10:43.720><c> it</c><00:10:43.840><c> in</c><00:10:43.960><c> like,</c><00:10:44.400><c> you</c><00:10:44.480><c> know,</c><00:10:44.640><c> 5</c><00:10:44.920><c> minutes.</c>
+
+00:10:45.190 --> 00:10:45.200 align:start position:0%
+to do it in like, you know, 5 minutes.
+ 
+
+00:10:45.200 --> 00:10:48.070 align:start position:0%
+to do it in like, you know, 5 minutes.
+Sometime<00:10:45.680><c> it</c><00:10:45.800><c> takes</c><00:10:46.000><c> some</c><00:10:46.160><c> time,</c><00:10:46.440><c> so</c><00:10:46.680><c> yeah.</c>
+
+00:10:48.070 --> 00:10:48.080 align:start position:0%
+Sometime it takes some time, so yeah.
+ 
+
+00:10:48.080 --> 00:10:49.670 align:start position:0%
+Sometime it takes some time, so yeah.
+Okay,<00:10:48.360><c> great.</c><00:10:48.600><c> And</c><00:10:48.720><c> feel</c><00:10:48.920><c> free</c><00:10:49.120><c> to</c><00:10:49.400><c> raise</c><00:10:49.600><c> your</c>
+
+00:10:49.670 --> 00:10:49.680 align:start position:0%
+Okay, great. And feel free to raise your
+ 
+
+00:10:49.680 --> 00:10:51.430 align:start position:0%
+Okay, great. And feel free to raise your
+hand,<00:10:49.920><c> guys.</c><00:10:50.320><c> Or</c><00:10:50.600><c> you</c><00:10:50.680><c> can</c><00:10:50.800><c> also</c><00:10:51.080><c> post</c><00:10:51.360><c> your</c>
+
+00:10:51.430 --> 00:10:51.440 align:start position:0%
+hand, guys. Or you can also post your
+ 
+
+00:10:51.440 --> 00:10:58.470 align:start position:0%
+hand, guys. Or you can also post your
+questions<00:10:52.080><c> just</c><00:10:52.320><c> right</c><00:10:52.480><c> in</c><00:10:52.560><c> the</c><00:10:52.640><c> chat</c><00:10:52.880><c> here.</c>
+
+00:10:58.470 --> 00:10:58.480 align:start position:0%
+ 
+ 
+
+00:10:58.480 --> 00:11:02.390 align:start position:0%
+ 
+Are<00:10:58.640><c> we</c><00:10:58.720><c> good?</c><00:10:59.440><c> I</c><00:10:59.640><c> think</c><00:11:00.960><c> I</c><00:11:01.000><c> saw</c><00:11:01.520><c> Elena</c><00:11:02.000><c> asking</c>
+
+00:11:02.390 --> 00:11:02.400 align:start position:0%
+Are we good? I think I saw Elena asking
+ 
+
+00:11:02.400 --> 00:11:05.150 align:start position:0%
+Are we good? I think I saw Elena asking
+me<00:11:02.560><c> on</c><00:11:02.720><c> TG.</c><00:11:03.400><c> I</c><00:11:03.480><c> was</c><00:11:03.839><c> out</c><00:11:04.040><c> of</c><00:11:04.200><c> office</c><00:11:04.600><c> yesterday,</c>
+
+00:11:05.150 --> 00:11:05.160 align:start position:0%
+me on TG. I was out of office yesterday,
+ 
+
+00:11:05.160 --> 00:11:07.829 align:start position:0%
+me on TG. I was out of office yesterday,
+but<00:11:06.200><c> um</c>
+
+00:11:07.829 --> 00:11:07.839 align:start position:0%
+but um
+ 
+
+00:11:07.839 --> 00:11:10.910 align:start position:0%
+but um
+but<00:11:08.839><c> um</c>
+
+00:11:10.910 --> 00:11:10.920 align:start position:0%
+ 
+ 
+
+00:11:10.920 --> 00:11:12.710 align:start position:0%
+ 
+but<00:11:11.120><c> I'll</c><00:11:11.200><c> follow</c><00:11:11.480><c> up</c><00:11:11.880><c> today.</c><00:11:12.280><c> And</c><00:11:12.600><c> the</c>
+
+00:11:12.710 --> 00:11:12.720 align:start position:0%
+but I'll follow up today. And the
+ 
+
+00:11:12.720 --> 00:11:14.230 align:start position:0%
+but I'll follow up today. And the
+question<00:11:13.080><c> for</c><00:11:13.200><c> George</c><00:11:13.520><c> is</c><00:11:13.640><c> like,</c><00:11:13.800><c> do</c><00:11:13.920><c> you</c><00:11:14.040><c> have</c>
+
+00:11:14.230 --> 00:11:14.240 align:start position:0%
+question for George is like, do you have
+ 
+
+00:11:14.240 --> 00:11:16.070 align:start position:0%
+question for George is like, do you have
+any<00:11:14.400><c> testnet</c><00:11:14.920><c> support?</c><00:11:15.400><c> It</c><00:11:15.520><c> was</c><00:11:15.680><c> mentioned</c><00:11:16.000><c> in</c>
+
+00:11:16.070 --> 00:11:16.080 align:start position:0%
+any testnet support? It was mentioned in
+ 
+
+00:11:16.080 --> 00:11:18.350 align:start position:0%
+any testnet support? It was mentioned in
+the<00:11:16.200><c> docs</c><00:11:16.520><c> by</c><00:11:16.680><c> Sepolia</c><00:11:17.160><c> I</c><00:11:17.200><c> support</c><00:11:17.600><c> it.</c><00:11:17.839><c> The</c>
+
+00:11:18.350 --> 00:11:18.360 align:start position:0%
+the docs by Sepolia I support it. The
+ 
+
+00:11:18.360 --> 00:11:20.510 align:start position:0%
+the docs by Sepolia I support it. The
+The<00:11:18.600><c> The</c><00:11:18.760><c> answer</c><00:11:19.000><c> is</c><00:11:19.200><c> yes.</c>
+
+00:11:20.510 --> 00:11:20.520 align:start position:0%
+The The answer is yes.
+ 
+
+00:11:20.520 --> 00:11:22.829 align:start position:0%
+The The answer is yes.
+Um,<00:11:21.360><c> but</c><00:11:21.920><c> there's</c><00:11:22.160><c> some</c><00:11:22.320><c> things</c><00:11:22.560><c> that</c><00:11:22.720><c> you</c>
+
+00:11:22.829 --> 00:11:22.839 align:start position:0%
+Um, but there's some things that you
+ 
+
+00:11:22.839 --> 00:11:26.550 align:start position:0%
+Um, but there's some things that you
+might<00:11:23.800><c> have</c><00:11:24.040><c> to</c><00:11:24.200><c> make</c><00:11:24.440><c> sure</c><00:11:25.360><c> in</c><00:11:25.920><c> order</c><00:11:26.120><c> to</c><00:11:26.240><c> get</c>
+
+00:11:26.550 --> 00:11:26.560 align:start position:0%
+might have to make sure in order to get
+ 
+
+00:11:26.560 --> 00:11:28.230 align:start position:0%
+might have to make sure in order to get
+ports.<00:11:26.960><c> If</c><00:11:27.120><c> not,</c><00:11:27.320><c> you're</c><00:11:27.440><c> going</c><00:11:27.600><c> to</c><00:11:27.680><c> get</c><00:11:27.920><c> some</c>
+
+00:11:28.230 --> 00:11:28.240 align:start position:0%
+ports. If not, you're going to get some
+ 
+
+00:11:28.240 --> 00:11:30.670 align:start position:0%
+ports. If not, you're going to get some
+errors.<00:11:28.880><c> So</c>
+
+00:11:30.670 --> 00:11:30.680 align:start position:0%
+errors. So
+ 
+
+00:11:30.680 --> 00:11:33.990 align:start position:0%
+errors. So
+pretty<00:11:31.040><c> much,</c><00:11:31.880><c> let</c><00:11:32.080><c> me</c><00:11:32.640><c> Should</c><00:11:32.800><c> be</c><00:11:32.880><c> here.</c>
+
+00:11:33.990 --> 00:11:34.000 align:start position:0%
+pretty much, let me Should be here.
+ 
+
+00:11:34.000 --> 00:11:35.990 align:start position:0%
+pretty much, let me Should be here.
+Pretty<00:11:34.200><c> much,</c><00:11:34.760><c> it's</c><00:11:35.000><c> important</c><00:11:35.520><c> that</c>
+
+00:11:35.990 --> 00:11:36.000 align:start position:0%
+Pretty much, it's important that
+ 
+
+00:11:36.000 --> 00:11:38.190 align:start position:0%
+Pretty much, it's important that
+whenever<00:11:36.400><c> you're</c><00:11:36.560><c> setting</c><00:11:36.920><c> up</c><00:11:37.200><c> Sepolia</c>
+
+00:11:38.190 --> 00:11:38.200 align:start position:0%
+whenever you're setting up Sepolia
+ 
+
+00:11:38.200 --> 00:11:41.750 align:start position:0%
+whenever you're setting up Sepolia
+pools,<00:11:38.880><c> you</c><00:11:39.160><c> need</c><00:11:39.400><c> to</c><00:11:39.560><c> have</c><00:11:39.800><c> at</c><00:11:39.960><c> least</c><00:11:40.839><c> um</c>
+
+00:11:41.750 --> 00:11:41.760 align:start position:0%
+pools, you need to have at least um
+ 
+
+00:11:41.760 --> 00:11:44.750 align:start position:0%
+pools, you need to have at least um
+$300<00:11:42.720><c> for</c><00:11:43.080><c> the</c><00:11:43.280><c> L2s.</c>
+
+00:11:44.750 --> 00:11:44.760 align:start position:0%
+$300 for the L2s.
+ 
+
+00:11:44.760 --> 00:11:46.070 align:start position:0%
+$300 for the L2s.
+And<00:11:44.920><c> a</c><00:11:45.000><c> thousand</c><00:11:45.400><c> on</c><00:11:45.520><c> the</c><00:11:45.600><c> mainnet</c><00:11:45.880><c> if</c><00:11:46.000><c> you</c>
+
+00:11:46.070 --> 00:11:46.080 align:start position:0%
+And a thousand on the mainnet if you
+ 
+
+00:11:46.080 --> 00:11:47.590 align:start position:0%
+And a thousand on the mainnet if you
+don't<00:11:46.200><c> have</c><00:11:46.320><c> to</c><00:11:46.480><c> like</c><00:11:46.720><c> it,</c><00:11:46.760><c> that's</c><00:11:46.960><c> okay.</c><00:11:47.240><c> But</c>
+
+00:11:47.590 --> 00:11:47.600 align:start position:0%
+don't have to like it, that's okay. But
+ 
+
+00:11:47.600 --> 00:11:50.390 align:start position:0%
+don't have to like it, that's okay. But
+for<00:11:47.960><c> for</c><00:11:48.120><c> the</c><00:11:48.240><c> L2s,</c><00:11:49.360><c> it's</c><00:11:49.560><c> important</c><00:11:50.040><c> to</c><00:11:50.160><c> have</c>
+
+00:11:50.390 --> 00:11:50.400 align:start position:0%
+for for the L2s, it's important to have
+ 
+
+00:11:50.400 --> 00:11:52.150 align:start position:0%
+for for the L2s, it's important to have
+at<00:11:50.560><c> least</c><00:11:50.880><c> this</c>
+
+00:11:52.150 --> 00:11:52.160 align:start position:0%
+at least this
+ 
+
+00:11:52.160 --> 00:11:53.910 align:start position:0%
+at least this
+on<00:11:52.280><c> the</c><00:11:52.400><c> pool</c><00:11:52.760><c> so</c><00:11:52.920><c> that</c><00:11:53.160><c> that</c><00:11:53.360><c> that</c><00:11:53.600><c> that</c><00:11:53.800><c> it</c>
+
+00:11:53.910 --> 00:11:53.920 align:start position:0%
+on the pool so that that that that it
+ 
+
+00:11:53.920 --> 00:11:55.630 align:start position:0%
+on the pool so that that that that it
+goes<00:11:54.200><c> to</c><00:11:54.480><c> to</c><00:11:54.640><c> get</c><00:11:54.839><c> the</c><00:11:54.960><c> coding</c><00:11:55.280><c> instead</c><00:11:55.560><c> of</c>
+
+00:11:55.630 --> 00:11:55.640 align:start position:0%
+goes to to get the coding instead of
+ 
+
+00:11:55.640 --> 00:11:57.070 align:start position:0%
+goes to to get the coding instead of
+like<00:11:55.839><c> getting</c><00:11:56.040><c> the</c><00:11:56.160><c> four</c><00:11:56.400><c> of</c><00:11:56.520><c> four</c><00:11:56.760><c> of</c><00:11:56.839><c> four</c>
+
+00:11:57.070 --> 00:11:57.080 align:start position:0%
+like getting the four of four of four
+ 
+
+00:11:57.080 --> 00:11:59.870 align:start position:0%
+like getting the four of four of four
+error<00:11:57.280><c> that</c><00:11:57.440><c> you</c><00:11:57.600><c> might</c><00:11:57.839><c> be</c><00:11:57.960><c> getting</c><00:11:58.280><c> or</c><00:11:58.640><c> 501.</c>
+
+00:11:59.870 --> 00:11:59.880 align:start position:0%
+error that you might be getting or 501.
+ 
+
+00:11:59.880 --> 00:12:01.829 align:start position:0%
+error that you might be getting or 501.
+I<00:12:00.000><c> don't</c><00:12:00.120><c> know</c><00:12:00.200><c> if</c><00:12:00.280><c> that's</c><00:12:01.040><c> helpful</c><00:12:01.400><c> for</c><00:12:01.640><c> Yeah,</c>
+
+00:12:01.829 --> 00:12:01.839 align:start position:0%
+I don't know if that's helpful for Yeah,
+ 
+
+00:12:01.839 --> 00:12:04.030 align:start position:0%
+I don't know if that's helpful for Yeah,
+that's<00:12:02.120><c> the</c><00:12:02.440><c> the</c><00:12:02.600><c> troubleshooting</c><00:12:03.320><c> there.</c>
+
+00:12:04.030 --> 00:12:04.040 align:start position:0%
+that's the the troubleshooting there.
+ 
+
+00:12:04.040 --> 00:12:06.470 align:start position:0%
+that's the the troubleshooting there.
+I'm<00:12:04.160><c> in.</c>
+
+00:12:06.470 --> 00:12:06.480 align:start position:0%
+I'm in.
+ 
+
+00:12:06.480 --> 00:12:10.030 align:start position:0%
+I'm in.
+And<00:12:06.680><c> finally,</c><00:12:07.040><c> swap</c><00:12:07.280><c> completed,</c><00:12:07.760><c> by</c><00:12:07.880><c> the</c><00:12:08.000><c> way.</c>
+
+00:12:10.030 --> 00:12:10.040 align:start position:0%
+And finally, swap completed, by the way.
+ 
+
+00:12:10.040 --> 00:12:12.110 align:start position:0%
+And finally, swap completed, by the way.
+Yes.<00:12:10.680><c> No,</c><00:12:10.839><c> I</c><00:12:10.920><c> just</c><00:12:11.120><c> want</c><00:12:11.280><c> to</c><00:12:11.400><c> say</c><00:12:11.600><c> that</c><00:12:12.000><c> the</c>
+
+00:12:12.110 --> 00:12:12.120 align:start position:0%
+Yes. No, I just want to say that the
+ 
+
+00:12:12.120 --> 00:12:14.750 align:start position:0%
+Yes. No, I just want to say that the
+message<00:12:12.600><c> sent</c><00:12:12.880><c> in</c><00:12:13.000><c> Discord,</c><00:12:14.280><c> I</c><00:12:14.360><c> created</c><00:12:14.720><c> a</c>
+
+00:12:14.750 --> 00:12:14.760 align:start position:0%
+message sent in Discord, I created a
+ 
+
+00:12:14.760 --> 00:12:16.390 align:start position:0%
+message sent in Discord, I created a
+group<00:12:15.000><c> with</c><00:12:15.280><c> with</c><00:12:15.600><c> Hulu.</c><00:12:16.080><c> I</c><00:12:16.160><c> think</c><00:12:16.360><c> you</c>
+
+00:12:16.390 --> 00:12:16.400 align:start position:0%
+group with with Hulu. I think you
+ 
+
+00:12:16.400 --> 00:12:18.350 align:start position:0%
+group with with Hulu. I think you
+already<00:12:16.720><c> responded</c><00:12:17.320><c> there.</c>
+
+00:12:18.350 --> 00:12:18.360 align:start position:0%
+already responded there.
+ 
+
+00:12:18.360 --> 00:12:21.590 align:start position:0%
+already responded there.
+Yeah.<00:12:19.040><c> Yeah,</c><00:12:19.200><c> yeah,</c><00:12:19.360><c> yeah.</c>
+
+00:12:21.590 --> 00:12:21.600 align:start position:0%
+Yeah. Yeah, yeah, yeah.
+ 
+
+00:12:21.600 --> 00:12:23.150 align:start position:0%
+Yeah. Yeah, yeah, yeah.
+Yeah,<00:12:21.839><c> I</c><00:12:21.880><c> checked</c><00:12:22.160><c> your</c><00:12:22.280><c> TG</c><00:12:22.560><c> message.</c><00:12:22.960><c> It</c><00:12:23.040><c> was</c>
+
+00:12:23.150 --> 00:12:23.160 align:start position:0%
+Yeah, I checked your TG message. It was
+ 
+
+00:12:23.160 --> 00:12:24.910 align:start position:0%
+Yeah, I checked your TG message. It was
+about<00:12:23.400><c> the</c><00:12:23.560><c> idea</c><00:12:23.920><c> with</c>
+
+00:12:24.910 --> 00:12:24.920 align:start position:0%
+about the idea with
+ 
+
+00:12:24.920 --> 00:12:25.950 align:start position:0%
+about the idea with
+Yeah.
+
+00:12:25.950 --> 00:12:25.960 align:start position:0%
+Yeah.
+ 
+
+00:12:25.960 --> 00:12:27.710 align:start position:0%
+Yeah.
+I<00:12:26.040><c> I</c><00:12:26.080><c> actually</c><00:12:26.640><c> I</c><00:12:27.040><c> Yeah,</c><00:12:27.160><c> yeah,</c><00:12:27.280><c> yeah.</c><00:12:27.560><c> So</c>
+
+00:12:27.710 --> 00:12:27.720 align:start position:0%
+I I actually I Yeah, yeah, yeah. So
+ 
+
+00:12:27.720 --> 00:12:28.950 align:start position:0%
+I I actually I Yeah, yeah, yeah. So
+yeah,<00:12:27.920><c> I</c><00:12:27.960><c> already</c><00:12:28.240><c> checked</c><00:12:28.440><c> that</c><00:12:28.600><c> message</c>
+
+00:12:28.950 --> 00:12:28.960 align:start position:0%
+yeah, I already checked that message
+ 
+
+00:12:28.960 --> 00:12:30.710 align:start position:0%
+yeah, I already checked that message
+message.<00:12:29.560><c> Yeah,</c><00:12:29.760><c> my</c><00:12:29.960><c> question</c><00:12:30.320><c> has</c><00:12:30.520><c> been</c>
+
+00:12:30.710 --> 00:12:30.720 align:start position:0%
+message. Yeah, my question has been
+ 
+
+00:12:30.720 --> 00:12:32.990 align:start position:0%
+message. Yeah, my question has been
+answered,<00:12:31.200><c> so</c><00:12:31.400><c> that's</c><00:12:31.720><c> all.</c>
+
+00:12:32.990 --> 00:12:33.000 align:start position:0%
+answered, so that's all.
+ 
+
+00:12:33.000 --> 00:12:35.190 align:start position:0%
+answered, so that's all.
+Lovely.<00:12:34.120><c> Lovely.</c><00:12:34.400><c> Yeah,</c>
+
+00:12:35.190 --> 00:12:35.200 align:start position:0%
+Lovely. Lovely. Yeah,
+ 
+
+00:12:35.200 --> 00:12:37.790 align:start position:0%
+Lovely. Lovely. Yeah,
+like<00:12:35.680><c> to</c><00:12:35.800><c> be</c><00:12:35.960><c> honest,</c><00:12:36.240><c> guys,</c><00:12:37.080><c> I</c><00:12:37.120><c> was</c><00:12:37.400><c> a</c><00:12:37.480><c> hacker</c>
+
+00:12:37.790 --> 00:12:37.800 align:start position:0%
+like to be honest, guys, I was a hacker
+ 
+
+00:12:37.800 --> 00:12:40.950 align:start position:0%
+like to be honest, guys, I was a hacker
+before<00:12:38.480><c> and</c><00:12:39.000><c> I</c><00:12:39.520><c> I</c><00:12:39.680><c> know</c><00:12:39.960><c> how</c><00:12:40.200><c> hard</c><00:12:40.480><c> it</c><00:12:40.600><c> is</c><00:12:40.680><c> to,</c>
+
+00:12:40.950 --> 00:12:40.960 align:start position:0%
+before and I I know how hard it is to,
+ 
+
+00:12:40.960 --> 00:12:42.590 align:start position:0%
+before and I I know how hard it is to,
+you<00:12:41.080><c> know,</c><00:12:41.320><c> get</c><00:12:41.600><c> out</c><00:12:41.760><c> there</c><00:12:42.120><c> and</c><00:12:42.280><c> having</c>
+
+00:12:42.590 --> 00:12:42.600 align:start position:0%
+you know, get out there and having
+ 
+
+00:12:42.600 --> 00:12:44.030 align:start position:0%
+you know, get out there and having
+questions<00:12:43.040><c> and</c><00:12:43.120><c> no</c><00:12:43.280><c> one</c><00:12:43.400><c> to</c><00:12:43.520><c> answer.</c><00:12:43.880><c> So</c>
+
+00:12:44.030 --> 00:12:44.040 align:start position:0%
+questions and no one to answer. So
+ 
+
+00:12:44.040 --> 00:12:45.670 align:start position:0%
+questions and no one to answer. So
+that's<00:12:44.360><c> why</c><00:12:44.520><c> during</c><00:12:44.800><c> this</c><00:12:45.000><c> hackathons</c><00:12:45.560><c> I</c>
+
+00:12:45.670 --> 00:12:45.680 align:start position:0%
+that's why during this hackathons I
+ 
+
+00:12:45.680 --> 00:12:47.670 align:start position:0%
+that's why during this hackathons I
+really<00:12:45.920><c> give</c><00:12:46.120><c> my</c><00:12:46.320><c> best</c><00:12:46.680><c> to,</c><00:12:47.240><c> you</c><00:12:47.320><c> know,</c><00:12:47.440><c> like</c>
+
+00:12:47.670 --> 00:12:47.680 align:start position:0%
+really give my best to, you know, like
+ 
+
+00:12:47.680 --> 00:12:49.950 align:start position:0%
+really give my best to, you know, like
+be<00:12:47.800><c> there</c><00:12:48.200><c> out</c><00:12:48.400><c> there</c><00:12:48.640><c> available</c><00:12:49.360><c> and</c><00:12:49.680><c> and</c><00:12:49.839><c> be</c>
+
+00:12:49.950 --> 00:12:49.960 align:start position:0%
+be there out there available and and be
+ 
+
+00:12:49.960 --> 00:12:51.350 align:start position:0%
+be there out there available and and be
+there<00:12:50.120><c> for</c><00:12:50.280><c> you</c><00:12:50.400><c> guys.</c>
+
+00:12:51.350 --> 00:12:51.360 align:start position:0%
+there for you guys.
+ 
+
+00:12:51.360 --> 00:12:53.310 align:start position:0%
+there for you guys.
+On<00:12:51.480><c> Discord,</c><00:12:51.920><c> as</c><00:12:52.080><c> I</c><00:12:52.120><c> mentioned,</c><00:12:52.720><c> I</c><00:12:52.839><c> didn't</c><00:12:53.080><c> get</c>
+
+00:12:53.310 --> 00:12:53.320 align:start position:0%
+On Discord, as I mentioned, I didn't get
+ 
+
+00:12:53.320 --> 00:12:55.390 align:start position:0%
+On Discord, as I mentioned, I didn't get
+the<00:12:53.720><c> the</c><00:12:53.839><c> time</c><00:12:54.200><c> to</c><00:12:54.480><c> answer</c><00:12:54.760><c> yet,</c><00:12:55.080><c> but</c><00:12:55.240><c> I'll</c>
+
+00:12:55.390 --> 00:12:55.400 align:start position:0%
+the the time to answer yet, but I'll
+ 
+
+00:12:55.400 --> 00:12:57.230 align:start position:0%
+the the time to answer yet, but I'll
+follow<00:12:55.640><c> up</c><00:12:55.760><c> after</c><00:12:56.000><c> the</c><00:12:56.080><c> meeting</c><00:12:56.480><c> and</c><00:12:56.800><c> call</c><00:12:57.000><c> me</c>
+
+00:12:57.230 --> 00:12:57.240 align:start position:0%
+follow up after the meeting and call me
+ 
+
+00:12:57.240 --> 00:12:58.670 align:start position:0%
+follow up after the meeting and call me
+in.<00:12:57.400><c> If</c><00:12:57.520><c> you</c><00:12:57.600><c> have</c><00:12:57.720><c> any</c><00:12:58.000><c> troubleshooting</c><00:12:58.600><c> or</c>
+
+00:12:58.670 --> 00:12:58.680 align:start position:0%
+in. If you have any troubleshooting or
+ 
+
+00:12:58.680 --> 00:13:00.230 align:start position:0%
+in. If you have any troubleshooting or
+whatever,<00:12:59.120><c> let</c><00:12:59.360><c> me</c><00:12:59.480><c> know.</c><00:12:59.640><c> But</c><00:12:59.920><c> most</c>
+
+00:13:00.230 --> 00:13:00.240 align:start position:0%
+whatever, let me know. But most
+ 
+
+00:13:00.240 --> 00:13:02.470 align:start position:0%
+whatever, let me know. But most
+important,<00:13:01.080><c> if</c><00:13:01.280><c> you</c><00:13:01.360><c> can</c><00:13:01.560><c> give</c><00:13:01.800><c> me</c><00:13:01.960><c> feedback</c>
+
+00:13:02.470 --> 00:13:02.480 align:start position:0%
+important, if you can give me feedback
+ 
+
+00:13:02.480 --> 00:13:05.190 align:start position:0%
+important, if you can give me feedback
+in<00:13:02.600><c> that</c><00:13:02.839><c> uh</c><00:13:03.120><c> feedback.md</c><00:13:04.000><c> file</c><00:13:04.800><c> in</c><00:13:05.000><c> your</c>
+
+00:13:05.190 --> 00:13:05.200 align:start position:0%
+in that uh feedback.md file in your
+ 
+
+00:13:05.200 --> 00:13:07.910 align:start position:0%
+in that uh feedback.md file in your
+repo,<00:13:05.880><c> dude,</c><00:13:06.200><c> I'll</c><00:13:06.320><c> be</c><00:13:06.440><c> more</c><00:13:06.600><c> than</c><00:13:06.800><c> happy</c><00:13:07.640><c> to,</c>
+
+00:13:07.910 --> 00:13:07.920 align:start position:0%
+repo, dude, I'll be more than happy to,
+ 
+
+00:13:07.920 --> 00:13:10.030 align:start position:0%
+repo, dude, I'll be more than happy to,
+you<00:13:08.040><c> know,</c><00:13:08.200><c> work</c><00:13:08.520><c> after</c><00:13:09.040><c> after</c><00:13:09.560><c> after</c><00:13:09.839><c> this</c>
+
+00:13:10.030 --> 00:13:10.040 align:start position:0%
+you know, work after after after this
+ 
+
+00:13:10.040 --> 00:13:12.070 align:start position:0%
+you know, work after after after this
+hackathon<00:13:10.440><c> to</c><00:13:10.560><c> improve</c><00:13:10.880><c> the</c><00:13:11.000><c> experience.</c><00:13:11.480><c> So</c>
+
+00:13:12.070 --> 00:13:12.080 align:start position:0%
+hackathon to improve the experience. So
+ 
+
+00:13:12.080 --> 00:13:14.400 align:start position:0%
+hackathon to improve the experience. So
+yeah.
+

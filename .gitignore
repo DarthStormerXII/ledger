@@ -44,3 +44,4 @@ forge-cache/
 .claude/
 .tmp/
 *.swp
+tools/llm-council/

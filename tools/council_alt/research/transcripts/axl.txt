@@ -1,0 +1,411 @@
+Hey, this is Jud from Jenson. And today
+we're going to look at and take a bit of
+a dive into the agent exchange layer.
+So, the agent exchange layer is a
+decentralized peer-to-peer networking
+layer built by Jenson that lets tools,
+agents,
+machine learning workloads, inference
+run on nodes that can discover each
+other and communicate in this completely
+encrypted environment. So, today we're
+going to go through AXL, what it is,
+some things that you can build with it,
+and we'll run through a demo at the end.
+And let's get started. So, what is the
+agent exchange layer? It's a
+peer-to-peer mesh network. It's a single
+go binary that handles all the
+networking. So, uh message routing, all
+types of uh encrypted messages of of any
+kind as long as it's bytes, and NAT
+traversal. These nodes that are
+connected to this network, uh they join
+a bootstrap network, and then if one of
+these nodes were to expose a public key,
+um
+other nodes can connect to that node,
+deliver payloads, send and receive,
+post, use different tools like MCP and
+agent-to-agent. Um these apps that are
+running on these nodes only talk to
+localhost. So, they send HTTP requests
+uh to localhost entirely. The The
+default port for that is 9002, but you
+can of course change this. And you can
+use any language that you want. So, any
+language you can make an HTTP request
+will work. So, like JavaScript, Go,
+Python, etc. Um it's entirely
+application agnostic. So, you can send
+pretty much anything as long as it's in
+bytes.
+And again, the way that these nodes find
+each other, once they're connected to a
+bootstrap node, is they have essentially
+a phone number. So, each node has a
+private key and a public key. And if you
+expose a public key, you can send that
+to somebody, you can post it somewhere,
+and people will be able to connect to
+your node and see what applications you
+have that are deployed on your node. So,
+at no point does any of this message
+routing, any of this connection go
+through any kind of central server. It's
+purely, well, purely peer-to-peer. It is
+truly peer-to-peer.
+There's no port forwarding, there's no
+cloud accounts, there's no DNS, there's
+no root or kernel requirements. Uh it
+runs completely in user space. Nodes,
+once they're spun up, are again sending
+HTTP requests. The port selected at your
+localhost, so again, by default 9002. Um
+and anytime that nodes communicate with
+each other with a public key, if you
+decide to share it, they are paying each
+other directly through a mesh network,
+but there's no central server. And you
+can also create your own bootstrap nodes
+as well. So, you don't even have to use
+public ones.
+So, your application interacts with a
+node through three very simple HTTP
+endpoints.
+The first of these is called post/send,
+and this is what lets you send data to
+another peer using their public key,
+which we mentioned earlier. The second
+is get/receive, and this is what you use
+to pull incoming messages. And each time
+one message is received, the previous
+one is dequeued. The third of these is
+get/topology. This gives you your public
+key, which will print to your terminal,
+and it'll also let you see who else is
+connected to whatever bootstrap node you
+are also connected to.
+That's it. That's the whole API for
+basic use. It's send data, receive data,
+and figure out who you are and who's
+around, pretty much. So, as far as
+encryption is concerned, when your node
+is connected to the mesh network, it
+means that you're also connected to a
+bootstrap node. And when you are sending
+messages from one node to another,
+sending data from one node to another,
+you're essentially your message content
+might be passed through other nodes, but
+it's still completely encrypted because
+none of those nodes are able to see what
+is being sent. They're able to see that
+there's a handoff happening somewhere,
+and maybe the the return and sender
+address, essentially. But there's no way
+that they can tell what the contents of
+that message are.
+There's two layers of security or
+encryption at work here. The first one
+is TLS service by hop. So, from each
+time you hop from one, or when the
+message hops from one node to another,
+it's encrypted. And then there's also an
+end-to-end payload encryption as well.
+And that's what's really nice about
+using something like AXL because you
+don't have to configure any transport
+layer security at all of yourself. It's
+already built in. So, now let's talk a
+bit about building using AXL. So, the
+starting pattern for pretty much
+everything is the the send and receive
+pattern. So, there's two applications on
+two different nodes, and one of them has
+to be a sender and the other a receiver.
+One node is going to be using the
+post/send method
+um with the destination's peer key, so
+it knows where it's going, and then the
+payload as the body. The other app is
+going to be pulling get/receive, popping
+each of those messages off of that queue
+of receiving messages,
+um and provide the sender's key as well.
+So, both the sender and the receiving
+nodes both know who is sending what and
+who's receiving what. Because you have
+to surface that public key, not the
+private key, but that public node key,
+which again is like that cell phone
+number that we've discussed earlier. And
+everything is going through this mesh
+network of nodes. Agents can use this.
+You can create peer-to-peer chat rooms.
+You can create distributed machine
+learning, decentralized machine learning
+inference pipelines. You can have agents
+communicating with each other, doing
+research on local devices, and then
+taking that information and creating
+these little context packets for use
+for, let's say, trading on something
+like Delphi, um if you have the Delphi
+SDK and the Delphi skills installed.
+Um there's a lot you can do with AXL.
+And then when you need a structured
+response,
+uh AXL also supports MCP and A2A. MCP,
+or model context protocol, allows you to
+expose named services running on your
+node, and then allow other nodes, if
+they have the service name and your
+public key, to call those and receive a
+structured JSON RPC response. And then
+we have A2A as well. So, A2A is Google's
+agent protocol. It allows skills to be
+posted as services in a way on your
+node, and allow other agents to find and
+access those skills. By the way, uh both
+of these, A2A and MCP, are in the AXL
+repo. So, you can look at those, and
+there's also some documented examples.
+But for getting just getting started and
+building something on those nodes, the
+send and receive methods are pretty much
+going to be the backbone of whatever you
+build. All right. So, now that we know a
+bit more about AXL, uh let's run through
+the very short checklist to clone the
+repo, get it running, spin up a node,
+and get building. You're going to want
+to clone the repo, uh CD into it, and
+then use the build command, generate
+your identity, which is going to
+generate your private key. Never share
+this, please. Do not share this. And
+then you're going to configure the node
+and generate um your public key, and
+connect to a bootstrap node, and then
+you're going to launch and verify
+everything. Um all these instructions
+and a lot more detail can be found in
+the documentation on
+docs.jenson.ai/docs/agent-exchange-layer.
+Um there's also a get started page,
+troubleshooting. We'll get more into
+some of those other resources later, but
+you can find everything right there as
+well.
+So, what are some of the things that you
+can build with AXL? Well, for starters,
+you could build something that revolves
+around agent collaboration. So, you can
+imagine two agents working on a research
+problem. One of them is finding
+information using web tools, aggregating
+context. The other one is synthesizing
+the findings, the context, into
+something that's actionable. Completely
+coordinating with no central
+coordinator. Each running its own node,
+so there's no server deciding which
+agent talks to which agent at all. They
+simply find each other by their public
+keys and go.
+You could also build a service registry,
+like a tool marketplace, or pub/sub and
+gossip, which is an example that does
+ship with the repo, where tools are
+published as services, and then other
+agents can use MCP to find and then
+utilize those tools.
+There's also the opportunity for private
+data exchange, to where you have it,
+financial information, um model outputs,
+uh medical data, all types of sensitive
+data from one peer to another,
+essentially in plain sight. Because
+again, other nodes can see that there's
+transmissions being made, but there's
+two layers of encryption. There's the
+hop-by-hop TLS, and then there's the
+end-to-end encryption as well. And so,
+you can send them whatever you want, and
+nobody would know what you're sending.
+You could do something with distributed
+inference, where you take a model, split
+it up across different nodes in the same
+mesh network, and exchange tensors
+directly, which you could then extend
+into something like pipeline
+parallelism, which essentially you take
+that model and that inference workload,
+you split one task on one task on one
+task from different nodes, and each one
+of those nodes does its part and passes
+the activation on to the next one.
+Um so, there's a lot that you can do
+here. And then there's, of course,
+anything peer-to-peer. So, multiplayer,
+voting, um live editing, messaging,
+anything at all that requires two
+machines talking to each other that you
+don't want to be centralized on somebody
+else's hardware. AXL handles the
+transport layer between those machines.
+Two machines, three machines, four
+machines, 100 machines.
+Build whatever you want. And just a
+reminder that if you want some
+inspiration, the AXL repo also comes
+packaged with um a good few examples
+that are also documented. So, converge
+cast, gossip sub, tensor exchange, and
+of course the A2A client. So, you can
+just take one of those, fork it as a
+starting point, and see where it gets
+you. And it doesn't have to be anything
+necessarily that's AI related. If AXL
+fits a use case that you have in mind,
+go for it.
+All right. So, now we know a bit about
+AXL. We know what we can do with it, how
+it works, how to get started, some of
+the things that you can build with it.
+Let's show what that looks like. So,
+this is a really simple peer-to-peer
+messaging app, a group chat that I built
+using AXL. It's a fairly straightforward
+application that uses some of the
+requests that we've been talking about,
+the post and the receive. It also
+incorporates agents. So, I have an Open
+Claw agent set up on one device running
+in one terminal. So, I have the Gateway
+off token there. And I've got four total
+terminals. I've got two sets of two.
+Two of these are sitting within
+Crostini, which we'll see in a second,
+and then two of these are in a dedicated
+terminal instance, just so I can flip
+back and forth pretty easily. So, and
+I've configured them both to both be
+listening to the same TCP, the same
+port, so that I can simulate a second
+device also pointing at its own
+localhost, but knowing my public, my
+first node's public key and being able
+to to essentially join that chat room.
+So, let's go ahead and get started. I'm
+going to open up the service here, which
+is the AXL group chat.
+Give myself a name, and then name my
+Open Claw agent instance, Mr. Guy.
+And let's go ahead and change the theme
+here a little bit, just to make it
+really clear who is who. So, I'm going
+to type a message, and now let's head
+over here and get started.
+So, because I'm running two nodes, and
+I'm trying to simulate a second device
+connecting, a second node connecting to
+the service I have here. I've got one
+Open Claw instance, so I'm not going to
+trip things up by
+bringing in an agent with me to both of
+these instances, but that's of this demo
+app here.
+This was designed so that multiple
+people could call and use one API key's
+worth of Open Claw agent. So, one person
+brings an agent through with their Open
+Claw Gateway authorization token, their
+key, and then multiple people can chat
+with it, they can call it, they can use
+it, and the Open Claw agent itself is
+actually being passed. It's all the
+messages in the chat are being fanned
+out, and then appended to a context blob
+that's sent along with each query to the
+agent. So, the agent can participate,
+can see, can see the surroundings, can
+see all the messages that are being
+sent, and multiple people can
+essentially share for the duration of
+one conversation an agent. So, I'm going
+to type in a name, which is guest, but
+we're not going to hit that second
+that second name selection. So, I'm
+going to say hello, and I'm going to go
+over here and see that guest has said
+hello. So, now this is two nodes
+on the same connected to the same
+bootstrap peer that are messaging each
+other. And then the
+Mr. Guy, hey.
+What is the temperature
+in Barbados?
+So, I'm going to post that message, and
+I've configured this in such a way where
+I don't want the agent to be constantly
+responding to everything. So, I just
+gave it a at, you know, at name here, so
+that it can be called at any point.
+Well, it looks like Mr. Guy doesn't have
+any live weather data, so I will say,
+What is 1 + 1?
+And what is blue? And
+switch over here to the other instance
+here.
+Blue and yellow create what color?
+Send that message, hop over back over
+here, and then do Mr. Guy,
+can you answer those two questions? And
+so now what I'm showing here is that
+there are multiple users in this chat
+room that are able to both use the agent
+by calling it specifically. And it's not
+going to ignore the messages of the
+other. So, one node connects to the
+other node's service, but the Open AI
+instance or the Open Claw instance is on
+one of those machines being run through
+that flag, and other people are able to
+essentially use that. So, what's
+happening here? One of the nodes is
+doing the post send HTTP request from
+one node to the other. The other one is
+receiving it with the other node's key,
+and then the other one is doing the
+receive in a loop. As you can see, we
+can send messages back back and forth.
+It's completely bidirectional, and the
+node is handling everything. The message
+routing, the delivery, the encryption,
+and the chat app is really just HTTP
+calls to localhost.
+All the hard stuff is in the node. It's
+it's the functionality, it's the
+infrastructure components that make up
+AXL.
+We could build this in an hour and go a
+lot further than this.
+Everything that you need to get started,
+to get up and running with AXL, is in
+the AXL repo. You can clone into
+everything, you can read some of the
+included documentation, get started. But
+again, all the resources can be found in
+the repo.
+And if you hit a wall, we have
+troubleshooting documentation and a
+Discord community that you can join at
+any point to ask questions. Of course,
+you have a wealth of documentation over
+on our docs platform. That's a wrap. So,
+I am super excited to see what you build
+with this. So, get out there and build
+something cool.
+Thanks for watching.

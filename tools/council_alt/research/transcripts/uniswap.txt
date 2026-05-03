@@ -1,0 +1,337 @@
+And welcome all of you guys to this open
+agent hackathon online round for all of
+us. Um where I hopefully
+you can all integrate the Uniswap API
+and just like you know use us and LP
+points in your application in minutes.
+My name is Angela as Audrey mentioned.
+Um I do developer relations at Uniswap
+Labs. And
+So I would love to start by saying most
+of the crypto and fintech products needs
+to swap. And this is just chatting about
+crypto and fintech products, but if we
+talk about the theme of this hackathon,
+agents needs to swap. Agents needs to
+pay. So today I just want to you show
+you some of the possibilities that we
+can you know allow you to integrate in
+your agent without
+you know like creating all or or
+building all of the routing
+infrastructure, all of the swap
+infrastructure. Just like couple of
+clicks and you're set to go. The Uniswap
+API powers on-chain swaps for wallets,
+exchanges, fintechs, AI agents, and
+more.
+From routing to liquidity aggregation as
+I mentioned and execution price should
+be super easy to and straightforward to
+app
+you know to add in all of our and your
+products. The reason why is because the
+Uniswap API aggregates on-chain and
+off-chain liquidity across all of our
+protocols. Uniswap V2,
+Uniswap V3, Uniswap V4, but also Uniswap
+X and more than 25 market makers. So
+yeah, this gives us a lot of like space
+and room for you guys to get quotes
+and also price execution. Some like key
+stats to share here and there. The
+Uniswap protocol cumulative volume more
+than four
+trillion.
+Uniswap protocol all-time trades more
+than 2.7 billion. Uniswap protocol
+assets more than 10 billion than 10
+million. And on the API side of the
+equation you have more than 17 chains to
+integrate. Um and yeah, 97%
+fill rates for all of you. As I
+mentioned, there's plenty of spaces for
+you to
+integrate, but the reality is like I
+mentioned at the beginning, you should
+be able to integrate this in minutes and
+it's that easy as go to
+developers.uniswap.org
+that org, generate your API key, request
+the code, get the best price, and
+customize your full model because we
+don't charge any fees, but you set all
+of the rules. And yes, when I said
+request the code, get the best price,
+you can do this manually, but you can
+also use Uniswap AI or AI these days to
+make this even easier. As some ideas or
+use cases, our bounty for this hackathon
+is super simple, like crazy simple. We
+want you to integrate the Uniswap API
+and all of your agents' ideas.
+And yeah, best creative case wins and
+the best application or integration
+wins. What I would love to ask you all
+here is like we're looking for for great
+feedback. So we're going to um
+you know appreciate if you add any
+feedback MD file in your submissions in
+order for us to understand how was your
+experience, how can we improve, is there
+something that you missed building this
+or yeah, anything that you like that you
+like to to to have moving forward. For
+example, back in the day I did to a
+mobile um can some of you guys asked us
+for having the LP endpoint. This is now
+live just a few weeks after. So if you
+guys keep pushing and giving us a lot of
+feedback, we're able to move forward and
+add all of these features in our
+ecosystem. So pretty straightforward,
+$5,000 in prizes, best Uniswap API
+integration. And the possibilities are
+you know honestly infinite from trading
+applications to agent-based systems,
+automated strategies, and even new
+financial primitives. So what we're
+looking is like show us what you could
+build and yeah, moving forward from this
+hackathon, what is something that you
+like to see out there and that your
+agents can run for you. So yeah, as for
+resources, there are like simple stuff
+that I like to share the developer
+platform developers.uniswap.org
+which is launched this and you should be
+able to find everything you need there.
+From documentation to your API keys to
+API references to a lot of like Uniswap
+um to AI
+features, everything should be there. If
+not, let me know in the feedback. Hey
+Angela, you know what, you guys missed
+this. Add it into the
+developers.uniswap.org.
+Here or here, super simple. But also we
+have Uniswap AI skills. This is what I'm
+going to show you right after this.
+Super simple. Honestly, I just created
+like a like a small
+mockup in order for me to
+add in my Anthropic API key, my Uniswap
+API key, and also like of course my
+wallet key using base mainnet to swap,
+get a quote, and swap. Super simple. But
+yeah, this skill should be able to let
+you build even faster during this time.
+So yeah, let's try it out. As I
+mentioned, developer platform is the
+way. So if this is the best place,
+developers.uniswap.org,
+here as I mentioned, you're going to
+find Let me actually share my screen
+like this.
+Um here actually you should be able to
+find
+again API references so you could test
+your API
+quotes here, set all of your parameters,
+and see like oh yeah, this might work in
+my project or not. We have LP endpoint
+as I mentioned and
+many other things. We have plenty of
+resources and as I mentioned like
+different content for all of you guys in
+here. Also on the ecosystem side of the
+equation, back in the day I can remember
+some of you guys
+requesting me like hey Angela, where can
+I find funding information, where can I
+find GTM support, where can I find
+security resources? Everything in here.
+Um
+And if you want to check the swapping or
+AI content should be
+here pretty straightforward. Okay, so I
+need an API key. That's the first thing
+that I'm going to do. And then I need
+the Uniswap AI skills that I honestly
+just added previous to this
+which should be because I wanted to you
+know spend the least time possible. But
+super simple.
+Um
+You go to Claude code if you if you use
+Claude code or just like install this in
+your terminal and you should be able to
+get access to all of these plugins. The
+one that I recommend you guys to use
+here is the plugin
+Uniswap trading that integrates all of
+the swap integration. By swap
+integration means using the API. Of
+course using the the swap
+endpoint, the LP one, but also pay with
+any token using the export to. So if
+your agent has any payment
+possibilities, this is also
+a great chance for you.
+I set up a wallet before this using
+base mainnet and this is basically the
+developers.uniswap.org
+that I mentioned. She goes here on the
+API key. I created one open agent for
+sure and I just set up my
+my Claude with like an M file where I
+just added the Anthropic API key, the
+Uniswap API key, and of course my
+private key from this wallet that again
+I'm going to use as a test. Previous to
+this talk, I just charged like two or
+three dollars and then I did a swap.
+42 minutes. I honestly chat with my um
+with my
+with my Claude in Spanish just because
+it is like my native language, but yeah,
+it should be pretty straightforward.
+It's like use uh let's let's I want to
+swap ETH to USDC on base mainnet. Let's
+swap
+0.5
+uh USD. And let's see how it goes. As I
+mentioned, what I requested to Claude
+before this is like you know what, I
+want an MVP where I can just give you
+these keys and an M file and then
+I am able to get a quote, request it,
+and then swap, and you know visualize
+this here. Of course you can add more of
+these things, but yeah, it should be
+pretty straightforward. To add the
+plugins that I mentioned, you just go to
+/plugins and then look for Uniswap. I
+already have all of these installed, but
+this is for you to um have a little bit
+more of context in here.
+Um
+Do do do.
+So okay. Uh I am asking Claude that I
+want to swap ETH to USDC on mainnet
+and then what it's doing is using the
+chain ID that I just set up on my M
+file. It's saying like yeah, chain is
+the base mainnet. I set up this like dry
+run mode just because I didn't want it
+the agent to swap because they allow I
+want to like some permit to
+issue some permissions first and then
+this is a conversion. Um so now it's
+getting the quote. Use the Uniswap API
+to get the quote and then execute the
+trade.
+Um and yeah, this is pretty pretty much
+it. Uh should be again pretty
+straightforward for you guys to interact
+with.
+Um and if you have any questions during
+this hackathon, what I'm going to do is
+to spend all of my time on Discord from
+now on.
+Um and yeah, hopefully guiding you
+throughout the whole the whole the whole
+hackathon. Um and if I have more info
+here, no, just honestly my
+um
+my information and where you guys can
+find me. But as I mentioned, if you go
+to Discord, uh the ETHGlobal one on the
+partners Uniswap Foundation one, I'll be
+there. And that should be it. Let me let
+me see if Claude already like fits
+thinking, you know, sometimes it takes
+some time here and there.
+But yeah, use all of these
+AI
+features that we now have to, you know,
+empower your agent to to swap any
+network out there. So now it's verifying
+the the balance, disabling the the the
+drive on block that I just did, execute
+the swap via the agent and stuff like
+that. So
+thank you all. That's that's it for for
+for this hackathon.
+Amazing. Um, did you want to have some
+time for a Q&amp;A?
+For like maybe the final 10 minutes?
+Yeah, if anyone has any questions, happy
+to happy to jump. And for now I can show
+this if like the cloud is making is able
+to do it in like, you know, 5 minutes.
+Sometime it takes some time, so yeah.
+Okay, great. And feel free to raise your
+hand, guys. Or you can also post your
+questions just right in the chat here.
+Are we good? I think I saw Elena asking
+me on TG. I was out of office yesterday,
+but um
+but I'll follow up today. And the
+question for George is like, do you have
+any testnet support? It was mentioned in
+the docs by Sepolia I support it. The
+The The answer is yes.
+Um, but there's some things that you
+might have to make sure in order to get
+ports. If not, you're going to get some
+errors. So
+pretty much, let me Should be here.
+Pretty much, it's important that
+whenever you're setting up Sepolia
+pools, you need to have at least um
+$300 for the L2s.
+And a thousand on the mainnet if you
+don't have to like it, that's okay. But
+for for the L2s, it's important to have
+at least this
+on the pool so that that that that it
+goes to to get the coding instead of
+like getting the four of four of four
+error that you might be getting or 501.
+I don't know if that's helpful for Yeah,
+that's the the troubleshooting there.
+I'm in.
+And finally, swap completed, by the way.
+Yes. No, I just want to say that the
+message sent in Discord, I created a
+group with with Hulu. I think you
+already responded there.
+Yeah. Yeah, yeah, yeah.
+Yeah, I checked your TG message. It was
+about the idea with
+Yeah.
+I I actually I Yeah, yeah, yeah. So
+yeah, I already checked that message
+message. Yeah, my question has been
+answered, so that's all.
+Lovely. Lovely. Yeah,
+like to be honest, guys, I was a hacker
+before and I I know how hard it is to,
+you know, get out there and having
+questions and no one to answer. So
+that's why during this hackathons I
+really give my best to, you know, like
+be there out there available and and be
+there for you guys.
+On Discord, as I mentioned, I didn't get
+the the time to answer yet, but I'll
+follow up after the meeting and call me
+in. If you have any troubleshooting or
+whatever, let me know. But most
+important, if you can give me feedback
+in that uh feedback.md file in your
+repo, dude, I'll be more than happy to,
+you know, work after after after this
+hackathon to improve the experience. So
+yeah.
