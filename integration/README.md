@@ -50,12 +50,14 @@ Two classes, both event-emitters, both designed for a Next.js frontend to subscr
 ### `BuyerAgent`
 
 Composes:
-- `MockEscrow` (or live LedgerEscrow contract on 0G Galileo at `0x12D2162F47AAAe1B0591e898648605daA186D644`) for `postTask` / `acceptBid` / `releasePayment` / `slashBond` / `cancelTask`
+
+- `MockEscrow` (or live LedgerEscrow contract on 0G Galileo at `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`) for `postTask` / `acceptTokenBid` / `releasePayment` / `slashBond` / `cancelTask`
 - `MockAxlBus` (or live AXL bridge at `localhost:9002` from `agents/axl-runtime`) for `#ledger-jobs` gossipsub broadcasts and direct `BID` / `BID_ACCEPTED` / `RESULT` messages
 - `MockReputationRegistry` (or live audited ERC-8004 at `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia) for star-rating feedback on settle
 - `MockEnsResolver` (or `LedgerCapabilityClient` from `resolver/`) for resolving `who.<worker>.<parent>.eth` cross-chain
 
 Public API:
+
 ```ts
 const buyer = new BuyerAgent({ buyerAddress, buyerPeerId, adapters, initialBalance });
 const off = buyer.on((event) => /* TaskPosted | BidReceived | BidAccepted | Settled | Slashed | Cancelled | AttestationRejected | Log */);
@@ -73,6 +75,7 @@ buyer.shutdown();
 ### `WorkerAgent`
 
 Composes:
+
 - `MockAxlBus` subscription to `#ledger-jobs` and direct inbox for `BID_ACCEPTED`
 - `MockCompute` (or live `runReasoning` from `agents/0g-compute`) with sealed-inference + attestation digest
 - `MockStorage` (or live `uploadAgentMemory` from `agents/0g-storage`) with AES-256-CTR + 0g:// CID roundtrip
@@ -80,6 +83,7 @@ Composes:
 - `MockWorkerINFTRegistry` (or live WorkerINFT at `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`) for `tokenId` / `ownerOf` / `memoryCID`
 
 Public API:
+
 ```ts
 const worker = new WorkerAgent({ workerAddress, workerPeerId, workerINFTId, workerLabel, adapters });
 worker.setBidStrategy(passthroughIfQualified({ askingBid: 900_000n, minRating: 4.5 }));
@@ -107,10 +111,15 @@ The SDK is import-clean and emits typed events — you drop it into a server act
 
 ```ts
 // app/api/auctions/route.ts
-import { BuyerAgent, createMockAdapters, newTaskId } from "@ledger/integration/sdk";
+import {
+  BuyerAgent,
+  createMockAdapters,
+  newTaskId,
+} from "@ledger/integration/sdk";
 
 export async function POST(req: Request) {
-  const { title, payment, bondRequirement, deadlineSeconds, minReputation } = await req.json();
+  const { title, payment, bondRequirement, deadlineSeconds, minReputation } =
+    await req.json();
   const adapters = createMockAdapters(); // swap for live adapters when ready
   const buyer = new BuyerAgent({
     buyerAddress: process.env.BUYER_ADDRESS as `0x${string}`,
@@ -139,6 +148,7 @@ export async function POST(req: Request) {
 ```
 
 For a live-adapter swap, replace `createMockAdapters()` with adapters that wrap:
+
 - `agents/0g-integration` (`LedgerEscrowAdapter`, `WorkerINFTAdapter`)
 - `agents/axl-runtime` (`LedgerAxlRuntime`)
 - `resolver/` (`LedgerCapabilityClient`)
@@ -148,25 +158,26 @@ The adapter interfaces are intentionally narrow (each method returns the same sh
 
 ## Scenarios — what each one proves
 
-| # | Scenario | What it verifies |
-|---|---|---|
-| 01 | `happy_path_full_lifecycle` | post → bid → accept → reasoning → memory upload → result → release → ERC-8004 +1; full lifecycle from end to end. |
-| 02 | `inheritance_happy_path` | mint iNFT to A → transfer to B (sealed-key re-keys) → ENS `who.*` flips with **zero ENS transactions** → next earnings flow to B. The hero demo. |
-| 03 | `auction_no_bids_cancel` | min-reputation gate filters all bids → buyer cancels → escrow refunds. |
-| 04 | `worker_timeout_bond_slash` | worker bonds but never delivers → deadline expires → buyer slashBonds → bond + payment go to buyer. |
-| 05 | `multi_bid_lowest_wins` | 3 qualified bidders → lowest bid wins (deterministic peer-id tie-break). |
-| 06 | `reputation_gating` | 4.7-rated worker qualifies, 3.5 doesn't, even though the 3.5 bid is cheaper. |
-| 07 | `cross_chain_eventual_consistency` | payment lands instantly, ERC-8004 feedback lags ≤10s; settlement record transitions `pending_reconcile` → `synced` automatically. |
-| 08 | `axl_node_disconnect_recovery` | mid-bid AXL drop → fallback bidder elected → reconnected worker is NOT double-accepted. |
-| 09 | `compute_attestation_failure_reject` | mock `verifyAttestation()` returns false → buyer rejects → bond slashed → no payment, no reputation. |
-| 10 | `concurrent_tasks` | 2 buyers, 2 tasks, 3 workers — no cross-contamination, AXL message taskIds unique per task, escrow accounting per-task is correct. |
-| 11 | `live_ens_resolution` | hits the **deployed** ENS gateway under `ledger.eth` on Sepolia and verifies `who.worker-001.ledger.eth` flips to the live `ownerOf(1)` cross-chain, plus `mem.* ai.mem.cid` returns the real 0G CID. Pass-through when offline; set `LEDGER_LIVE_ENS=1` for strict mode. |
+| #   | Scenario                             | What it verifies                                                                                                                                                                                                                                                          |
+| --- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 01  | `happy_path_full_lifecycle`          | post → bid → accept → reasoning → memory upload → result → release → ERC-8004 +1; full lifecycle from end to end.                                                                                                                                                         |
+| 02  | `inheritance_happy_path`             | mint iNFT to A → transfer to B (sealed-key re-keys) → ENS `who.*` flips with **zero ENS transactions** → next earnings flow to B. The hero demo.                                                                                                                          |
+| 03  | `auction_no_bids_cancel`             | min-reputation gate filters all bids → buyer cancels → escrow refunds.                                                                                                                                                                                                    |
+| 04  | `worker_timeout_bond_slash`          | worker bonds but never delivers → deadline expires → buyer slashBonds → bond + payment go to buyer.                                                                                                                                                                       |
+| 05  | `multi_bid_lowest_wins`              | 3 qualified bidders → lowest bid wins (deterministic peer-id tie-break).                                                                                                                                                                                                  |
+| 06  | `reputation_gating`                  | 4.7-rated worker qualifies, 3.5 doesn't, even though the 3.5 bid is cheaper.                                                                                                                                                                                              |
+| 07  | `cross_chain_eventual_consistency`   | payment lands instantly, ERC-8004 feedback lags ≤10s; settlement record transitions `pending_reconcile` → `synced` automatically.                                                                                                                                         |
+| 08  | `axl_node_disconnect_recovery`       | mid-bid AXL drop → fallback bidder elected → reconnected worker is NOT double-accepted.                                                                                                                                                                                   |
+| 09  | `compute_attestation_failure_reject` | mock `verifyAttestation()` returns false → buyer rejects → bond slashed → no payment, no reputation.                                                                                                                                                                      |
+| 10  | `concurrent_tasks`                   | 2 buyers, 2 tasks, 3 workers — no cross-contamination, AXL message taskIds unique per task, escrow accounting per-task is correct.                                                                                                                                        |
+| 11  | `live_ens_resolution`                | hits the **deployed** ENS gateway under `ledger.eth` on Sepolia and verifies `who.worker-001.ledger.eth` flips to the live `ownerOf(1)` cross-chain, plus `mem.* ai.mem.cid` returns the real 0G CID. Pass-through when offline; set `LEDGER_LIVE_ENS=1` for strict mode. |
 
 Total runtime: ≈4.9s for all 11 (one ~3s wait in scenario 7, ~1.2s for the live ENS gateway round-trips in scenario 11).
 
-Live verification confirmed (scenario 11, run 2026-05-02):
-- `ledger.eth` parent on Sepolia, resolver `0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531`
-- gateway: `https://9e04-124-123-105-119.ngrok-free.app/{sender}/{data}`
+Live verification confirmed (scenario 11, run 2026-05-03):
+
+- `ledger.eth` parent on Sepolia, resolver `0xd94cC429058E5495a57953c7896661542648E1B3`
+- gateway: `https://resolver.fierypools.fun/{sender}/{data}`
 - `who.worker-001.ledger.eth` → `0x6641221B1cb66Dc9f890350058A7341eF0eD600b` (matches direct `ownerOf(1)` on Galileo)
 - `mem.worker-001.ledger.eth` `ai.mem.cid` → `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
 
@@ -174,13 +185,13 @@ Live verification confirmed (scenario 11, run 2026-05-02):
 
 The mock adapters faithfully simulate the on-chain state machines (same revert reasons in escrow, same sealed-key re-keying in iNFT, same exactly-once direct delivery in AXL). Live mode is wired through env-driven adapter swaps:
 
-| Env | Effect |
-|---|---|
-| `GALILEO_RPC` (default `https://evmrpc-testnet.0g.ai`) | Used by preflight; live adapters dispatch through it. |
-| `AXL_BRIDGE_URL` (default `http://127.0.0.1:9002`) | Used by `agents/axl-client`; preflight pings `/topology`. |
-| `LEDGER_RESOLVER_URL` | Used by `LedgerCapabilityClient`; resolves `who.*` cross-chain. |
-| `BASE_SEPOLIA_RPC_URL` | Used by the live ERC-8004 adapter for feedback writes. |
-| `PRIVATE_KEY` | Required for any live signed write (postTask, mint, transfer, feedback). |
+| Env                                                    | Effect                                                                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------ |
+| `GALILEO_RPC` (default `https://evmrpc-testnet.0g.ai`) | Used by preflight; live adapters dispatch through it.                    |
+| `AXL_BRIDGE_URL` (default `http://127.0.0.1:9002`)     | Used by `agents/axl-client`; preflight pings `/topology`.                |
+| `LEDGER_RESOLVER_URL`                                  | Used by `LedgerCapabilityClient`; resolves `who.*` cross-chain.          |
+| `BASE_SEPOLIA_RPC_URL`                                 | Used by the live ERC-8004 adapter for feedback writes.                   |
+| `PRIVATE_KEY`                                          | Required for any live signed write (postTask, mint, transfer, feedback). |
 
 A future PR will land `LiveLedgerAdapters` with the same shape as `createMockAdapters()`. The scenario code does not change — only the fixture's adapter factory does.
 
@@ -207,18 +218,18 @@ npx tsx scenarios/02_inheritance_happy_path.ts
 
 ## Performance baseline (mock mode, M2 MacBook Pro)
 
-| Scenario | ms |
-|---|---|
-| 01 happy_path | 44 |
-| 02 inheritance | 55 |
-| 03 no_bids_cancel | 216 |
-| 04 timeout_slash | 52 |
-| 05 multi_bid | 12 |
-| 06 reputation_gating | 18 |
-| 07 cross_chain (3s wait) | 3076 |
-| 08 axl_disconnect | 51 |
-| 09 attestation_failure | 40 |
-| 10 concurrent_tasks | 49 |
-| **Total** | **3613** |
+| Scenario                 | ms       |
+| ------------------------ | -------- |
+| 01 happy_path            | 44       |
+| 02 inheritance           | 55       |
+| 03 no_bids_cancel        | 216      |
+| 04 timeout_slash         | 52       |
+| 05 multi_bid             | 12       |
+| 06 reputation_gating     | 18       |
+| 07 cross_chain (3s wait) | 3076     |
+| 08 axl_disconnect        | 51       |
+| 09 attestation_failure   | 40       |
+| 10 concurrent_tasks      | 49       |
+| **Total**                | **3613** |
 
 Round-trip post→settled excluding the 3s test wait: ≈40-60ms per task (mock). Live mode will be dominated by Galileo block time (~5-10s per tx) and AXL gossipsub propagation (~500-700ms per hop in proofs).

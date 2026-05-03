@@ -1,6 +1,6 @@
 # 0G Proof
 
-*Status: Phase 1 live Galileo proof complete on May 2, 2026. Source verification on the Galileo explorer is still pending a real explorer API key.*
+*Status: live Galileo proof complete as of May 3, 2026. Source verification on the Galileo explorer is still pending a real explorer API key.*
 
 ## What We Used
 
@@ -8,13 +8,34 @@
 
 The live ERC-8004 registry reference remains `0x8004B663056A597Dffe9eCcC1965A193B7388713`; Ledger does not deploy a custom reputation registry.
 
+## Track A Framework Proof
+
+Track A is represented by `agents/ledger-agent-kit`, an isolated framework/tooling package rather than a rebrand of the marketplace UI.
+
+- Runtime: `LedgerAgentRuntime` loads a worker's 0G iNFT ownership state, ENS capability snapshot, encrypted-memory reference, reasoning adapter, and optional AXL transport.
+- 0G adapters: `createZeroGMemoryAdapter`, `createZeroGComputeAdapter`, and `createZeroGOwnershipAdapter`.
+- Other adapters: `createEnsIdentityAdapter` and `createAxlTransportAdapter`.
+- Working example agent: `agents/ledger-agent-kit/examples/research-worker-agent.ts`.
+- Architecture diagram: `agents/ledger-agent-kit/docs/architecture.mmd`.
+
+Verified locally on May 3, 2026:
+
+```bash
+cd agents/ledger-agent-kit
+npm run typecheck
+npm test
+LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research
+```
+
+The example generated a valid Ledger AXL `BID` payload for `who.worker-001.ledger.eth`, read WorkerINFT owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, verified the ENS capability owner matched that owner, verified the ENS memory CID matched `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`, proved `pay.*` rotation with two different addresses, and attached ERC-8004 reputation evidence `47 / 4.77` from the ENS gateway. The reasoner is explicitly deterministic dry-run in this example; paid live 0G Compute proof is recorded separately in the compute section below.
+
 ## Deployed Contracts
 
 | Contract | Address | Deploy tx |
 | --- | --- | --- |
 | `MockTEEOracle` | `0x229869949693f1467b8b43d2907bDAE3C58E3047` | `0x3ad5dce58ee111a54768ef2e35fe9576c6bad578080719e70a080a198634bcde` |
 | `WorkerINFT` | `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` | `0x753fe54efcbbaea020ca5e8dd101cb849a636d5f837f9d2004d6441b4680427a` |
-| `LedgerEscrow` | `0x12D2162F47AAAe1B0591e898648605daA186D644` | `0x5b56cde9ed5c383c6d4b568a9f060f047c2ca30abb3cf5e151a4f89eca527b35` |
+| `LedgerEscrow` | `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB` | `0x8189e5a075ce73092abc1c654f95572d39928ea8c358f8a1ce983b39f597fb99` |
 | `LedgerIdentityRegistry` | `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb` | `0x7384dc15a1dd17b52e92f8d8df71222d149c3b35579169a6f05282f217d77f2f` |
 
 Code-size readback after deploy confirmed non-empty bytecode for all deployed contracts.
@@ -63,13 +84,21 @@ The installed live network listed two services at test time: one chatbot and one
 - Identity registration tx: `0x7ce676a250246781d6f3095963cde1331dee0ac4c33fbba2201ed602724f28ed`
 - Registered ENS-style name: `worker-001.ledger.eth`
 - Registered capabilities: `who,pay,tx,rep,mem`
-- Escrow task ID: `0xffa92cfef48d8c4ec2432e2aa82a02b67a1a05a1a2a9f3977377faf2d1b8bb81`
-- `postTask` tx: `0x38edcfd048698b285596c4d192216b169288ff726bde228f96538aa4e20e2d15`
-- `acceptBid` tx: `0x4fbcc6bc57975d02557502c93c49732ec1df5ad9a4114d205ef88a8a2e16dd4e`
-- `releasePayment` tx: `0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c`
+- Upgraded `LedgerEscrow`: `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
+- Escrow deploy tx: `0x8189e5a075ce73092abc1c654f95572d39928ea8c358f8a1ce983b39f597fb99`
+- Escrow task ID: `0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae`
+- `postTask` tx: `0x01111fa6852b084f96e514475ee99950be7f909e58174308e3c366229dc49cfe`
+- `acceptTokenBid` tx: `0x327e0bffc45ee801a6676b69e85e5fd1cf83e9cc9e2ec9fc75e3d35f15f570cb`
+- `taskWorkerTokenIds(taskId)` readback: `1`
+- `payoutRecipient(taskId)` readback before release: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
+- `releasePayment` tx: `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d`
+- `PaymentReleased` worker topic: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
+- Result hash: `0xf8d3ef6a9f1c1d8242101d18b891675e37eef6670eda143971bf69b4d4ce9fb4`
 - Final task status readback: `3` (`Released`)
 
-Escrow limitation as of May 3, 2026: the deployed `LedgerEscrow` above is the live settlement contract used for this proof, but it is the legacy deployed version. The repository source and Foundry tests now include token-owned payout routing (`acceptTokenBid`, `taskWorkerTokenIds`, `payoutRecipient`, and `releasePayment` resolving `ownerOf(tokenId)` at payment time). That upgraded escrow still needs to be redeployed and seeded before the ownerOf-at-payment inheritance payout claim is live on Galileo.
+This proves the owner-of-at-payment inheritance payout route live on Galileo: the accepted job records worker iNFT token ID `1`, `payoutRecipient(taskId)` resolves `WorkerINFT.ownerOf(1)`, and the release event pays the current owner `0x6641...600b`.
+
+Machine-readable proof artifact: `proofs/data/0g-token-owned-escrow.json`.
 
 ## Live ERC-8004 Reputation Proof
 
@@ -104,11 +133,11 @@ Per Gabriel's instruction, `7.0` OG was moved to a reserve wallet and was not sp
 
 - Reserve wallet: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 - Reserve transfer tx: `0xa3fecd88a663cf8bb5e6dc0515e87c7ebe6e6b9c441ea93dd524824c5695237b`
-- Reserve balance after all tests: `7.000000000000000000` OG
-- Deployer wallet balance after all tests: `0.081844937234583732` OG
+- Reserve/current owner balance after the token-owned settlement proof: `4.000103251998955691` OG
+- Deployer wallet balance after the token-owned settlement proof: `0.076645849226710328` OG
 - Compute ledger/provider allocation used from the testing budget: ledger created with `3.0` OG; `3.0` OG transferred to the live compute provider sub-account by the SDK across two live compute smokes.
 
-Do not spend the reserve wallet unless Gabriel explicitly authorizes it.
+Do not spend this current-owner wallet further unless Gabriel explicitly authorizes it.
 
 ## Verification Commands
 
@@ -124,13 +153,28 @@ cd ../0g-compute
 pnpm test
 pnpm typecheck
 
+cd ../ledger-agent-kit
+npm run typecheck
+npm test
+LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research
+
 cast call 0x48B051F3e565E394ED8522ac453d87b3Fa40ad62 \
   "ownerOf(uint256)(address)" 1 \
   --rpc-url https://evmrpc-testnet.0g.ai
 
-cast call 0x12D2162F47AAAe1B0591e898648605daA186D644 \
+cast call 0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB \
   "tasks(bytes32)(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,uint8)" \
-  0xffa92cfef48d8c4ec2432e2aa82a02b67a1a05a1a2a9f3977377faf2d1b8bb81 \
+  0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae \
+  --rpc-url https://evmrpc-testnet.0g.ai
+
+cast call 0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB \
+  "taskWorkerTokenIds(bytes32)(uint256)" \
+  0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae \
+  --rpc-url https://evmrpc-testnet.0g.ai
+
+cast call 0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB \
+  "payoutRecipient(bytes32)(address)" \
+  0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae \
   --rpc-url https://evmrpc-testnet.0g.ai
 ```
 

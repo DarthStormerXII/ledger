@@ -46,20 +46,18 @@ Recommended: `🧾`.
 ### Demonstration Link
 
 ```text
-Lead input required after recording: final 2-4 minute demo video URL
+Demo video: https://ethglobal.com/showcase/ledger-bineb
+Live deployment: https://ledger-open-agents.vercel.app/
+Proof dashboard: https://ledger-open-agents.vercel.app/proof
 ```
 
-Expected shape:
+Notes:
 
 ```text
-2-4 minute demo: Lead input required after recording
-30-second elevator cut: Lead input required if created
-Live deployment: https://ledger-open-agents.vercel.app/
+ETHGlobal and 0G both accepted the 2-4 minute event video format for this submission. The under-3-minute wording was confirmed as sponsor-side copy drift.
 ```
 
-Note: ETHGlobal's general rules require a 2-4 minute video. The 0G prize page says to keep the demo video under 3 minutes. Submission-day safest path is a primary 2:45-2:59 cut plus a separate 30-second elevator cut linked in the README.
-
-Deployment status checked May 2, 2026: `http://ledger-open-agents.vercel.app/` redirects to HTTPS, but `https://ledger-open-agents.vercel.app/` currently returns Vercel `DEPLOYMENT_NOT_FOUND` (HTTP 404). Lead input required after Vercel deploy.
+Deployment status checked May 3, 2026: `https://ledger-open-agents.vercel.app/` and `/proof` return HTTP 200.
 
 ### Short Description (100 chars max)
 
@@ -90,7 +88,7 @@ Recommended paste — descriptive markdown:
 
 A buyer agent posts a task. Worker agents bid for the job over a Gensyn AXL peer-to-peer mesh. The winning worker completes the task, settlement pays the current worker owner, and reputation is written back through ERC-8004 feedback.
 
-The core idea is **the worker is the asset**. Each worker is an ERC-7857 (0G iNFT draft standard) iNFT on 0G Galileo. Its encrypted memory, reasoning provenance, reputation history, earnings flow, and ENS identity are designed to follow ownership. In the demo, tokenId `1` transfers from `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00` to `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`; the same worker immediately bids again, the next payment routes to the new wallet, and `who.worker-001.[final-parent-name].eth` is designed to resolve to the new owner without an ENS transaction once the Sepolia parent name is registered.
+The core idea is **the worker is the asset**. Each worker is an ERC-7857 (0G iNFT draft standard) iNFT on 0G Galileo. Its encrypted memory, reasoning provenance, reputation history, earnings flow, and ENS identity are designed to follow ownership. In the demo, tokenId `1` transfers from `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00` to `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`; the same worker immediately bids again, the next payment routes to the new wallet, and `who.worker-001.ledger.eth` resolves to the new owner without an ENS transaction through the Sepolia CCIP-Read resolver.
 
 Ledger combines three sponsor surfaces into one product:
 
@@ -106,7 +104,7 @@ Version 2 — shorter markdown:
 
 Buyer agents post work, worker agents bid in real time, and on-chain settlement records payment plus reputation. The twist is that workers are not just accounts or profiles: they are ERC-7857 (0G iNFT draft standard) assets on 0G Galileo.
 
-When a worker transfers, its encrypted memory, reputation pointer, future earnings, and ENS identity move with the asset. The demo shows this as an "inheritance" moment: worker iNFT tokenId `1` is transferred, then immediately keeps working for the new owner. ENS makes the change visible because `who.worker-001.[final-parent-name].eth` follows live `ownerOf()` via CCIP-Read once the Sepolia parent name is registered.
+When a worker transfers, its encrypted memory, reputation pointer, future earnings, and ENS identity move with the asset. The demo shows this as an "inheritance" moment: worker iNFT tokenId `1` is transferred, then immediately keeps working for the new owner. ENS makes the change visible because `who.worker-001.ledger.eth` follows live `ownerOf()` via CCIP-Read.
 
 The result is a two-sided labor market and a secondary market for working AI agents.
 ```
@@ -279,16 +277,18 @@ Applicable prize tracks:
 #### Why Applicable / How Are You Using This Protocol/API?
 
 ```text
-Ledger uses 0G as both worker-asset layer and agent intelligence layer. WorkerINFT is deployed on 0G Galileo at `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`; demo tokenId `1` minted in tx `0xc41cebd...001f` and transferred in tx `0x3e6b0e...3a79`. Memory is stored at `0g://0xd8fb3a...982c4`, and sealed inference uses provider `0xa48f...7836` with attestation digest `0x59c79e...3950`. This fits both 0G framework/tooling and iNFT intelligence/memory tracks.
+Ledger uses 0G as both framework layer and worker-asset layer. Track A is `@ledger/agent-kit` in `agents/ledger-agent-kit`: an OpenClaw-inspired runtime with swappable adapters for 0G Storage memory, 0G Compute reasoning, 0G WorkerINFT ownership, ENS identity, and Gensyn AXL transport. It includes a working `research-worker-agent` proof example, architecture diagram, typecheck, and tests. The example fails closed unless the ENS gateway owner, memory CID, and reputation proof are present and consistent with the live WorkerINFT read; local-only dry run requires an explicit opt-in env var.
+
+Track B is the live iNFT worker proof. WorkerINFT is deployed on 0G Galileo at `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`; demo tokenId `1` minted in tx `0xc41cebd...001f` and transferred in tx `0x3e6b0e...3a79`. Memory is stored at `0g://0xd8fb3a...982c4`, sealed inference uses provider `0xa48f...7836` with attestation digest `0x59c79e...3950`, and token-owned escrow pays the current iNFT owner at settlement.
 ```
 
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger-v1/blob/main/contracts/src/WorkerINFT.sol#L60
+https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/src/runtime.ts#L17
 ```
 
-Representative line: `WorkerINFT.transfer(...)` with sealed-key and proof arguments. Supporting proof links live in `README.md#sponsor-submission-code-links` and `proofs/0g-proof.md`.
+Representative line: `LedgerAgentRuntime`, the framework core that turns 0G iNFT ownership, 0G Storage memory, 0G Compute reasoning, ENS identity, and AXL transport into a reusable agent runtime. Supporting Track B proof links live in `README.md#sponsor-submission-code-links` and `proofs/0g-proof.md`.
 
 #### Star Rating / Ease Rating
 
@@ -313,7 +313,7 @@ Rationale: Compute and Storage are accessible, but proving "embedded intelligenc
 #### Why Applicable / How Are You Using This Protocol/API?
 
 ```text
-Ledger maps AXL's service registry / tool marketplace framing onto a live agent labor market. A `TASK_POSTED` message is a tool-call descriptor, bids are capability declarations, and `AUCTION_CLOSED` finalizes the match. This is proven across three separate AXL nodes: bootstrap `a560...70eb` on Fly sjc, worker `f274...fa64` on Fly fra, and local NAT laptop `590f...5f4c`. Proof artifacts include topology, tcpdump, nonce roundtrip, and full `TASK_POSTED → BID → BID_ACCEPTED → AUCTION_CLOSED → RESULT`.
+Ledger maps AXL's service registry / tool marketplace framing onto a live agent labor market. A `TASK_POSTED` message is a tool-call descriptor, bids are capability declarations, and `AUCTION_CLOSED` finalizes the match. This is proven across three separate AXL nodes, not local processes: bootstrap `a560...70eb` on Fly sjc, worker `f274...fa64` on Fly fra, and local NAT laptop `590f...5f4c`. No centralized broker replaces AXL; application code talks to AXL's HTTP bridge (`/send`, `/recv`, `/topology`). Proof artifacts include topology, tcpdump, nonce roundtrip, bootstrap-kill continuity, TypeScript GossipSub fanout, and the full `TASK_POSTED → BID → BID_ACCEPTED → AUCTION_CLOSED → RESULT` cycle.
 ```
 
 #### Line Of Code
@@ -351,7 +351,7 @@ Applicable prize tracks:
 #### Why Applicable / How Are You Using This Protocol/API?
 
 ```text
-Ledger uses ENS as the agent identity and capability layer. The resolver gateway handles all five namespaces: `who`, `pay`, `tx`, `rep`, and `mem`. `who.worker-001.[final-parent-name].eth` resolves live `ownerOf(1)` from 0G Galileo; `pay.*` returns rotating HD-derived addresses; `rep.*` points to the audited ERC-8004 ReputationRegistry `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia. Live smoke artifact: `proofs/data/ens-live-smoke.json` with `status.pass=true`. Sepolia parent registration is still pending faucet ETH.
+Ledger uses ENS as the agent identity and capability layer. The resolver gateway handles all five namespaces: `who`, `pay`, `tx`, `rep`, and `mem`. `who.worker-001.ledger.eth` resolves live `ownerOf(1)` from 0G Galileo; after the iNFT transfer it returns the new owner without a new ENS transaction. `pay.*` returns rotating HD-derived addresses; `tx.*` returns release-payment state; `rep.*` points to the audited ERC-8004 ReputationRegistry `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia; `mem.*` points to the 0G Storage memory root. Live Sepolia smoke artifact: `proofs/data/ens-sepolia-resolve.json` with `status.pass=true`.
 ```
 
 #### Line Of Code
@@ -386,9 +386,12 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 - Chain: 0G Galileo, chainId `16602`
 - Explorer: `https://chainscan-galileo.0g.ai/`
 - `WorkerINFT`: `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`
-- `LedgerEscrow`: `0x12D2162F47AAAe1B0591e898648605daA186D644`
+- `LedgerEscrow`: `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
 - `LedgerIdentityRegistry`: `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb`
 - `MockTEEOracle`: `0x229869949693f1467b8b43d2907bDAE3C58E3047`
+- Track A framework package: `agents/ledger-agent-kit`
+- Track A example command: `LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research`
+- Track A example output: valid `BID` for `who.worker-001.ledger.eth`, owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, `identityVerified=true`, matching memory CID `0g://0xd8fb3a...982c4`, `payChanged=true`, reputation `47 / 4.77` with source `ens-gateway`
 - Demo iNFT tokenId: `1`
 - Mint tx: `0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f` at block `31130502`
 - Transfer tx: `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79` at block `31130543`
@@ -401,9 +404,11 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 - Attestation digest: `0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950`
 - Compute ledger creation tx: `0xc27d4f36505320f24f60d6ab6cc0e0cf7899b374def9ee953527c2d0aac78ff2`
 - Escrow lifecycle:
-  - `postTask`: `0x38edcfd048698b285596c4d192216b169288ff726bde228f96538aa4e20e2d15`
-  - `acceptBid`: `0x4fbcc6bc57975d02557502c93c49732ec1df5ad9a4114d205ef88a8a2e16dd4e`
-  - `releasePayment`: `0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c`
+  - `postTask`: `0x01111fa6852b084f96e514475ee99950be7f909e58174308e3c366229dc49cfe`
+  - `acceptTokenBid`: `0x327e0bffc45ee801a6676b69e85e5fd1cf83e9cc9e2ec9fc75e3d35f15f570cb`
+  - `releasePayment`: `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d`
+  - `taskWorkerTokenIds(taskId)`: `1`
+  - `payoutRecipient(taskId)`: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 
 ### Gensyn AXL
 
@@ -429,21 +434,20 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 ### ENS
 
 - Resolver source: `resolver/`
-- Gateway mode: local CCIP-Read offchain gateway; stable HTTPS deployment pending
+- Parent ENS name: `ledger.eth` on Sepolia
+- Resolver contract: `0xd94cC429058E5495a57953c7896661542648E1B3`
+- Gateway mode: durable Cloudflare named tunnel at `https://resolver.fierypools.fun/{sender}/{data}`
 - Capability namespaces implemented: `who`, `pay`, `tx`, `rep`, `mem`
-- Live smoke artifact: `proofs/data/ens-live-smoke.json`, `status.pass=true`
-- Cross-chain owner resolution: `who.worker-001.[final-parent-name].eth` resolves live `ownerOf(1)` from 0G Galileo once parent registration completes
+- Live smoke artifacts: `proofs/data/ens-live-smoke.json`, `proofs/data/ens-sepolia-resolve.json`, `status.pass=true`
+- Cross-chain owner resolution: `who.worker-001.ledger.eth` resolves live `ownerOf(1)` from 0G Galileo
 - ERC-8004 ReputationRegistry: `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia
-- Pending lead item: Sepolia parent name registration is waiting on Sepolia ETH faucet
 
 ## Lead Inputs Still Required
 
-- Final 2-4 minute demo video URL after recording.
-- Optional 30-second elevator cut URL if created.
-- Vercel deployment confirmation for `https://ledger-open-agents.vercel.app/` once it returns HTTP 200.
-- Final Sepolia ENS parent name after faucet ETH arrives and registration completes.
 - Final GitHub branch/commit confirmation for `https://github.com/DarthStormerXII/ledger-v1` before pasting file-line anchors.
 - Actual ETHGlobal category and tech-stack dropdown shapes from the authenticated Hacker Dashboard.
+
+Provided lead contact for sponsor fields: Telegram `@gabrielaxyy`, X `@gabrielaxyeth`.
 
 ## README Cross-Link Chain
 
@@ -452,11 +456,8 @@ Current repository state validated during Phase 1:
 - `README.md` links users to `proofs/`.
 - `proofs/README.md` exists.
 - `proofs/0g-proof.md`, `proofs/axl-proof.md`, and `proofs/ens-proof.md` exist.
-- The proof files are currently stubs and must be populated during build before final submission.
-
-Current gap:
-
-- `README.md` does not yet include the full Proof Matrix template above the fold. `docs/07_SUBMISSION_PACK.md` contains the canonical matrix. Submission-day README final pass must copy it into `README.md` with real artifacts.
+- `README.md` includes an above-the-fold sponsor judge checklist and lead contact handles.
+- `proofs/0g-proof.md`, `proofs/axl-proof.md`, and `proofs/ens-proof.md` are populated with current live/captured artifacts.
 
 ## Pre-Flight Form Check
 

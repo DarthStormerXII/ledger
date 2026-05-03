@@ -46,7 +46,7 @@ This runs a paid live 0G Compute inference using the existing provider sub-accou
 ## Current Live Defaults
 
 - `WorkerINFT`: `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`
-- `LedgerEscrow`: `0x12D2162F47AAAe1B0591e898648605daA186D644`
+- `LedgerEscrow`: `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
 - `LedgerIdentityRegistry`: `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb`
 - ERC-8004 registry reference: `0x8004B663056A597Dffe9eCcC1965A193B7388713`
 - Demo token ID: `1`

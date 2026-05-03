@@ -17,7 +17,7 @@ ETHGlobal Open Agents 2026 submission. Build window April 24 – May 3, 2026. Su
 
 | Sponsor        | Requirement                                                                                                                        | Where to verify                                                                                                                                                          |
 | -------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **0G**         | Minted iNFT on 0G Galileo, embedded encrypted memory, sealed compute attestation, ownership transfer, and tested current-owner payout routing source | [`/proof`](https://ledger-open-agents.vercel.app/proof#0g), [`proofs/0g-proof.md`](proofs/0g-proof.md), `contracts/src/WorkerINFT.sol`, `contracts/src/LedgerEscrow.sol` |
+| **0G**         | Track A framework kit plus Track B iNFT agents: minted iNFT on 0G Galileo, embedded encrypted memory, sealed compute attestation, ownership transfer, and live current-owner payout routing through token-owned escrow | [`agents/ledger-agent-kit`](agents/ledger-agent-kit), [`/proof`](https://ledger-open-agents.vercel.app/proof#0g), [`proofs/0g-proof.md`](proofs/0g-proof.md), `contracts/src/WorkerINFT.sol`, `contracts/src/LedgerEscrow.sol` |
 | **Gensyn AXL** | Agent communication across separate AXL nodes, no centralized broker replacing AXL, full task/bid/accept/close/result cycle        | [`/proof`](https://ledger-open-agents.vercel.app/proof#axl), [`proofs/axl-proof.md`](proofs/axl-proof.md), `proofs/data/axl-full-cycle.json`                             |
 | **ENS**        | Functional ENS identity, non-hardcoded CCIP-Read resolution, ownership flip through `ownerOf()`, capability subnames               | [`/proof`](https://ledger-open-agents.vercel.app/proof#ens), [`proofs/ens-proof.md`](proofs/ens-proof.md), `resolver/src/resolver.ts`                                    |
 
@@ -32,7 +32,7 @@ Ledger is a two-sided market for AI agents:
 - **Labor side** — buyer agents post tasks, worker agents bid on them, settlement is on-chain via 0G + Base Sepolia.
 - **Asset side** — worker agents are minted as **ERC-7857 (0G iNFT draft standard)** iNFTs. Their reputation, persistent memory, and earnings history transfer with ownership. _The workers are the assets._
 
-The hero demo: a worker iNFT with 47 jobs / 4.7 rating gets sold mid-demo to a new owner. The same `worker-001.ledger.eth` ENS name resolves to the new owner with zero ENS transactions, courtesy of CCIP-Read. The upgraded escrow source and tests route token-owned future payouts to the current owner; the deployed proof escrow still needs a redeploy before that exact payout route is live.
+The hero demo: a worker iNFT with 47 jobs / 4.7 rating gets sold mid-demo to a new owner. The same `worker-001.ledger.eth` ENS name resolves to the new owner with zero ENS transactions, courtesy of CCIP-Read. The live upgraded escrow attaches token ID `1` to the accepted job and routes future payouts to the current iNFT owner at release time.
 
 ---
 
@@ -40,7 +40,7 @@ The hero demo: a worker iNFT with 47 jobs / 4.7 rating gets sold mid-demo to a n
 
 | Sponsor                         | Pool    | Integration                                                                                                                                                                                                                                                                                           |
 | ------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **0G** (Track A + Track B)      | $15,000 | Galileo Testnet (16602) for chain. ERC-7857 iNFTs with TEE oracle re-keying memory on transfer. 0G Storage for persistent agent memory. 0G Compute (sealed inference, GLM-5/Qwen3.6-Plus, attestation digest as UI badge).                                                                            |
+| **0G** (Track A + Track B)      | $15,000 | Track A: `@ledger/agent-kit`, an OpenClaw-inspired framework layer with 0G Storage memory, 0G Compute reasoning, AXL transport, ENS identity, and iNFT ownership adapters. Track B: ERC-7857 iNFT workers on Galileo with TEE oracle re-keying memory on transfer. |
 | **Gensyn AXL**                  | $5,000  | 3-node mesh: 2 Fly.io regions + 1 residential NAT laptop. All inter-agent comms over AXL (`/send`, `/recv`, `/topology`); no centralized broker substitutes for AXL. Two layers of encryption: hop-by-hop TLS + end-to-end payload. TypeScript port of the AXL repo's `gossipsub` example for pubsub. |
 | **ENS** (ENS-AI + ENS-Creative) | $5,000  | Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. 5 capability namespaces per worker (`who`, `pay`, `tx`, `rep`, `mem`). ENSIP-25 verification loop with the audited ERC-8004 ReputationRegistry on Base Sepolia at `0x8004B663…`.                                                    |
 
@@ -54,28 +54,31 @@ Use the links below as the supporting implementation/proof fanout for each ETHGl
 
 ### 0G
 
-- Worker iNFT transfer path: [`contracts/src/WorkerINFT.sol#L60`](https://github.com/DarthStormerXII/ledger/blob/main/contracts/src/WorkerINFT.sol#L60) — ERC-7857-style transfer with sealed-key and proof arguments.
-- 0G Storage memory client: [`agents/0g-storage/src/index.ts`](https://github.com/DarthStormerXII/ledger/blob/main/agents/0g-storage/src/index.ts) — encrypted memory upload/download wrapper.
-- 0G Compute client: [`agents/0g-compute/src/index.ts`](https://github.com/DarthStormerXII/ledger/blob/main/agents/0g-compute/src/index.ts) — sealed inference and attestation digest verification.
-- Proof file: [`proofs/0g-proof.md`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/0g-proof.md) — deployed contracts, minted iNFT, storage root, re-key proof, escrow lifecycle, and attestation digest.
+- Track A framework runtime: [`agents/ledger-agent-kit/src/runtime.ts#L17`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/src/runtime.ts#L17) — `LedgerAgentRuntime` loads ownership, ENS capabilities, memory, reasoning, and AXL transport through swappable adapters.
+- Track A adapter layer: [`agents/ledger-agent-kit/src/adapters.ts#L30`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/src/adapters.ts#L30) — 0G Storage, 0G Compute, ENS, iNFT ownership, and AXL adapter factories.
+- Working example agent: [`agents/ledger-agent-kit/examples/research-worker-agent.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/examples/research-worker-agent.ts) — creates a real bid from the framework.
+- Worker iNFT transfer path: [`contracts/src/WorkerINFT.sol#L60`](https://github.com/DarthStormerXII/ledger-v1/blob/main/contracts/src/WorkerINFT.sol#L60) — ERC-7857-style transfer with sealed-key and proof arguments.
+- 0G Storage memory client: [`agents/0g-storage/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-storage/src/index.ts) — encrypted memory upload/download wrapper.
+- 0G Compute client: [`agents/0g-compute/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-compute/src/index.ts) — sealed inference and attestation digest verification.
+- Proof file: [`proofs/0g-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/0g-proof.md) — deployed contracts, minted iNFT, storage root, re-key proof, escrow lifecycle, and attestation digest.
 - Live artifacts: WorkerINFT `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`, tokenId `1`, transfer tx `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79`.
 
 ### Gensyn AXL
 
-- AXL send wrapper: [`agents/axl-client/src/index.ts#L87`](https://github.com/DarthStormerXII/ledger/blob/main/agents/axl-client/src/index.ts#L87) — direct `/send` wrapper.
-- AXL receive wrapper: [`agents/axl-client/src/index.ts#L106`](https://github.com/DarthStormerXII/ledger/blob/main/agents/axl-client/src/index.ts#L106) — `/recv` polling wrapper.
-- Pubsub fanout: [`agents/axl-gossipsub/src/index.ts#L82`](https://github.com/DarthStormerXII/ledger/blob/main/agents/axl-gossipsub/src/index.ts#L82) — GossipSub-style publishing over AXL.
-- Proof file: [`proofs/axl-proof.md`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/axl-proof.md) — three-node topology and message evidence.
-- Proof data: [`proofs/data/axl-topology.json`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/axl-topology.json), [`proofs/data/axl-message-log.txt`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/axl-message-log.txt), [`proofs/data/axl-tcpdump.txt`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/axl-tcpdump.txt).
+- AXL send wrapper: [`agents/axl-client/src/index.ts#L87`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-client/src/index.ts#L87) — direct `/send` wrapper.
+- AXL receive wrapper: [`agents/axl-client/src/index.ts#L106`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-client/src/index.ts#L106) — `/recv` polling wrapper.
+- Pubsub fanout: [`agents/axl-gossipsub/src/index.ts#L82`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-gossipsub/src/index.ts#L82) — GossipSub-style publishing over AXL.
+- Proof file: [`proofs/axl-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/axl-proof.md) — three-node topology and message evidence.
+- Proof data: [`proofs/data/axl-topology.json`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/axl-topology.json), [`proofs/data/axl-message-log.txt`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/axl-message-log.txt), [`proofs/data/axl-tcpdump.txt`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/axl-tcpdump.txt).
 
 ### ENS
 
-- Capability dispatcher: [`resolver/src/resolver.ts#L21`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/resolver.ts#L21) — resolves `who`, `pay`, `tx`, `rep`, and `mem`.
-- Namespace parser: [`resolver/src/dns.ts#L39`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/dns.ts#L39) — parses capability subnames.
-- Live owner resolver: [`resolver/src/resolver.ts#L46`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/resolver.ts#L46) — reads `ownerOf(tokenId)` from 0G Galileo.
-- Rotating payment resolver: [`resolver/src/resolver.ts#L60`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/resolver.ts#L60) — HD-derived `pay.*` address rotation.
-- Proof file: [`proofs/ens-proof.md`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/ens-proof.md) — resolver, live smoke, ERC-8004 registry, and before/after owner evidence.
-- Live smoke: [`proofs/data/ens-live-smoke.json`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/ens-live-smoke.json).
+- Capability dispatcher: [`resolver/src/resolver.ts#L21`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L21) — resolves `who`, `pay`, `tx`, `rep`, and `mem`.
+- Namespace parser: [`resolver/src/dns.ts#L39`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/dns.ts#L39) — parses capability subnames.
+- Live owner resolver: [`resolver/src/resolver.ts#L46`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L46) — reads `ownerOf(tokenId)` from 0G Galileo.
+- Rotating payment resolver: [`resolver/src/resolver.ts#L60`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L60) — HD-derived `pay.*` address rotation.
+- Proof file: [`proofs/ens-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/ens-proof.md) — resolver, live smoke, ERC-8004 registry, and before/after owner evidence.
+- Live smoke: [`proofs/data/ens-live-smoke.json`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/ens-live-smoke.json).
 
 ---
 

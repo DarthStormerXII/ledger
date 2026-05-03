@@ -1,6 +1,6 @@
 # ENS Proof
 
-*Status: Sepolia ENS CCIP-Read integration live-smoked on May 3, 2026. `ledger.eth` now points to the new immutable-URL resolver served via the durable `resolver.fierypools.fun` Cloudflare named tunnel; `who`, `pay`, `tx`, `rep`, and `mem` namespace handlers exist; Sepolia ENS resolution smoke passed.*
+_Status: Sepolia ENS CCIP-Read integration live-smoked on May 3, 2026. `ledger.eth` now points to the new immutable-URL resolver served via the durable `resolver.fierypools.fun` Cloudflare named tunnel; `who`, `pay`, `tx`, `rep`, and `mem` namespace handlers exist; Sepolia ENS resolution smoke passed._
 
 ## What we used
 
@@ -23,7 +23,7 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
 
 - **0G Galileo chain:** `16602`; live RPC returned `eth_chainId = 0x40da`
 - **WorkerINFT:** `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`
-- **LedgerEscrow:** `0x12D2162F47AAAe1B0591e898648605daA186D644`
+- **LedgerEscrow:** `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
 - **LedgerIdentityRegistry:** `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb`
 - **ERC-8004 ReputationRegistry:** `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia
 
@@ -46,9 +46,19 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
   - `ai.tx.chain = 0g-galileo:16602`
   - `ai.tx.amount = 0.1`
   - `ai.tx.cid = 0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
-  - `ai.tx.receipt` includes the on-chain `releasePayment` tx hash `0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c` and the escrow taskId `0xffa92cfef48d8c4ec2432e2aa82a02b67a1a05a1a2a9f3977377faf2d1b8bb81`
+  - `ai.tx.receipt` includes the on-chain `releasePayment` tx hash `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d` and the escrow taskId `0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae`
 - `ledger.eth` parent text smoke:
   - `agent-registration = {"standard":"ENSIP-25","registry":"0x8004B663056A597Dffe9eCcC1965A193B7388713","chain":"base-sepolia","chainId":84532,"agentId":"5444","identityRegistry":"0x8004A818BFB912233c491871b3d84c89A494BD9e"}`
+
+## Judge Path
+
+The fastest way to evaluate the ENS integration is:
+
+1. Open `/agent/worker-001.ledger.eth` in the live app and verify the capability tree shows `who`, `pay`, `tx`, `rep`, and `mem`.
+2. Run `cd resolver && npm run smoke:ens` to resolve the Sepolia ENS name through CCIP-Read.
+3. Compare `who.worker-001.ledger.eth` with `WorkerINFT.ownerOf(1)` on 0G Galileo. They should match the current owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`.
+4. Confirm the ownership flip happened through the 0G iNFT transfer tx, not through a new ENS tx. ENS remains the stable name while `ownerOf(1)` changes underneath.
+5. Confirm `pay.worker-001.ledger.eth` rotates receive addresses and `rep.worker-001.ledger.eth` points to the live ERC-8004 registry data.
 
 ## Inheritance Flip
 

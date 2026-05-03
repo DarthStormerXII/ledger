@@ -8,13 +8,24 @@ Ledger is running the official `gensyn-ai/axl` Go node across three independent 
 
 - `node-buyer-bootstrap`: Fly.io `sjc` public TCP bootstrap at `66.51.123.38:9001`
 - `node-worker-1`: Fly.io `fra` worker at `77.83.143.142:9001`, outbound peer to bootstrap and public listener for bootstrap-kill continuity
-- `node-worker-2`: local `Noir.local` laptop, outbound-only residential/NAT peer to the bootstrap
+- `node-worker-2`: residential NAT laptop, outbound-only peer to the bootstrap (`Noir.local` appears only in the raw topology capture)
 
 Application code talks only to the localhost HTTP bridge on port `9002` using `/topology`, `/send`, and `/recv`. The TypeScript client is in `agents/axl-client`; the TypeScript GossipSub port is in `agents/axl-gossipsub`.
 
 ## Why It Matters
 
 The Gensyn AXL qualifying line is communication across separate AXL nodes, not three local processes. This proof shows separate host networks, distinct ed25519 peer IDs, distinct Yggdrasil IPv6 addresses, public TCP bootstrap traffic, and real payload roundtrips.
+
+## Judge Path
+
+The fastest way to verify the AXL integration is:
+
+1. Open `proofs/data/axl-topology.json` and confirm the three independent hosts: Fly.io `sjc`, Fly.io `fra`, and a residential NAT laptop.
+2. Open `proofs/data/axl-full-cycle.json` and confirm the full application protocol: `TASK_POSTED -> BID -> BID_ACCEPTED -> AUCTION_CLOSED -> RESULT`.
+3. Open `proofs/data/axl-gossipsub-fanout.json` and confirm the `#ledger-jobs` broadcast reached both non-publisher nodes in under one second.
+4. Open `proofs/data/axl-kill-bootstrap.log` and confirm the mesh kept routing after the bootstrap was stopped.
+
+No Redis, websocket server, database queue, or centralized message broker is used as a replacement for AXL. Application code talks to the AXL bridge through `/send`, `/recv`, and `/topology`.
 
 ## Evidence
 
