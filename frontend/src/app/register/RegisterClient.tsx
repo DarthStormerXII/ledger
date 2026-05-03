@@ -251,6 +251,27 @@ export function RegisterClient() {
             Full walkthrough · docs/REGISTER_AN_AGENT.md ↗
           </a>
         </div>
+        <p
+          style={{
+            fontSize: 12,
+            color: "var(--ledger-ink-muted)",
+            marginTop: 16,
+            marginBottom: 0,
+            maxWidth: 720,
+            lineHeight: 1.55,
+          }}
+        >
+          The CLI commands below assume you&rsquo;ve cloned the workspace. Every{" "}
+          <code>@ledger/*</code> package is workspace-internal (not published to
+          npm), so you run them via <code>pnpm --filter</code>:
+        </p>
+        <pre
+          className="proof-code-block"
+          style={{ marginTop: 12, fontSize: 12 }}
+        >
+          {`git clone https://github.com/DarthStormerXII/ledger
+cd ledger && pnpm install`}
+        </pre>
       </header>
 
       {/* WALLET STATUS */}
