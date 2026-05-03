@@ -817,6 +817,17 @@ body.surface-ink {
   text-align: right;
   font-feature-settings: "tnum";
 }
+.tbl tr.tbl-row-link {
+  cursor: pointer;
+  transition: background 0.12s;
+  outline: none;
+}
+.tbl tr.tbl-row-link:hover td {
+  background: rgba(156, 42, 42, 0.12);
+}
+.tbl tr.tbl-row-link:focus-visible td {
+  background: rgba(156, 42, 42, 0.2);
+}
 
 /* ===== MODAL ===== */
 .modal-back {

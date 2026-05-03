@@ -1,6 +1,7 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import type { Lot, RecentJob, ProvenanceEvent } from "@/lib/data";
 import {
   SettlementStrip,
@@ -10,7 +11,9 @@ import { CapabilityRow } from "@/components/CapabilityRow";
 import { ReputationChart } from "@/components/ReputationChart";
 import { InheritanceModal } from "@/components/InheritanceModal";
 import { useLiveOwner, shortAddr } from "@/components/useLiveOwner";
-import { DEMO_PAY_NONCE_0, DEMO_PAY_NONCE_1 } from "@/lib/contracts";
+import { DEMO_PAY_NONCE_0, DEMO_PAY_NONCE_1, galileoTx } from "@/lib/contracts";
+
+type BriefMap = Map<string, { title: string; category: string }>;
 
 export function WorkerProfileClient({
   lot,
@@ -30,7 +33,44 @@ export function WorkerProfileClient({
   provenance: ProvenanceEvent[];
   settlementProof?: SettlementProof;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+
+  // Fetch briefs once on mount + every 8s. Used to enrich recent-jobs rows
+  // with the actual pinned title in place of "(no title pinned)".
+  const [briefs, setBriefs] = useState<BriefMap>(new Map());
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const r = await fetch("/api/jobs/brief", { cache: "no-store" });
+        if (!r.ok) return;
+        const body = (await r.json()) as {
+          briefs?: Array<{
+            taskId: string;
+            brief: { title?: string; category?: string };
+          }>;
+        };
+        if (cancelled || !body.briefs) return;
+        const next: BriefMap = new Map();
+        for (const b of body.briefs) {
+          next.set(b.taskId.toLowerCase(), {
+            title: b.brief?.title ?? "",
+            category: b.brief?.category ?? "other",
+          });
+        }
+        setBriefs(next);
+      } catch {
+        /* best-effort */
+      }
+    };
+    load();
+    const id = window.setInterval(load, 8000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, []);
 
   const { owner: liveOwner, live } = useLiveOwner(liveProof.tokenId, undefined);
   const whoValue = liveOwner
@@ -277,72 +317,165 @@ export function WorkerProfileClient({
             </tr>
           </thead>
           <tbody>
-            {recentJobs.map((r, i) => (
-              <tr key={i}>
-                <td className="mono" style={{ color: "rgba(245,241,232,0.7)" }}>
-                  {r.date}
-                </td>
-                <td className="mono">{r.employer}</td>
-                <td>
-                  {r.title ? (
-                    r.title
-                  ) : (
-                    <span
-                      className="italic"
-                      style={{ color: "rgba(245,241,232,0.5)" }}
-                    >
-                      (no title pinned)
-                    </span>
-                  )}
-                </td>
-                <td className="num">
-                  <span className="italic-num">{r.realized}</span>{" "}
-                  <span className="caps-sm muted">0G</span>
-                </td>
-                <td className="num">
-                  <span className="italic-num">{r.rating}</span>{" "}
-                  <span className="text-oxblood">★</span>
-                </td>
-              </tr>
-            ))}
+            {recentJobs.map((r, i) => {
+              const briefTitle = r.taskId
+                ? briefs.get(r.taskId.toLowerCase())?.title
+                : undefined;
+              const displayTitle =
+                briefTitle && briefTitle.length > 0 ? briefTitle : r.title;
+              const clickable = !!r.taskId;
+              return (
+                <tr
+                  key={i}
+                  className={clickable ? "tbl-row-link" : undefined}
+                  onClick={
+                    clickable
+                      ? () => router.push(`/jobs/${r.taskId!}`)
+                      : undefined
+                  }
+                  tabIndex={clickable ? 0 : -1}
+                  onKeyDown={
+                    clickable
+                      ? (e) => {
+                          if (e.key === "Enter")
+                            router.push(`/jobs/${r.taskId!}`);
+                        }
+                      : undefined
+                  }
+                  style={clickable ? { cursor: "pointer" } : undefined}
+                >
+                  <td
+                    className="mono"
+                    style={{ color: "rgba(245,241,232,0.7)" }}
+                  >
+                    {r.date}
+                  </td>
+                  <td className="mono">{r.employer}</td>
+                  <td>
+                    {displayTitle ? (
+                      displayTitle
+                    ) : (
+                      <span
+                        className="italic"
+                        style={{ color: "rgba(245,241,232,0.5)" }}
+                      >
+                        (no title pinned)
+                      </span>
+                    )}
+                  </td>
+                  <td className="num">
+                    <span className="italic-num">{r.realized}</span>{" "}
+                    <span className="caps-sm muted">0G</span>
+                  </td>
+                  <td className="num">
+                    <span className="italic-num">{r.rating}</span>{" "}
+                    <span className="text-oxblood">★</span>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
       {/* PROVENANCE */}
       <div style={{ padding: "32px 0 16px" }}>
-        <div className="caps-md muted" style={{ marginBottom: 18 }}>
-          PROVENANCE
-        </div>
-        {provenance.map((p, i) => (
-          <div
-            key={i}
+        <div
+          className="caps-md muted"
+          style={{
+            marginBottom: 18,
+            display: "flex",
+            alignItems: "baseline",
+            justifyContent: "space-between",
+          }}
+        >
+          <span>PROVENANCE</span>
+          <span
+            className="mono"
             style={{
-              display: "grid",
-              gridTemplateColumns: "140px 200px 1fr 160px",
-              alignItems: "center",
-              padding: "14px 0",
-              borderBottom: "1px solid rgba(245,241,232,0.08)",
+              fontSize: 11,
+              color: "rgba(245,241,232,0.45)",
+              letterSpacing: "0.04em",
             }}
           >
-            <span className="caps-sm muted">{p.date}</span>
-            <span className="mono" style={{ color: "var(--ledger-paper)" }}>
-              {p.to || "—"}
-            </span>
-            <span
-              className="italic-num"
-              style={{ fontSize: 18, color: "var(--ledger-paper)" }}
-            >
-              {p.price ? `${p.price} 0G` : "—"}
-            </span>
-            <span
-              className="caps-sm"
-              style={{ color: "var(--ledger-oxblood)" }}
-            >
-              {p.label}
-            </span>
+            {provenance.length} {provenance.length === 1 ? "EVENT" : "EVENTS"}{" "}
+            ON GALILEO
+          </span>
+        </div>
+        {provenance.length === 0 ? (
+          <div
+            className="italic"
+            style={{
+              padding: "20px 0",
+              color: "rgba(245,241,232,0.5)",
+            }}
+          >
+            (no on-chain events found for this lot)
           </div>
-        ))}
+        ) : (
+          provenance.map((p, i) => (
+            <div
+              key={i}
+              style={{
+                display: "grid",
+                gridTemplateColumns: "180px 140px 200px 1fr 130px 90px",
+                alignItems: "center",
+                gap: 12,
+                padding: "14px 0",
+                borderBottom: "1px solid rgba(245,241,232,0.08)",
+              }}
+            >
+              <span
+                className="caps-sm muted"
+                style={{ letterSpacing: "0.06em" }}
+              >
+                {p.date}
+              </span>
+              <span
+                className="caps-sm"
+                style={{ color: "var(--ledger-gold-leaf)" }}
+              >
+                {p.action.toUpperCase()}
+              </span>
+              <span className="mono" style={{ color: "var(--ledger-paper)" }}>
+                {p.to || "—"}
+              </span>
+              <span
+                className="italic"
+                style={{
+                  color: "rgba(245,241,232,0.6)",
+                  fontSize: 13,
+                }}
+              >
+                {p.label}
+              </span>
+              <span
+                className="italic-num"
+                style={{ fontSize: 16, color: "var(--ledger-paper)" }}
+              >
+                {p.price ? `${p.price} 0G` : "—"}
+              </span>
+              {p.txHash ? (
+                <a
+                  href={galileoTx(p.txHash)}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="mono"
+                  style={{
+                    fontSize: 11,
+                    color: "var(--ledger-oxblood)",
+                    borderBottom: "1px dotted rgba(156,42,42,0.5)",
+                    justifySelf: "end",
+                  }}
+                >
+                  {p.txHash.slice(0, 6)}…{p.txHash.slice(-4)} ↗
+                </a>
+              ) : (
+                <span style={{ color: "rgba(245,241,232,0.3)" }}>—</span>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
       {open && <InheritanceModal lot={lot} onClose={() => setOpen(false)} />}

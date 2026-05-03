@@ -38,6 +38,12 @@ export interface RecentJob {
   title: string;
   realized: string;
   rating: number;
+  // Optional — links the row back to the auction-room page when set.
+  taskId?: string;
+  // Optional — explorer link for the row (release tx if settled, posted tx
+  // if still in progress).
+  txHash?: string;
+  status?: "Posted" | "Accepted" | "Released" | "Cancelled" | "Slashed";
 }
 
 export interface ProvenanceEvent {
@@ -46,6 +52,8 @@ export interface ProvenanceEvent {
   to: string | null;
   price: string | null;
   label: string;
+  // Optional — explorer link for the row (mint / transfer / release tx).
+  txHash?: string;
 }
 
 export interface WalletEvent {
