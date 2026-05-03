@@ -8,7 +8,7 @@ This directory is **populated during execution** (May 2 evening → May 3 mornin
 
 | File | Verifies | Owner during build |
 |---|---|---|
-| `0g-proof.md` | iNFT contract addresses, 0G Storage memory CIDs, 0G Compute attestation digests, sealed-key parameter in transfer | Builder C |
+| `0g-proof.md` | Track A Agent Kit framework proof, iNFT contract addresses, 0G Storage memory CIDs, 0G Compute attestation digests, sealed-key parameter in transfer | Builder C |
 | `axl-proof.md` | 3 ed25519 peer IDs, 3 Yggdrasil IPv6 addresses, 3 host networks, `/topology` JSON snapshot, kill-the-bootstrap log, judge-typed-nonce trace | Builder A |
 | `ens-proof.md` | ENS parent name registration tx, CCIP-Read resolver gateway URL, namespace tree showing live resolution, before/after `who.*` flip on iNFT transfer, ENSIP-25 verification text record | Builder B |
 

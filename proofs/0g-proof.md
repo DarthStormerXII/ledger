@@ -27,7 +27,7 @@ npm test
 LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research
 ```
 
-The example generated a valid Ledger AXL `BID` payload for `who.worker-001.ledger.eth`, read WorkerINFT owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, verified the ENS capability owner matched that owner, verified the ENS memory CID matched `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`, proved `pay.*` rotation with two different addresses, and attached ERC-8004 reputation evidence `47 / 4.77` from the ENS gateway. The reasoner is explicitly deterministic dry-run in this example; paid live 0G Compute proof is recorded separately in the compute section below.
+The example generated a valid Ledger AXL `BID` payload for `who.worker-001.ledger.eth`, read WorkerINFT owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, returned `identityMode="gateway"` and `identityVerified=true`, verified the ENS capability owner matched that owner, verified the ENS memory CID matched `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`, proved `pay.*` rotation with two different addresses, and attached ERC-8004 reputation evidence `47 / 4.77` from the ENS gateway. Running the example without `LEDGER_ENS_GATEWAY_URL` fails closed; local-only dry-run requires `LEDGER_AGENT_KIT_ALLOW_LOCAL_DRY_RUN=1` and emits `source="unverified"`. The reasoner is explicitly deterministic dry-run in this example; paid live 0G Compute proof is recorded separately in the compute section below.
 
 ## Deployed Contracts
 

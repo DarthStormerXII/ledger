@@ -391,7 +391,7 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 - `MockTEEOracle`: `0x229869949693f1467b8b43d2907bDAE3C58E3047`
 - Track A framework package: `agents/ledger-agent-kit`
 - Track A example command: `LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research`
-- Track A example output: valid `BID` for `who.worker-001.ledger.eth`, owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, `identityVerified=true`, matching memory CID `0g://0xd8fb3a...982c4`, `payChanged=true`, reputation `47 / 4.77` with source `ens-gateway`
+- Track A example output: valid `BID` for `who.worker-001.ledger.eth`, owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, `identityMode=gateway`, `identityVerified=true`, matching memory CID `0g://0xd8fb3a...982c4`, `payChanged=true`, reputation `47 / 4.77` with source `ens-gateway`
 - Demo iNFT tokenId: `1`
 - Mint tx: `0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f` at block `31130502`
 - Transfer tx: `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79` at block `31130543`

@@ -58,8 +58,8 @@ forwarding, no STUN, no hole-punching.
 Identity is ENS. The team owns a parent name on Sepolia with an
 ENSIP-10 wildcard CCIP-Read offchain resolver (Path C pattern, per
 0xFlicker/tod-offchain-resolver) that serves a capability tree per
-worker: who.<agent>.<team>.eth resolves to the live ownerOf() on 0G
-Galileo, pay.<agent>.<team>.eth rotates HD-derived receive addresses
+worker: who.<agent>.ledger.eth resolves to the live ownerOf() on 0G
+Galileo, pay.<agent>.ledger.eth rotates HD-derived receive addresses
 (Fluidkey-inspired — credit to Greg's favorite hackathon project), and
 tx / rep / mem complete the namespace. ENSIP-25 agent-registration text
 records on the parent point to the audited ERC-8004 ReputationRegistry
@@ -83,7 +83,7 @@ contract checks ownerOf() at settlement time so the in-flight job's
 payment goes to whoever owns the iNFT when settlement fires; (b) the
 ERC-7857 TEE oracle re-keys the memory blob so the new owner can decrypt
 it immediately; (c) ENS resolution flips with zero ENS transactions —
-who.<agent>.<team>.eth follows ownerOf() automatically via CCIP-Read.
+who.<agent>.ledger.eth follows ownerOf() automatically via CCIP-Read.
 The hero worker's reputation history (47 jobs, 47 employer-signed
 feedback records on the audited ERC-8004 ReputationRegistry at
 0x8004B663… on Base Sepolia) is seeded for demonstration. The contract
@@ -118,9 +118,9 @@ HD-derived receive addresses on each resolution, Fluidkey-style.
 
 ### Partner-prize selection (3 / 3 slots filled)
 ```
-Partner 1 — 0G Labs        (Track A: Best Application of 0G + Track B:
-                           Best Autonomous Agents, Swarms & iNFT
-                           Innovations)
+Partner 1 — 0G Labs        (Track A: Best Agent Framework, Tooling &
+                           Core Extensions + Track B: Best Autonomous
+                           Agents, Swarms & iNFT Innovations)
 Partner 2 — Gensyn AXL     (Best Application of AXL)
 Partner 3 — ENS            (ENS-AI + ENS-Creative — both tracks count
                            as one partner-slot per ETHGlobal rules)
@@ -128,12 +128,18 @@ Partner 3 — ENS            (ENS-AI + ENS-Creative — both tracks count
 
 ### Sponsor integration writeups (per sponsor)
 
-#### 0G Labs — Track A (Best Application of 0G) + Track B (Best Autonomous Agents, Swarms & iNFT Innovations)
+#### 0G Labs — Track A (Best Agent Framework, Tooling & Core Extensions) + Track B (Best Autonomous Agents, Swarms & iNFT Innovations)
 
 ```
-Ledger uses 0G as the agent fabric — compute, storage, and identity.
-The marketplace SDK doubles as a Track A primitive; the iNFT-bound
-intelligence is the Track B story.
+Ledger uses 0G as both framework fabric and iNFT asset layer. Track A
+is `@ledger/agent-kit` in `agents/ledger-agent-kit`: an OpenClaw-inspired
+runtime with swappable 0G Storage, 0G Compute, 0G WorkerINFT ownership,
+ENS identity, and Gensyn AXL transport adapters. It includes a working
+`research-worker-agent` proof example and Mermaid architecture diagram.
+The example fails closed unless ENS owner, memory, and reputation proofs
+are present and consistent with the live WorkerINFT read.
+
+The iNFT-bound intelligence is the Track B story.
 
 iNFT (ERC-7857, 0G iNFT draft standard): Each worker is minted as an
 ERC-7857 iNFT on 0G Galileo Testnet (ChainID 16602, native 0G token).
@@ -169,15 +175,15 @@ The same reasoning. New address. The iNFT carries embedded intelligence,
 not just a name.
 
 Contract addresses (0G Galileo Testnet, ChainID 16602):
-- WorkerINFT.sol:                 [TO ADD ON SUBMISSION DAY]
-- LedgerEscrow.sol:               [TO ADD]
-- LedgerIdentityRegistry.sol:     [TO ADD]
+- WorkerINFT.sol:                 0x48B051F3e565E394ED8522ac453d87b3Fa40ad62
+- LedgerEscrow.sol:               0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB
+- LedgerIdentityRegistry.sol:     0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb
 (NOTE: we do NOT deploy our own ReputationRegistry. We use the live
 audited ERC-8004 deployment at 0x8004B663056A597Dffe9eCcC1965A193B7388713
 on Base Sepolia. LedgerEscrow.feedback() calls into it on settlement.)
 
-Architecture diagram: see /docs/architecture-diagram.png
-Demo video:           [URL]
+Architecture diagram: agents/ledger-agent-kit/docs/architecture.mmd
+Demo video:           https://ethglobal.com/showcase/ledger-bineb
 0G proof file:        /proofs/0g-proof.md
 ```
 
@@ -210,13 +216,13 @@ includes a live topology visualization showing real cross-node packets
 with peer IDs and IPv6 addresses.
 
 Demo proof:
-- 3 ed25519 peer IDs (64-char hex):    [TO ADD]
-- 3 Yggdrasil IPv6 addresses (200::/7): [TO ADD]
-- 3 host networks:                     AWS us-west, GCP eu-central, residential CGNAT
+- 3 ed25519 peer IDs (64-char hex):    a560...70eb, f274...fa64, 590f...5f4c
+- 3 Yggdrasil IPv6 addresses (200::/7): 200:b53e...99fc, 200:1b16...109a, 201:9bc1...dc85
+- 3 host networks:                     Fly sjc, Fly fra, residential NAT laptop
 - /topology JSON snapshot:             /proofs/axl-proof.md
 - tcpdump excerpt:                     /proofs/axl-proof.md
 
-Repo:                          [URL]
+Repo:                          https://github.com/DarthStormerXII/ledger-v1
 Demo cross-node section:       video timestamp 0:35–1:35
 AXL proof file:                /proofs/axl-proof.md
 ```
@@ -227,18 +233,18 @@ AXL proof file:                /proofs/axl-proof.md
 Ledger gives every worker iNFT a stable ENS identity that follows
 ownerOf() across chains with zero ENS transactions on transfer.
 
-Parent name on Sepolia: <team>.eth (registered via sepolia.app.ens.domains).
-ENSIP-10 wildcard CCIP-Read offchain resolver deployed on Vercel,
-Path C pattern per 0xFlicker/tod-offchain-resolver.
+Parent name on Sepolia: ledger.eth.
+ENSIP-10 wildcard CCIP-Read offchain resolver deployed behind
+https://resolver.fierypools.fun/{sender}/{data}.
 
-Capability tree per worker (e.g. worker-001.<team>.eth):
-- who.<agent>.<team>.eth   →  live ownerOf() on 0G Galileo Testnet (ChainID 16602)
-- pay.<agent>.<team>.eth   →  rotating HD-derived receive address (Fluidkey-inspired,
+Capability tree per worker (e.g. worker-001.ledger.eth):
+- who.<agent>.ledger.eth   →  live ownerOf() on 0G Galileo Testnet (ChainID 16602)
+- pay.<agent>.ledger.eth   →  rotating HD-derived receive address (Fluidkey-inspired,
                               credit to Greg's favorite hackathon project)
-- tx.<agent>.<team>.eth    →  current escrow / in-flight job pointer on Base Sepolia
-- rep.<agent>.<team>.eth   →  reputation summary derived from the audited
+- tx.<agent>.ledger.eth    →  current escrow / in-flight job pointer on 0G Galileo
+- rep.<agent>.ledger.eth   →  reputation summary derived from the audited
                               ERC-8004 ReputationRegistry on Base Sepolia
-- mem.<agent>.<team>.eth   →  current 0G Storage CID for the memory blob
+- mem.<agent>.ledger.eth   →  current 0G Storage CID for the memory blob
 
 ENSIP-25 agent-registration text record on the parent name points to
 the audited ERC-8004 deployment at
@@ -247,7 +253,7 @@ the ENSIP-25 ↔ ERC-8004 verification loop Greg named in the ENS
 workshop.
 
 The 5-second "oh" moment in the demo: a worker iNFT transfers on 0G
-Galileo. who.worker-001.<team>.eth resolution flips from Owner_A to
+Galileo. who.worker-001.ledger.eth resolution flips from Owner_A to
 Owner_B in under 30 seconds — without any ENS transaction. The
 CCIP-Read resolver gateway picks up the new ownerOf() automatically
 because it reads the source of truth, not a cached snapshot.
@@ -261,8 +267,8 @@ proof surface for technical judges.
 
 ENS proof file:                /proofs/ens-proof.md
 Demo ENS-flip section:         video timestamp 2:00–3:15
-Resolver gateway URL:          [TO ADD]
-Parent name on Sepolia:        [TO ADD].eth
+Resolver gateway URL:          https://resolver.fierypools.fun/{sender}/{data}
+Parent name on Sepolia:        ledger.eth
 ```
 
 ---
@@ -302,13 +308,14 @@ Every claim below links to evidence in this repo. No assertions without artifact
 
 | Claim | Evidence |
 |---|---|
-| Worker is an ERC-7857 (0G iNFT draft standard) iNFT | Token address `0x...` · tokenId `1` · [Galileo explorer](https://chainscan-galileo.0g.ai/address/0x...) · reference impl: [0glabs/0g-agent-nft@eip-7857-draft](https://github.com/0glabs/0g-agent-nft/tree/eip-7857-draft) |
-| Memory persists on 0G Storage | CID before transfer: `0x...` · CID after transfer: `0x...` (re-keyed) · [retrieval link](https://...) · AES-256-CTR key-rebind via TEE oracle per ERC-7857 spec |
-| Reasoning runs sealed on 0G Compute | Model: GLM-5 (744B, TeeML) / Qwen3.6-Plus (TeeTLS) · attestation digest: `0x...` · verified via [`broker.inference.verifyService`](https://docs.0g.ai/...) |
-| AXL is real cross-machine P2P | Peer IDs: `<id1>`, `<id2>`, `<id3>` (ed25519, 64-char hex) · IPv6: `200::a:b:c:d`, `200::e:f:g:h`, `200::i:j:k:l` · Hosts: AWS us-west, GCP eu-central, residential CGNAT · [topology JSON](./proofs/axl-proof.md) · [tcpdump excerpt](./proofs/axl-proof.md) |
-| ENS identity follows ownerOf cross-chain | `worker-001.<team>.eth` on Sepolia · resolver: `0x...` · iNFT contract on 0G Galileo: `0x...` · before: `who.*` → Owner_A · after: `who.*` → Owner_B · zero ENS transactions |
-| Reputation lives on the audited ERC-8004 deployment | [`0x8004B663056A597Dffe9eCcC1965A193B7388713`](https://sepolia.basescan.org/address/0x8004B663056A597Dffe9eCcC1965A193B7388713) on Base Sepolia · ENSIP-25 text record on `<team>.eth` points here |
-| Ownership changes earnings flow | ownerBefore: `0x...` · ownerAfter: `0x...` · payment recipient tx hash on Base Sepolia: `0x...` |
+| 0G Track A framework exists | `agents/ledger-agent-kit` · `LedgerAgentRuntime` · `research-worker-agent` example · architecture diagram |
+| Worker is an ERC-7857 (0G iNFT draft standard) iNFT | Token address `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` · tokenId `1` · transfer tx `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79` |
+| Memory persists on 0G Storage | CID `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4` · AES-256-CTR key-rebind via TEE oracle per ERC-7857 spec |
+| Reasoning runs sealed on 0G Compute | Provider `0xa48f01287233509FD694a22Bf840225062E67836` · attestation digest `0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950` |
+| AXL is real cross-machine P2P | Peer IDs: `a560...70eb`, `f274...fa64`, `590f...5f4c` · Hosts: Fly sjc, Fly fra, residential NAT laptop · [topology JSON](./proofs/axl-proof.md) · [tcpdump excerpt](./proofs/axl-proof.md) |
+| ENS identity follows ownerOf cross-chain | `worker-001.ledger.eth` on Sepolia · resolver: `0xd94cC429058E5495a57953c7896661542648E1B3` · iNFT contract on 0G Galileo · `who.*` follows `ownerOf(1)` · zero ENS transactions |
+| Reputation lives on the audited ERC-8004 deployment | [`0x8004B663056A597Dffe9eCcC1965A193B7388713`](https://sepolia.basescan.org/address/0x8004B663056A597Dffe9eCcC1965A193B7388713) on Base Sepolia · ENSIP-25 text record on `ledger.eth` points here |
+| Ownership changes earnings flow | ownerBefore: `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00` · ownerAfter: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b` · release tx `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d` |
 
 Companion proof files (one screen each):
 [`proofs/0g-proof.md`](./proofs/0g-proof.md) · [`proofs/axl-proof.md`](./proofs/axl-proof.md) · [`proofs/ens-proof.md`](./proofs/ens-proof.md)
@@ -350,7 +357,7 @@ provenance.
 | Inter-agent comms | Gensyn AXL — 3 nodes, gossipsub fork, no central broker |
 | Identity | ENS parent name on Sepolia + ENSIP-10 wildcard CCIP-Read offchain resolver (Path C) |
 | Reputation | Audited ERC-8004 ReputationRegistry @ `0x8004B663…` on Base Sepolia (we use, we do not deploy) |
-| Settlement | USDC escrow on Base Sepolia (LedgerEscrow.sol) |
+| Settlement | Native 0G escrow on Galileo for the token-owned payout proof; ERC-8004 feedback reference on Base Sepolia |
 | Frontend | Next.js 14 + shadcn/ui + Capability Tree Viewer + Settlement Status Strip |
 
 Settlement is **two-phase commit, eventually consistent within ~10s.** Both transactions guaranteed to fire; the dashboard surfaces a `pending_reconcile` state if one lags. The Settlement Status Strip shows ✓/✓/⏳ per leg.
@@ -359,7 +366,7 @@ Settlement is **two-phase commit, eventually consistent within ~10s.** Both tran
 
 ## Sponsor integrations
 
-- **0G Labs (Track A + Track B)** — iNFT-minted worker swarm, sealed inference attestation, 0G Storage memory persistence, ERC-7857 TEE re-keying on transfer. [Details](#0g-integration) · [Proof](./proofs/0g-proof.md)
+- **0G Labs (Track A + Track B)** — `@ledger/agent-kit` framework runtime plus iNFT-minted worker swarm, sealed inference attestation, 0G Storage memory persistence, ERC-7857 TEE re-keying on transfer. [Details](#0g-integration) · [Proof](./proofs/0g-proof.md)
 - **Gensyn AXL** — 3-node cross-machine mesh (2 cloud + 1 residential CGNAT) with gossipsub pubsub, hop-by-hop TLS + end-to-end encrypted payloads. Service-registry / tool-marketplace pattern. [Details](#gensyn-integration) · [Proof](./proofs/axl-proof.md)
 - **ENS (ENS-AI + ENS-Creative)** — parent name on Sepolia + ENSIP-10 wildcard CCIP-Read resolver + capability tree (`who/pay/tx/rep/mem`) + ENSIP-25 ↔ ERC-8004 verification loop + live `ownerOf()` flip on transfer. [Details](#ens-integration) · [Proof](./proofs/ens-proof.md)
 
@@ -371,23 +378,23 @@ Settlement is **two-phase commit, eventually consistent within ~10s.** Both tran
 
 | Contract | Address |
 |---|---|
-| WorkerINFT | `0x...` |
-| LedgerEscrow | `0x...` |
-| LedgerIdentityRegistry | `0x...` |
+| WorkerINFT | `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` |
+| LedgerEscrow | `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB` |
+| LedgerIdentityRegistry | `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb` |
 
 **Base Sepolia:**
 
 | Contract | Address | Note |
 |---|---|---|
 | ERC-8004 ReputationRegistry | `0x8004B663056A597Dffe9eCcC1965A193B7388713` | Audited deployment — we use, we do not deploy |
-| LedgerEscrow (settlement) | `0x...` | calls `feedback()` on the ERC-8004 above |
+| LedgerEscrow (settlement reference) | `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB` | token-owned payout proof on Galileo; references ERC-8004 identity/reputation |
 
 **Sepolia (ENS):**
 
 | Resource | Address |
 |---|---|
-| Parent name | `<team>.eth` |
-| Wildcard CCIP-Read resolver contract | `0x...` |
+| Parent name | `ledger.eth` |
+| Wildcard CCIP-Read resolver contract | `0xd94cC429058E5495a57953c7896661542648E1B3` |
 | Resolver gateway URL | `https://...` |
 
 ---
@@ -460,7 +467,7 @@ Before clicking submit, verify:
 - [ ] `proofs/0g-proof.md` filed with real artifacts
 - [ ] `proofs/axl-proof.md` filed with real artifacts
 - [ ] `proofs/ens-proof.md` filed with real artifacts
-- [ ] `who.worker-001.<team>.eth` resolves correctly via `cast resolve` AND via the custom Capability Tree Viewer page (and via `app.ens.domains/sepolia/<name>` if the official app cooperates)
+- [ ] `who.worker-001.ledger.eth` resolves correctly via the resolver smoke script and custom Capability Tree Viewer page
 - [ ] AXL `/topology` returns 3 distinct peer IDs from 3 distinct hosts
 - [ ] At least one full settlement flow has a verifiable on-chain tx hash on Base Sepolia for the ERC-8004 feedback record
 - [ ] ETHGlobal submission form completed

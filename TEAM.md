@@ -6,25 +6,34 @@ read commits in the right voice.
 
 ## Roster
 
-| Person | Role |
-|---|---|
-| **Gabriel** | Project lead. Architecture, contracts, ENS resolver, integration plumbing, the buck. |
-| **Joel** | Backend engineering. Agent runtime, AXL mesh, gossipsub, contracts plumbing, deploy ops. |
-| **Joanna** | Research & docs. Sponsor research, doc QA, submission prep, README polish, things that need a careful pair of eyes. |
-| **DarthStormer** | Brand & motion. Identity system, Higgsfield, demo-video edit, sound, anything visual. |
+| Person           | Role                                                                                                                |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Gabriel**      | Project lead. Architecture, contracts, ENS resolver, integration plumbing, the buck.                                |
+| **Joel**         | Backend engineering. Agent runtime, AXL mesh, gossipsub, contracts plumbing, deploy ops.                            |
+| **Joanna**       | Research & docs. Sponsor research, doc QA, submission prep, README polish, things that need a careful pair of eyes. |
+| **DarthStormer** | Brand & motion. Identity system, Higgsfield, demo-video edit, sound, anything visual.                               |
+
+## Submission contact
+
+Gabriel is the lead contact for ETHGlobal and sponsor follow-up.
+
+| Channel  | Handle                                          |
+| -------- | ----------------------------------------------- |
+| Telegram | `@gabrielaxyy`                                  |
+| X        | [`@gabrielaxyeth`](https://x.com/gabrielaxyeth) |
 
 ## How we write commit subjects
 
 We're loose about format but the prefix tends to track who's writing. Skim
 `git log` and you'll see the pattern.
 
-| Prefix | Usually written by | Used for |
-|---|---|---|
-| `notes:` / `todo:` | Gabriel | Lead-level decisions, architecture call-outs, project-state notes |
-| `wip:` | Joel | In-progress engineering — agent runtime, AXL, contracts, deploys |
-| `research:` | Joanna | Sponsor research, doc passes, submission ops |
-| `creative:` | DarthStormer | Brand assets, visual decisions, demo-video work |
-| `scratchpad:` | (anyone) | End-of-day captures, working notes |
+| Prefix             | Usually written by | Used for                                                          |
+| ------------------ | ------------------ | ----------------------------------------------------------------- |
+| `notes:` / `todo:` | Gabriel            | Lead-level decisions, architecture call-outs, project-state notes |
+| `wip:`             | Joel               | In-progress engineering — agent runtime, AXL, contracts, deploys  |
+| `research:`        | Joanna             | Sponsor research, doc passes, submission ops                      |
+| `creative:`        | DarthStormer       | Brand assets, visual decisions, demo-video work                   |
+| `scratchpad:`      | (anyone)           | End-of-day captures, working notes                                |
 
 These aren't strict — if Joel wants to leave a `notes:` thought he can — but
 keeping the rough split makes the history easier to read at a glance.
