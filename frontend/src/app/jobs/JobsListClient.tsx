@@ -1,6 +1,11 @@
 "use client";
 
-import { useEffect, useState, type MouseEvent } from "react";
+import {
+  useEffect,
+  useState,
+  useSyncExternalStore,
+  type MouseEvent,
+} from "react";
 import { useRouter } from "next/navigation";
 import type { Job } from "@/lib/data";
 import {
@@ -17,6 +22,9 @@ import {
 } from "@/lib/contracts";
 
 type DerivedStatus = "open" | "accepted" | "settled" | "cancelled" | "slashed";
+type ViewMode = "grid" | "table";
+
+const VIEW_STORAGE_KEY = "ledger.jobs.view";
 
 function deriveStatus(title: string): DerivedStatus {
   if (title === "Bid accepted") return "accepted";
@@ -34,10 +42,76 @@ const STATUS_LABEL: Record<DerivedStatus, string> = {
   slashed: "SLASHED",
 };
 
+// < 1 min  → "Xs"           (terse, for live-tail urgency)
+// < 1 h    → "MM:SS"         (canonical countdown)
+// < 24 h   → "Xh YYm"        (e.g. "12h 04m")
+// ≥ 24 h   → "Xd Yh"         (e.g. "3d 7h")
+function formatCountdown(s: number): string {
+  if (s < 60) return `${s}s`;
+  if (s < 3600) {
+    const m = Math.floor(s / 60);
+    const ss = s % 60;
+    return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+  }
+  if (s < 86400) {
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    return `${h}h ${String(m).padStart(2, "0")}m`;
+  }
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  return `${d}d ${h}h`;
+}
+
+const stop = (e: MouseEvent) => e.stopPropagation();
+
+// localStorage-backed view-mode store. useSyncExternalStore handles SSR
+// (server snapshot = "grid"), the storage event keeps tabs in sync, and
+// mount-time hydration happens without a setState-in-effect.
+function readStoredViewMode(): ViewMode {
+  try {
+    const v = window.localStorage.getItem(VIEW_STORAGE_KEY);
+    return v === "table" ? "table" : "grid";
+  } catch {
+    return "grid";
+  }
+}
+function subscribeToViewMode(onChange: () => void) {
+  const handler = (e: StorageEvent) => {
+    if (e.key === VIEW_STORAGE_KEY) onChange();
+  };
+  window.addEventListener("storage", handler);
+  return () => window.removeEventListener("storage", handler);
+}
+function useStoredViewMode(): [ViewMode, (v: ViewMode) => void] {
+  const stored = useSyncExternalStore<ViewMode>(
+    subscribeToViewMode,
+    readStoredViewMode,
+    () => "grid" as ViewMode,
+  );
+  const set = (v: ViewMode) => {
+    try {
+      window.localStorage.setItem(VIEW_STORAGE_KEY, v);
+      // Local writes don't fire `storage` in the same tab — nudge subscribers.
+      window.dispatchEvent(
+        new StorageEvent("storage", { key: VIEW_STORAGE_KEY }),
+      );
+    } catch {
+      /* ignore */
+    }
+  };
+  return [stored, set];
+}
+
 export function JobsListClient({ jobs }: { jobs: Job[] }) {
   const router = useRouter();
   const [tick, setTick] = useState(0);
   const [inspectJobId, setInspectJobId] = useState<string | null>(null);
+  // viewMode lives in localStorage; useStoredViewMode handles SSR snapshot
+  // ("grid"), client hydration, and storage-event sync without a
+  // setState-in-effect.
+  const [viewMode, setView] = useStoredViewMode();
+
   const hasLive = jobs.some((j) => {
     const s = deriveStatus(j.title);
     return s === "open" || s === "accepted";
@@ -48,30 +122,8 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
     return () => window.clearInterval(id);
   }, [hasLive]);
 
-  // < 1 min  → "Xs"           (terse, for live-tail urgency)
-  // < 1 h    → "MM:SS"         (canonical countdown)
-  // < 24 h   → "Xh YYm"        (e.g. "12h 04m")
-  // ≥ 24 h   → "Xd Yh"         (e.g. "3d 7h")
-  const fmt = (s: number) => {
-    if (s < 60) return `${s}s`;
-    if (s < 3600) {
-      const m = Math.floor(s / 60);
-      const ss = s % 60;
-      return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
-    }
-    if (s < 86400) {
-      const h = Math.floor(s / 3600);
-      const m = Math.floor((s % 3600) / 60);
-      return `${h}h ${String(m).padStart(2, "0")}m`;
-    }
-    const d = Math.floor(s / 86400);
-    const h = Math.floor((s % 86400) / 3600);
-    return `${d}d ${h}h`;
-  };
-
   const inspectJob = jobs.find((j) => j.id === inspectJobId);
 
-  // Stable counts per status — drives the header band so judges see the live mix.
   const counts = jobs.reduce(
     (acc, j) => {
       const s = deriveStatus(j.title);
@@ -81,7 +133,8 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
     {} as Record<DerivedStatus, number>,
   );
 
-  const stop = (e: MouseEvent) => e.stopPropagation();
+  const openInspect = (id: string) => setInspectJobId(id);
+  const openAuction = (id: string) => router.push(`/jobs/${id}`);
 
   return (
     <div className="page jobs-page-wrap">
@@ -94,28 +147,54 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
             chain.
           </p>
         </div>
-        <div className="jobs-page-counts">
-          <span>
-            <strong>{counts.open ?? 0}</strong> open
-          </span>
-          <span className="dot-sep">·</span>
-          <span>
-            <strong>{counts.accepted ?? 0}</strong> accepted
-          </span>
-          <span className="dot-sep">·</span>
-          <span>
-            <strong>{counts.settled ?? 0}</strong> settled
-          </span>
-          <a
-            href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
-            target="_blank"
-            rel="noreferrer noopener"
-            className="caps-sm jobs-escrow-link"
-            onClick={stop}
-            title="Open LedgerEscrow on Galileo explorer"
+        <div className="jobs-page-meta">
+          <div className="jobs-page-counts">
+            <span>
+              <strong>{counts.open ?? 0}</strong> open
+            </span>
+            <span className="dot-sep">·</span>
+            <span>
+              <strong>{counts.accepted ?? 0}</strong> accepted
+            </span>
+            <span className="dot-sep">·</span>
+            <span>
+              <strong>{counts.settled ?? 0}</strong> settled
+            </span>
+            <a
+              href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="caps-sm jobs-escrow-link"
+              onClick={stop}
+              title="Open LedgerEscrow on Galileo explorer"
+            >
+              ESCROW ↗
+            </a>
+          </div>
+          <div
+            className="jobs-view-toggle"
+            role="tablist"
+            aria-label="Jobs view"
           >
-            ESCROW ↗
-          </a>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === "grid"}
+              className={`jobs-view-toggle-btn ${viewMode === "grid" ? "is-active" : ""}`}
+              onClick={() => setView("grid")}
+            >
+              <ViewIconGrid /> Grid
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={viewMode === "table"}
+              className={`jobs-view-toggle-btn ${viewMode === "table" ? "is-active" : ""}`}
+              onClick={() => setView("table")}
+            >
+              <ViewIconTable /> Table
+            </button>
+          </div>
         </div>
       </div>
 
@@ -136,126 +215,23 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
         </div>
       )}
 
-      <div className="jobs-grid">
-        {jobs.map((j) => {
-          const status = deriveStatus(j.title);
-          const isLive = status === "open" || status === "accepted";
-          const t = isLive ? Math.max(0, j.timeLeft - tick) : 0;
-          const expired = isLive && t === 0;
-          const timerColor =
-            t < 30 && t > 0
-              ? "var(--ledger-gold-leaf)"
-              : "var(--ledger-oxblood)";
-          return (
-            <div
-              key={j.id}
-              className={`job-card status-${status}`}
-              onClick={() => router.push(`/jobs/${j.id}`)}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") router.push(`/jobs/${j.id}`);
-              }}
-            >
-              <div className="job-card-head">
-                <span className={`job-status-pill status-${status}`}>
-                  ● {STATUS_LABEL[status]}
-                </span>
-                {isLive ? (
-                  <div className="job-card-timer">
-                    <span
-                      className="mono"
-                      style={{
-                        fontSize: 22,
-                        fontWeight: 500,
-                        color: expired ? "var(--ledger-ink-muted)" : timerColor,
-                      }}
-                    >
-                      {expired ? "EXPIRED" : fmt(t)}
-                    </span>
-                    {!expired && (
-                      <span
-                        className="caps-sm muted"
-                        style={{ fontSize: 10, marginLeft: 6 }}
-                      >
-                        LEFT
-                      </span>
-                    )}
-                  </div>
-                ) : (
-                  <a
-                    className="caps-sm job-card-receipt"
-                    href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    onClick={stop}
-                  >
-                    RECEIPT ↗
-                  </a>
-                )}
-              </div>
+      {jobs.length > 0 && viewMode === "grid" && (
+        <JobsGrid
+          jobs={jobs}
+          tick={tick}
+          onInspect={openInspect}
+          onOpen={openAuction}
+        />
+      )}
 
-              <div>
-                <div className="job-card-title">{j.title}.</div>
-                <div className="job-card-desc">{j.desc}</div>
-              </div>
-
-              <div className="job-card-band">
-                <div className="job-card-stat">
-                  <div className="caps-sm muted">PAYOUT</div>
-                  <div className="italic-num job-card-stat-val">{j.payout}</div>
-                </div>
-                {j.bond !== "—" && (
-                  <div className="job-card-stat">
-                    <div className="caps-sm muted">
-                      {status === "settled" ? "WINNING BID" : "BID"}
-                    </div>
-                    <div className="italic-num job-card-stat-val-sm">
-                      {j.bond}
-                    </div>
-                  </div>
-                )}
-                <div className="job-card-stat">
-                  <div className="caps-sm muted">BIDS</div>
-                  <div className="italic-num job-card-stat-val-sm">
-                    {j.bids}
-                  </div>
-                </div>
-              </div>
-
-              <div className="job-card-foot">
-                <div className="job-card-buyer">
-                  <span className="caps-sm muted">BUYER</span>
-                  <a
-                    href={galileoAddr(j.employer)}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="mono job-card-buyer-link"
-                    onClick={stop}
-                    title="Open buyer on Galileo explorer"
-                  >
-                    {j.employer}
-                  </a>
-                </div>
-                <div className="job-card-actions">
-                  <span onClick={stop}>
-                    <InspectPill onClick={() => setInspectJobId(j.id)} />
-                  </span>
-                  <button
-                    className="job-card-cta"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(`/jobs/${j.id}`);
-                    }}
-                  >
-                    Open auction →
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {jobs.length > 0 && viewMode === "table" && (
+        <JobsTable
+          jobs={jobs}
+          tick={tick}
+          onInspect={openInspect}
+          onOpen={openAuction}
+        />
+      )}
 
       <InspectDrawer
         open={inspectJob !== undefined}
@@ -272,6 +248,305 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
   );
 }
 
+// ────────────────────────────────────────────────────────────────────────────
+// GRID VIEW
+// ────────────────────────────────────────────────────────────────────────────
+function JobsGrid({
+  jobs,
+  tick,
+  onInspect,
+  onOpen,
+}: {
+  jobs: Job[];
+  tick: number;
+  onInspect: (id: string) => void;
+  onOpen: (id: string) => void;
+}) {
+  return (
+    <div className="jobs-grid">
+      {jobs.map((j) => {
+        const status = deriveStatus(j.title);
+        const isLive = status === "open" || status === "accepted";
+        const t = isLive ? Math.max(0, j.timeLeft - tick) : 0;
+        const expired = isLive && t === 0;
+        const timerColor =
+          t < 30 && t > 0 ? "var(--ledger-gold-leaf)" : "var(--ledger-oxblood)";
+        return (
+          <div
+            key={j.id}
+            className={`job-card status-${status}`}
+            onClick={() => onOpen(j.id)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") onOpen(j.id);
+            }}
+          >
+            <div className="job-card-head">
+              <span className={`job-status-pill status-${status}`}>
+                ● {STATUS_LABEL[status]}
+              </span>
+              {isLive ? (
+                <div className="job-card-timer">
+                  <span
+                    className="mono"
+                    style={{
+                      fontSize: 22,
+                      fontWeight: 500,
+                      color: expired ? "var(--ledger-ink-muted)" : timerColor,
+                    }}
+                  >
+                    {expired ? "EXPIRED" : formatCountdown(t)}
+                  </span>
+                  {!expired && (
+                    <span
+                      className="caps-sm muted"
+                      style={{ fontSize: 10, marginLeft: 6 }}
+                    >
+                      LEFT
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <a
+                  className="caps-sm job-card-receipt"
+                  href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  onClick={stop}
+                >
+                  RECEIPT ↗
+                </a>
+              )}
+            </div>
+
+            <div>
+              <div className="job-card-title">{j.title}.</div>
+              <div className="job-card-desc">{j.desc}</div>
+            </div>
+
+            <div className="job-card-band">
+              <div className="job-card-stat">
+                <div className="caps-sm muted">PAYOUT</div>
+                <div className="italic-num job-card-stat-val">{j.payout}</div>
+              </div>
+              {j.bond !== "—" && (
+                <div className="job-card-stat">
+                  <div className="caps-sm muted">
+                    {status === "settled" ? "WINNING BID" : "BID"}
+                  </div>
+                  <div className="italic-num job-card-stat-val-sm">
+                    {j.bond}
+                  </div>
+                </div>
+              )}
+              <div className="job-card-stat">
+                <div className="caps-sm muted">BIDS</div>
+                <div className="italic-num job-card-stat-val-sm">{j.bids}</div>
+              </div>
+            </div>
+
+            <div className="job-card-foot">
+              <div className="job-card-buyer">
+                <span className="caps-sm muted">BUYER</span>
+                <a
+                  href={galileoAddr(j.employer)}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="mono job-card-buyer-link"
+                  onClick={stop}
+                  title="Open buyer on Galileo explorer"
+                >
+                  {j.employer}
+                </a>
+              </div>
+              <div className="job-card-actions">
+                <span onClick={stop}>
+                  <InspectPill onClick={() => onInspect(j.id)} />
+                </span>
+                <button
+                  className="job-card-cta"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onOpen(j.id);
+                  }}
+                >
+                  Open auction →
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// TABLE VIEW (shadcn-style)
+// ────────────────────────────────────────────────────────────────────────────
+function JobsTable({
+  jobs,
+  tick,
+  onInspect,
+  onOpen,
+}: {
+  jobs: Job[];
+  tick: number;
+  onInspect: (id: string) => void;
+  onOpen: (id: string) => void;
+}) {
+  return (
+    <div className="jobs-table-wrap">
+      <table className="jobs-table">
+        <thead>
+          <tr>
+            <th>Status</th>
+            <th>Task</th>
+            <th className="num">Payout</th>
+            <th className="num">Bid</th>
+            <th className="num">Bids</th>
+            <th className="num">Time</th>
+            <th>Buyer</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {jobs.map((j) => {
+            const status = deriveStatus(j.title);
+            const isLive = status === "open" || status === "accepted";
+            const t = isLive ? Math.max(0, j.timeLeft - tick) : 0;
+            const expired = isLive && t === 0;
+            const timerColor =
+              t < 30 && t > 0
+                ? "var(--ledger-gold-leaf)"
+                : "var(--ledger-oxblood)";
+            const taskIdShort = `${j.id.slice(0, 8)}…${j.id.slice(-4)}`;
+            return (
+              <tr
+                key={j.id}
+                className={`jobs-table-row status-${status}`}
+                onClick={() => onOpen(j.id)}
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") onOpen(j.id);
+                }}
+              >
+                <td>
+                  <span className={`job-status-pill status-${status}`}>
+                    ● {STATUS_LABEL[status]}
+                  </span>
+                </td>
+                <td>
+                  <div className="jobs-table-task">{j.title}</div>
+                  <div className="mono jobs-table-task-id">{taskIdShort}</div>
+                </td>
+                <td className="num italic-num jobs-table-payout">{j.payout}</td>
+                <td className="num mono jobs-table-bid">
+                  {j.bond === "—" ? <span className="muted">—</span> : j.bond}
+                </td>
+                <td className="num italic-num">{j.bids}</td>
+                <td className="num jobs-table-time">
+                  {isLive ? (
+                    <span
+                      className="mono"
+                      style={{
+                        color: expired ? "var(--ledger-ink-muted)" : timerColor,
+                      }}
+                    >
+                      {expired ? "EXPIRED" : formatCountdown(t)}
+                    </span>
+                  ) : (
+                    <a
+                      className="mono jobs-table-receipt"
+                      href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      onClick={stop}
+                    >
+                      receipt ↗
+                    </a>
+                  )}
+                </td>
+                <td>
+                  <a
+                    href={galileoAddr(j.employer)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="mono jobs-table-buyer"
+                    onClick={stop}
+                    title="Open buyer on Galileo explorer"
+                  >
+                    {j.employer}
+                  </a>
+                </td>
+                <td className="jobs-table-actions">
+                  <span onClick={stop}>
+                    <InspectPill onClick={() => onInspect(j.id)} />
+                  </span>
+                  <button
+                    className="jobs-table-open"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpen(j.id);
+                    }}
+                    aria-label="Open auction"
+                  >
+                    →
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Toggle icons (inline SVG, no extra deps)
+// ────────────────────────────────────────────────────────────────────────────
+function ViewIconGrid() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden
+    >
+      <rect x="1.5" y="1.5" width="5" height="5" />
+      <rect x="9.5" y="1.5" width="5" height="5" />
+      <rect x="1.5" y="9.5" width="5" height="5" />
+      <rect x="9.5" y="9.5" width="5" height="5" />
+    </svg>
+  );
+}
+function ViewIconTable() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 16 16"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      aria-hidden
+    >
+      <rect x="1.5" y="2.5" width="13" height="11" />
+      <line x1="1.5" y1="6.2" x2="14.5" y2="6.2" />
+      <line x1="1.5" y1="9.5" x2="14.5" y2="9.5" />
+      <line x1="6" y1="2.5" x2="6" y2="13.5" />
+    </svg>
+  );
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Inspect drawer content
+// ────────────────────────────────────────────────────────────────────────────
 function buildJobInspectGroups(job: Job): InspectGroup[] {
   return [
     {

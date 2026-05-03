@@ -1473,6 +1473,286 @@ body.surface-ink {
   margin-bottom: 32px;
 }
 
+/* ===== JOBS — view toggle + table view ===== */
+.jobs-page-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.jobs-view-toggle {
+  display: inline-flex;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: rgba(245, 241, 232, 0.02);
+  padding: 3px;
+}
+.jobs-view-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: var(--ledger-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ledger-ink-muted);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.jobs-view-toggle-btn:hover {
+  color: var(--ledger-paper);
+}
+.jobs-view-toggle-btn.is-active {
+  background: var(--ledger-oxblood);
+  color: var(--ledger-paper);
+}
+
+.jobs-table-wrap {
+  border: 1px solid rgba(245, 241, 232, 0.14);
+  background: rgba(245, 241, 232, 0.015);
+  overflow-x: auto;
+}
+.jobs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.jobs-table th {
+  font-family: var(--ledger-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: left;
+  font-weight: 500;
+  color: var(--ledger-ink-muted);
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(245, 241, 232, 0.14);
+  background: rgba(245, 241, 232, 0.025);
+  white-space: nowrap;
+}
+.jobs-table th.num,
+.jobs-table td.num {
+  text-align: right;
+}
+.jobs-table tbody tr {
+  cursor: pointer;
+  transition: background 0.12s;
+  outline: none;
+}
+.jobs-table tbody tr:hover {
+  background: rgba(245, 241, 232, 0.04);
+}
+.jobs-table tbody tr:focus-visible {
+  background: rgba(156, 42, 42, 0.18);
+}
+.jobs-table tbody tr + tr td {
+  border-top: 1px solid rgba(245, 241, 232, 0.08);
+}
+.jobs-table td {
+  padding: 14px 16px;
+  vertical-align: middle;
+  color: var(--ledger-paper);
+}
+.jobs-table-task {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--ledger-paper);
+  line-height: 1.15;
+}
+.jobs-table-task-id {
+  font-size: 11px;
+  color: var(--ledger-ink-muted);
+  margin-top: 2px;
+}
+.jobs-table-payout {
+  font-size: 16px;
+  color: var(--ledger-paper);
+}
+.jobs-table-bid {
+  font-size: 12px;
+  color: var(--ledger-paper);
+}
+.jobs-table-time {
+  font-size: 14px;
+}
+.jobs-table-receipt {
+  color: var(--ledger-ink-muted);
+  text-decoration: none;
+  font-size: 11px;
+}
+.jobs-table-receipt:hover {
+  color: var(--ledger-gold-leaf);
+}
+.jobs-table-buyer {
+  font-size: 12px;
+  color: var(--ledger-paper);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(245, 241, 232, 0.32);
+  transition:
+    color 0.15s,
+    border-color 0.15s;
+}
+.jobs-table-buyer:hover {
+  color: var(--ledger-gold-leaf);
+  border-bottom-color: var(--ledger-gold-leaf);
+}
+.jobs-table-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.jobs-table-open {
+  background: transparent;
+  border: 1px solid var(--ledger-oxblood);
+  color: var(--ledger-oxblood);
+  font-family: var(--ledger-font-mono);
+  font-size: 13px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.jobs-table-open:hover {
+  background: var(--ledger-oxblood);
+  color: var(--ledger-paper);
+}
+
+/* ===== TASKID hover popover (used in AuctionRoomClient) ===== */
+.taskid-hover {
+  position: relative;
+  display: inline-block;
+  cursor: help;
+}
+.taskid-hover-trigger {
+  border-bottom: 1px dotted rgba(245, 241, 232, 0.32);
+}
+.taskid-hover-popover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  padding: 8px 12px;
+  background: var(--ledger-ink-elevated, #14141a);
+  border: 1px solid rgba(245, 241, 232, 0.24);
+  color: var(--ledger-paper);
+  font-size: 12px;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  max-width: min(560px, 92vw);
+  overflow-wrap: anywhere;
+  white-space: normal;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(2px);
+  transition:
+    opacity 0.12s,
+    transform 0.12s;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+.taskid-hover:hover .taskid-hover-popover,
+.taskid-hover:focus-within .taskid-hover-popover {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ===== SORT DROPDOWN (workers page; shadcn-style replacement for native select) ===== */
+.sort-dropdown {
+  position: relative;
+  display: inline-block;
+}
+.sort-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: rgba(245, 241, 232, 0.02);
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  color: var(--ledger-paper);
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    border-color 0.12s;
+  min-width: 220px;
+  text-align: left;
+}
+.sort-dropdown-trigger:hover {
+  background: rgba(245, 241, 232, 0.04);
+  border-color: rgba(245, 241, 232, 0.32);
+}
+.sort-dropdown-trigger.is-open {
+  border-color: var(--ledger-oxblood);
+}
+.sort-dropdown-label {
+  color: var(--ledger-ink-muted);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+}
+.sort-dropdown-value {
+  flex: 1;
+  color: var(--ledger-paper);
+  font-size: 13px;
+}
+.sort-dropdown-caret {
+  color: var(--ledger-ink-muted);
+  transition: transform 0.15s;
+}
+.sort-dropdown-trigger.is-open .sort-dropdown-caret {
+  transform: rotate(180deg);
+}
+.sort-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 50;
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  min-width: 100%;
+  background: var(--ledger-ink-elevated, #14141a);
+  border: 1px solid rgba(245, 241, 232, 0.24);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.4);
+}
+.sort-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  color: var(--ledger-paper);
+  cursor: pointer;
+  outline: none;
+  transition: background 0.1s;
+}
+.sort-dropdown-item:hover,
+.sort-dropdown-item:focus-visible {
+  background: rgba(245, 241, 232, 0.06);
+}
+.sort-dropdown-item.is-selected {
+  color: var(--ledger-oxblood);
+}
+.sort-dropdown-check {
+  color: var(--ledger-oxblood);
+  font-size: 13px;
+}
+
 /* ===== FOOTER — wrap nicely on mobile ===== */
 @media (max-width: 768px) {
   .footer {

@@ -1,12 +1,102 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Lot } from "@/lib/data";
 import { LotPlate } from "@/components/LotPlate";
 
 type Filter = "all" | "listed" | "top" | "recent";
 type Sort = "realized" | "rating" | "recent";
+
+const SORT_OPTIONS: { value: Sort; label: string }[] = [
+  { value: "realized", label: "By realized earnings" },
+  { value: "rating", label: "By rating" },
+  { value: "recent", label: "By recency" },
+];
+
+function SortDropdown({
+  value,
+  onChange,
+}: {
+  value: Sort;
+  onChange: (v: Sort) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (!open) return;
+    const onDocClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onDocClick);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDocClick);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const current =
+    SORT_OPTIONS.find((o) => o.value === value) ?? SORT_OPTIONS[0];
+  return (
+    <div className="sort-dropdown" ref={ref}>
+      <button
+        type="button"
+        className={`sort-dropdown-trigger ${open ? "is-open" : ""}`}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+      >
+        <span className="caps-sm sort-dropdown-label">SORT</span>
+        <span className="sort-dropdown-value">{current.label}</span>
+        <svg
+          className="sort-dropdown-caret"
+          width="10"
+          height="10"
+          viewBox="0 0 10 10"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          aria-hidden
+        >
+          <path d="M2 3.5 L5 6.5 L8 3.5" strokeLinecap="round" />
+        </svg>
+      </button>
+      {open && (
+        <ul className="sort-dropdown-menu" role="listbox">
+          {SORT_OPTIONS.map((opt) => {
+            const selected = opt.value === value;
+            return (
+              <li
+                key={opt.value}
+                role="option"
+                aria-selected={selected}
+                tabIndex={0}
+                className={`sort-dropdown-item ${selected ? "is-selected" : ""}`}
+                onClick={() => {
+                  onChange(opt.value);
+                  setOpen(false);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    onChange(opt.value);
+                    setOpen(false);
+                  }
+                }}
+              >
+                <span>{opt.label}</span>
+                {selected && <span className="sort-dropdown-check">✓</span>}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export function WorkersClient({
   lots: all,
@@ -106,21 +196,7 @@ export function WorkersClient({
               </a>
             ))}
           </div>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as Sort)}
-            style={{
-              background: "transparent",
-              color: "var(--ledger-paper)",
-              border: "1px solid rgba(245,241,232,0.16)",
-              padding: "6px 10px",
-              fontSize: 13,
-            }}
-          >
-            <option value="realized">Sort: by realized</option>
-            <option value="rating">Sort: by rating</option>
-            <option value="recent">Sort: by recency</option>
-          </select>
+          <SortDropdown value={sort} onChange={setSort} />
         </div>
       )}
 

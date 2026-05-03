@@ -320,69 +320,6 @@ export function AuctionRoomClient({
 // Sub-components
 // ──────────────────────────────────────────────────────────────────────────
 
-// Minimal placeholder so the JSX reference doesn't break the build while
-// another teammate finishes the rich receipt panel. Renders a small ledger
-// of the on-chain state passed in from the page.
-function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
-  return (
-    <div
-      className="auction-block"
-      style={{ marginTop: 8, marginBottom: 24, padding: 18 }}
-    >
-      <div
-        className="caps-md"
-        style={{ color: "var(--ledger-paper)", marginBottom: 10 }}
-      >
-        TASK RECEIPT · {receipt.status.toUpperCase()}
-      </div>
-      <div
-        className="mono"
-        style={{
-          fontSize: 12,
-          color: "var(--ledger-ink-muted)",
-          lineHeight: 1.6,
-          display: "grid",
-          gridTemplateColumns: "auto 1fr",
-          gap: "4px 16px",
-          alignItems: "baseline",
-        }}
-      >
-        <span>buyer</span>
-        <span style={{ color: "var(--ledger-paper)" }}>{receipt.buyer}</span>
-        {receipt.worker ? (
-          <>
-            <span>worker</span>
-            <span style={{ color: "var(--ledger-paper)" }}>
-              {receipt.workerEnsName ?? receipt.worker}
-            </span>
-          </>
-        ) : null}
-        <span>payment</span>
-        <span style={{ color: "var(--ledger-paper)" }}>
-          {receipt.paymentEth} 0G
-        </span>
-        {receipt.bidAmountEth ? (
-          <>
-            <span>winning bid</span>
-            <span style={{ color: "var(--ledger-paper)" }}>
-              {receipt.bidAmountEth} 0G
-            </span>
-          </>
-        ) : null}
-        <span>posted tx</span>
-        <a
-          href={`https://chainscan-galileo.0g.ai/tx/${receipt.postedTx}`}
-          target="_blank"
-          rel="noreferrer noopener"
-          style={{ color: "var(--ledger-gold-leaf)" }}
-        >
-          {short(receipt.postedTx, 10, 6)} ↗
-        </a>
-      </div>
-    </div>
-  );
-}
-
 function BridgeBlocked({ error }: { error: string | null }) {
   return (
     <div className="auction-block">
