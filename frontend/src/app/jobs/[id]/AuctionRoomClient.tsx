@@ -240,22 +240,56 @@ export function AuctionRoomClient({
   // Topology peer count (live mesh size).
   const peerCount = topology?.peers?.length ?? 0;
 
+  // ── Status-aware header copy ────────────────────────────────────────────
+  // The top strip and the bidder panel both need to behave differently
+  // depending on where the task is in its lifecycle.
+  const status = receipt?.status ?? "Posted";
+  const isPosted = status === "Posted";
+  const HEADER_LABEL: Record<typeof status, string> = {
+    Posted: "LIVE AUCTION",
+    Accepted: "ACCEPTED · IN PROGRESS",
+    Released: "SETTLED · PAID",
+    Cancelled: "AUCTION CANCELLED",
+    Slashed: "BOND SLASHED",
+  };
+  const HEADER_TONE: Record<typeof status, string> = {
+    Posted: "var(--ledger-oxblood)",
+    Accepted: "var(--ledger-gold-leaf)",
+    Released: "var(--ledger-success)",
+    Cancelled: "var(--ledger-ink-muted)",
+    Slashed: "var(--ledger-oxblood)",
+  };
+  const fallbackTitle =
+    status === "Released"
+      ? "Settled task"
+      : status === "Accepted"
+        ? "Task in progress"
+        : status === "Cancelled"
+          ? "Cancelled task"
+          : status === "Slashed"
+            ? "Slashed task"
+            : "Untitled task";
+
   return (
     <div className="page jobs-page-wrap">
       {/* TOP SECTION */}
       <div className="auction-top">
         <div>
           <div
-            className="caps-md muted"
+            className="caps-md"
             style={{
               marginBottom: 8,
               display: "flex",
               gap: 10,
               alignItems: "center",
               flexWrap: "wrap",
+              color: HEADER_TONE[status],
             }}
           >
-            <TaskIdHover taskId={job.id} /> · LIVE AUCTION
+            <TaskIdHover taskId={job.id} /> ·{" "}
+            <span style={{ color: HEADER_TONE[status] }}>
+              {HEADER_LABEL[status]}
+            </span>
             {brief ? (
               <span className={`category-chip is-static cat-${brief.category}`}>
                 {brief.category.charAt(0).toUpperCase() +
@@ -263,38 +297,69 @@ export function AuctionRoomClient({
               </span>
             ) : null}
           </div>
-          <h1 className="auction-title">{brief?.title ?? "Untitled task"}.</h1>
+          <h1 className="auction-title">{brief?.title ?? fallbackTitle}.</h1>
           <p className="auction-desc">{brief?.description ?? job.desc}</p>
         </div>
         <div className="auction-clock">
-          <div
-            className="mono auction-clock-time"
-            style={{
-              color:
-                timeLeft < 30
-                  ? "var(--ledger-gold-leaf)"
-                  : "var(--ledger-oxblood)",
-            }}
-          >
-            {fmtTime(timeLeft)}
-          </div>
+          {isPosted || status === "Accepted" ? (
+            <div
+              className="mono auction-clock-time"
+              style={{
+                color:
+                  timeLeft < 30
+                    ? "var(--ledger-gold-leaf)"
+                    : isPosted
+                      ? "var(--ledger-oxblood)"
+                      : "var(--ledger-gold-leaf)",
+              }}
+            >
+              {fmtTime(timeLeft)}
+            </div>
+          ) : (
+            // For terminal states (Released/Cancelled/Slashed) the deadline
+            // counter is nonsense; replace with the resolved status.
+            <div
+              className="mono auction-clock-time"
+              style={{ color: HEADER_TONE[status], fontSize: 32 }}
+            >
+              {status === "Released"
+                ? "PAID"
+                : status === "Cancelled"
+                  ? "VOID"
+                  : "SLASH"}
+            </div>
+          )}
           <div className="auction-clock-meta">
             <div>
-              <span className="caps-sm muted">PAYOUT — </span>
+              <span className="caps-sm muted">
+                {status === "Released"
+                  ? "RELEASED — "
+                  : status === "Accepted"
+                    ? "ACCEPTED BID — "
+                    : "PAYOUT — "}
+              </span>
               <span
                 className="italic-num"
                 style={{ fontSize: 18, color: "var(--ledger-paper)" }}
               >
-                {job.payout}
+                {receipt && (status === "Released" || status === "Accepted")
+                  ? `${receipt.bidAmountEth ?? receipt.paymentEth} 0G`
+                  : job.payout}
               </span>
             </div>
             <div>
-              <span className="caps-sm muted">BOND — </span>
+              <span className="caps-sm muted">
+                {status === "Posted" ? "BOND — " : "POSTED REWARD — "}
+              </span>
               <span
                 className="italic-num"
                 style={{ fontSize: 18, color: "var(--ledger-paper)" }}
               >
-                {job.bond}
+                {status === "Posted"
+                  ? job.bond
+                  : receipt
+                    ? `${receipt.paymentEth} 0G`
+                    : job.payout}
               </span>
             </div>
           </div>
@@ -324,17 +389,28 @@ export function AuctionRoomClient({
       ) : null}
 
       <div className="auction-body">
-        {/* CENTER — bidders */}
+        {/* CENTER — bidders. The "live BID feed" only makes sense while
+            the auction is open. Once the task is past Posted, we hide the
+            "0 WORKERS BIDDING + no BID messages received yet" placeholder
+            (the rich receipt panel above already shows who won + how the
+            payout settled). For terminal states we just label this section
+            "BID HISTORY" and let the AXL ring buffer surface anything that
+            was captured on chain — usually empty after the receipt has
+            cleared. */}
         <div className="auction-center">
           <div className="caps-md muted" style={{ marginBottom: 18 }}>
-            {bridgeStatus === "live"
-              ? `${derivedBids.length} ${derivedBids.length === 1 ? "WORKER BIDDING" : "WORKERS BIDDING"} (LIVE)`
-              : bridgeStatus === "unavailable"
-                ? "AXL BRIDGE UNAVAILABLE"
-                : "PROBING AXL BRIDGE…"}
+            {!isPosted
+              ? `BID HISTORY · ${HEADER_LABEL[status]}`
+              : bridgeStatus === "live"
+                ? `${derivedBids.length} ${derivedBids.length === 1 ? "WORKER BIDDING" : "WORKERS BIDDING"} (LIVE)`
+                : bridgeStatus === "unavailable"
+                  ? "AXL BRIDGE UNAVAILABLE"
+                  : "PROBING AXL BRIDGE…"}
           </div>
 
-          {bridgeStatus === "unavailable" ? (
+          {!isPosted && derivedBids.length === 0 ? (
+            <ResolvedAuctionNote receipt={receipt} />
+          ) : bridgeStatus === "unavailable" ? (
             <>
               <BridgeBlocked error={bridgeError} />
               <CapturedAxlProof />
@@ -731,6 +807,50 @@ function formatBid(n: number): string {
 function short(s: string, head = 6, tail = 4): string {
   if (s.length <= head + tail + 2) return s;
   return `${s.slice(0, head)}…${s.slice(-tail)}`;
+}
+
+// Short note shown in the BID HISTORY slot when the task has resolved and
+// the AXL ring has nothing for the taskId — happens often because the
+// auction closes before the bridge captures anything, or because the
+// resolution happened in a previous demo session.
+function ResolvedAuctionNote({ receipt }: { receipt?: LiveJobReceipt }) {
+  const status = receipt?.status ?? "Posted";
+  const heading =
+    status === "Released"
+      ? "Auction resolved — payout released."
+      : status === "Accepted"
+        ? "Bid accepted — work is in progress."
+        : status === "Cancelled"
+          ? "Auction cancelled."
+          : status === "Slashed"
+            ? "Auction closed — bond slashed."
+            : "Auction resolved.";
+  const body =
+    status === "Released"
+      ? "The winning worker's address, accepted bid, and on-chain trail are in the receipt panel above. The live BID feed is only relevant while bidders are racing the clock — that phase is over for this taskId."
+      : status === "Accepted"
+        ? "The buyer has locked the worker in for delivery. The live BID feed is paused until the worker submits a result; the receipt panel above shows the locked worker + accepted bid."
+        : "The auction is closed. Settlement details (if any) are in the receipt panel above.";
+  return (
+    <div
+      style={{
+        padding: "20px 24px",
+        border: "1px dashed rgba(245,241,232,0.16)",
+        borderRadius: 4,
+        color: "var(--ledger-ink-muted)",
+        fontSize: 13,
+        lineHeight: 1.6,
+      }}
+    >
+      <div
+        className="caps-md"
+        style={{ color: "var(--ledger-paper)", marginBottom: 6 }}
+      >
+        {heading}
+      </div>
+      {body}
+    </div>
+  );
 }
 
 function TaskIdHover({ taskId }: { taskId: string }) {

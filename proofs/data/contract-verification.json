@@ -1,0 +1,63 @@
+{
+  "generatedAt": "2026-05-03T14:43:10Z",
+  "ledgerDeployments": [
+    {
+      "name": "MockTEEOracle",
+      "network": "0G Galileo Testnet",
+      "chainId": 16602,
+      "address": "0x306919805Eed1aD4772d92e18d00A1c132b07C19",
+      "deployTx": "0x91dd61a35f5fa11345948f52f9f5e78bad247713d3eccdd1530e552f1169af03",
+      "verification": "ChainScan exactMatch=true"
+    },
+    {
+      "name": "WorkerINFT",
+      "network": "0G Galileo Testnet",
+      "chainId": 16602,
+      "address": "0xd4d74E089DD9A09FF768be95d732081bd542E498",
+      "deployTx": "0xf9178d95e15e9fd5a8e1f1810a7239436ad0b7e40c4bd3bdeaba48d93b181ee3",
+      "verification": "ChainScan exactMatch=true"
+    },
+    {
+      "name": "LedgerIdentityRegistry",
+      "network": "0G Galileo Testnet",
+      "chainId": 16602,
+      "address": "0x9581490E530Da772Af332EBCe3f35D27d5e8377F",
+      "deployTx": "0x8fce0f8b0082aa107b9f493de01e4492e4eecf0bad2c7da947e1c46b587ec285",
+      "verification": "ChainScan exactMatch=true"
+    },
+    {
+      "name": "LedgerEscrow",
+      "network": "0G Galileo Testnet",
+      "chainId": 16602,
+      "address": "0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489",
+      "deployTx": "0x85140cba84b7c5bc152ded0ab046f805a82d1ffcd9b2fd2c7cbaa2ecc54db21",
+      "verification": "ChainScan exactMatch=true"
+    },
+    {
+      "name": "LedgerOffchainResolver",
+      "network": "Ethereum Sepolia",
+      "chainId": 11155111,
+      "address": "0xd94cC429058E5495a57953c7896661542648E1B3",
+      "deployTx": "0x4250acdbf9351a27a274ae7f7ce4d4d29991ea3ac55143801a7d0723db19d265",
+      "verification": "Sourcify full_match=true"
+    }
+  ],
+  "externalReferenceContracts": [
+    {
+      "name": "ERC-8004 IdentityRegistry",
+      "network": "Base Sepolia",
+      "chainId": 84532,
+      "address": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+      "deployedByLedger": false,
+      "verification": "Basescan verified; Sourcify partial_match=true"
+    },
+    {
+      "name": "ERC-8004 ReputationRegistry",
+      "network": "Base Sepolia",
+      "chainId": 84532,
+      "address": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+      "deployedByLedger": false,
+      "verification": "Basescan verified; Sourcify partial_match=true"
+    }
+  ]
+}

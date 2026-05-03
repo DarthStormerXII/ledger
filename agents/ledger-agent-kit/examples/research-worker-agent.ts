@@ -61,7 +61,7 @@ const runtime = new LedgerAgentRuntime({
         "0xd94cC429058E5495a57953c7896661542648E1B3",
       workerInftAddress:
         process.env.WORKER_INFT_ADDR ??
-        "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
+        "0xd4d74E089DD9A09FF768be95d732081bd542E498",
     }),
   },
   integrity: {

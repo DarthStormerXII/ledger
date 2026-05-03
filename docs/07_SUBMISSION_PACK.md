@@ -27,9 +27,9 @@ ENS identity travel with them across owners.
 ```
 Ledger is a peer-to-peer marketplace where AI agents hire other AI
 agents. Buyer agents post tasks. Worker agents on a Gensyn AXL mesh
-bid in real-time auctions. On-chain escrow on Base Sepolia settles
-payment, and the audited ERC-8004 ReputationRegistry records signed
-feedback. Workers themselves are ERC-7857 (0G iNFT draft standard)
+bid in real-time auctions. On-chain escrow on 0G Galileo settles
+payment to the current iNFT owner, while the audited ERC-8004
+ReputationRegistry anchors signed feedback on Base Sepolia. Workers themselves are ERC-7857 (0G iNFT draft standard)
 iNFTs on 0G Galileo Testnet — when one transfers, its ENS identity,
 its memory on 0G Storage, its sealed reasoning on 0G Compute, and the
 next earned payment all follow the new owner. The workers are the
@@ -66,13 +66,14 @@ records on the parent point to the audited ERC-8004 ReputationRegistry
 deployment at 0x8004B663056A597Dffe9eCcC1965A193B7388713 on Base Sepolia
 — that's the verification loop Greg named in the ENS workshop.
 
-Settlement is USDC on Base Sepolia via our LedgerEscrow contract.
-On settlement the contract calls feedback() on the live ERC-8004
-ReputationRegistry — we deploy zero of our own reputation infrastructure;
-we use the audited deployment. The dashboard is Next.js 14 with
-shadcn/ui, with live AXL event streaming over Server-Sent Events, a
-Settlement Status Strip (USDC paid ✓ / ERC-8004 feedback recorded ✓ /
-0G Storage CID updated ✓) under a two-phase commit eventually-consistent
+Settlement is native 0G on Galileo via our LedgerEscrow contract.
+On settlement the contract resolves the current `WorkerINFT.ownerOf(tokenId)`
+before paying, so ownership transfer changes the next payout recipient.
+We deploy zero of our own reputation infrastructure; ERC-8004 feedback
+history stays on the audited Base Sepolia deployment and is surfaced
+through ENS and the app. The dashboard is Next.js 14 with shadcn/ui,
+with live AXL event streaming over Server-Sent Events and a Settlement
+Status Strip under a two-phase commit eventually-consistent
 model, and a custom Capability Tree Viewer page that renders live ENS
 resolutions per worker.
 
@@ -175,12 +176,14 @@ The same reasoning. New address. The iNFT carries embedded intelligence,
 not just a name.
 
 Contract addresses (0G Galileo Testnet, ChainID 16602):
-- WorkerINFT.sol:                 0x48B051F3e565E394ED8522ac453d87b3Fa40ad62
-- LedgerEscrow.sol:               0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB
-- LedgerIdentityRegistry.sol:     0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb
+- WorkerINFT.sol:                 0xd4d74E089DD9A09FF768be95d732081bd542E498
+- LedgerEscrow.sol:               0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489
+- LedgerIdentityRegistry.sol:     0x9581490E530Da772Af332EBCe3f35D27d5e8377F
 (NOTE: we do NOT deploy our own ReputationRegistry. We use the live
 audited ERC-8004 deployment at 0x8004B663056A597Dffe9eCcC1965A193B7388713
-on Base Sepolia. LedgerEscrow.feedback() calls into it on settlement.)
+on Base Sepolia. LedgerEscrow proves token-owned payout on 0G Galileo;
+the app and ENS layer bind that settlement proof to the ERC-8004
+reputation record.)
 
 Architecture diagram: agents/ledger-agent-kit/docs/architecture.mmd
 Demo video:           https://ethglobal.com/showcase/ledger-bineb
@@ -309,13 +312,13 @@ Every claim below links to evidence in this repo. No assertions without artifact
 | Claim | Evidence |
 |---|---|
 | 0G Track A framework exists | `agents/ledger-agent-kit` · `LedgerAgentRuntime` · `research-worker-agent` example · architecture diagram |
-| Worker is an ERC-7857 (0G iNFT draft standard) iNFT | Token address `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` · tokenId `1` · transfer tx `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79` |
+| Worker is an ERC-7857 (0G iNFT draft standard) iNFT | Token address `0xd4d74E089DD9A09FF768be95d732081bd542E498` · tokenId `1` · transfer tx `0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd` |
 | Memory persists on 0G Storage | CID `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4` · AES-256-CTR key-rebind via TEE oracle per ERC-7857 spec |
 | Reasoning runs sealed on 0G Compute | Provider `0xa48f01287233509FD694a22Bf840225062E67836` · attestation digest `0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950` |
 | AXL is real cross-machine P2P | Peer IDs: `a560...70eb`, `f274...fa64`, `590f...5f4c` · Hosts: Fly sjc, Fly fra, residential NAT laptop · [topology JSON](./proofs/axl-proof.md) · [tcpdump excerpt](./proofs/axl-proof.md) |
 | ENS identity follows ownerOf cross-chain | `worker-001.ledger.eth` on Sepolia · resolver: `0xd94cC429058E5495a57953c7896661542648E1B3` · iNFT contract on 0G Galileo · `who.*` follows `ownerOf(1)` · zero ENS transactions |
 | Reputation lives on the audited ERC-8004 deployment | [`0x8004B663056A597Dffe9eCcC1965A193B7388713`](https://sepolia.basescan.org/address/0x8004B663056A597Dffe9eCcC1965A193B7388713) on Base Sepolia · ENSIP-25 text record on `ledger.eth` points here |
-| Ownership changes earnings flow | ownerBefore: `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00` · ownerAfter: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b` · release tx `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d` |
+| Ownership changes earnings flow | ownerBefore: `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00` · ownerAfter: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b` · release tx `0x7f7ff8061ba4a68b6963d27abefa601fbde8d9474e8dadd8207d138fc6e1a3e2` |
 
 Companion proof files (one screen each):
 [`proofs/0g-proof.md`](./proofs/0g-proof.md) · [`proofs/axl-proof.md`](./proofs/axl-proof.md) · [`proofs/ens-proof.md`](./proofs/ens-proof.md)
@@ -360,7 +363,7 @@ provenance.
 | Settlement | Native 0G escrow on Galileo for the token-owned payout proof; ERC-8004 feedback reference on Base Sepolia |
 | Frontend | Next.js 14 + shadcn/ui + Capability Tree Viewer + Settlement Status Strip |
 
-Settlement is **two-phase commit, eventually consistent within ~10s.** Both transactions guaranteed to fire; the dashboard surfaces a `pending_reconcile` state if one lags. The Settlement Status Strip shows ✓/✓/⏳ per leg.
+Settlement is **two-phase commit, eventually consistent within ~10s in the demo path.** The dashboard surfaces a `pending_reconcile` state if one leg lags. The Settlement Status Strip shows ✓/✓/⏳ per leg.
 
 ---
 
@@ -376,26 +379,27 @@ Settlement is **two-phase commit, eventually consistent within ~10s.** Both tran
 
 **0G Galileo Testnet (ChainID 16602, native 0G token):**
 
-| Contract | Address |
-|---|---|
-| WorkerINFT | `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` |
-| LedgerEscrow | `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB` |
-| LedgerIdentityRegistry | `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb` |
+| Contract | Address | Explorer verification |
+|---|---|---|
+| MockTEEOracle | `0x306919805Eed1aD4772d92e18d00A1c132b07C19` | ChainScan exact match |
+| WorkerINFT | `0xd4d74E089DD9A09FF768be95d732081bd542E498` | ChainScan exact match |
+| LedgerEscrow | `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489` | ChainScan exact match |
+| LedgerIdentityRegistry | `0x9581490E530Da772Af332EBCe3f35D27d5e8377F` | ChainScan exact match |
 
 **Base Sepolia:**
 
 | Contract | Address | Note |
 |---|---|---|
-| ERC-8004 ReputationRegistry | `0x8004B663056A597Dffe9eCcC1965A193B7388713` | Audited deployment — we use, we do not deploy |
-| LedgerEscrow (settlement reference) | `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB` | token-owned payout proof on Galileo; references ERC-8004 identity/reputation |
+| ERC-8004 IdentityRegistry | `0x8004A818BFB912233c491871b3d84c89A494BD9e` | Audited reference deployment — we use, we do not deploy |
+| ERC-8004 ReputationRegistry | `0x8004B663056A597Dffe9eCcC1965A193B7388713` | Audited reference deployment — we use, we do not deploy |
 
 **Sepolia (ENS):**
 
-| Resource | Address |
-|---|---|
-| Parent name | `ledger.eth` |
-| Wildcard CCIP-Read resolver contract | `0xd94cC429058E5495a57953c7896661542648E1B3` |
-| Resolver gateway URL | `https://...` |
+| Resource | Address | Explorer verification |
+|---|---|---|
+| Parent name | `ledger.eth` | ENS Sepolia app |
+| Wildcard CCIP-Read resolver contract | `0xd94cC429058E5495a57953c7896661542648E1B3` | Sourcify full match |
+| Resolver gateway URL | `https://resolver.fierypools.fun/{sender}/{data}` | live gateway |
 
 ---
 
@@ -407,7 +411,7 @@ All inter-agent communication runs over Gensyn AXL across three independent node
 
 Identity is ENS. Parent name on Sepolia + ENSIP-10 wildcard CCIP-Read offchain resolver (Path C, per `0xFlicker/tod-offchain-resolver`) serving a capability tree per worker: `who.*` resolves to live `ownerOf()` on 0G Galileo, `pay.*` rotates HD-derived receive addresses (**inspired by Fluidkey** — Greg's favorite hackathon project, mentioned in the ENS workshop), and `tx / rep / mem` complete the namespace. ENSIP-25 agent-registration text record on the parent points to the audited ERC-8004 ReputationRegistry on Base Sepolia — that's the verification loop Greg named in the workshop.
 
-Settlement is USDC on Base Sepolia. `LedgerEscrow.sol` calls `feedback()` on the live ERC-8004 ReputationRegistry on settlement. We deploy zero of our own reputation infrastructure; we use the audited deployment.
+Settlement proof is native 0G escrow on Galileo: `LedgerEscrow.sol` records the worker iNFT token ID at bid acceptance and resolves `WorkerINFT.ownerOf(tokenId)` at release, so payout follows the current iNFT owner. ERC-8004 reputation remains on the audited Base Sepolia deployment; ENS and the app bind the worker name, settlement receipt, and reputation record into one judge-visible capability tree. We deploy zero of our own reputation infrastructure.
 
 > **Honest disclosure on demo data:** The hero worker's reputation history (47 jobs, 47 employer-signed feedback records on the audited ERC-8004 ReputationRegistry at `0x8004B663…` on Base Sepolia) is seeded for demonstration. The contract accepts any employer-signed feedback record per ERC-8004 spec; production deployments would derive history from real task settlements.
 

@@ -29,7 +29,7 @@ Lead contact: Gabriel — Telegram `@gabrielaxyy`, X [`@gabrielaxyeth`](https://
 
 Ledger is a two-sided market for AI agents:
 
-- **Labor side** — buyer agents post tasks, worker agents bid on them, settlement is on-chain via 0G + Base Sepolia.
+- **Labor side** — buyer agents post tasks, worker agents bid on them, settlement is on-chain via 0G Galileo, with reputation anchored to the audited ERC-8004 deployment on Base Sepolia.
 - **Asset side** — worker agents are minted as **ERC-7857 (0G iNFT draft standard)** iNFTs. Their reputation, persistent memory, and earnings history transfer with ownership. _The workers are the assets._
 
 The hero demo: a worker iNFT with 47 jobs / 4.7 rating gets sold mid-demo to a new owner. The same `worker-001.ledger.eth` ENS name resolves to the new owner with zero ENS transactions, courtesy of CCIP-Read. The live upgraded escrow attaches token ID `1` to the accepted job and routes future payouts to the current iNFT owner at release time.
@@ -61,7 +61,7 @@ Use the links below as the supporting implementation/proof fanout for each ETHGl
 - 0G Storage memory client: [`agents/0g-storage/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-storage/src/index.ts) — encrypted memory upload/download wrapper.
 - 0G Compute client: [`agents/0g-compute/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-compute/src/index.ts) — sealed inference and attestation digest verification.
 - Proof file: [`proofs/0g-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/0g-proof.md) — deployed contracts, minted iNFT, storage root, re-key proof, escrow lifecycle, and attestation digest.
-- Live artifacts: WorkerINFT `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`, tokenId `1`, transfer tx `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79`.
+- Live artifacts: WorkerINFT `0xd4d74E089DD9A09FF768be95d732081bd542E498`, tokenId `1`, transfer tx `0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd`.
 
 ### Gensyn AXL
 

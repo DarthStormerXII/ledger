@@ -51,7 +51,7 @@ Two classes, both event-emitters, both designed for a Next.js frontend to subscr
 
 Composes:
 
-- `MockEscrow` (or live LedgerEscrow contract on 0G Galileo at `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`) for `postTask` / `acceptTokenBid` / `releasePayment` / `slashBond` / `cancelTask`
+- `MockEscrow` (or live LedgerEscrow contract on 0G Galileo at `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489`) for `postTask` / `acceptTokenBid` / `releasePayment` / `slashBond` / `cancelTask`
 - `MockAxlBus` (or live AXL bridge at `localhost:9002` from `agents/axl-runtime`) for `#ledger-jobs` gossipsub broadcasts and direct `BID` / `BID_ACCEPTED` / `RESULT` messages
 - `MockReputationRegistry` (or live audited ERC-8004 at `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia) for star-rating feedback on settle
 - `MockEnsResolver` (or `LedgerCapabilityClient` from `resolver/`) for resolving `who.<worker>.<parent>.eth` cross-chain
@@ -80,7 +80,7 @@ Composes:
 - `MockCompute` (or live `runReasoning` from `agents/0g-compute`) with sealed-inference + attestation digest
 - `MockStorage` (or live `uploadAgentMemory` from `agents/0g-storage`) with AES-256-CTR + 0g:// CID roundtrip
 - `MockEscrow` for `acceptBid` (paying bond)
-- `MockWorkerINFTRegistry` (or live WorkerINFT at `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`) for `tokenId` / `ownerOf` / `memoryCID`
+- `MockWorkerINFTRegistry` (or live WorkerINFT at `0xd4d74E089DD9A09FF768be95d732081bd542E498`) for `tokenId` / `ownerOf` / `memoryCID`
 
 Public API:
 

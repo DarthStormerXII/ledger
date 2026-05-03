@@ -1,36 +1,36 @@
 {
-  "generatedAt": "2026-05-03T12:45:56.270Z",
+  "generatedAt": "2026-05-03T14:48:50.128Z",
   "status": {
     "pass": true
   },
   "chain": {
     "rpcUrl": "https://evmrpc-testnet.0g.ai",
     "chainId": "16602",
-    "latestBlock": 31298803
+    "latestBlock": 31315989
   },
   "contracts": {
-    "workerInftAddress": "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
+    "workerInftAddress": "0xd4d74E089DD9A09FF768be95d732081bd542E498",
     "reputationRegistryAddress": "0x8004B663056A597Dffe9eCcC1965A193B7388713"
   },
   "token": {
     "tokenId": "1",
-    "historicalOwnerBlock": 31130502,
+    "historicalOwnerBlock": 31312412,
     "historicalOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
-    "postTransferOwnerBlock": 31130543,
+    "postTransferOwnerBlock": 31312433,
     "postTransferOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
     "latestOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b"
   },
   "transferLogs": [
     {
-      "blockNumber": 31130502,
-      "transactionHash": "0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f",
+      "blockNumber": 31312412,
+      "transactionHash": "0x26b7de55c33f7f82730ea333b509706c1092797c65c5360d1ad5ae0027c17c96",
       "from": "0x0000000000000000000000000000000000000000",
       "to": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
       "tokenId": "1"
     },
     {
-      "blockNumber": 31130543,
-      "transactionHash": "0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79",
+      "blockNumber": 31312433,
+      "transactionHash": "0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd",
       "from": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
       "to": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
       "tokenId": "1"

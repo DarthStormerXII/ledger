@@ -9,7 +9,7 @@ describe("0G app integration kit", () => {
     const config = loadZeroGConfig({ GALILEO_CHAIN_ID: "16602" });
     expect(config.chainId).toBe(16602);
     expect(config.nativeToken).toBe("0G");
-    expect(config.addresses.workerINFT).toBe("0x48B051F3e565E394ED8522ac453d87b3Fa40ad62");
+    expect(config.addresses.workerINFT).toBe("0xd4d74E089DD9A09FF768be95d732081bd542E498");
   });
 
   it("rejects non-Galileo chain IDs", () => {

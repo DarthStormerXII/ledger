@@ -91,10 +91,10 @@ This is the technical heart of the pitch. Walk through what actually happens dur
 
 Use the real values from `proofs/0g-proof.md`:
 
-- **WorkerINFT contract:** `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` on 0G Galileo
-- **Mint tx:** `0xc41cebd48d8638...` (block 31130502)
+- **WorkerINFT contract:** `0xd4d74E089DD9A09FF768be95d732081bd542E498` on 0G Galileo
+- **Mint tx:** `0x26b7de55c33f7...` (block 31312412)
 - **Initial owner:** `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00`
-- **Transfer tx:** `0x3e6b0e4f27ee07...` (block 31130543)
+- **Transfer tx:** `0xe4d697d7b8dd7...` (block 31312433)
 - **Post-transfer owner:** `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 - **Memory CID:** `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
 - **0G Compute attestation digest:** `0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950`

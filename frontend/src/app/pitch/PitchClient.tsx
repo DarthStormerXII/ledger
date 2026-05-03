@@ -6,25 +6,25 @@ import { Reveal } from "@/components/Reveal";
 
 // Real on-chain artefacts from proofs/0g-proof.md (live testnet)
 const PROOFS = {
-  workerInft: "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
-  mintTx: "0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f",
-  mintBlock: "31130502",
+  workerInft: "0xd4d74E089DD9A09FF768be95d732081bd542E498",
+  mintTx: "0x26b7de55c33f7f82730ea333b509706c1092797c65c5360d1ad5ae0027c17c96",
+  mintBlock: "31312412",
   initialOwner: "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
   transferTx:
-    "0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79",
-  transferBlock: "31130543",
+    "0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd",
+  transferBlock: "31312433",
   newOwner: "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
   memCid:
     "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
   attestation:
     "0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950",
-  ledgerEscrow: "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB",
+  ledgerEscrow: "0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489",
   tokenTaskId:
-    "0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae",
+    "0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604",
   acceptTokenBidTx:
-    "0x327e0bffc45ee801a6676b69e85e5fd1cf83e9cc9e2ec9fc75e3d35f15f570cb",
+    "0x57f35f717ff8e73e2e309f9e9131f68399bad823cc773bf7e123cde8b0335c02",
   releaseTx:
-    "0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d",
+    "0x7f7ff8061ba4a68b6963d27abefa601fbde8d9474e8dadd8207d138fc6e1a3e2",
   ensResolver: "0xd94cC429058E5495a57953c7896661542648E1B3",
   reputationRegistry: "0x8004B663056A597Dffe9eCcC1965A193B7388713",
 };

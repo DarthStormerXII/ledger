@@ -3,7 +3,7 @@ import type { Address, Hex } from "./types.js";
 
 // In-memory mirror of contracts/src/WorkerINFT.sol — including ERC-7857 sealed-key re-keying.
 // Live mode: replace with ethers Contract calls against the deployed Galileo address
-// 0x48B051F3e565E394ED8522ac453d87b3Fa40ad62.
+// 0xd4d74E089DD9A09FF768be95d732081bd542E498.
 
 export interface WorkerMetadata {
   agentName: string;

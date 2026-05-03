@@ -1,6 +1,23 @@
 # Ledger — ETHGlobal Submission Draft
 
-Status: live-artifact draft, May 2, 2026. Sponsor integrations are populated with the current 0G, Gensyn AXL, and ENS proof artifacts. Remaining lead inputs are called out explicitly near the relevant fields.
+Status: live-artifact draft, updated May 3, 2026. Sponsor integrations are populated with the current 0G, Gensyn AXL, and ENS proof artifacts. Remaining lead inputs are called out explicitly near the relevant fields.
+
+## Current Submission Sync Marker
+
+This is the freshness marker for the ETHGlobal form copy. If the repository, live deployment, or proof files materially change, rerun the project-level `/sync-submission` command before editing the ETHGlobal dashboard.
+
+- Captured at: `2026-05-03T20:23:33 IST` / `2026-05-03T14:53:33Z`
+- Git HEAD: `8c6ae44a42f19ec451778d96ccdeeb2d552464e5`
+- Git HEAD subject: `wip: WalletGate + truthful CLI commands on /register`
+- `origin/main`: `8c6ae44a42f19ec451778d96ccdeeb2d552464e5`
+- Public repo refs checked: `DarthStormerXII/ledger@main` and `DarthStormerXII/ledger-v1@main` both point to `8c6ae44a42f19ec451778d96ccdeeb2d552464e5`
+- Working tree at capture: dirty, `48` changed/untracked entries before this sync-marker update. Treat uncommitted local changes as update candidates, not final submitted evidence, until they are committed and pushed.
+- Live deployment checks: `/`, `/proof`, `/jobs`, `/register`, `/pitch`, and `/api/jobs/brief` returned HTTP `200` from `https://ledger-open-agents.vercel.app`.
+- Backup deployment alias: `https://ledger-two-red.vercel.app`.
+- Contract verification manifest: `proofs/data/contract-verification.json`, generated `2026-05-03T14:43:10Z`.
+- Contract verification lane: complete. The Ledger contracts are deployed on 0G Galileo Testnet and verified on ChainScan with exact source matches. The ENS resolver is deployed on Ethereum Sepolia and verified through Sourcify. ERC-8004 identity and reputation registries are external reference contracts on Base Sepolia and are cited separately, not claimed as Ledger deployments.
+- Stale address guard: do not use old escrow `0x12D2162F47AAAe1B0591e898648605daA186D644` anywhere in submission copy or demo UI. The verified LedgerEscrow is `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489`.
+- Submission repo recommendation: use `https://github.com/DarthStormerXII/ledger` in the main repository field; `https://github.com/DarthStormerXII/ledger-v1` is an up-to-date public mirror at the same commit.
 
 ## Source Basis
 
@@ -49,6 +66,7 @@ Recommended: `🧾`.
 Demo video: https://ethglobal.com/showcase/ledger-bineb
 Live deployment: https://ledger-open-agents.vercel.app/
 Proof dashboard: https://ledger-open-agents.vercel.app/proof
+Backup deployment: https://ledger-two-red.vercel.app/
 ```
 
 Notes:
@@ -174,6 +192,12 @@ Ledger is built with 0G Galileo iNFT contracts, encrypted 0G Storage memory, 0G 
 ### GitHub Repositories
 
 ```text
+https://github.com/DarthStormerXII/ledger
+```
+
+Mirror, also current at the sync marker commit:
+
+```text
 https://github.com/DarthStormerXII/ledger-v1
 ```
 
@@ -279,13 +303,13 @@ Applicable prize tracks:
 ```text
 Ledger uses 0G as both framework layer and worker-asset layer. Track A is `@ledger/agent-kit` in `agents/ledger-agent-kit`: an OpenClaw-inspired runtime with swappable adapters for 0G Storage memory, 0G Compute reasoning, 0G WorkerINFT ownership, ENS identity, and Gensyn AXL transport. It includes a working `research-worker-agent` proof example, architecture diagram, typecheck, and tests. The example fails closed unless the ENS gateway owner, memory CID, and reputation proof are present and consistent with the live WorkerINFT read; local-only dry run requires an explicit opt-in env var.
 
-Track B is the live iNFT worker proof. WorkerINFT is deployed on 0G Galileo at `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`; demo tokenId `1` minted in tx `0xc41cebd...001f` and transferred in tx `0x3e6b0e...3a79`. Memory is stored at `0g://0xd8fb3a...982c4`, sealed inference uses provider `0xa48f...7836` with attestation digest `0x59c79e...3950`, and token-owned escrow pays the current iNFT owner at settlement.
+Track B is the live iNFT worker proof. WorkerINFT is deployed on 0G Galileo at `0xd4d74E089DD9A09FF768be95d732081bd542E498`; demo tokenId `1` minted in tx `0x26b7de...7c96` and transferred in tx `0xe4d697...e9fd`. Memory is stored at `0g://0xd8fb3a...982c4`, sealed inference uses provider `0xa48f...7836` with attestation digest `0x59c79e...3950`, and verified LedgerEscrow `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489` pays the current iNFT owner at settlement. The 0G contracts are ChainScan exact-match verified; ERC-8004 identity and reputation are external Base Sepolia reference contracts cited separately.
 ```
 
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/src/runtime.ts#L17
+https://github.com/DarthStormerXII/ledger/blob/8c6ae44a42f19ec451778d96ccdeeb2d552464e5/agents/ledger-agent-kit/src/runtime.ts#L19
 ```
 
 Representative line: `LedgerAgentRuntime`, the framework core that turns 0G iNFT ownership, 0G Storage memory, 0G Compute reasoning, ENS identity, and AXL transport into a reusable agent runtime. Supporting Track B proof links live in `README.md#sponsor-submission-code-links` and `proofs/0g-proof.md`.
@@ -319,7 +343,7 @@ Ledger maps AXL's service registry / tool marketplace framing onto a live agent 
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-client/src/index.ts#L87
+https://github.com/DarthStormerXII/ledger/blob/8c6ae44a42f19ec451778d96ccdeeb2d552464e5/agents/axl-client/src/index.ts#L92
 ```
 
 Representative line: `AxlClient.send(...)`, the direct `/send` wrapper. Supporting proof links live in `README.md#sponsor-submission-code-links` and `proofs/axl-proof.md`.
@@ -357,7 +381,7 @@ Ledger uses ENS as the agent identity and capability layer. The resolver gateway
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L21
+https://github.com/DarthStormerXII/ledger/blob/8c6ae44a42f19ec451778d96ccdeeb2d552464e5/resolver/src/resolver.ts#L26
 ```
 
 Representative line: `resolveName(...)`, the capability namespace dispatcher. Supporting proof links live in `README.md#sponsor-submission-code-links` and `proofs/ens-proof.md`.
@@ -385,16 +409,18 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 
 - Chain: 0G Galileo, chainId `16602`
 - Explorer: `https://chainscan-galileo.0g.ai/`
-- `WorkerINFT`: `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`
-- `LedgerEscrow`: `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
-- `LedgerIdentityRegistry`: `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb`
-- `MockTEEOracle`: `0x229869949693f1467b8b43d2907bDAE3C58E3047`
+- Explorer source status: `MockTEEOracle`, `WorkerINFT`, `LedgerEscrow`, and `LedgerIdentityRegistry` are ChainScan exact-match verified.
+- `WorkerINFT`: `0xd4d74E089DD9A09FF768be95d732081bd542E498`
+- `LedgerEscrow`: `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489`
+- `LedgerIdentityRegistry`: `0x9581490E530Da772Af332EBCe3f35D27d5e8377F`
+- `MockTEEOracle`: `0x306919805Eed1aD4772d92e18d00A1c132b07C19`
+- Contract verification manifest: `proofs/data/contract-verification.json`
 - Track A framework package: `agents/ledger-agent-kit`
 - Track A example command: `LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research`
 - Track A example output: valid `BID` for `who.worker-001.ledger.eth`, owner `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`, `identityMode=gateway`, `identityVerified=true`, matching memory CID `0g://0xd8fb3a...982c4`, `payChanged=true`, reputation `47 / 4.77` with source `ens-gateway`
 - Demo iNFT tokenId: `1`
-- Mint tx: `0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f` at block `31130502`
-- Transfer tx: `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79` at block `31130543`
+- Mint tx: `0x26b7de55c33f7f82730ea333b509706c1092797c65c5360d1ad5ae0027c17c96` at block `31312412`
+- Transfer tx: `0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd` at block `31312433`
 - Initial owner: `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00`
 - Post-transfer owner: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 - Memory CID: `0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
@@ -404,9 +430,9 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 - Attestation digest: `0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950`
 - Compute ledger creation tx: `0xc27d4f36505320f24f60d6ab6cc0e0cf7899b374def9ee953527c2d0aac78ff2`
 - Escrow lifecycle:
-  - `postTask`: `0x01111fa6852b084f96e514475ee99950be7f909e58174308e3c366229dc49cfe`
-  - `acceptTokenBid`: `0x327e0bffc45ee801a6676b69e85e5fd1cf83e9cc9e2ec9fc75e3d35f15f570cb`
-  - `releasePayment`: `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d`
+  - `postTask`: `0x4b36766cd44b05bbc95ebfaf188ec3cac57a8d81b3246f51526f487eb9d4007c`
+  - `acceptTokenBid`: `0x57f35f717ff8e73e2e309f9e9131f68399bad823cc773bf7e123cde8b0335c02`
+  - `releasePayment`: `0x7f7ff8061ba4a68b6963d27abefa601fbde8d9474e8dadd8207d138fc6e1a3e2`
   - `taskWorkerTokenIds(taskId)`: `1`
   - `payoutRecipient(taskId)`: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 
@@ -436,16 +462,24 @@ Rationale: ENS makes the idea possible, but the creative path depends on reliabl
 - Resolver source: `resolver/`
 - Parent ENS name: `ledger.eth` on Sepolia
 - Resolver contract: `0xd94cC429058E5495a57953c7896661542648E1B3`
+- Resolver verification: Sourcify verified on Ethereum Sepolia, chainId `11155111`
 - Gateway mode: durable Cloudflare named tunnel at `https://resolver.fierypools.fun/{sender}/{data}`
 - Capability namespaces implemented: `who`, `pay`, `tx`, `rep`, `mem`
 - Live smoke artifacts: `proofs/data/ens-live-smoke.json`, `proofs/data/ens-sepolia-resolve.json`, `status.pass=true`
 - Cross-chain owner resolution: `who.worker-001.ledger.eth` resolves live `ownerOf(1)` from 0G Galileo
 - ERC-8004 ReputationRegistry: `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia
 
+### External Reference Contracts
+
+These are used by Ledger but are not claimed as Ledger deployments.
+
+- ERC-8004 IdentityRegistry: `0x8004A818BFB912233c491871b3d84c89A494BD9e` on Base Sepolia, chainId `84532`; Basescan verified/similar match, Sourcify partial match.
+- ERC-8004 ReputationRegistry: `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia, chainId `84532`; Basescan verified/similar match, Sourcify partial match.
+
 ## Lead Inputs Still Required
 
-- Final GitHub branch/commit confirmation for `https://github.com/DarthStormerXII/ledger-v1` before pasting file-line anchors.
 - Actual ETHGlobal category and tech-stack dropdown shapes from the authenticated Hacker Dashboard.
+- Final click on the ETHGlobal submit button. Draft field updates are allowed, but do not final-submit without Gabriel confirming the final video, repository, and partner prize text.
 
 Provided lead contact for sponsor fields: Telegram `@gabrielaxyy`, X `@gabrielaxyeth`.
 

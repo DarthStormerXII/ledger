@@ -1,6 +1,6 @@
 # 0G Proof
 
-*Status: live Galileo proof complete as of May 3, 2026. Source verification on the Galileo explorer is still pending a real explorer API key.*
+*Status: live Galileo proof complete as of May 3, 2026. All Ledger-deployed 0G contracts below are exact-match source verified on the Galileo ChainScan explorer.*
 
 ## What We Used
 
@@ -33,12 +33,14 @@ The example generated a valid Ledger AXL `BID` payload for `who.worker-001.ledge
 
 | Contract | Address | Deploy tx |
 | --- | --- | --- |
-| `MockTEEOracle` | `0x229869949693f1467b8b43d2907bDAE3C58E3047` | `0x3ad5dce58ee111a54768ef2e35fe9576c6bad578080719e70a080a198634bcde` |
-| `WorkerINFT` | `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62` | `0x753fe54efcbbaea020ca5e8dd101cb849a636d5f837f9d2004d6441b4680427a` |
-| `LedgerEscrow` | `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB` | `0x8189e5a075ce73092abc1c654f95572d39928ea8c358f8a1ce983b39f597fb99` |
-| `LedgerIdentityRegistry` | `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb` | `0x7384dc15a1dd17b52e92f8d8df71222d149c3b35579169a6f05282f217d77f2f` |
+| `MockTEEOracle` | `0x306919805Eed1aD4772d92e18d00A1c132b07C19` | `0x91dd61a35f5fa11345948f52f9f5e78bad247713d3eccdd1530e552f1169af03` |
+| `WorkerINFT` | `0xd4d74E089DD9A09FF768be95d732081bd542E498` | `0xf9178d95e15e9fd5a8e1f1810a7239436ad0b7e40c4bd3bdeaba48d93b181ee3` |
+| `LedgerEscrow` | `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489` | `0x85140cba84b7c5bc152ded0ab046f805a82d1ffcd9b2fd2c7cbaa2ecc54db21` |
+| `LedgerIdentityRegistry` | `0x9581490E530Da772Af332EBCe3f35D27d5e8377F` | `0x8fce0f8b0082aa107b9f493de01e4492e4eecf0bad2c7da947e1c46b587ec285` |
 
 Code-size readback after deploy confirmed non-empty bytecode for all deployed contracts.
+
+Source verification readback from `https://chainscan-galileo.0g.ai/v1/contract/<address>?fields=verify,transactionHash` returned `exactMatch=true` for all four contracts with Solidity `v0.8.24+commit.e11b9ed9`, EVM `cancun`, optimizer disabled, and MIT license.
 
 ## Live Storage Proof
 
@@ -53,12 +55,12 @@ Note: the installed 0G Storage SDK exposes `upload` / `download` on `Indexer`; L
 
 ## Live iNFT Proof
 
-- Mint tx: `0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f`
-- Mint block: `31130502`
+- Mint tx: `0x26b7de55c33f7f82730ea333b509706c1092797c65c5360d1ad5ae0027c17c96`
+- Mint block: `31312412`
 - Token ID: `1`
 - Initial owner: `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00`
-- Transfer tx: `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79`
-- Transfer block: `31130543`
+- Transfer tx: `0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd`
+- Transfer block: `31312433`
 - New owner read from `ownerOf(1)`: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 - Sealed key after transfer: `0x7365616c65642d666f722d726573657276652d6f776e6572`
 - Reputation ref: `erc8004:0x8004B663056A597Dffe9eCcC1965A193B7388713`
@@ -81,17 +83,17 @@ The installed live network listed two services at test time: one chatbot and one
 
 ## Live Identity And Escrow Proof
 
-- Identity registration tx: `0x7ce676a250246781d6f3095963cde1331dee0ac4c33fbba2201ed602724f28ed`
+- Identity registration tx: `0x9530028297c6656657be2f77ab0e68841839b6db2594ffe97e5003b841d9e9e0`
 - Registered ENS-style name: `worker-001.ledger.eth`
 - Registered capabilities: `who,pay,tx,rep,mem`
-- Upgraded `LedgerEscrow`: `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
-- Escrow deploy tx: `0x8189e5a075ce73092abc1c654f95572d39928ea8c358f8a1ce983b39f597fb99`
-- Escrow task ID: `0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae`
-- `postTask` tx: `0x01111fa6852b084f96e514475ee99950be7f909e58174308e3c366229dc49cfe`
-- `acceptTokenBid` tx: `0x327e0bffc45ee801a6676b69e85e5fd1cf83e9cc9e2ec9fc75e3d35f15f570cb`
+- Upgraded `LedgerEscrow`: `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489`
+- Escrow deploy tx: `0x85140cba84b7c5bc152ded0ab046f805a82d1ffcd9b2fd2c7cbaa2ecc54db21`
+- Escrow task ID: `0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604`
+- `postTask` tx: `0x4b36766cd44b05bbc95ebfaf188ec3cac57a8d81b3246f51526f487eb9d4007c`
+- `acceptTokenBid` tx: `0x57f35f717ff8e73e2e309f9e9131f68399bad823cc773bf7e123cde8b0335c02`
 - `taskWorkerTokenIds(taskId)` readback: `1`
 - `payoutRecipient(taskId)` readback before release: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
-- `releasePayment` tx: `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d`
+- `releasePayment` tx: `0x7f7ff8061ba4a68b6963d27abefa601fbde8d9474e8dadd8207d138fc6e1a3e2`
 - `PaymentReleased` worker topic: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 - Result hash: `0xf8d3ef6a9f1c1d8242101d18b891675e37eef6670eda143971bf69b4d4ce9fb4`
 - Final task status readback: `3` (`Released`)
@@ -133,8 +135,8 @@ Per Gabriel's instruction, `7.0` OG was moved to a reserve wallet and was not sp
 
 - Reserve wallet: `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 - Reserve transfer tx: `0xa3fecd88a663cf8bb5e6dc0515e87c7ebe6e6b9c441ea93dd524824c5695237b`
-- Reserve/current owner balance after the token-owned settlement proof: `4.000103251998955691` OG
-- Deployer wallet balance after the token-owned settlement proof: `0.076645849226710328` OG
+- Reserve/current owner balance after the token-owned settlement proof: `4.000007167998031495` OG
+- Deployer wallet balance after the token-owned settlement proof: `0.052124845682478845` OG
 - Compute ledger/provider allocation used from the testing budget: ledger created with `3.0` OG; `3.0` OG transferred to the live compute provider sub-account by the SDK across two live compute smokes.
 
 Do not spend this current-owner wallet further unless Gabriel explicitly authorizes it.
@@ -158,26 +160,26 @@ npm run typecheck
 npm test
 LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun npm run example:research
 
-cast call 0x48B051F3e565E394ED8522ac453d87b3Fa40ad62 \
+cast call 0xd4d74E089DD9A09FF768be95d732081bd542E498 \
   "ownerOf(uint256)(address)" 1 \
   --rpc-url https://evmrpc-testnet.0g.ai
 
-cast call 0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB \
+cast call 0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489 \
   "tasks(bytes32)(address,address,uint256,uint256,uint256,uint256,uint256,bytes32,uint8)" \
-  0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae \
+  0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604 \
   --rpc-url https://evmrpc-testnet.0g.ai
 
-cast call 0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB \
+cast call 0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489 \
   "taskWorkerTokenIds(bytes32)(uint256)" \
-  0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae \
+  0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604 \
   --rpc-url https://evmrpc-testnet.0g.ai
 
-cast call 0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB \
+cast call 0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489 \
   "payoutRecipient(bytes32)(address)" \
-  0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae \
+  0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604 \
   --rpc-url https://evmrpc-testnet.0g.ai
 ```
 
-## Known Limitation
+## Source Verification
 
-Source verification on `https://chainscan-galileo.0g.ai` is not completed because this environment does not have a real `GALILEO_EXPLORER_API_KEY`. Deployment and runtime behavior are proven by transaction receipts and direct RPC readbacks.
+The judge-facing 0G contracts are deployed from single-file sources in `contracts/verified/` because the Galileo ChainScan verifier currently accepts single-file Solidity input. ChainScan verification is complete for `MockTEEOracle`, `WorkerINFT`, `LedgerIdentityRegistry`, and `LedgerEscrow`; each explorer API response returned `exactMatch=true`.

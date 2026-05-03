@@ -15,15 +15,15 @@
     "chainId": 16602,
     "rpcEnv": "GALILEO_RPC",
     "defaultRpc": "https://evmrpc-testnet.0g.ai",
-    "workerInftAddress": "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
-    "identityRegistryAddress": "0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb"
+    "workerInftAddress": "0xd4d74E089DD9A09FF768be95d732081bd542E498",
+    "identityRegistryAddress": "0x9581490E530Da772Af332EBCe3f35D27d5e8377F"
   },
   "baseSepolia": {
     "rpcEnv": "BASE_SEPOLIA_RPC",
     "defaultRpc": "https://sepolia.base.org",
     "erc8004ReputationRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
     "erc8004IdentityRegistry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
-    "escrowAddress": "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB",
+    "escrowAddress": "0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489",
     "demoAgentId": "5444",
     "demoFeedbackCount": 47,
     "demoAverageScore": 4.77
@@ -74,8 +74,8 @@
   "demo": {
     "tokenId": "1",
     "workerLabel": "worker-001",
-    "historicalOwnerBlock": 31130502,
-    "postTransferOwnerBlock": 31130543,
+    "historicalOwnerBlock": 31312412,
+    "postTransferOwnerBlock": 31312433,
     "oldOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
     "newOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
     "memoryCid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",

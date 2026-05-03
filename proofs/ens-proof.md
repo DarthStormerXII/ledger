@@ -1,6 +1,6 @@
 # ENS Proof
 
-_Status: Sepolia ENS CCIP-Read integration live-smoked on May 3, 2026. `ledger.eth` now points to the new immutable-URL resolver served via the durable `resolver.fierypools.fun` Cloudflare named tunnel; `who`, `pay`, `tx`, `rep`, and `mem` namespace handlers exist; Sepolia ENS resolution smoke passed._
+_Status: Sepolia ENS CCIP-Read integration live-smoked on May 3, 2026. `ledger.eth` points to the durable-URL resolver served via `resolver.fierypools.fun`; the resolver contract is source verified on Sourcify for Sepolia; `who`, `pay`, `tx`, `rep`, and `mem` namespace handlers exist; Sepolia ENS resolution smoke passed._
 
 ## What we used
 
@@ -11,6 +11,7 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
 - **Parent ENS name:** `ledger.eth` on Sepolia
 - **Parent owner:** `0x32FE11d9900D63350016374BE98ff37c3Af75847`
 - **Sepolia CCIP resolver contract (current):** `0xd94cC429058E5495a57953c7896661542648E1B3`
+- **Resolver source verification:** Sourcify full-match verified on Sepolia chainId `11155111`
 - **Set resolver tx (current pointer):** `0xc49a3288274156d826bec3898bf31c15121a90d3bf885f39a8cb74ba67d89caf`
 - **CCIP gateway URL (durable):** `https://resolver.fierypools.fun/{sender}/{data}` (Cloudflare named tunnel `kosyn-cre`)
 - **Resolver signer:** `0x32FE11d9900D63350016374BE98ff37c3Af75847`
@@ -22,9 +23,9 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
 ## Contracts
 
 - **0G Galileo chain:** `16602`; live RPC returned `eth_chainId = 0x40da`
-- **WorkerINFT:** `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`
-- **LedgerEscrow:** `0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB`
-- **LedgerIdentityRegistry:** `0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb`
+- **WorkerINFT:** `0xd4d74E089DD9A09FF768be95d732081bd542E498`
+- **LedgerEscrow:** `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489`
+- **LedgerIdentityRegistry:** `0x9581490E530Da772Af332EBCe3f35D27d5e8377F`
 - **ERC-8004 ReputationRegistry:** `0x8004B663056A597Dffe9eCcC1965A193B7388713` on Base Sepolia
 
 ## Namespace Smoke
@@ -46,7 +47,7 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
   - `ai.tx.chain = 0g-galileo:16602`
   - `ai.tx.amount = 0.1`
   - `ai.tx.cid = 0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
-  - `ai.tx.receipt` includes the on-chain `releasePayment` tx hash `0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d` and the escrow taskId `0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae`
+  - `ai.tx.receipt` includes the on-chain `releasePayment` tx hash `0x7f7ff8061ba4a68b6963d27abefa601fbde8d9474e8dadd8207d138fc6e1a3e2` and the escrow taskId `0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604`
 - `ledger.eth` parent text smoke:
   - `agent-registration = {"standard":"ENSIP-25","registry":"0x8004B663056A597Dffe9eCcC1965A193B7388713","chain":"base-sepolia","chainId":84532,"agentId":"5444","identityRegistry":"0x8004A818BFB912233c491871b3d84c89A494BD9e"}`
 
@@ -64,10 +65,10 @@ The fastest way to evaluate the ENS integration is:
 
 Historical on-chain proof from the already-completed transfer:
 
-- Block `31130502`: `ownerOf(1)` returned `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00`
-- Mint tx at block `31130502`: `0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f`
-- Block `31130543`: `ownerOf(1)` returned `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
-- Transfer tx at block `31130543`: `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79`
+- Block `31312412`: `ownerOf(1)` returned `0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00`
+- Mint tx at block `31312412`: `0x26b7de55c33f7f82730ea333b509706c1092797c65c5360d1ad5ae0027c17c96`
+- Block `31312433`: `ownerOf(1)` returned `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
+- Transfer tx at block `31312433`: `0xe4d697d7b8dd7c3cb01fa28544a03aecd4cd6f2f1c019c26d2219c828398e9fd`
 - Latest Sepolia ENS smoke through `who.worker-001.ledger.eth` returned `0x6641221B1cb66Dc9f890350058A7341eF0eD600b`
 
 ## Known Limitations

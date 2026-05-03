@@ -150,6 +150,12 @@ const sections: Section[] = [
           "Honest disclosure — this is a shim. The ERC-7857 spec is followed mechanically (sealed-key bytes change on transfer, proof verified) but a real TEE enclave is not running.",
       },
       {
+        label: "Source verification",
+        value: "ChainScan exactMatch=true",
+        caption:
+          "MockTEEOracle, WorkerINFT, LedgerEscrow, and LedgerIdentityRegistry are exact-match source verified on the Galileo explorer.",
+      },
+      {
         label: "Mint tx (token #1)",
         value: DEMO_MINT_TX,
         href: galileoTx(DEMO_MINT_TX),
@@ -402,6 +408,7 @@ const sections: Section[] = [
         value: LEDGER_ENS_RESOLVER_CONTRACT,
         href: sepoliaAddr(LEDGER_ENS_RESOLVER_CONTRACT),
         mono: true,
+        caption: "Source verified on Sourcify for Sepolia chainId 11155111.",
       },
       {
         label: "Set-resolver tx",
@@ -485,6 +492,12 @@ const sections: Section[] = [
         value: ERC8004_REPUTATION_REGISTRY,
         href: baseAddr(ERC8004_REPUTATION_REGISTRY),
         mono: true,
+      },
+      {
+        label: "Source verification",
+        value: "Basescan verified + Sourcify partial match",
+        caption:
+          "The ERC-8004 reference contracts are external audited deployments; Ledger uses them and does not redeploy them.",
       },
       {
         label: "Demo agentId",

@@ -49,10 +49,10 @@ const BASE_SEPOLIA = {
 };
 
 const ADDRESSES = {
-  workerINFT: "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62" as const,
-  ledgerEscrow: "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB" as const,
-  identityRegistry: "0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb" as const,
-  mockTEEOracle: "0x229869949693f1467b8b43d2907bDAE3C58E3047" as const,
+  workerINFT: "0xd4d74E089DD9A09FF768be95d732081bd542E498" as const,
+  ledgerEscrow: "0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489" as const,
+  identityRegistry: "0x9581490E530Da772Af332EBCe3f35D27d5e8377F" as const,
+  mockTEEOracle: "0x306919805Eed1aD4772d92e18d00A1c132b07C19" as const,
   erc8004IdentityRegistry:
     "0x8004A818BFB912233c491871b3d84c89A494BD9e" as const,
   erc8004ReputationRegistry:

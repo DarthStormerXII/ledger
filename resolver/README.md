@@ -62,7 +62,7 @@ const client = new LedgerCapabilityClient({
   parentName: "ledger-demo.eth",
   gatewayUrl: "https://<resolver-host>",
   resolverAddress: "0x<sepolia-resolver-contract>",
-  workerInftAddress: "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62"
+  workerInftAddress: "0xd4d74E089DD9A09FF768be95d732081bd542E498"
 });
 
 const snapshot = await client.snapshot("worker-001", 1n, "task-001");
@@ -76,7 +76,7 @@ Before wiring the frontend, run:
 
 ```bash
 RESOLVER_PRIVATE_KEY=0x... \
-WORKER_INFT_ADDRESS=0x48B051F3e565E394ED8522ac453d87b3Fa40ad62 \
+WORKER_INFT_ADDRESS=0xd4d74E089DD9A09FF768be95d732081bd542E498 \
 GALILEO_RPC=https://evmrpc-testnet.0g.ai \
 GALILEO_CHAIN_ID=16602 \
 MEMORY_POINTERS_JSON='{"worker-001":"0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4"}' \
