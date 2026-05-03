@@ -1,0 +1,19 @@
+{
+  "name": "@ledger/tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone scripts and CLIs for Ledger (registration, smokes, etc.)",
+  "scripts": {
+    "register": "tsx register.ts",
+    "register:help": "tsx register.ts help"
+  },
+  "dependencies": {
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
