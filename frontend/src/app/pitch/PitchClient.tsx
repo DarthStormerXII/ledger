@@ -3,6 +3,7 @@
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
+import { galileoTx } from "@/lib/contracts";
 
 // Real on-chain artefacts from proofs/0g-proof.md (live testnet)
 const PROOFS = {
@@ -29,7 +30,7 @@ const PROOFS = {
   reputationRegistry: "0x8004B663056A597Dffe9eCcC1965A193B7388713",
 };
 
-const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
+// galileoTx imported from @/lib/contracts (isExplorerSafe-guarded).
 
 export function PitchClient() {
   return (

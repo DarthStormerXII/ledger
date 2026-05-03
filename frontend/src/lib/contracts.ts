@@ -15,6 +15,19 @@ export const LEDGER_IDENTITY_REGISTRY_ADDRESS: Address =
     | Address
     | undefined) ?? "0x9581490E530Da772Af332EBCe3f35D27d5e8377F";
 
+// LedgerMarketplace — non-custodial iNFT marketplace on Galileo
+// Deployed 2026-05-04 in tx 0x8b69c94e5bafd60fa26cb23d87f2ef2f730af38653b4b7cc3cecb97226e947ab
+export const LEDGER_MARKETPLACE_ADDRESS: Address =
+  (process.env.NEXT_PUBLIC_LEDGER_MARKETPLACE_ADDRESS as Address | undefined) ??
+  "0xa96aAaED5e545C5412545208Fc3c1a278b63fF87";
+
+// The TEE proof string the MockTEEOracle accepts. Frontend uses it when
+// constructing `list()` calls so the marketplace can call WorkerINFT.transfer
+// at buy time. Real production swaps this for a real attestation signature.
+export const DEMO_TEE_SEALED_KEY =
+  "0x7365616c65642d666f722d726573657276652d6f776e6572"; // "sealed-for-reserve-owner"
+export const DEMO_TEE_PROOF = "0x6c65646765722d76616c69642d7465652d70726f6f66"; // "ledger-valid-tee-proof"
+
 export const MOCK_TEE_ORACLE_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_MOCK_TEE_ORACLE_ADDRESS as Address | undefined) ??
   "0x306919805Eed1aD4772d92e18d00A1c132b07C19";
@@ -249,25 +262,259 @@ export const LEDGER_ESCROW_ABI = [
   },
 ] as const;
 
+export const LEDGER_MARKETPLACE_ABI = [
+  {
+    inputs: [
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+      { internalType: "uint256", name: "askPrice", type: "uint256" },
+      { internalType: "bytes", name: "sealedKey", type: "bytes" },
+      { internalType: "bytes", name: "transferProof", type: "bytes" },
+    ],
+    name: "list",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+      { internalType: "uint256", name: "newAskPrice", type: "uint256" },
+    ],
+    name: "updatePrice",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "cancel",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "buy",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "isListed",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "getListing",
+    outputs: [
+      { internalType: "address", name: "seller", type: "address" },
+      { internalType: "uint256", name: "askPrice", type: "uint256" },
+      { internalType: "uint256", name: "listedAt", type: "uint256" },
+      { internalType: "bool", name: "active", type: "bool" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "seller",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "askPrice",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "listedAt",
+        type: "uint256",
+      },
+    ],
+    name: "ListingCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "seller",
+        type: "address",
+      },
+    ],
+    name: "ListingCancelled",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "seller",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "buyer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "price",
+        type: "uint256",
+      },
+    ],
+    name: "ListingSold",
+    type: "event",
+  },
+] as const;
+
+// Worker iNFT approval ABI — sellers must call approve(marketplace, tokenId)
+// before list() so the marketplace can transfer on buy.
+export const WORKER_INFT_APPROVE_ABI = [
+  {
+    inputs: [
+      { internalType: "address", name: "to", type: "address" },
+      { internalType: "uint256", name: "tokenId", type: "uint256" },
+    ],
+    name: "approve",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "getApproved",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+] as const;
+
 /* === Block explorers === */
 
+/**
+ * Defensive shape check for explorer-bound input. Returns true ONLY when the
+ * value looks like a real on-chain address (40 hex) or tx hash (64 hex). Any
+ * truncation marker (`…` U+2026, literal `...`, the URL-encoded form
+ * `%E2%80%A6`) is rejected; explicitly-empty input is also rejected. This
+ * stops a callsite that accidentally passes a display-shortened value (e.g.
+ * `0x6B9a…eC00`) from constructing an explorer URL that 404s.
+ *
+ * The pattern accepts both addresses and tx hashes — they only differ by
+ * length, and we can't reliably tell which is which at the helper layer
+ * (a callsite may legitimately pass either to galileoTx vs galileoAddr).
+ * A length sanity range catches obvious garbage.
+ */
+function isExplorerSafe(v: string | null | undefined): v is string {
+  if (typeof v !== "string" || v.length === 0) return false;
+  if (v.includes("…") || v.includes("...")) return false;
+  if (v.includes("%E2%80%A6")) return false;
+  // Accept anything starting with 0x followed by 40-64 hex chars, plus `0g://`
+  // CIDs (handled by ogStorageCid separately) and chain-native names.
+  return /^0x[a-fA-F0-9]{40,64}$/.test(v);
+}
+
+/**
+ * Sentinel hrefs returned when a caller hands us a truncated or otherwise
+ * malformed value. Anchor renders as a non-navigating `#` so clicks don't
+ * go to a broken explorer URL; the `data-broken-link` attribute makes it
+ * easy to find these in DOM snapshots if we ever regress.
+ */
+const SAFE_NOOP_HREF = "#";
+
+function safeBuild(
+  v: string | null | undefined,
+  builder: (s: string) => string,
+  label: string,
+): string {
+  if (!isExplorerSafe(v)) {
+    if (
+      typeof console !== "undefined" &&
+      process.env.NODE_ENV !== "production"
+    ) {
+      console.warn(
+        `[explorer-link] refusing to build ${label} URL for malformed input: ${JSON.stringify(v)}`,
+      );
+    }
+    return SAFE_NOOP_HREF;
+  }
+  return builder(v);
+}
+
 export function galileoTx(tx: string) {
-  return `https://chainscan-galileo.0g.ai/tx/${tx}`;
+  return safeBuild(
+    tx,
+    (h) => `https://chainscan-galileo.0g.ai/tx/${h}`,
+    "galileoTx",
+  );
 }
 export function galileoAddr(addr: string) {
-  return `https://chainscan-galileo.0g.ai/address/${addr}`;
+  return safeBuild(
+    addr,
+    (a) => `https://chainscan-galileo.0g.ai/address/${a}`,
+    "galileoAddr",
+  );
 }
 export function baseSepoliaTx(tx: string) {
-  return `https://sepolia.basescan.org/tx/${tx}`;
+  return safeBuild(
+    tx,
+    (h) => `https://sepolia.basescan.org/tx/${h}`,
+    "baseSepoliaTx",
+  );
 }
 export function baseSepoliaAddr(addr: string) {
-  return `https://sepolia.basescan.org/address/${addr}`;
+  return safeBuild(
+    addr,
+    (a) => `https://sepolia.basescan.org/address/${a}`,
+    "baseSepoliaAddr",
+  );
 }
 export function sepoliaTx(tx: string) {
-  return `https://sepolia.etherscan.io/tx/${tx}`;
+  return safeBuild(
+    tx,
+    (h) => `https://sepolia.etherscan.io/tx/${h}`,
+    "sepoliaTx",
+  );
 }
 export function sepoliaAddr(addr: string) {
-  return `https://sepolia.etherscan.io/address/${addr}`;
+  return safeBuild(
+    addr,
+    (a) => `https://sepolia.etherscan.io/address/${a}`,
+    "sepoliaAddr",
+  );
 }
 /**
  * Browseable explorer URL for an `0g://...` Memory CID.

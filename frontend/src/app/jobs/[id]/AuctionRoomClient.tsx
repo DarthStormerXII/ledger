@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { Job, Lot } from "@/lib/data";
 import { AxlTopology } from "@/components/AxlTopology";
 import { AXL_CAPTURED_PROOF } from "@/lib/axl-proof";
-import { LEDGER_ESCROW_ADDRESS } from "@/lib/contracts";
+import { LEDGER_ESCROW_ADDRESS, galileoTx, galileoAddr } from "@/lib/contracts";
 
 /**
  * AuctionRoomClient — live auction view for one task.
@@ -238,8 +238,14 @@ export function AuctionRoomClient({
 
   // Derive distinct bidders + best (lowest) bid per worker from real BID messages.
   const derivedBids = deriveBids(recvMessages);
-  // Topology peer count (live mesh size).
+  // Total mesh size = the bridge we're querying (us) + each peer it sees.
+  // Earlier rendering only showed `topology.peers.length` ("2 nodes") which
+  // undercounts by one — the bridge always counts itself as a node in the
+  // mesh. The /api/axl/topology response carries `our_public_key` confirming
+  // a third participant; size = peers + 1 when the bridge is up.
   const peerCount = topology?.peers?.length ?? 0;
+  const meshSize =
+    bridgeStatus === "live" && topology?.peers ? peerCount + 1 : 0;
 
   // ── Status-aware header copy ────────────────────────────────────────────
   // The top strip and the bidder panel both need to behave differently
@@ -492,7 +498,7 @@ export function AuctionRoomClient({
             <StatusInd
               label={
                 bridgeStatus === "live"
-                  ? `AXL · ${peerCount} ${peerCount === 1 ? "node" : "nodes"} connected`
+                  ? `AXL · ${meshSize} ${meshSize === 1 ? "node" : "nodes"} connected`
                   : "AXL bridge offline · captured proof shown"
               }
               ok={bridgeStatus === "live" && peerCount > 0}
@@ -717,29 +723,165 @@ function MeshLog({
     );
   }
   return (
-    <div className="mesh-log">
+    <div className="mesh-log mesh-log-rich">
       {messages.map((m, i) => {
-        const t = formatTime(m.receivedAt);
-        const p = m.payload as { type?: string } | string | undefined;
-        const type =
-          typeof p === "object" && p && "type" in p ? (p.type ?? "MSG") : "MSG";
-        const fromShort = m.fromPeerId ? short(m.fromPeerId) : "—";
+        const detail = describeMessage(m);
         return (
           <div
             key={`${m.receivedAt}-${i}`}
-            className="mono mesh-log-row"
-            style={{ opacity: Math.max(0.4, 1 - i * 0.05) }}
+            className="mesh-log-rich-row"
+            style={{ opacity: Math.max(0.55, 1 - i * 0.04) }}
           >
-            <span className="muted">{t}</span>{" "}
-            <span style={{ color: "var(--ledger-paper)" }}>{fromShort}</span> :{" "}
-            <span className="text-oxblood" style={{ fontWeight: 600 }}>
-              {type}
-            </span>
+            <div className="mesh-log-rich-head">
+              <span className="mono muted mesh-log-rich-time">
+                {formatTime(m.receivedAt)}
+              </span>
+              <span
+                className="mesh-log-rich-type caps-sm"
+                data-tone={detail.tone}
+              >
+                {detail.type}
+              </span>
+              <span className="mesh-log-rich-channel mono muted">
+                {detail.channel}
+              </span>
+            </div>
+            <div className="mesh-log-rich-line mono">
+              <span className="muted">peer</span>{" "}
+              <span style={{ color: "var(--ledger-paper)" }}>
+                {m.fromPeerId ? short(m.fromPeerId, 4, 4) : "—"}
+              </span>
+              {detail.summary ? (
+                <>
+                  {"  "}
+                  <span className="muted">·</span>{" "}
+                  <span style={{ color: "var(--ledger-paper)" }}>
+                    {detail.summary}
+                  </span>
+                </>
+              ) : null}
+            </div>
+            {detail.kvs.length > 0 ? (
+              <div className="mesh-log-rich-kvs">
+                {detail.kvs.map((kv, j) => (
+                  <span key={j} className="mesh-log-rich-kv mono">
+                    <span className="muted">{kv.label}</span>
+                    <span>{kv.value}</span>
+                  </span>
+                ))}
+              </div>
+            ) : null}
           </div>
         );
       })}
     </div>
   );
+}
+
+/**
+ * Decode a wire payload into a richer set of fields the mesh log can render
+ * — type pill (with color tone), channel hint, one-line summary, and a
+ * compact list of key/value pairs (taskId / worker / bid / etc.). We never
+ * fabricate data; every field below is pulled directly from the AXL payload.
+ */
+function describeMessage(m: AxlMessage): {
+  type: string;
+  tone: "post" | "bid" | "accept" | "result" | "close" | "info";
+  channel: string;
+  summary: string | null;
+  kvs: { label: string; value: string }[];
+} {
+  const p = m.payload as Record<string, unknown> | undefined;
+  if (!p || typeof p !== "object") {
+    return {
+      type: "MSG",
+      tone: "info",
+      channel: "direct",
+      summary: typeof m.payload === "string" ? m.payload.slice(0, 40) : null,
+      kvs: [],
+    };
+  }
+  const type = String(p.type ?? "MSG").toUpperCase();
+  const taskId = typeof p.taskId === "string" ? short(p.taskId, 6, 4) : null;
+  const kvs: { label: string; value: string }[] = [];
+  let summary: string | null = null;
+  let tone: "post" | "bid" | "accept" | "result" | "close" | "info" = "info";
+  let channel = "direct";
+
+  if (type === "TASK_POSTED") {
+    tone = "post";
+    channel = "#ledger-jobs";
+    summary = "buyer broadcast new task";
+    if (p.task && typeof p.task === "object") {
+      const t = p.task as { title?: string; deadlineSeconds?: number };
+      if (t.title) kvs.push({ label: "title", value: String(t.title) });
+      if (typeof t.deadlineSeconds === "number")
+        kvs.push({ label: "deadline", value: `${t.deadlineSeconds}s` });
+    }
+    if (p.payment && typeof p.payment === "object") {
+      const pay = p.payment as { amount?: string; token?: string };
+      if (pay.amount && pay.token)
+        kvs.push({ label: "payment", value: `${pay.amount} ${pay.token}` });
+    }
+    if (taskId) kvs.push({ label: "task", value: taskId });
+  } else if (type === "BID") {
+    tone = "bid";
+    channel = "direct";
+    const worker = typeof p.worker === "string" ? p.worker : null;
+    const bidAmount =
+      typeof p.bidAmount === "string" || typeof p.bidAmount === "number"
+        ? String(p.bidAmount)
+        : null;
+    summary = worker ? `bid from ${short(worker, 4, 4)}` : "bid received";
+    if (bidAmount) kvs.push({ label: "amount", value: bidAmount });
+    const rep = p.reputationProof as
+      | { jobCount?: number; avgRating?: number }
+      | undefined;
+    if (rep?.jobCount !== undefined)
+      kvs.push({
+        label: "rep",
+        value: `${rep.jobCount} jobs · ${rep.avgRating ?? "—"}★`,
+      });
+    if (taskId) kvs.push({ label: "task", value: taskId });
+  } else if (type === "BID_ACCEPTED") {
+    tone = "accept";
+    channel = "direct";
+    const w = typeof p.selectedWorker === "string" ? p.selectedWorker : null;
+    summary = w ? `winner = ${short(w, 4, 4)}` : "winner picked";
+    if (typeof p.acceptedBidAmount !== "undefined")
+      kvs.push({ label: "bid", value: String(p.acceptedBidAmount) });
+    if (typeof p.escrowTxHash === "string")
+      kvs.push({ label: "escrow", value: short(p.escrowTxHash, 6, 4) });
+    if (taskId) kvs.push({ label: "task", value: taskId });
+  } else if (type === "RESULT") {
+    tone = "result";
+    channel = "direct";
+    const w = typeof p.worker === "string" ? p.worker : null;
+    summary = w ? `result from ${short(w, 4, 4)}` : "result delivered";
+    if (typeof p.resultHash === "string")
+      kvs.push({ label: "hash", value: short(p.resultHash, 6, 4) });
+    if (typeof p.resultPointer === "string")
+      kvs.push({
+        label: "blob",
+        value: short(p.resultPointer, 8, 4),
+      });
+    if (taskId) kvs.push({ label: "task", value: taskId });
+  } else if (type === "AUCTION_CLOSED") {
+    tone = "close";
+    channel = "#ledger-auction-closed";
+    summary = "auction ended — losers free their bond";
+    if (typeof p.selectedWorker === "string")
+      kvs.push({
+        label: "winner",
+        value: short(p.selectedWorker as string, 4, 4),
+      });
+    if (taskId) kvs.push({ label: "task", value: taskId });
+  } else {
+    summary = type === "MSG" ? "untyped payload" : type.toLowerCase();
+    if (taskId) kvs.push({ label: "task", value: taskId });
+  }
+
+  return { type, tone, channel, summary, kvs };
 }
 
 function StatusInd({ label, ok }: { label: string; ok: boolean }) {
@@ -1288,9 +1430,8 @@ function JobBriefPanel({
 // every value end-to-end.
 // ────────────────────────────────────────────────────────────────────────────
 function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
-  const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
-  const galileoAddr = (a: string) =>
-    `https://chainscan-galileo.0g.ai/address/${a}`;
+  // Note: galileoTx / galileoAddr are imported from @/lib/contracts where
+  // they're guarded by isExplorerSafe() — never hand them a truncated value.
   const ensApp = (n: string) =>
     `https://sepolia.app.ens.domains/${encodeURIComponent(n)}`;
   const escrowAddr = LEDGER_ESCROW_ADDRESS;

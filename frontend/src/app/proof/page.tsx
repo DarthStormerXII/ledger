@@ -32,6 +32,11 @@ import {
   ERC7857_DRAFT,
   GALILEO_TESTNET_DOCS,
   ogStorageCid,
+  galileoTx,
+  galileoAddr,
+  baseSepoliaAddr,
+  sepoliaAddr,
+  sepoliaTx,
 } from "@/lib/contracts";
 
 export const metadata = {
@@ -40,15 +45,10 @@ export const metadata = {
     "Every live tx hash, contract address, attestation digest, storage CID, AXL peer ID, and ENS namespace, in one place. Click anything to verify on-chain.",
 };
 
-// ──────────────────────────────────────────────────────────────────────────
-// Explorer URL helpers
-// ──────────────────────────────────────────────────────────────────────────
-const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
-const galileoAddr = (a: string) =>
-  `https://chainscan-galileo.0g.ai/address/${a}`;
-const baseAddr = (a: string) => `https://sepolia.basescan.org/address/${a}`;
-const sepoliaAddr = (a: string) => `https://sepolia.etherscan.io/address/${a}`;
-const sepoliaTx = (h: string) => `https://sepolia.etherscan.io/tx/${h}`;
+// Note: galileoTx / galileoAddr / baseSepoliaAddr / sepoliaAddr / sepoliaTx
+// are imported from @/lib/contracts where they're guarded by isExplorerSafe()
+// — never hand them a truncated value. Local alias kept for legacy refs.
+const baseAddr = baseSepoliaAddr;
 
 const ERC8004_IDENTITY_ADDRESS = "0x8004A818BFB912233c491871b3d84c89A494BD9e";
 const ERC8004_AGENT_ID = 5444;

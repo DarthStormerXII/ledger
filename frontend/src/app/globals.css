@@ -3169,3 +3169,94 @@ body.surface-ink {
   color: var(--ledger-gold);
   border-color: var(--ledger-gold);
 }
+
+/* ===== Rich AXL mesh log (per-message detail rows) ===== */
+
+.mesh-log-rich {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.mesh-log-rich-row {
+  padding: 10px 12px;
+  border: 1px solid rgba(245, 241, 232, 0.08);
+  background: rgba(245, 241, 232, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: opacity 200ms ease-out;
+}
+.mesh-log-rich-row:first-child {
+  border-color: rgba(200, 168, 92, 0.32);
+}
+.mesh-log-rich-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 10px;
+}
+.mesh-log-rich-time {
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.mesh-log-rich-type {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  padding: 2px 8px;
+  border: 1px solid currentColor;
+  font-family: var(--ledger-font-mono);
+}
+.mesh-log-rich-type[data-tone="post"] {
+  color: var(--ledger-gold-leaf);
+}
+.mesh-log-rich-type[data-tone="bid"] {
+  color: var(--ledger-paper);
+}
+.mesh-log-rich-type[data-tone="accept"] {
+  color: var(--ledger-success);
+}
+.mesh-log-rich-type[data-tone="result"] {
+  color: var(--ledger-paper);
+  background: rgba(200, 168, 92, 0.08);
+}
+.mesh-log-rich-type[data-tone="close"] {
+  color: var(--ledger-oxblood);
+}
+.mesh-log-rich-type[data-tone="info"] {
+  color: var(--ledger-ink-muted);
+}
+.mesh-log-rich-channel {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  margin-left: auto;
+}
+.mesh-log-rich-line {
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--ledger-paper);
+  word-break: break-all;
+}
+.mesh-log-rich-kvs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  font-size: 10px;
+  padding-top: 4px;
+  border-top: 1px dashed rgba(245, 241, 232, 0.08);
+}
+.mesh-log-rich-kv {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.mesh-log-rich-kv > span:first-child {
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 9px;
+}
+.mesh-log-rich-kv > span:last-child {
+  color: var(--ledger-paper);
+  font-size: 11px;
+  word-break: break-all;
+}
