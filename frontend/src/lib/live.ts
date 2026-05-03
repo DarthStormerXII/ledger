@@ -13,7 +13,6 @@ import {
   type Address,
   type Hex,
   parseAbiItem,
-  decodeEventLog,
   formatEther,
   formatUnits,
 } from "viem";
@@ -161,23 +160,27 @@ export async function getRepHistory(
         toBlock: to,
       });
       for (const l of chunk) {
+        // Slice value + valueDecimals out of the raw data manually. The ABI
+        // layout for the non-indexed head is: uint64 feedbackIndex (slot 0),
+        // int128 value (slot 1), uint8 valueDecimals (slot 2), then string
+        // offsets / bytes32. We only need slots 1 and 2. This sidesteps
+        // viem's strict decoder which trips on whichever bytes32 is treated
+        // as indexed by the canonical ERC-8004 deployment.
         try {
-          const decoded = decodeEventLog({
-            abi: [ERC8004_NEW_FEEDBACK],
-            data: l.data,
-            topics: l.topics,
-          });
-          const args = decoded.args as unknown as {
-            value: bigint;
-            valueDecimals: number;
-          };
-          const rating = Number(args.value) / 10 ** Number(args.valueDecimals);
+          const hex = l.data.slice(2); // strip 0x
+          const valueHex = hex.slice(64, 128);
+          const decimalsHex = hex.slice(128, 192);
+          if (valueHex.length !== 64 || decimalsHex.length !== 64) continue;
+          const value = BigInt("0x" + valueHex);
+          const decimals = Number(BigInt("0x" + decimalsHex));
+          if (decimals < 0 || decimals > 36) continue;
+          const rating = Number(value) / 10 ** decimals;
           const block = l.blockNumber ?? 0n;
-          if (block > 0n && Number.isFinite(rating)) {
+          if (block > 0n && Number.isFinite(rating) && rating >= 0) {
             raw.push({ block, rating });
           }
         } catch {
-          // Skip undecodable log (signature mismatch, partial log, etc.)
+          // Skip undecodable log
         }
       }
     } catch {
