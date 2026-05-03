@@ -1,5 +1,15 @@
 # Ledger — Lite Submission Answers
 
+## Current Public Audit State
+
+Use this file for manual ETHGlobal entry. The public audit repository is:
+
+https://github.com/DarthStormerXII/ledger
+
+Use the latest pushed `main` branch as the source for code links and proof files. The mirror checked during sync is:
+
+https://github.com/DarthStormerXII/ledger-v1
+
 ## Project Details
 
 ### Project Name
