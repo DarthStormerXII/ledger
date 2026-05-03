@@ -9,10 +9,10 @@ export const NAME = "11_live_ens_resolution";
 const PARENT_NAME = process.env.PARENT_ENS_NAME ?? "ledger.eth";
 const GATEWAY_URL =
   process.env.LEDGER_RESOLVER_URL ??
-  "https://9e04-124-123-105-119.ngrok-free.app/{sender}/{data}";
+  "https://resolver.fierypools.fun/{sender}/{data}";
 const RESOLVER_ADDRESS =
   process.env.LEDGER_RESOLVER_ADDRESS ??
-  "0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531";
+  "0xd94cC429058E5495a57953c7896661542648E1B3";
 const WORKER_INFT_ADDRESS =
   process.env.WORKER_INFT_ADDR ?? "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62";
 const STRICT = process.env.LEDGER_LIVE_ENS === "1";

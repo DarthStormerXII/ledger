@@ -17,7 +17,7 @@ export type ZeroGIntegrationConfig = {
 
 export const DEFAULT_ZERO_G_ADDRESSES: ZeroGAddresses = {
   workerINFT: "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
-  ledgerEscrow: "0x12D2162F47AAAe1B0591e898648605daA186D644",
+  ledgerEscrow: "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB",
   identityRegistry: "0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb",
   erc8004Registry: "0x8004B663056A597Dffe9eCcC1965A193B7388713",
 };

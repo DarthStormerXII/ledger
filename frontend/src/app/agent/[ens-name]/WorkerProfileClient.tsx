@@ -2,11 +2,15 @@
 
 import { type ReactNode, useState } from "react";
 import type { Lot, RecentJob, ProvenanceEvent } from "@/lib/data";
-import { SettlementStrip, type SettlementProof } from "@/components/SettlementStrip";
+import {
+  SettlementStrip,
+  type SettlementProof,
+} from "@/components/SettlementStrip";
 import { CapabilityRow } from "@/components/CapabilityRow";
 import { ReputationChart } from "@/components/ReputationChart";
 import { InheritanceModal } from "@/components/InheritanceModal";
 import { useLiveOwner, shortAddr } from "@/components/useLiveOwner";
+import { DEMO_PAY_NONCE_0, DEMO_PAY_NONCE_1 } from "@/lib/contracts";
 
 export function WorkerProfileClient({
   lot,
@@ -29,42 +33,25 @@ export function WorkerProfileClient({
   const [open, setOpen] = useState(false);
 
   const { owner: liveOwner, live } = useLiveOwner(liveProof.tokenId, undefined);
-  const whoValue =
-    liveOwner
-      ? `${shortAddr(liveOwner)}${live ? "  · live" : ""}`
-      : shortAddr(liveProof.owner);
+  const whoValue = liveOwner
+    ? `${shortAddr(liveOwner)}${live ? "  · live" : ""}`
+    : shortAddr(liveProof.owner);
   const memoryValue = shortValue(liveProof.memoryCID);
+  const payValue =
+    liveProof.tokenId === 1
+      ? `${shortAddr(DEMO_PAY_NONCE_0)} → ${shortAddr(DEMO_PAY_NONCE_1)}`
+      : "not configured";
 
   return (
-    <div className="page" style={{ padding: 40 }}>
+    <div className="page worker-profile-page">
       <SettlementStrip proof={settlementProof} />
 
       {/* HEADER BAND */}
-      <div
-        style={{
-          minHeight: 360,
-          paddingBottom: 40,
-          borderBottom: "1px solid rgba(245,241,232,0.16)",
-        }}
-      >
+      <div className="worker-profile-hero">
         <div className="caps-md muted" style={{ marginBottom: 16 }}>
           LOT {lot.lot} — listed {lot.daysActive} days ago
         </div>
-        <h1
-          style={{
-            fontFamily: "var(--ledger-font-display)",
-            fontStyle: "italic",
-            fontWeight: 900,
-            fontSize: 96,
-            lineHeight: 0.95,
-            letterSpacing: "-0.03em",
-            margin: "0 0 18px",
-            color: "var(--ledger-paper)",
-            wordBreak: "break-word",
-          }}
-        >
-          {lot.ens}
-        </h1>
+        <h1 className="worker-profile-title">{lot.ens}</h1>
         <div
           className="caps-md"
           style={{
@@ -85,17 +72,9 @@ export function WorkerProfileClient({
       </div>
 
       {/* TWO-COL BODY */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "60% 40%",
-          gap: 24,
-          padding: "40px 0",
-          borderBottom: "1px solid rgba(245,241,232,0.16)",
-        }}
-      >
+      <div className="worker-profile-body">
         {/* LEFT */}
-        <div style={{ paddingRight: 24 }}>
+        <div className="worker-profile-media">
           <div
             style={{
               width: 240,
@@ -156,12 +135,7 @@ export function WorkerProfileClient({
         </div>
 
         {/* RIGHT — Capability Tree */}
-        <div
-          style={{
-            borderLeft: "1px solid rgba(245,241,232,0.16)",
-            paddingLeft: 24,
-          }}
-        >
+        <div className="worker-profile-capabilities">
           <div className="caps-md muted" style={{ marginBottom: 18 }}>
             CAPABILITY TREE
           </div>
@@ -171,20 +145,33 @@ export function WorkerProfileClient({
               ensName={lot.ens}
               label="WHO.*"
               value={whoValue}
+              sub="CCIP-Read resolves live ownerOf(tokenId)"
             />
             <CapabilityRow
               rowKey="pay"
               ensName={lot.ens}
               label="PAY.*"
-              value="not configured"
-              sub="no live pay resolver record"
+              value={payValue}
+              sub={
+                liveProof.tokenId === 1
+                  ? "HD-derived receive address rotates by nonce"
+                  : "no live pay resolver record"
+              }
             />
             <CapabilityRow
               rowKey="tx"
               ensName={lot.ens}
               label="TX.*"
-              value={recentJobs.length ? "escrow task history" : "no task receipt selected"}
-              sub={recentJobs.length ? "from live LedgerEscrow task reads" : undefined}
+              value={
+                recentJobs.length
+                  ? "escrow task history"
+                  : "no task receipt selected"
+              }
+              sub={
+                recentJobs.length
+                  ? "from live LedgerEscrow task reads"
+                  : undefined
+              }
             />
             <CapabilityRow
               rowKey="rep"
@@ -226,10 +213,7 @@ export function WorkerProfileClient({
               >
                 MockTEEOracle
               </span>
-              <span
-                className="caps-sm"
-                style={{ color: "var(--ledger-gold)" }}
-              >
+              <span className="caps-sm" style={{ color: "var(--ledger-gold)" }}>
                 DISCLOSED
               </span>
             </div>

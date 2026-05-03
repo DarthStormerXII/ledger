@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Job, Lot } from "@/lib/data";
 import { AxlTopology } from "@/components/AxlTopology";
+import { AXL_CAPTURED_PROOF } from "@/lib/axl-proof";
 
 /**
  * AuctionRoomClient — live auction view for one task.
@@ -11,7 +12,8 @@ import { AxlTopology } from "@/components/AxlTopology";
  *   ZERO mocking, ZERO simulation. No Math.random, no seeded logs.
  *   Every bid, mesh log entry, topology row comes from the real AXL bridge
  *   (proxied via /api/axl/*). When the bridge is unreachable, the UI shows
- *   an explicit blocked state — never fabricated activity.
+ *   an explicit blocked state plus timestamped captured proof from the real
+ *   three-node run — never fabricated activity.
  */
 
 type AxlMessage = {
@@ -192,7 +194,10 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
           </div>
 
           {bridgeStatus === "unavailable" ? (
-            <BridgeBlocked error={bridgeError} />
+            <>
+              <BridgeBlocked error={bridgeError} />
+              <CapturedAxlProof />
+            </>
           ) : derivedBids.length === 0 ? (
             <EmptyBids status={bridgeStatus} />
           ) : (
@@ -218,7 +223,7 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
               label={
                 bridgeStatus === "live"
                   ? `AXL · ${peerCount} ${peerCount === 1 ? "node" : "nodes"} connected`
-                  : "AXL bridge offline"
+                  : "AXL bridge offline · captured proof shown"
               }
               ok={bridgeStatus === "live" && peerCount > 0}
             />
@@ -233,6 +238,7 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
             AXL TOPOLOGY
           </div>
           <AxlTopology />
+          {bridgeStatus === "unavailable" ? <CapturedTopologyRows /> : null}
 
           <div style={{ marginTop: 32 }}>
             <div className="caps-md muted" style={{ marginBottom: 12 }}>
@@ -258,15 +264,66 @@ function BridgeBlocked({ error }: { error: string | null }) {
   return (
     <div className="auction-block">
       <div className="caps-md" style={{ color: "var(--ledger-warning)" }}>
-        NO LIVE BIDS TO SHOW
+        LIVE BRIDGE NOT ATTACHED TO THIS DEPLOY
       </div>
       <p className="auction-block-body">
-        The local AXL bridge at <code>127.0.0.1:9002</code> is not responding.
-        Start the daemon (see <code>proofs/axl-proof.md</code>) and refresh —
-        bid messages, peers, and mesh log will populate from the live network.
-        We do not fabricate activity here.
+        Vercel cannot reach the local AXL bridge at <code>127.0.0.1:9002</code>.
+        The live bridge view will populate when the AXL daemon is attached.
+        Until then, this page shows timestamped captured proof from the real
+        three-node run: two Fly.io nodes plus one residential NAT laptop. No
+        mock bid data is rendered.
       </p>
       {error ? <div className="auction-block-error">{error}</div> : null}
+    </div>
+  );
+}
+
+function CapturedAxlProof() {
+  return (
+    <div className="captured-proof-panel">
+      <div className="captured-proof-head">
+        <div>
+          <div className="caps-sm muted">CAPTURED LIVE AXL PROOF</div>
+          <div className="captured-proof-title">
+            TASK_POSTED → BID → BID_ACCEPTED → AUCTION_CLOSED → RESULT
+          </div>
+        </div>
+        <div className="mono captured-proof-time">
+          {AXL_CAPTURED_PROOF.capturedAt}
+        </div>
+      </div>
+      <div className="captured-proof-grid">
+        {AXL_CAPTURED_PROOF.nodes.map((node) => (
+          <div key={node.peerId} className="captured-node">
+            <div className="caps-sm text-oxblood">{node.role}</div>
+            <div className="captured-node-host">{node.host}</div>
+            <div className="mono captured-node-peer">
+              {short(node.peerId, 10, 8)}
+            </div>
+            <div className="mono captured-node-peer">{node.ipv6}</div>
+          </div>
+        ))}
+      </div>
+      <div className="captured-proof-foot">
+        <span>
+          Fanout: local {AXL_CAPTURED_PROOF.fanout.localLatencyMs}ms · worker{" "}
+          {AXL_CAPTURED_PROOF.fanout.workerLatencyMs}ms
+        </span>
+        <span>Topology: {AXL_CAPTURED_PROOF.topologyCapturedAt}</span>
+      </div>
+    </div>
+  );
+}
+
+function CapturedTopologyRows() {
+  return (
+    <div className="captured-topology-list">
+      {AXL_CAPTURED_PROOF.nodes.map((node) => (
+        <div key={node.peerId} className="captured-topology-row">
+          <span className="caps-sm">{node.role}</span>
+          <span className="mono">{short(node.peerId, 6, 4)}</span>
+        </div>
+      ))}
     </div>
   );
 }
@@ -366,8 +423,16 @@ function MeshLog({
 }) {
   if (status === "unavailable") {
     return (
-      <div className="mesh-log-blocked">
-        Bridge offline — no mesh log to display.
+      <div className="mesh-log captured-mesh-log">
+        {AXL_CAPTURED_PROOF.lifecycle.map((entry) => (
+          <div key={`${entry.at}-${entry.event}`} className="mono mesh-log-row">
+            <span className="muted">{entry.at}</span>{" "}
+            <span style={{ color: "var(--ledger-paper)" }}>{entry.node}</span> :{" "}
+            <span className="text-oxblood" style={{ fontWeight: 600 }}>
+              {entry.event}
+            </span>
+          </div>
+        ))}
         {error ? <div className="mesh-log-blocked-error">{error}</div> : null}
       </div>
     );

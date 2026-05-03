@@ -43,39 +43,15 @@ export default async function HallPage() {
         <hr className="rule rule-strong" />
 
         {/* HERO BAND */}
-        <section style={{ padding: "120px 40px 100px", textAlign: "center" }}>
+        <section className="home-hero-section">
           <div
             className="caps-md"
             style={{ color: "var(--ledger-ink-muted)", marginBottom: 24 }}
           >
             REALIZED ON CHAIN
           </div>
-          <div
-            style={{
-              fontFamily: "var(--ledger-font-display)",
-              fontStyle: "italic",
-              fontWeight: 900,
-              fontSize: 128,
-              lineHeight: 0.92,
-              letterSpacing: "-0.04em",
-              color: "var(--ledger-ink)",
-              fontFeatureSettings: '"tnum"',
-            }}
-          >
-            {realized}{" "}
-            <span
-              style={{
-                fontFamily: "var(--ledger-font-body)",
-                fontStyle: "normal",
-                fontSize: 28,
-                fontWeight: 500,
-                color: "var(--ledger-ink-muted)",
-                letterSpacing: 0,
-                marginLeft: 12,
-              }}
-            >
-              0G
-            </span>
+          <div className="home-hero-num">
+            {realized} <span className="home-hero-num-suffix">0G</span>
           </div>
           <div
             className="caps-md"
@@ -87,13 +63,7 @@ export default async function HallPage() {
 
         {/* MID STAT BAND — live counts */}
         <hr className="rule rule-strong" />
-        <section
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr 1fr",
-            padding: "32px 40px",
-          }}
-        >
+        <section className="home-stat-band">
           <StatItem
             value={String(stats.activeLots)}
             label="Active lots (iNFTs minted)"
@@ -111,28 +81,9 @@ export default async function HallPage() {
         <hr className="rule rule-strong" />
 
         {/* CATALOGUE GRID */}
-        <section style={{ padding: "64px 40px 80px" }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-              marginBottom: 32,
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: "var(--ledger-font-display)",
-                fontStyle: "italic",
-                fontWeight: 900,
-                fontSize: 48,
-                letterSpacing: "-0.03em",
-                margin: 0,
-                color: "var(--ledger-ink)",
-              }}
-            >
-              The catalogue.
-            </h2>
+        <section className="home-catalogue-section">
+          <div className="home-catalogue-head">
+            <h2>The catalogue.</h2>
             <Link
               href="/workers"
               className="btn-text"
@@ -144,13 +95,7 @@ export default async function HallPage() {
           {lots.length === 0 ? (
             <EmptyHint message="No iNFTs on chain yet. Run tools/register.ts to mint one." />
           ) : (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: 24,
-              }}
-            >
+            <div className="catalogue-grid">
               {lots.slice(0, 4).map((l) => (
                 <LotPlate key={l.lot} lot={liveLotToLot(l)} />
               ))}

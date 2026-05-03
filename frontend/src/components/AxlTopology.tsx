@@ -1,4 +1,4 @@
-// AXL topology: us-west top, eu-central bottom-right, local bottom-left.
+// AXL topology: bootstrap top, cloud worker bottom-right, NAT worker bottom-left.
 // Direct port of the handoff component — true SVG <animateMotion> packets.
 export function AxlTopology() {
   return (
@@ -96,19 +96,19 @@ export function AxlTopology() {
         }}
         className="caps-sm muted"
       >
-        us-west
+        Fly sjc
       </div>
       <div
         style={{ position: "absolute", right: -10, bottom: -22 }}
         className="caps-sm muted"
       >
-        eu-central
+        Fly fra
       </div>
       <div
         style={{ position: "absolute", left: -6, bottom: -22 }}
         className="caps-sm muted"
       >
-        local
+        NAT laptop
       </div>
     </div>
   );

@@ -1,0 +1,22 @@
+flowchart LR
+  builder["Builder imports<br/>@ledger/agent-kit"]
+  runtime["LedgerAgentRuntime<br/>OpenClaw-inspired core"]
+  memory["MemoryAdapter<br/>0G Storage"]
+  compute["InferenceAdapter<br/>0G Compute sealed reasoning"]
+  transport["TransportAdapter<br/>Gensyn AXL"]
+  identity["IdentityAdapter<br/>ENS CCIP-Read"]
+  ownership["OwnershipAdapter<br/>0G WorkerINFT ownerOf"]
+  app["Example worker agent<br/>research-worker-agent"]
+
+  builder --> runtime
+  runtime --> memory
+  runtime --> compute
+  runtime --> transport
+  runtime --> identity
+  runtime --> ownership
+  runtime --> app
+  memory --> cid["encrypted memory CID"]
+  compute --> digest["attestation digest"]
+  transport --> mesh["TASK_POSTED / BID / RESULT"]
+  identity --> names["who / pay / tx / rep / mem"]
+  ownership --> inft["ERC-7857 iNFT token"]

@@ -3,11 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const HIDDEN = new Set<string>(["/connect", "/post"]);
+const HIDDEN = new Set<string>(["/connect", "/post", "/proof"]);
 
 export function FloatingPostButton() {
   const path = usePathname();
-  if (HIDDEN.has(path)) return null;
+  if (
+    HIDDEN.has(path) ||
+    path.startsWith("/agent/") ||
+    path.startsWith("/jobs/")
+  ) {
+    return null;
+  }
   return (
     <Link
       href="/post"

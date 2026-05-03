@@ -45,6 +45,21 @@ const FEEDBACK_CLIENTS: Address[] = (
   (seedManifest as { feedbackClients?: Address[] }).feedbackClients ?? []
 ).map((a) => a as Address);
 
+const AVATAR_BY_TOKEN_ID: Record<string, string> = {
+  "1": "/assets/avatars/ledger_lot_047.png",
+  "2": "/assets/avatars/ledger_lot_048.png",
+  "3": "/assets/avatars/ledger_lot_049.png",
+  "4": "/assets/avatars/ledger_lot_050.png",
+  "5": "/assets/avatars/ledger_lot_050.png",
+};
+
+function avatarForTokenId(tokenId: bigint): string {
+  return (
+    AVATAR_BY_TOKEN_ID[tokenId.toString()] ??
+    "/assets/empty-states/ledger_empty_state_paper.png"
+  );
+}
+
 export const WORKERS: WorkerRecord[] = (
   (seedManifest as { workers?: Array<Record<string, unknown>> }).workers ?? []
 ).map((w) => ({
@@ -341,7 +356,7 @@ export async function getAllLots(): Promise<LiveLot[]> {
         agentId,
         earnedNum,
         earned: earnedNum.toFixed(4),
-        avatar: `/assets/avatars/ledger_lot_${String(Number(tokenId)).padStart(3, "0")}.png`,
+        avatar: avatarForTokenId(tokenId),
       });
     } catch {
       // skip token if any read fails

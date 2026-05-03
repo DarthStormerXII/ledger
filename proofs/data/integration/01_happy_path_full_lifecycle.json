@@ -2,18 +2,18 @@
   "scenario": "01_happy_path_full_lifecycle",
   "pass": true,
   "reasons": [],
-  "durationMs": 54,
+  "durationMs": 52,
   "artifacts": {
-    "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
-    "postTx": "0x34f8bfea4960124c711850dc574453b3ec58442862993549fc03209eb12d747c",
+    "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
+    "postTx": "0x46ac5509ccf6bd89a09b5573d85761769980760b4606b9860078b5dc88403e29",
     "bids": [
-      {
-        "worker": "0x2222222222222222222222222222222222222222",
-        "bid": "900000"
-      },
       {
         "worker": "0x1111111111111111111111111111111111111111",
         "bid": "950000"
+      },
+      {
+        "worker": "0x2222222222222222222222222222222222222222",
+        "bid": "900000"
       }
     ],
     "winner": {
@@ -21,8 +21,8 @@
       "bid": "900000"
     },
     "settlement": {
-      "release": "0x2c0c35b46ec76ce6471e3bda1d185be31da384a18cafde3292acb63de20fac6d",
-      "feedback": "0x5e81200e23cf66edc3662af8f58a77633df072a50a32d0fd174ddb4a37e9a41a",
+      "release": "0xbb92b6998918ae68820a76ec53a3af78a987616f92fcdd2d8648cd731b3616fd",
+      "feedback": "0x02158c6b26b2fdde6bcf7e3dc9033b40999565decf5e0db472159b5d7c0ece52",
       "payment": "1000000",
       "bidAmount": "900000",
       "bondAmount": "100000"
@@ -44,24 +44,7 @@
     {
       "type": "BidReceived",
       "bid": {
-        "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
-        "worker": "0x2222222222222222222222222222222222222222",
-        "workerINFTId": "2",
-        "workerPeerId": "wp-2",
-        "bidAmount": "900000",
-        "estimatedCompletionSeconds": 30,
-        "reputation": {
-          "jobCount": 30,
-          "avgRating": 4.599999999999997
-        },
-        "bidExpiresAt": 1777742293
-      },
-      "receivedAt": 1777742233
-    },
-    {
-      "type": "BidReceived",
-      "bid": {
-        "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+        "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
         "worker": "0x1111111111111111111111111111111111111111",
         "workerINFTId": "1",
         "workerPeerId": "wp-1",
@@ -71,14 +54,31 @@
           "jobCount": 47,
           "avgRating": 4.800000000000004
         },
-        "bidExpiresAt": 1777742293
+        "bidExpiresAt": 1777816704
       },
-      "receivedAt": 1777742233
+      "receivedAt": 1777816644
+    },
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
+        "worker": "0x2222222222222222222222222222222222222222",
+        "workerINFTId": "2",
+        "workerPeerId": "wp-2",
+        "bidAmount": "900000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 30,
+          "avgRating": 4.599999999999997
+        },
+        "bidExpiresAt": 1777816704
+      },
+      "receivedAt": 1777816644
     },
     {
       "type": "TaskPosted",
       "task": {
-        "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+        "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
         "title": "Summarize the latest 0G changelog",
         "description": "Return a 200-word executive summary suitable for an AI buyer.",
         "outputSchema": "{ summary: string }",
@@ -87,59 +87,59 @@
         "deadlineSeconds": 300,
         "minReputation": 4
       },
-      "postedAt": 1777742233,
+      "postedAt": 1777816644,
       "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb"
     },
     {
       "type": "BidAccepted",
-      "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+      "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
       "worker": "0x2222222222222222222222222222222222222222",
       "bidAmount": "900000",
-      "acceptedAt": 1777742233
+      "acceptedAt": 1777816644
     },
     {
       "type": "BidAccepted",
-      "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+      "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
       "worker": "0x2222222222222222222222222222222222222222",
       "bidAmount": "900000",
-      "acceptedAt": 1777742233
+      "acceptedAt": 1777816644
     },
     {
       "type": "ResultSubmitted",
       "result": {
-        "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+        "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
         "worker": "0x2222222222222222222222222222222222222222",
         "resultHash": "0x36034195f161e014bb5d20a5dbf65668063f888422be6a32bfb023a1c84308e5",
         "resultPointer": "0g://d83ba874fe8ea39a3b95ef1c316ea3907c937e18599eb0e499ff24fa0ea1cef7",
         "attestationDigest": "0x2f1b30d86add15f31335b14b8d429dc40a7c544465618a7e826e4ab963febfc9"
       },
-      "submittedAt": 1777742233
+      "submittedAt": 1777816644
     },
     {
       "type": "ResultSubmitted",
       "result": {
-        "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+        "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
         "worker": "0x2222222222222222222222222222222222222222",
         "resultHash": "0x36034195f161e014bb5d20a5dbf65668063f888422be6a32bfb023a1c84308e5",
         "resultPointer": "0g://d83ba874fe8ea39a3b95ef1c316ea3907c937e18599eb0e499ff24fa0ea1cef7",
         "attestationDigest": "0x4ac07984fffc3abc657fd2247b6cab4458e6e1b8b57d148df8866b588e25e088"
       },
-      "submittedAt": 1777742233
+      "submittedAt": 1777816644
     },
     {
       "type": "Settled",
       "record": {
-        "taskId": "0x0f40281cabe77794a72548d2fb9ef0d0921dd2a6d96ab4fad36b339e84341db7",
+        "taskId": "0x22d5fac55201a6c3feba3022ea9d0ed04b3a7c02253b9b7da77ef4b2af450b3f",
         "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb",
         "worker": "0x2222222222222222222222222222222222222222",
         "payment": "1000000",
         "bidAmount": "900000",
         "bondAmount": "100000",
         "resultHash": "0x36034195f161e014bb5d20a5dbf65668063f888422be6a32bfb023a1c84308e5",
-        "releaseTxHash": "0x2c0c35b46ec76ce6471e3bda1d185be31da384a18cafde3292acb63de20fac6d",
-        "reputationFeedbackTxHash": "0x5e81200e23cf66edc3662af8f58a77633df072a50a32d0fd174ddb4a37e9a41a",
+        "releaseTxHash": "0xbb92b6998918ae68820a76ec53a3af78a987616f92fcdd2d8648cd731b3616fd",
+        "reputationFeedbackTxHash": "0x02158c6b26b2fdde6bcf7e3dc9033b40999565decf5e0db472159b5d7c0ece52",
         "reputationReconcileState": "synced",
-        "settledAt": 1777742233
+        "settledAt": 1777816644
       }
     }
   ]

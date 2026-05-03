@@ -10,7 +10,7 @@ export function SettlementLeg({
   href?: string;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+    <div className="settlement-leg">
       <span className={`live-dot ${pending ? "warn" : "success"}`}></span>
       <span
         className="caps-sm"
@@ -18,28 +18,19 @@ export function SettlementLeg({
           color: pending ? "var(--ledger-warning)" : "var(--ledger-paper)",
         }}
       >
-        {pending ? "PENDING_RECONCILE" : label}
+        {pending ? "PENDING" : label}
       </span>
       {href ? (
         <a
           href={href}
           target="_blank"
           rel="noreferrer noopener"
-          className="mono"
-          style={{
-            fontSize: 11,
-            color: "rgba(245,241,232,0.55)",
-          }}
+          className="mono settlement-leg-hash"
         >
           {hash} ↗
         </a>
       ) : (
-        <span
-          className="mono"
-          style={{ fontSize: 11, color: "rgba(245,241,232,0.55)" }}
-        >
-          {hash} ↗
-        </span>
+        <span className="mono settlement-leg-hash">{hash} ↗</span>
       )}
     </div>
   );

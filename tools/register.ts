@@ -50,7 +50,7 @@ const BASE_SEPOLIA = {
 
 const ADDRESSES = {
   workerINFT: "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62" as const,
-  ledgerEscrow: "0x12D2162F47AAAe1B0591e898648605daA186D644" as const,
+  ledgerEscrow: "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB" as const,
   identityRegistry: "0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb" as const,
   mockTEEOracle: "0x229869949693f1467b8b43d2907bDAE3C58E3047" as const,
   erc8004IdentityRegistry:

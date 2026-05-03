@@ -12,35 +12,25 @@ export type SettlementProof = {
 export function SettlementStrip({ proof }: { proof?: SettlementProof }) {
   const settled = Boolean(proof?.releaseTx);
   return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "14px 20px",
-        border: "1px solid rgba(245,241,232,0.16)",
-        marginBottom: 32,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          gap: 28,
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
+    <div className="settlement-strip">
+      <div className="settlement-strip-legs">
         <SettlementLeg
           pending={!settled}
           label="0G ESCROW RELEASE"
-          hash={proof?.releaseTx ? shortValue(proof.releaseTx) : "no release tx"}
+          hash={
+            proof?.releaseTx ? shortValue(proof.releaseTx) : "no release tx"
+          }
           href={proof?.releaseTx ? galileoTx(proof.releaseTx) : undefined}
         />
         <SettlementLeg
           pending={!settled}
           label="REPUTATION REGISTRY"
           hash={shortValue(proof?.reputationRegistry ?? "not recorded")}
-          href={proof?.reputationRegistry ? baseSepoliaAddr(proof.reputationRegistry) : undefined}
+          href={
+            proof?.reputationRegistry
+              ? baseSepoliaAddr(proof.reputationRegistry)
+              : undefined
+          }
         />
         <SettlementLeg
           pending={!settled}
@@ -50,8 +40,10 @@ export function SettlementStrip({ proof }: { proof?: SettlementProof }) {
         />
       </div>
       <span
-        className="pill"
-        style={{ color: settled ? "var(--ledger-success)" : "var(--ledger-warning)" }}
+        className="pill settlement-strip-pill"
+        style={{
+          color: settled ? "var(--ledger-success)" : "var(--ledger-warning)",
+        }}
       >
         <span className="dot"></span>
         {settled ? "SETTLED" : "NO RELEASE"}

@@ -2,9 +2,9 @@
   "scenario": "08_axl_node_disconnect_recovery",
   "pass": true,
   "reasons": [],
-  "durationMs": 54,
+  "durationMs": 53,
   "artifacts": {
-    "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+    "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
     "allBids": [
       {
         "peer": "wp-1",
@@ -33,7 +33,7 @@
     {
       "type": "BidReceived",
       "bid": {
-        "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+        "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
         "worker": "0x1111111111111111111111111111111111111111",
         "workerINFTId": "1",
         "workerPeerId": "wp-1",
@@ -43,14 +43,14 @@
           "jobCount": 47,
           "avgRating": 4.800000000000004
         },
-        "bidExpiresAt": 1777742297
+        "bidExpiresAt": 1777816708
       },
-      "receivedAt": 1777742237
+      "receivedAt": 1777816648
     },
     {
       "type": "BidReceived",
       "bid": {
-        "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+        "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
         "worker": "0x2222222222222222222222222222222222222222",
         "workerINFTId": "2",
         "workerPeerId": "wp-2",
@@ -60,14 +60,14 @@
           "jobCount": 30,
           "avgRating": 4.599999999999997
         },
-        "bidExpiresAt": 1777742297
+        "bidExpiresAt": 1777816708
       },
-      "receivedAt": 1777742237
+      "receivedAt": 1777816648
     },
     {
       "type": "TaskPosted",
       "task": {
-        "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+        "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
         "title": "Summarize the latest 0G changelog",
         "description": "Return a 200-word executive summary suitable for an AI buyer.",
         "outputSchema": "{ summary: string }",
@@ -76,59 +76,59 @@
         "deadlineSeconds": 300,
         "minReputation": 4
       },
-      "postedAt": 1777742237,
+      "postedAt": 1777816648,
       "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb"
     },
     {
       "type": "BidAccepted",
-      "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+      "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
       "worker": "0x2222222222222222222222222222222222222222",
       "bidAmount": "900000",
-      "acceptedAt": 1777742237
+      "acceptedAt": 1777816648
     },
     {
       "type": "BidAccepted",
-      "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+      "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
       "worker": "0x2222222222222222222222222222222222222222",
       "bidAmount": "900000",
-      "acceptedAt": 1777742237
+      "acceptedAt": 1777816648
     },
     {
       "type": "ResultSubmitted",
       "result": {
-        "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+        "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
         "worker": "0x2222222222222222222222222222222222222222",
         "resultHash": "0x36034195f161e014bb5d20a5dbf65668063f888422be6a32bfb023a1c84308e5",
         "resultPointer": "0g://d83ba874fe8ea39a3b95ef1c316ea3907c937e18599eb0e499ff24fa0ea1cef7",
         "attestationDigest": "0x2f1b30d86add15f31335b14b8d429dc40a7c544465618a7e826e4ab963febfc9"
       },
-      "submittedAt": 1777742237
+      "submittedAt": 1777816648
     },
     {
       "type": "ResultSubmitted",
       "result": {
-        "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+        "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
         "worker": "0x2222222222222222222222222222222222222222",
         "resultHash": "0x36034195f161e014bb5d20a5dbf65668063f888422be6a32bfb023a1c84308e5",
         "resultPointer": "0g://d83ba874fe8ea39a3b95ef1c316ea3907c937e18599eb0e499ff24fa0ea1cef7",
         "attestationDigest": "0x4ac07984fffc3abc657fd2247b6cab4458e6e1b8b57d148df8866b588e25e088"
       },
-      "submittedAt": 1777742237
+      "submittedAt": 1777816648
     },
     {
       "type": "Settled",
       "record": {
-        "taskId": "0x3f0dba56707ad2a0e1bdf7da60ba9265f7d94a0dd319797c504023b771d7151b",
+        "taskId": "0x3dfe29c568d81bb08d2442c434e2c85bd1844b3d5c7e90c1fe48066d6f2a277e",
         "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb",
         "worker": "0x2222222222222222222222222222222222222222",
         "payment": "1000000",
         "bidAmount": "900000",
         "bondAmount": "100000",
         "resultHash": "0x36034195f161e014bb5d20a5dbf65668063f888422be6a32bfb023a1c84308e5",
-        "releaseTxHash": "0xd60bbc94574631e38942e37e4211fe1798251ac2a4e7be3c023154700a161ed3",
-        "reputationFeedbackTxHash": "0xeacab78c53c859c4462061c1a5561a09ae36a0032b439524b1a3e09d77aaac1a",
+        "releaseTxHash": "0xff771d6a8f1982c908c0847613a4f3e355842be237fae389f8e2dd3d1a132eb9",
+        "reputationFeedbackTxHash": "0x90ea0089b2962a29972dee2ac4c7a7d78b64eb83595dd8aed3ffdb346bad324f",
         "reputationReconcileState": "synced",
-        "settledAt": 1777742237
+        "settledAt": 1777816648
       }
     }
   ]
