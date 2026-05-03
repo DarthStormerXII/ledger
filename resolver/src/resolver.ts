@@ -184,20 +184,22 @@ async function resolveText(
   }
 
   // Standard ENS keys that the ENS app's Profile tab probes for every name.
-  // Returning values here makes who.* / pay.* / rep.* / mem.* render with
-  // real content in the explorer, not "0 records".
+  // Each namespace inlines its own meaningful value (memory CID, owner
+  // address, rep count, etc) into description / notice so the explorer
+  // surfaces the unique data, not boilerplate.
   if (
     parsed.namespace === "who" ||
     parsed.namespace === "pay" ||
     parsed.namespace === "rep" ||
     parsed.namespace === "mem"
   ) {
-    const standard = standardTextForNamespace(
+    const standard = await standardTextForNamespace(
       parsed.namespace,
       parsed.workerLabel,
       parsed.tokenId,
       parsed.parentName,
       key,
+      config,
     );
     if (standard !== null) return standard;
   }
@@ -234,34 +236,100 @@ async function resolveText(
   return "";
 }
 
-function standardTextForNamespace(
+async function standardTextForNamespace(
   namespace: "who" | "pay" | "rep" | "mem",
   workerLabel: string,
   tokenId: bigint,
   parentName: string,
   key: string,
-): string | null {
+  config: ResolverConfig,
+): Promise<string | null> {
   const fullName = `${namespace}.${workerLabel}.${parentName}`;
-  const summaries: Record<typeof namespace, string> = {
-    who: `Live ownerOf(${tokenId.toString()}) on 0G Galileo. Address rotates with every iNFT transfer — the resolver follows it cross-chain via CCIP-Read.`,
-    pay: `Fresh HD-derived payment address per resolution for ${workerLabel}. Each query bumps a nonce; the master is a parent xpub. See ai.pay.master.`,
-    rep: `Reputation summary for ${workerLabel} (ERC-8004 agentId ${tokenId.toString()}) on Base Sepolia. See ai.rep.* records for count, average, and registry address.`,
-    mem: `Encrypted memory pointer for ${workerLabel}. Returns the 0G Storage CID stored on the iNFT. AES-256-CTR encrypted client-side; re-keyed by the TEE on transfer.`,
-  };
-  switch (key) {
-    case "name":
-      return fullName;
-    case "description":
-      return summaries[namespace];
-    case "url":
-      return `https://ledger-open-agents.vercel.app/agent/${workerLabel}.${parentName}`;
-    case "notice":
-      return `ENSIP-10 wildcard + CCIP-Read. ${namespace}.* namespace for ${workerLabel}. Custom keys: ai.${namespace}.*`;
-    case "avatar":
-      return `https://api.dicebear.com/9.x/shapes/svg?seed=${workerLabel}-${namespace}`;
-    default:
-      return null;
+  // Common standard keys that don't depend on namespace data
+  if (key === "url") {
+    return `https://ledger-open-agents.vercel.app/agent/${workerLabel}.${parentName}`;
   }
+  if (key === "avatar") {
+    return `https://api.dicebear.com/9.x/shapes/svg?seed=${workerLabel}-${namespace}`;
+  }
+  if (key === "name") return fullName;
+
+  // Per-namespace description + notice with the actual unique value embedded
+  if (namespace === "who") {
+    if (key === "description" || key === "notice") {
+      try {
+        const owner = await resolveWho(tokenId, config);
+        return key === "description"
+          ? `Current owner: ${owner}. Live cross-chain ownerOf(${tokenId.toString()}) on 0G Galileo (chainId ${config.ogChainId}) via ENSIP-10 + CCIP-Read. Address follows the iNFT on every transfer with no Sepolia tx.`
+          : `Owner ${owner} — live cross-chain read. Updates within ${config.ttlSeconds}s of any Galileo transfer.`;
+      } catch {
+        return key === "description"
+          ? `Live ownerOf(${tokenId.toString()}) on 0G Galileo (chainId ${config.ogChainId}). Cross-chain read via CCIP-Read.`
+          : `who.* namespace — live cross-chain ownerOf read.`;
+      }
+    }
+    return null;
+  }
+
+  if (namespace === "pay") {
+    // IMPORTANT: do NOT call resolvePay() here — it bumps the rotation
+    // nonce, which would corrupt the per-worker counter every time the ENS
+    // app probes a text record. Use the cached "last derived" address from
+    // an earlier addr query, plus the master xpub which is stateless.
+    const last = lastPayResolutions.get(workerLabel);
+    const masterXpub = getPayAccount(config).neuter().extendedKey;
+    if (key === "description") {
+      const lastBlurb = last
+        ? `Latest derived: ${last.address} (path ${last.path}, nonce ${last.nonce.toString()}). `
+        : "";
+      return `${lastBlurb}HD-derived from a parent xpub — every addr query bumps a per-worker nonce so payments never reuse a destination. Master xpub: ${masterXpub.slice(0, 28)}…`;
+    }
+    if (key === "notice") {
+      return last
+        ? `Rotating pay address. Last derived: ${last.address} at nonce ${last.nonce.toString()}.`
+        : `Rotating pay address. Query addr to derive the next one.`;
+    }
+    return null;
+  }
+
+  if (namespace === "rep") {
+    const summary = resolveRepSummary(workerLabel, tokenId, config);
+    if (key === "description") {
+      const count = summary.count?.toString() ?? "—";
+      const avg = summary.average?.toString() ?? "—";
+      const reg = summary.registry ?? config.reputationRegistryAddress;
+      const agentId = summary.agentId ?? tokenId.toString();
+      return `${count} jobs · ${avg} ★ avg · ERC-8004 agentId ${agentId}. Audited registry on Base Sepolia: ${reg}. Cross-chain read.`;
+    }
+    if (key === "notice") {
+      const reg = summary.registry ?? config.reputationRegistryAddress;
+      return `ERC-8004 ReputationRegistry ${reg} on Base Sepolia. Live cross-chain read of agent reputation.`;
+    }
+    return null;
+  }
+
+  if (namespace === "mem") {
+    try {
+      const cid = await resolveMemoryPointer(workerLabel, tokenId, config);
+      if (key === "description") {
+        return cid
+          ? `0G Storage memory CID: ${cid}. AES-256-CTR encrypted client-side, re-keyed by the TEE on every iNFT transfer so the new owner can decrypt and the old owner can't.`
+          : `Encrypted memory pointer for ${workerLabel}. iNFT memoryCID not yet set on Galileo.`;
+      }
+      if (key === "notice") {
+        return cid
+          ? `Memory CID ${cid} — pulled live from WorkerINFT.getMetadata(${tokenId.toString()}).memoryCID on Galileo.`
+          : `mem.* namespace — live cross-chain read of WorkerINFT.getMetadata().memoryCID.`;
+      }
+    } catch {
+      if (key === "description") {
+        return `Encrypted memory pointer for ${workerLabel}. Live cross-chain read of WorkerINFT.getMetadata().memoryCID on Galileo.`;
+      }
+    }
+    return null;
+  }
+
+  return null;
 }
 
 function nextPayNonce(workerLabel: string): bigint {
