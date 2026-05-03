@@ -8,7 +8,7 @@ import {
   type SettlementProof,
 } from "@/components/SettlementStrip";
 import { CapabilityRow } from "@/components/CapabilityRow";
-import { ReputationChart } from "@/components/ReputationChart";
+import { ReputationChart, type RepPoint } from "@/components/ReputationChart";
 import { InheritanceModal } from "@/components/InheritanceModal";
 import { useLiveOwner, shortAddr } from "@/components/useLiveOwner";
 import { DEMO_PAY_NONCE_0, DEMO_PAY_NONCE_1, galileoTx } from "@/lib/contracts";
@@ -21,6 +21,7 @@ export function WorkerProfileClient({
   recentJobs,
   provenance,
   settlementProof,
+  repHistory,
 }: {
   lot: Lot;
   liveProof: {
@@ -32,6 +33,7 @@ export function WorkerProfileClient({
   recentJobs: RecentJob[];
   provenance: ProvenanceEvent[];
   settlementProof?: SettlementProof;
+  repHistory: RepPoint[];
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -185,6 +187,7 @@ export function WorkerProfileClient({
               ensName={lot.ens}
               label="WHO.*"
               value={whoValue}
+              valueRaw={liveOwner ?? liveProof.owner}
               sub="CCIP-Read resolves live ownerOf(tokenId)"
             />
             <CapabilityRow
@@ -225,6 +228,7 @@ export function WorkerProfileClient({
               ensName={lot.ens}
               label="MEM.*"
               value={memoryValue}
+              valueRaw={liveProof.memoryCID}
               sub="WorkerINFT.getMetadata().memoryCID"
             />
           </div>
@@ -293,7 +297,7 @@ export function WorkerProfileClient({
         <div className="caps-md muted" style={{ marginBottom: 18 }}>
           REPUTATION HISTORY
         </div>
-        <ReputationChart />
+        <ReputationChart points={repHistory} />
       </div>
 
       {/* RECENT JOBS */}

@@ -12,12 +12,22 @@ export function CapabilityRow({
   rowKey,
   label,
   value,
+  valueRaw,
   sub,
   ensName,
 }: {
   rowKey: string;
   label: string;
   value: ReactNode;
+  /**
+   * Optional unmodified version of `value` used for href derivation only.
+   * Pass this when `value` is a display-shortened string (e.g.
+   * `0g://0xd8f…4982c4` or `0x6641…600b`) — otherwise the link href will
+   * be built from the truncated text and 404 on the explorer. When
+   * absent, falls back to `value` (string-coerced) for backwards
+   * compatibility.
+   */
+  valueRaw?: string;
   sub?: string;
   ensName: string;
 }) {
@@ -28,17 +38,23 @@ export function CapabilityRow({
   const ensAppUrl = ensSepoliaName(subname);
   // For rows whose value is an address or CID, build a chain-specific deep
   // link so judges can verify the resolved value too, not just the name.
-  const valueText = typeof value === "string" ? value : String(value);
-  const firstToken = valueText.trim().split(/\s+/)[0] ?? "";
+  // Use valueRaw (unmodified source) for href derivation; only use the
+  // string form of `value` as a last-resort fallback.
+  const hrefSource =
+    valueRaw ?? (typeof value === "string" ? value : String(value));
+  const firstToken = hrefSource.trim().split(/\s+/)[0] ?? "";
   let resolvedHref: string | null = null;
   let resolvedLabel = "View on chain ↗";
   if (/^0x[a-fA-F0-9]{40}$/.test(firstToken)) {
     resolvedHref = galileoAddr(firstToken);
     resolvedLabel = "View address on Galileo ↗";
-  } else if (/^0g:\/\//.test(firstToken)) {
+  } else if (/^0g:\/\/0x[a-fA-F0-9]{64}$/.test(firstToken)) {
+    // Only treat as a real CID when the root is a full 32-byte hex —
+    // catches truncated display strings (`0g://0xd8f…4982c4`) and falls
+    // through to no link rather than producing a bogus URL.
     resolvedHref = ogStorageCid(firstToken);
     resolvedLabel = "View blob on 0G storage ↗";
-  } else if (rowKey === "rep" && /0x8004/.test(valueText)) {
+  } else if (rowKey === "rep" && /0x8004/.test(hrefSource)) {
     resolvedHref = baseSepoliaAddr(
       "0x8004B663056A597Dffe9eCcC1965A193B7388713",
     );
