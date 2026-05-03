@@ -1,0 +1,16 @@
+{
+  "scenario": "11_live_ens_resolution",
+  "pass": true,
+  "reasons": [],
+  "durationMs": 1167,
+  "artifacts": {
+    "parentName": "ledger.eth",
+    "gatewayUrl": "https://9e04-124-123-105-119.ngrok-free.app",
+    "resolverAddress": "0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531",
+    "strictMode": false,
+    "directOwnerOf": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+    "whoAddr": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+    "memCid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4"
+  },
+  "events": []
+}

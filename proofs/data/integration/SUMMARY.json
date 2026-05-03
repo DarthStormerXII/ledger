@@ -1,0 +1,149 @@
+{
+  "runAt": "2026-05-02T17:17:18.550Z",
+  "preflight": {
+    "galileoLive": true,
+    "galileoChainId": 16602,
+    "galileoRpc": "https://evmrpc-testnet.0g.ai",
+    "axlBridgeUrl": "http://127.0.0.1:9002",
+    "axlReachable": true,
+    "notes": [
+      "0G Galileo RPC https://evmrpc-testnet.0g.ai reachable, chainId=16602",
+      "AXL bridge http://127.0.0.1:9002 reachable",
+      "Resolver gateway: not configured (LEDGER_RESOLVER_URL)"
+    ]
+  },
+  "totalScenarios": 11,
+  "passed": 11,
+  "failed": 0,
+  "totalDurationMs": 4872,
+  "scenarios": [
+    {
+      "name": "01_happy_path_full_lifecycle",
+      "pass": true,
+      "durationMs": 54,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 2,
+        "TaskPosted": 1,
+        "BidAccepted": 2,
+        "ResultSubmitted": 2,
+        "Settled": 1
+      }
+    },
+    {
+      "name": "02_inheritance_happy_path",
+      "pass": true,
+      "durationMs": 53,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 1,
+        "TaskPosted": 1,
+        "BidAccepted": 2,
+        "ResultSubmitted": 2,
+        "Settled": 1
+      }
+    },
+    {
+      "name": "03_auction_no_bids_cancel",
+      "pass": true,
+      "durationMs": 244,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 2,
+        "TaskPosted": 1,
+        "Cancelled": 1
+      }
+    },
+    {
+      "name": "04_worker_timeout_bond_slash",
+      "pass": true,
+      "durationMs": 49,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 1,
+        "TaskPosted": 1,
+        "BidAccepted": 2,
+        "Slashed": 1
+      }
+    },
+    {
+      "name": "05_multi_bid_lowest_wins",
+      "pass": true,
+      "durationMs": 19,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 3,
+        "TaskPosted": 1
+      }
+    },
+    {
+      "name": "06_reputation_gating",
+      "pass": true,
+      "durationMs": 23,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 2,
+        "TaskPosted": 1
+      }
+    },
+    {
+      "name": "07_cross_chain_eventual_consistency",
+      "pass": true,
+      "durationMs": 3103,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 1,
+        "TaskPosted": 1,
+        "BidAccepted": 2,
+        "ResultSubmitted": 2,
+        "Settled": 1
+      }
+    },
+    {
+      "name": "08_axl_node_disconnect_recovery",
+      "pass": true,
+      "durationMs": 54,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 2,
+        "TaskPosted": 1,
+        "BidAccepted": 2,
+        "ResultSubmitted": 2,
+        "Settled": 1
+      }
+    },
+    {
+      "name": "09_compute_attestation_failure_reject",
+      "pass": true,
+      "durationMs": 48,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 1,
+        "TaskPosted": 1,
+        "BidAccepted": 2,
+        "ResultSubmitted": 2,
+        "AttestationRejected": 1,
+        "Slashed": 1
+      }
+    },
+    {
+      "name": "10_concurrent_tasks",
+      "pass": true,
+      "durationMs": 58,
+      "reasons": [],
+      "eventCounts": {
+        "BidReceived": 6,
+        "TaskPosted": 2,
+        "BidAccepted": 4,
+        "ResultSubmitted": 4,
+        "Settled": 2
+      }
+    },
+    {
+      "name": "11_live_ens_resolution",
+      "pass": true,
+      "durationMs": 1167,
+      "reasons": []
+    }
+  ]
+}
