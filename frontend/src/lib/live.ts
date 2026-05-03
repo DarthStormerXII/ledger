@@ -20,6 +20,8 @@ import { galileoClient, baseSepoliaClient } from "./clients";
 import {
   WORKER_INFT_ADDRESS,
   LEDGER_ESCROW_ADDRESS,
+  LEDGER_MARKETPLACE_ADDRESS,
+  LEDGER_MARKETPLACE_ABI,
   ERC8004_REPUTATION_REGISTRY,
 } from "./contracts";
 
@@ -725,4 +727,50 @@ export async function getRecentEvents(limit = 12): Promise<LiveEvent[]> {
   return events
     .sort((a, b) => Number(b.blockNumber - a.blockNumber))
     .slice(0, limit);
+}
+
+// ────────────────────────────────────────────────────────────────────────
+// Live LedgerMarketplace listings — overlays the manifest's `listed` flag
+// with real on-chain getListing(tokenId) data so the marketplace UI can
+// distinguish demo-only flags from actual buyable orders.
+// ────────────────────────────────────────────────────────────────────────
+export type LiveListing = {
+  tokenId: bigint;
+  seller: Address;
+  askPriceWei: bigint;
+  askPriceFormatted: string; // 0G string, e.g. "0.005"
+  listedAt: number; // unix seconds
+  active: boolean;
+};
+
+export async function getLiveListings(
+  tokenIds: bigint[],
+): Promise<Map<string, LiveListing>> {
+  const out = new Map<string, LiveListing>();
+  const results = await Promise.all(
+    tokenIds.map(async (tokenId) => {
+      try {
+        const r = (await galileoClient.readContract({
+          address: LEDGER_MARKETPLACE_ADDRESS,
+          abi: LEDGER_MARKETPLACE_ABI,
+          functionName: "getListing",
+          args: [tokenId],
+        })) as readonly [Address, bigint, bigint, boolean];
+        return {
+          tokenId,
+          seller: r[0],
+          askPriceWei: r[1],
+          askPriceFormatted: formatEther(r[1]),
+          listedAt: Number(r[2]),
+          active: r[3],
+        } satisfies LiveListing;
+      } catch {
+        return null;
+      }
+    }),
+  );
+  for (const r of results) {
+    if (r && r.active) out.set(r.tokenId.toString(), r);
+  }
+  return out;
 }

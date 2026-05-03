@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Lot } from "@/lib/data";
+import type { LiveListing } from "@/lib/live";
 import { InspectDrawer, InspectPill, type InspectGroup } from "./InspectDrawer";
+import { MarketplaceActionSheet } from "./MarketplaceActionSheet";
 import {
   WORKER_INFT_ADDRESS,
   LEDGER_ENS_PARENT,
@@ -25,15 +27,29 @@ export function LotPlate({
   lot,
   showPrice = false,
   onClick,
+  liveListing = null,
+  marketplace = false,
 }: {
   lot: Lot;
   showPrice?: boolean;
   onClick?: () => void;
+  /** On-chain listing if any. Drives "ON-CHAIN" badge + ready-to-buy state. */
+  liveListing?: LiveListing | null;
+  /** When true, renders inline Buy / Offer buttons + opens the action sheet
+   * instead of routing to /agent on click. */
+  marketplace?: boolean;
 }) {
   const router = useRouter();
   const [inspectOpen, setInspectOpen] = useState(false);
+  const [sheetMode, setSheetMode] = useState<"buy" | "offer" | "list" | null>(
+    null,
+  );
   const handleClick =
     onClick ?? (() => router.push(`/agent/${encodeURIComponent(lot.ens)}`));
+  const stop = (e: MouseEvent) => e.stopPropagation();
+  const onChainListed = !!liveListing?.active;
+  const displayPrice = liveListing?.askPriceFormatted ?? lot.askPrice;
+
   return (
     <div className="lot-plate" onClick={handleClick}>
       <div
@@ -45,14 +61,23 @@ export function LotPlate({
       >
         <span className="lot-num">LOT {lot.lot}</span>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {lot.listed && (
+          {onChainListed ? (
+            <span
+              className="caps-sm"
+              style={{ color: "var(--ledger-success)" }}
+              title="Real on-chain listing in LedgerMarketplace"
+            >
+              ● ON-CHAIN
+            </span>
+          ) : lot.listed ? (
             <span
               className="caps-sm"
               style={{ color: "var(--ledger-oxblood)" }}
+              title="Demo listing — not yet posted to the marketplace contract"
             >
-              LISTED
+              ○ DEMO LISTING
             </span>
-          )}
+          ) : null}
           <InspectPill onClick={() => setInspectOpen(true)} />
         </div>
       </div>
@@ -65,7 +90,7 @@ export function LotPlate({
         {lot.jobs} JOBS · {lot.rating} ★ ·{" "}
         {lot.earnedNum > 0 ? <>{lot.earned} 0G EARNED</> : <>ERC-8004 SEEDED</>}
       </div>
-      {showPrice && lot.listed && lot.askPrice && (
+      {showPrice && (lot.listed || onChainListed) && displayPrice && (
         <div
           style={{
             display: "flex",
@@ -77,10 +102,35 @@ export function LotPlate({
         >
           <span className="caps-sm muted">ASKING</span>
           <span className="italic-num text-oxblood" style={{ fontSize: 22 }}>
-            {lot.askPrice} 0G
+            {displayPrice} 0G
           </span>
         </div>
       )}
+
+      {/* Marketplace inline actions — only on /marketplace surface */}
+      {marketplace && (lot.listed || onChainListed) && (
+        <div className="lot-marketplace-actions" onClick={stop}>
+          <button
+            className="lot-buy-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSheetMode("buy");
+            }}
+          >
+            Buy now →
+          </button>
+          <button
+            className="lot-offer-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSheetMode("offer");
+            }}
+          >
+            Make offer
+          </button>
+        </div>
+      )}
+
       <div className="lot-foot">
         <span className="view-link">View Lot →</span>
       </div>
@@ -92,6 +142,16 @@ export function LotPlate({
         subtitle={`LOT ${lot.lot} · ERC-7857 iNFT on 0G Galileo (chainId 16602)`}
         groups={buildLotInspectGroups(lot)}
       />
+
+      {sheetMode && (
+        <MarketplaceActionSheet
+          lot={lot}
+          liveListing={liveListing}
+          initialMode={sheetMode}
+          open={true}
+          onClose={() => setSheetMode(null)}
+        />
+      )}
     </div>
   );
 }

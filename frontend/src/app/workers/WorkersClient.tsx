@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import type { Lot } from "@/lib/data";
 import { LotPlate } from "@/components/LotPlate";
 
@@ -98,14 +97,24 @@ function SortDropdown({
   );
 }
 
+type SerializedListing = {
+  seller: string;
+  askPriceWei: string;
+  askPriceFormatted: string;
+  listedAt: number;
+  active: boolean;
+};
+
 export function WorkersClient({
   lots: all,
   marketplaceOnly = false,
+  liveListings = {},
 }: {
   lots: Lot[];
   marketplaceOnly?: boolean;
+  /** Map of tokenId → on-chain listing. Only set on /marketplace. */
+  liveListings?: Record<string, SerializedListing>;
 }) {
-  const router = useRouter();
   const [filter, setFilter] = useState<Filter>(
     marketplaceOnly ? "listed" : "all",
   );
@@ -207,39 +216,29 @@ export function WorkersClient({
           gap: 24,
         }}
       >
-        {lots.map((l) => (
-          <div key={l.lot}>
-            <LotPlate lot={l} showPrice={marketplaceOnly} />
-            {marketplaceOnly && (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: 8,
-                  marginTop: 8,
-                }}
-              >
-                <button
-                  className="btn btn-italic"
-                  onClick={() =>
-                    router.push(`/agent/${encodeURIComponent(l.ens)}`)
-                  }
-                >
-                  Buy now
-                </button>
-                <button
-                  className="btn-text"
-                  style={{
-                    border: "1px solid var(--ledger-oxblood)",
-                    padding: "12px 22px",
-                  }}
-                >
-                  Make offer
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
+        {lots.map((l) => {
+          const raw = liveListings[l.lot];
+          const liveListing = raw
+            ? {
+                tokenId: BigInt(l.lot),
+                seller: raw.seller as `0x${string}`,
+                askPriceWei: BigInt(raw.askPriceWei),
+                askPriceFormatted: raw.askPriceFormatted,
+                listedAt: raw.listedAt,
+                active: raw.active,
+              }
+            : null;
+          return (
+            <div key={l.lot}>
+              <LotPlate
+                lot={l}
+                showPrice={marketplaceOnly}
+                liveListing={liveListing}
+                marketplace={marketplaceOnly}
+              />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
