@@ -13,6 +13,7 @@ import {
   type Address,
   type Hex,
   parseAbiItem,
+  decodeEventLog,
   formatEther,
   formatUnits,
 } from "viem";
@@ -116,6 +117,92 @@ const ERC8004_ABI = [
     "function getSummary(uint256 agentId, address[] clientAddresses, string tag1, string tag2) view returns (uint64 count, int128 sumValue, uint8 valueDecimals)",
   ),
 ] as const;
+
+// Per-feedback event from the canonical ERC-8004 ReputationRegistry on Base
+// Sepolia. We index agentId + client so we can filter logs server-side; the
+// rest of the fields (value, valueDecimals, tags, URIs, hash) live in the
+// non-indexed payload and aren't needed for the rep-history chart.
+const ERC8004_NEW_FEEDBACK = parseAbiItem(
+  "event NewFeedback(uint256 indexed agentId, address indexed client, uint64 feedbackIndex, int128 value, uint8 valueDecimals, string tag1, string tag2, string endpoint, string feedbackURI, string responseURI, bytes32 feedbackHash)",
+);
+
+export type RepPoint = { unixSec: number; value: number };
+
+// Query Base Sepolia for every NewFeedback event tagged with this agentId,
+// fetch each event's block timestamp, and return chronologically ordered
+// (timestamp, rating) points. Each `value` is divided by 10^valueDecimals so
+// the chart axis is in human-readable rating units (typically 0–5).
+//
+// Cold-start cost: one eth_getLogs (chunked across the chain since contract
+// deploy) plus one eth_getBlock per unique block. The registry was deployed
+// recently and our 47 demo feedbacks land in a narrow block range, so the
+// total wall-time is ~1–2s on Base Sepolia. We cap chunk size at 9_000 to
+// stay under the public RPC's 10_000-block range limit.
+export async function getRepHistory(
+  agentId: bigint,
+  fromBlock: bigint = 30_000_000n,
+): Promise<RepPoint[]> {
+  const tip = await baseSepoliaClient.getBlockNumber().catch(() => 0n);
+  if (tip === 0n) return [];
+  const CHUNK = 9_000n;
+  // Collect (blockNumber, rating) pairs as we go. We pull raw logs and
+  // decodeEventLog each one because viem's getLogs auto-decode only fills
+  // in the indexed args (agentId, client) — the non-indexed value /
+  // valueDecimals that we need for the chart live in the data payload.
+  const raw: Array<{ block: bigint; rating: number }> = [];
+  for (let from = fromBlock; from <= tip; from += CHUNK + 1n) {
+    const to = from + CHUNK > tip ? tip : from + CHUNK;
+    try {
+      const chunk = await baseSepoliaClient.getLogs({
+        address: ERC8004_REPUTATION_REGISTRY,
+        event: ERC8004_NEW_FEEDBACK,
+        args: { agentId },
+        fromBlock: from,
+        toBlock: to,
+      });
+      for (const l of chunk) {
+        try {
+          const decoded = decodeEventLog({
+            abi: [ERC8004_NEW_FEEDBACK],
+            data: l.data,
+            topics: l.topics,
+          });
+          const args = decoded.args as unknown as {
+            value: bigint;
+            valueDecimals: number;
+          };
+          const rating = Number(args.value) / 10 ** Number(args.valueDecimals);
+          const block = l.blockNumber ?? 0n;
+          if (block > 0n && Number.isFinite(rating)) {
+            raw.push({ block, rating });
+          }
+        } catch {
+          // Skip undecodable log (signature mismatch, partial log, etc.)
+        }
+      }
+    } catch {
+      // RPC hiccup on a single chunk — skip and keep going.
+    }
+  }
+  if (raw.length === 0) return [];
+  // Resolve block timestamps in parallel, deduping repeat block numbers.
+  const uniqueBlocks = Array.from(new Set(raw.map((r) => r.block)));
+  const ts = new Map<bigint, number>();
+  await Promise.all(
+    uniqueBlocks.map(async (b) => {
+      try {
+        const block = await baseSepoliaClient.getBlock({ blockNumber: b });
+        ts.set(b, Number(block.timestamp));
+      } catch {
+        ts.set(b, 0);
+      }
+    }),
+  );
+  return raw
+    .map((r) => ({ unixSec: ts.get(r.block) ?? 0, value: r.rating }))
+    .filter((p) => p.unixSec > 0)
+    .sort((a, b) => a.unixSec - b.unixSec);
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Hall stats — live counts from on-chain

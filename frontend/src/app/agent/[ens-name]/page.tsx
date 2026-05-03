@@ -1,7 +1,13 @@
 import { notFound } from "next/navigation";
 import { Shell } from "@/components/Shell";
 import { WorkerProfileClient } from "./WorkerProfileClient";
-import { getAllLots, liveLotToLot, getAllJobs, WORKERS } from "@/lib/live";
+import {
+  getAllLots,
+  liveLotToLot,
+  getAllJobs,
+  getRepHistory,
+  WORKERS,
+} from "@/lib/live";
 import { galileoClient } from "@/lib/clients";
 import type { RecentJob, ProvenanceEvent } from "@/lib/data";
 import {
@@ -187,6 +193,13 @@ export default async function AgentPage({
     ];
   }
 
+  // Real ERC-8004 reputation history for this agent on Base Sepolia.
+  // Empty array → ReputationChart renders an explicit "no feedback yet"
+  // empty state rather than fabricated points.
+  const repHistory = await getRepHistory(BigInt(liveLot.agentId)).catch(
+    () => [],
+  );
+
   return (
     <Shell>
       <WorkerProfileClient
@@ -200,6 +213,7 @@ export default async function AgentPage({
         recentJobs={recentJobs}
         provenance={provenance}
         settlementProof={settlementProof}
+        repHistory={repHistory}
       />
     </Shell>
   );
