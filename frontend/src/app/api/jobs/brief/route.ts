@@ -78,6 +78,33 @@ type Entry = {
 // function. Cold starts will hit the DB once per taskId and re-warm.
 const cache = new Map<string, Entry>();
 
+// Negative-result cache: taskIds that are known to have NO brief in DB.
+// The auction room polls /api/jobs/brief?taskId=X every few seconds for any
+// task posted before the persistence fix shipped (or any task posted
+// out-of-band) — without this, every poll spent ~1s on a Postgres miss.
+// We cap the set to prevent unbounded growth and TTL each entry briefly so
+// a freshly POSTed brief still reaches a polling client within seconds.
+const NEG_TTL_MS = 30_000;
+const NEG_MAX = 500;
+const negCache = new Map<string, number>(); // taskId → expires-at (ms epoch)
+function negHas(taskId: string): boolean {
+  const exp = negCache.get(taskId);
+  if (!exp) return false;
+  if (exp < Date.now()) {
+    negCache.delete(taskId);
+    return false;
+  }
+  return true;
+}
+function negSet(taskId: string): void {
+  if (negCache.size >= NEG_MAX) {
+    // Evict oldest. Map iteration is insertion order in JS.
+    const first = negCache.keys().next().value;
+    if (first) negCache.delete(first);
+  }
+  negCache.set(taskId, Date.now() + NEG_TTL_MS);
+}
+
 const DEFAULT_INDEXER_RPC = "https://indexer-storage-testnet-turbo.0g.ai";
 const DEFAULT_GALILEO_RPC = "https://evmrpc-testnet.0g.ai";
 
@@ -421,6 +448,7 @@ export async function POST(req: Request) {
     size: payload.byteLength,
   };
   cache.set(entry.taskId, entry);
+  negCache.delete(entry.taskId); // freshly POSTed → invalidate any neg-cache hit
   await dbUpsert(entry);
 
   return NextResponse.json({
@@ -468,6 +496,20 @@ export async function GET(req: Request) {
     );
   }
   const taskIdLower = taskId.toLowerCase();
+  // Short-circuit known-missing taskIds. Pre-fix tasks (or tasks posted
+  // out-of-band) will never have a brief, but the auction room polls every
+  // few seconds — without this short-circuit each poll spent ~1s hitting
+  // Postgres for the same definite miss. TTL is short so that a freshly
+  // POSTed brief appears to polling clients within ~30s.
+  if (negHas(taskIdLower)) {
+    return NextResponse.json(
+      {
+        error: "not_found",
+        hint: "Brief not in registry. Cached miss — pre-fix task or never POSTed.",
+      },
+      { status: 404 },
+    );
+  }
   let entry = cache.get(taskIdLower);
   if (!entry) {
     const fromDb = await dbGet(taskIdLower);
@@ -477,6 +519,7 @@ export async function GET(req: Request) {
     }
   }
   if (!entry) {
+    negSet(taskIdLower);
     return NextResponse.json(
       {
         error: "not_found",
