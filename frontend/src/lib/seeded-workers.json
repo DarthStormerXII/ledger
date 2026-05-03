@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-05-03T12:32:42.258Z",
+  "capturedAt": "2026-05-03T14:47:42.327Z",
   "workers": [
     {
       "label": "worker-001",
@@ -88,5 +88,6 @@
     "open": "0x41fb552d879bdbb260fc63886ea879b2860ebda6d5c80214ab1c41cd71624c03",
     "accepted": "0x8ec4a6c9d8b445c8ed18cc09d38299d61c9fdf9f98bbf3a4e17065935e8e72f4",
     "released": "0x298ac2ca398bf3eea5ef9479e80c72e45285dbeafa0689d0272eb91926f3cd90"
-  }
+  },
+  "redeployNote": "iNFT contract redeployed; tokenIds 2-5 are new. ERC-8004 agentIds and feedback records unchanged (Base Sepolia, independent of Galileo redeploy)."
 }

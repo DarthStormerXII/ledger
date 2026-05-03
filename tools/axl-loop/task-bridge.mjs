@@ -15,7 +15,7 @@
 import { createPublicClient, http, parseAbiItem } from "viem";
 import { LedgerAxlRuntime, LEDGER_JOBS_TOPIC } from "../../agents/axl-runtime/dist/index.js";
 
-const ESCROW = "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB";
+const ESCROW = "0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489";
 const RPC = process.env.GALILEO_RPC ?? "https://evmrpc-testnet.0g.ai";
 const BRIDGE = process.env.LEDGER_AXL_BRIDGE ?? "http://127.0.0.1:9002";
 
