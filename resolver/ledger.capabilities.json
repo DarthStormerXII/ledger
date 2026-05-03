@@ -23,7 +23,7 @@
     "defaultRpc": "https://sepolia.base.org",
     "erc8004ReputationRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
     "erc8004IdentityRegistry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
-    "escrowAddress": "0x12D2162F47AAAe1B0591e898648605daA186D644",
+    "escrowAddress": "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB",
     "demoAgentId": "5444",
     "demoFeedbackCount": 47,
     "demoAverageScore": 4.77
