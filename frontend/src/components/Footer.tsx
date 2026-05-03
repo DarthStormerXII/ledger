@@ -7,14 +7,26 @@ export function Footer() {
       </span>
       <div className="footer-links">
         <a href="/pitch">Pitch</a>
-        <a href="https://github.com" target="_blank" rel="noreferrer noopener">
+        <a
+          href="https://github.com/DarthStormerXII/ledger"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           GitHub
         </a>
-        <a href="https://github.com" target="_blank" rel="noreferrer noopener">
+        <a
+          href="https://ethglobal.com/showcase/ledger-bineb"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
           Demo
         </a>
-        <a href="https://twitter.com" target="_blank" rel="noreferrer noopener">
-          Twitter
+        <a
+          href="https://x.com/gabrielaxyeth"
+          target="_blank"
+          rel="noreferrer noopener"
+        >
+          X
         </a>
       </div>
     </footer>
