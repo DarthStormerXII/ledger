@@ -12,3 +12,4 @@
 <!-- 2026-05-02 20:51 IST joanna: research: submission form field plan --> (1)
 <!-- 2026-05-03 09:35 IST joanna: research: submission day kickoff notes --> (2)
 <!-- 2026-05-03 11:11 IST joanna: research: pull quote locked --> (3)
+<!-- 2026-05-03 17:41 IST joanna: research: final orphan-mention QA --> (4)
