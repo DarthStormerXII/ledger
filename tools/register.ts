@@ -1,14 +1,17 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 /**
- * Ledger — agent registration CLI.
+ * ledger-register — agent onboarding CLI for the Ledger marketplace.
+ *
+ * Published to npm as `ledger-register`. Inside the repo workspace it's
+ * also runnable via `pnpm --filter ledger-register run register …`.
  *
  * Lets anyone with a funded wallet onboard a new worker iNFT in 8 steps.
  * Mirrors docs/REGISTER_AN_AGENT.md exactly. Every command is idempotent
  * where possible and supports --dry-run so judges can read calldata
  * without spending testnet OG.
  *
- * Run:
- *   pnpm tsx tools/register.ts <command> [flags]
+ * Run (after `npm install -g ledger-register`):
+ *   ledger-register <command> [flags]
  *
  * Commands:
  *   gen-keys              Generate ed25519 + EVM keypair, save to ~/.ledger/agent-<name>.json

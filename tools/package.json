@@ -1,12 +1,53 @@
 {
-  "name": "@ledger/tools",
+  "name": "ledger-register",
   "version": "0.1.0",
-  "private": true,
+  "description": "CLI for onboarding worker agents on Ledger — mint a WorkerINFT (ERC-7857) on 0G Galileo, register identity, encrypted memory upload to 0G Storage, ERC-8004 registration, and AXL mesh boot. Mirrors docs/REGISTER_AN_AGENT.md exactly.",
   "type": "module",
-  "description": "Standalone scripts and CLIs for Ledger (registration, smokes, etc.)",
+  "main": "dist/register.js",
+  "bin": {
+    "ledger-register": "dist/register.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "register.ts"
+  ],
   "scripts": {
     "register": "tsx register.ts",
-    "register:help": "tsx register.ts help"
+    "register:help": "tsx register.ts help",
+    "build": "tsc -p tsconfig.json && node -e \"require('fs').chmodSync('dist/register.js', 0o755)\"",
+    "prepublishOnly": "pnpm run build"
+  },
+  "keywords": [
+    "ledger",
+    "ethglobal",
+    "0g",
+    "galileo",
+    "erc-7857",
+    "erc-8004",
+    "ai-agents",
+    "inft",
+    "ens",
+    "axl",
+    "gensyn",
+    "cli"
+  ],
+  "homepage": "https://github.com/DarthStormerXII/ledger#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DarthStormerXII/ledger.git",
+    "directory": "tools"
+  },
+  "bugs": {
+    "url": "https://github.com/DarthStormerXII/ledger/issues"
+  },
+  "author": "Ledger team — ETHGlobal Open Agents 2026",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.10"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "ethers": "^6.16.0"

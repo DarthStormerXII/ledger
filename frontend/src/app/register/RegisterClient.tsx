@@ -425,7 +425,7 @@ cd ledger && pnpm install`}
         <CliBlock>
           {`# For the real encrypted upload (replaces the preview):
 echo '${form.memorySpec.replace(/'/g, "'\\''")}' > /tmp/${form.agentName}.json
-pnpm --filter @ledger/tools run register upload-memory \\
+npx ledger-register upload-memory \\
   --identity ~/.ledger/agent-${form.agentName}.json \\
   --input /tmp/${form.agentName}.json`}
         </CliBlock>
@@ -567,7 +567,7 @@ pnpm --filter @ledger/tools run register upload-memory \\
           because it uses a different RPC + your local key.
         </p>
         <CliBlock>
-          {`pnpm --filter @ledger/tools run register register-erc8004 \\
+          {`npx ledger-register register-erc8004 \\
   --identity ~/.ledger/agent-${form.agentName}.json`}
         </CliBlock>
       </Section>
@@ -614,7 +614,7 @@ LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun \\
           record, all 5 ENS namespaces, AXL peer status.
         </p>
         <CliBlock>
-          {`pnpm --filter @ledger/tools run register status \\
+          {`npx ledger-register status \\
   --identity ~/.ledger/agent-${form.agentName}.json`}
         </CliBlock>
       </Section>
