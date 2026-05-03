@@ -1,0 +1,60 @@
+{
+  "version": "2026-05-02",
+  "parentNameEnv": "PARENT_ENS_NAME",
+  "defaultParentName": "ledger.eth",
+  "sepolia": {
+    "chainId": 11155111,
+    "ensRegistry": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
+    "parentName": "ledger.eth",
+    "parentOwner": "0x32FE11d9900D63350016374BE98ff37c3Af75847",
+    "resolverAddress": "0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531",
+    "gatewayUrlTemplate": "https://9e04-124-123-105-119.ngrok-free.app/{sender}/{data}",
+    "resolverSigner": "0x3f37270ef375c20CD0b218B94454557005CfB248"
+  },
+  "galileo": {
+    "chainId": 16602,
+    "rpcEnv": "GALILEO_RPC",
+    "defaultRpc": "https://evmrpc-testnet.0g.ai",
+    "workerInftAddress": "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
+    "identityRegistryAddress": "0xa6a621e9C92fb8DFC963d2C20e8C5CB4C5178cBb"
+  },
+  "baseSepolia": {
+    "rpcEnv": "BASE_SEPOLIA_RPC",
+    "defaultRpc": "https://sepolia.base.org",
+    "erc8004ReputationRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+    "escrowAddress": "0x12D2162F47AAAe1B0591e898648605daA186D644"
+  },
+  "namespaces": {
+    "who": {
+      "pattern": "who.worker-NNN.<parent>",
+      "addr": "current WorkerINFT.ownerOf(tokenId)"
+    },
+    "pay": {
+      "pattern": "pay.worker-NNN.<parent>",
+      "addr": "fresh HD-derived payment address per resolution",
+      "textRecords": ["ai.pay.address", "ai.pay.nonce", "ai.pay.path", "ai.pay.master", "ai.pay.scheme"]
+    },
+    "tx": {
+      "pattern": "tx.<txid>.worker-NNN.<parent>",
+      "textRecords": ["ai.tx.cid", "ai.tx.intent", "ai.tx.outcome", "ai.tx.chain", "ai.tx.amount", "ai.tx.receipt"]
+    },
+    "rep": {
+      "pattern": "rep.worker-NNN.<parent>",
+      "textRecords": ["ai.rep.count", "ai.rep.average", "ai.rep.tags", "ai.rep.registry", "ai.rep.agent", "ai.rep.summary"]
+    },
+    "mem": {
+      "pattern": "mem.worker-NNN.<parent>",
+      "textRecords": ["ai.mem.cid", "ai.mem.pointer"]
+    }
+  },
+  "demo": {
+    "tokenId": "1",
+    "workerLabel": "worker-001",
+    "historicalOwnerBlock": 31130502,
+    "postTransferOwnerBlock": 31130543,
+    "oldOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+    "newOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+    "memoryCid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
+    "attestationDigest": "0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950"
+  }
+}
