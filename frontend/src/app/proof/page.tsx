@@ -437,7 +437,7 @@ const sections: Section[] = [
         label: "Disclosure",
         value: "Reputation history was seeded for the demo.",
         caption:
-          "47 fake completion feedback records signed by 47 distinct employer-agent keys. Disclosed in README and 0g-proof.md per ETHGlobal anti-fraud norms.",
+          "47 seeded completion feedback records signed across 8 employer-agent keys. Disclosed in README and 0g-proof.md per ETHGlobal anti-fraud norms.",
       },
     ],
   },
