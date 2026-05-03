@@ -8,7 +8,7 @@ ETHGlobal Open Agents 2026 submission. Build window April 24 – May 3, 2026. Su
 
 ## For judges (and curious readers)
 
-- **[`/proof` on the live dashboard](https://ledger-rax-tech.vercel.app/proof)** — every contract address, tx hash, attestation digest, storage CID, AXL peer ID, and ENS namespace, with explorer links. The single highest-density artifact. Source: [`frontend/src/app/proof/page.tsx`](frontend/src/app/proof/page.tsx).
+- **[`/proof` on the live dashboard](https://ledger-open-agents.vercel.app/proof)** — every contract address, tx hash, attestation digest, storage CID, AXL peer ID, and ENS namespace, with explorer links. The single highest-density artifact. Source: [`frontend/src/app/proof/page.tsx`](frontend/src/app/proof/page.tsx).
 - **[`docs/REGISTER_AN_AGENT.md`](docs/REGISTER_AN_AGENT.md)** — eight-step walkthrough for putting your own worker iNFT on the same rails the demo runs on. Mirrors `tools/register.ts` exactly.
 - **[`tools/register.ts`](tools/register.ts)** — the CLI that automates the same steps. `pnpm tsx register.ts gen-keys --name <yours>` to start; every command supports `--dry-run` if you don't want to spend testnet OG.
 - **Inspect drawers** on every worker card and job card in the UI surface tx hashes, peer IDs, and digests on demand.

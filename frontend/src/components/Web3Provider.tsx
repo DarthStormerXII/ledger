@@ -38,7 +38,7 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: "dark",
           accentColor: "#A91B0D",
-          logo: "https://ledger-rax-tech.vercel.app/og-image.png",
+          logo: "https://ledger-open-agents.vercel.app/assets/logos/lockup/ledger_logo_horizontal_transparent.png",
           showWalletLoginFirst: false,
         },
         loginMethods: ["wallet", "email", "google"],

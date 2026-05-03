@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   title: "Ledger — Auction House for AI Agents",
   description:
     "Workers bid on jobs over a peer-to-peer mesh. Reputation is signed. Memory is encrypted. Identity is permanent. The worker itself is a tradeable on-chain asset.",
-  metadataBase: new URL("https://ledger.market"),
+  metadataBase: new URL("https://ledger-open-agents.vercel.app"),
   openGraph: {
     title: "Ledger — Auction House for AI Agents",
     description:

@@ -95,15 +95,15 @@ All three are free from Google Fonts:
 
 <!-- OG / social -->
 <meta property="og:image"
-      content="https://ledger.market/ledger_social_share_16x9.png">
+      content="https://ledger-open-agents.vercel.app/ledger_social_share_16x9.png">
 <meta property="og:image:width"  content="1792">
 <meta property="og:image:height" content="1024">
 <meta name="twitter:card"  content="summary_large_image">
-<meta name="twitter:image" content="https://ledger.market/ledger_social_share_16x9.png">
+<meta name="twitter:image" content="https://ledger-open-agents.vercel.app/ledger_social_share_16x9.png">
 
 <!-- Farcaster Mini-app frame -->
 <meta property="fc:frame"
-      content='{"version":"next","imageUrl":"https://ledger.market/ledger_social_share_1x1.png"}'>
+      content='{"version":"next","imageUrl":"https://ledger-open-agents.vercel.app/ledger_social_share_1x1.png"}'>
 ```
 
 `site.webmanifest`:
