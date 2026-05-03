@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { useRouter } from "next/navigation";
 import type { Job } from "@/lib/data";
 import {
@@ -12,85 +12,227 @@ import {
   LEDGER_ESCROW_ADDRESS,
   DEMO_TASK_ID,
   DEMO_RELEASE_TX,
+  galileoTx,
+  galileoAddr,
 } from "@/lib/contracts";
+
+type DerivedStatus = "open" | "accepted" | "settled" | "cancelled" | "slashed";
+
+function deriveStatus(title: string): DerivedStatus {
+  if (title === "Bid accepted") return "accepted";
+  if (title === "Task settled") return "settled";
+  if (title === "Cancelled") return "cancelled";
+  if (title === "Bond slashed") return "slashed";
+  return "open";
+}
+
+const STATUS_LABEL: Record<DerivedStatus, string> = {
+  open: "OPEN",
+  accepted: "ACCEPTED",
+  settled: "SETTLED",
+  cancelled: "CANCELLED",
+  slashed: "SLASHED",
+};
 
 export function JobsListClient({ jobs }: { jobs: Job[] }) {
   const router = useRouter();
   const [tick, setTick] = useState(0);
   const [inspectJobId, setInspectJobId] = useState<string | null>(null);
+  const hasLive = jobs.some((j) => {
+    const s = deriveStatus(j.title);
+    return s === "open" || s === "accepted";
+  });
   useEffect(() => {
+    if (!hasLive) return;
     const id = window.setInterval(() => setTick((t) => t + 1), 1000);
     return () => window.clearInterval(id);
-  }, []);
+  }, [hasLive]);
+
   const fmt = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
   const inspectJob = jobs.find((j) => j.id === inspectJobId);
 
+  // Stable counts per status — drives the header band so judges see the live mix.
+  const counts = jobs.reduce(
+    (acc, j) => {
+      const s = deriveStatus(j.title);
+      acc[s] = (acc[s] ?? 0) + 1;
+      return acc;
+    },
+    {} as Record<DerivedStatus, number>,
+  );
+
+  const stop = (e: MouseEvent) => e.stopPropagation();
+
   return (
     <div className="page jobs-page-wrap">
       <div className="jobs-page-header">
-        <h1>Live jobs.</h1>
-        <span className="caps-md muted">{jobs.length} ACTIVE</span>
+        <div>
+          <h1>Live jobs.</h1>
+          <p className="jobs-page-sub">
+            Every row is an on-chain LedgerEscrow task on 0G Galileo. Click a
+            card to enter the auction room, or inspect for the full receipt
+            chain.
+          </p>
+        </div>
+        <div className="jobs-page-counts">
+          <span>
+            <strong>{counts.open ?? 0}</strong> open
+          </span>
+          <span className="dot-sep">·</span>
+          <span>
+            <strong>{counts.accepted ?? 0}</strong> accepted
+          </span>
+          <span className="dot-sep">·</span>
+          <span>
+            <strong>{counts.settled ?? 0}</strong> settled
+          </span>
+          <a
+            href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="caps-sm jobs-escrow-link"
+            onClick={stop}
+            title="Open LedgerEscrow on Galileo explorer"
+          >
+            ESCROW ↗
+          </a>
+        </div>
       </div>
-      <div>
+
+      {jobs.length === 0 && (
+        <div className="job-empty">
+          <div className="caps-md muted" style={{ marginBottom: 8 }}>
+            NO TASKS YET
+          </div>
+          <div style={{ color: "var(--ledger-ink-muted)", marginBottom: 16 }}>
+            Live testnet — no escrow events yet. Be the first to post.
+          </div>
+          <button
+            className="btn btn-italic"
+            onClick={() => router.push("/post")}
+          >
+            Post a task →
+          </button>
+        </div>
+      )}
+
+      <div className="jobs-grid">
         {jobs.map((j) => {
-          const t = Math.max(0, j.timeLeft - tick);
+          const status = deriveStatus(j.title);
+          const isLive = status === "open" || status === "accepted";
+          const t = isLive ? Math.max(0, j.timeLeft - tick) : 0;
+          const expired = isLive && t === 0;
+          const timerColor =
+            t < 30 && t > 0
+              ? "var(--ledger-gold-leaf)"
+              : "var(--ledger-oxblood)";
           return (
             <div
               key={j.id}
+              className={`job-card status-${status}`}
               onClick={() => router.push(`/jobs/${j.id}`)}
-              className="jobs-row"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") router.push(`/jobs/${j.id}`);
+              }}
             >
-              <div style={{ minWidth: 0 }}>
-                <div className="job-title-display">{j.title}</div>
-                <div
-                  className="mono muted"
-                  style={{ fontSize: 12, marginTop: 4 }}
-                >
-                  {j.id} · {j.employer}
+              <div className="job-card-head">
+                <span className={`job-status-pill status-${status}`}>
+                  ● {STATUS_LABEL[status]}
+                </span>
+                {isLive ? (
+                  <div className="job-card-timer">
+                    <span
+                      className="mono"
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 500,
+                        color: expired ? "var(--ledger-ink-muted)" : timerColor,
+                      }}
+                    >
+                      {expired ? "EXPIRED" : fmt(t)}
+                    </span>
+                    {!expired && (
+                      <span
+                        className="caps-sm muted"
+                        style={{ fontSize: 10, marginLeft: 6 }}
+                      >
+                        LEFT
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <a
+                    className="caps-sm job-card-receipt"
+                    href={galileoAddr(LEDGER_ESCROW_ADDRESS)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    onClick={stop}
+                  >
+                    RECEIPT ↗
+                  </a>
+                )}
+              </div>
+
+              <div>
+                <div className="job-card-title">{j.title}.</div>
+                <div className="job-card-desc">{j.desc}</div>
+              </div>
+
+              <div className="job-card-band">
+                <div className="job-card-stat">
+                  <div className="caps-sm muted">PAYOUT</div>
+                  <div className="italic-num job-card-stat-val">{j.payout}</div>
+                </div>
+                {j.bond !== "—" && (
+                  <div className="job-card-stat">
+                    <div className="caps-sm muted">
+                      {status === "settled" ? "WINNING BID" : "BID"}
+                    </div>
+                    <div className="italic-num job-card-stat-val-sm">
+                      {j.bond}
+                    </div>
+                  </div>
+                )}
+                <div className="job-card-stat">
+                  <div className="caps-sm muted">BIDS</div>
+                  <div className="italic-num job-card-stat-val-sm">
+                    {j.bids}
+                  </div>
                 </div>
               </div>
-              <div
-                className="jobs-row-time"
-                style={{
-                  textAlign: "right",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 4,
-                }}
-              >
-                <span
-                  className="mono"
-                  style={{
-                    fontSize: 22,
-                    fontWeight: 500,
-                    color:
-                      t < 30
-                        ? "var(--ledger-gold-leaf)"
-                        : "var(--ledger-oxblood)",
-                  }}
-                >
-                  {fmt(t)}
-                </span>
-                <span
-                  className="italic-num"
-                  style={{ fontSize: 16, color: "var(--ledger-paper)" }}
-                >
-                  {j.payout}
-                </span>
-              </div>
-              <div
-                className="jobs-row-bids"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-end",
-                  gap: 8,
-                }}
-              >
-                <span className="caps-sm muted">[{j.bids} BIDS]</span>
-                <InspectPill onClick={() => setInspectJobId(j.id)} />
+
+              <div className="job-card-foot">
+                <div className="job-card-buyer">
+                  <span className="caps-sm muted">BUYER</span>
+                  <a
+                    href={galileoAddr(j.employer)}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="mono job-card-buyer-link"
+                    onClick={stop}
+                    title="Open buyer on Galileo explorer"
+                  >
+                    {j.employer}
+                  </a>
+                </div>
+                <div className="job-card-actions">
+                  <span onClick={stop}>
+                    <InspectPill onClick={() => setInspectJobId(j.id)} />
+                  </span>
+                  <button
+                    className="job-card-cta"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      router.push(`/jobs/${j.id}`);
+                    }}
+                  >
+                    Open auction →
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -113,25 +255,12 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
 }
 
 function buildJobInspectGroups(job: Job): InspectGroup[] {
-  const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
-  const galileoAddr = (a: string) =>
-    `https://chainscan-galileo.0g.ai/address/${a}`;
   return [
     {
       title: "AUCTION (AXL MESH)",
       rows: [
         { label: "Job ID", value: job.id, mono: true },
         { label: "Buyer", value: job.employer },
-        {
-          label: "AXL node source",
-          value: "github.com/gensyn-ai/axl",
-          href: "https://github.com/gensyn-ai/axl",
-        },
-        {
-          label: "Live mesh /topology",
-          value: "axl.fierypools.fun/topology",
-          href: "https://axl.fierypools.fun/topology",
-        },
         {
           label: "Channel",
           value: "#ledger-jobs (gossipsub fork)",
@@ -147,15 +276,14 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
           value: "Hop-by-hop TLS + end-to-end payload (two layers)",
         },
         {
-          label: "Bootstrap (Fly · sjc)",
-          value: "tls://66.51.123.38:9001 — kill-resilient",
-          href: "https://fly.io/apps/ledger-axl-usw-180526",
+          label: "Bootstrap",
+          value: "tls://66.51.123.38:9001 (sjc) — kill-resilient",
           mono: true,
         },
       ],
     },
     {
-      title: "ESCROW (BASE SEPOLIA / 0G GALILEO)",
+      title: "ESCROW (0G GALILEO)",
       rows: [
         {
           label: "LedgerEscrow contract",
@@ -164,7 +292,7 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
           mono: true,
         },
         { label: "Payment", value: job.payout },
-        { label: "Worker bond", value: job.bond },
+        { label: "Worker bid", value: job.bond },
         { label: "Time left", value: `${job.timeLeft}s · deadline-anchored` },
         {
           label: "taskId derivation",
