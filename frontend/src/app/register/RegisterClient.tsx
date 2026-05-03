@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { type ReactNode, useMemo, useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import {
   useAccount,
@@ -11,7 +11,7 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import { keccak256, parseEther, stringToBytes, toHex, type Hex } from "viem";
+import { keccak256, parseEther, stringToBytes, type Hex } from "viem";
 import { galileo } from "@/lib/chains";
 import {
   LEDGER_IDENTITY_REGISTRY_ADDRESS,
@@ -19,6 +19,7 @@ import {
   WORKER_INFT_ABI as BASE_WORKER_INFT_ABI,
   galileoTx,
 } from "@/lib/contracts";
+import { WalletGate } from "@/components/WalletGate";
 
 /**
  * RegisterClient — interactive agent onboarding flow.
@@ -403,7 +404,7 @@ export function RegisterClient() {
         <CliBlock>
           {`# For the real encrypted upload (replaces the preview):
 echo '${form.memorySpec.replace(/'/g, "'\\''")}' > /tmp/${form.agentName}.json
-pnpm tsx tools/register.ts upload-memory \\
+pnpm --filter @ledger/tools run register upload-memory \\
   --identity ~/.ledger/agent-${form.agentName}.json \\
   --input /tmp/${form.agentName}.json`}
         </CliBlock>
@@ -436,44 +437,55 @@ pnpm tsx tools/register.ts upload-memory \\
             href={`https://chainscan-galileo.0g.ai/address/${WORKER_INFT_ADDRESS}`}
           />
         </div>
-        <div className="register-action-row">
-          <button
-            className="btn"
-            disabled={!canMint || isSigningMint || mintConfirming}
-            onClick={submitMint}
-          >
-            {isSigningMint
-              ? "Sign in wallet…"
-              : mintConfirming
-                ? "Confirming on Galileo…"
-                : mintConfirmed
-                  ? "Minted ✓"
-                  : "Mint Worker iNFT"}
-          </button>
-          {mintTx ? (
-            <a
-              href={galileoTx(mintTx)}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-text"
+        <WalletGate
+          title="Connect to mint your worker"
+          description={
+            <>
+              Minting fires a real <code>WorkerINFT.mint</code> transaction on
+              0G Galileo. You&rsquo;ll sign once in your wallet — gas comes from
+              your OG balance.
+            </>
+          }
+        >
+          <div className="register-action-row">
+            <button
+              className="btn"
+              disabled={!canMint || isSigningMint || mintConfirming}
+              onClick={submitMint}
             >
-              {mintConfirmed ? "View tx ↗" : "Pending tx ↗"}
-            </a>
-          ) : null}
-          {newTokenId !== null ? (
-            <span className="caps-sm muted">
-              tokenId · {String(newTokenId)}
-            </span>
-          ) : null}
-        </div>
+              {isSigningMint
+                ? "Sign in wallet…"
+                : mintConfirming
+                  ? "Confirming on Galileo…"
+                  : mintConfirmed
+                    ? "Minted ✓"
+                    : "Mint Worker iNFT"}
+            </button>
+            {mintTx ? (
+              <a
+                href={galileoTx(mintTx)}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-text"
+              >
+                {mintConfirmed ? "View tx ↗" : "Pending tx ↗"}
+              </a>
+            ) : null}
+            {newTokenId !== null ? (
+              <span className="caps-sm muted">
+                tokenId · {String(newTokenId)}
+              </span>
+            ) : null}
+          </div>
+        </WalletGate>
       </Section>
 
       {/* REGISTER IDENTITY */}
       <Section label="STEP 4 · REGISTER IDENTITY ON-CHAIN">
         <p className="register-step-desc">
           Calls <code>LedgerIdentityRegistry.registerAgent</code> on 0G Galileo.
-          This is the lookup table the marketplace reads to resolve your agent's
-          address to a name + capabilities.
+          This is the lookup table the marketplace reads to resolve your
+          agent&apos;s address to a name + capabilities.
         </p>
         <div className="register-mint-summary">
           <SummaryRow label="agentAddress" value={address ?? "—"} mono />
@@ -486,33 +498,44 @@ pnpm tsx tools/register.ts upload-memory \\
             href={`https://chainscan-galileo.0g.ai/address/${LEDGER_IDENTITY_REGISTRY_ADDRESS}`}
           />
         </div>
-        <div className="register-action-row">
-          <button
-            className="btn"
-            disabled={!canRegister || isSigningRegister || regConfirming}
-            onClick={submitRegister}
-          >
-            {!mintConfirmed
-              ? "Mint first"
-              : isSigningRegister
-                ? "Sign in wallet…"
-                : regConfirming
-                  ? "Confirming on Galileo…"
-                  : regConfirmed
-                    ? "Registered ✓"
-                    : "Register Identity"}
-          </button>
-          {registerTx ? (
-            <a
-              href={galileoTx(registerTx)}
-              target="_blank"
-              rel="noreferrer"
-              className="btn-text"
+        <WalletGate
+          title="Connect to register your identity"
+          description={
+            <>
+              This signs <code>LedgerIdentityRegistry.registerAgent</code> on 0G
+              Galileo so the marketplace can resolve your address to a human
+              name and capability list.
+            </>
+          }
+        >
+          <div className="register-action-row">
+            <button
+              className="btn"
+              disabled={!canRegister || isSigningRegister || regConfirming}
+              onClick={submitRegister}
             >
-              {regConfirmed ? "View tx ↗" : "Pending tx ↗"}
-            </a>
-          ) : null}
-        </div>
+              {!mintConfirmed
+                ? "Mint first"
+                : isSigningRegister
+                  ? "Sign in wallet…"
+                  : regConfirming
+                    ? "Confirming on Galileo…"
+                    : regConfirmed
+                      ? "Registered ✓"
+                      : "Register Identity"}
+            </button>
+            {registerTx ? (
+              <a
+                href={galileoTx(registerTx)}
+                target="_blank"
+                rel="noreferrer"
+                className="btn-text"
+              >
+                {regConfirmed ? "View tx ↗" : "Pending tx ↗"}
+              </a>
+            ) : null}
+          </div>
+        </WalletGate>
       </Section>
 
       {/* OFF-CHAIN STEPS */}
@@ -523,7 +546,7 @@ pnpm tsx tools/register.ts upload-memory \\
           because it uses a different RPC + your local key.
         </p>
         <CliBlock>
-          {`pnpm tsx tools/register.ts register-erc8004 \\
+          {`pnpm --filter @ledger/tools run register register-erc8004 \\
   --identity ~/.ledger/agent-${form.agentName}.json`}
         </CliBlock>
       </Section>
@@ -543,18 +566,24 @@ MEMORY_POINTERS_JSON='{"${form.agentName}":"${memoryCidPreview}"}' \\
         </CliBlock>
       </Section>
 
-      <Section label="STEP 7 · BOOT THE RUNTIME">
+      <Section label="STEP 7 · RUN A WORKER (RESEARCH EXAMPLE)">
         <p className="register-step-desc">
-          Connects your worker to the AXL mesh. Subscribes to{" "}
-          <code>#ledger-jobs</code>, listens for <code>TASK_POSTED</code>,
-          submits <code>BID</code> messages.
+          Boots an end-to-end worker against the live ENS resolver and escrow.
+          The runtime primitives live in <code>@ledger/agent-kit</code>(
+          <code>agents/ledger-agent-kit/src/runtime.ts</code>); the example
+          script runs one hardcoded research task through the full
+          plan&nbsp;→&nbsp;decide&nbsp;→&nbsp;reason&nbsp;→&nbsp;deliver loop.
+          To wire your own continuous-bidding agent, fork the example and
+          subscribe to <code>#ledger-jobs</code> via the AXL bridge.
         </p>
         <CliBlock>
-          {`pnpm --filter @ledger/agent-runtime run start \\
-  --identity ~/.ledger/agent-${form.agentName}.json \\
-  --bootstrap tls://66.51.123.38:9001 \\
-  --strategy cheapest-above-cost-floor \\
-  --cost-floor-og 0.005`}
+          {`# Run the bundled research-worker example end-to-end:
+LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun \\
+  pnpm --filter @ledger/agent-kit run example:research
+
+# To bid against your own task, fork agents/ledger-agent-kit/examples/
+# research-worker-agent.ts and replace the demoTask object with a live
+# TASK_POSTED payload from /api/axl/recv.`}
         </CliBlock>
       </Section>
 
@@ -564,7 +593,7 @@ MEMORY_POINTERS_JSON='{"${form.agentName}":"${memoryCidPreview}"}' \\
           record, all 5 ENS namespaces, AXL peer status.
         </p>
         <CliBlock>
-          {`pnpm tsx tools/register.ts status \\
+          {`pnpm --filter @ledger/tools run register status \\
   --identity ~/.ledger/agent-${form.agentName}.json`}
         </CliBlock>
       </Section>

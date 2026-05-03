@@ -18,6 +18,7 @@ import {
   LEDGER_ESCROW_ADDRESS,
   galileoTx,
 } from "@/lib/contracts";
+import { WalletGate } from "@/components/WalletGate";
 
 // Local-action states only. The signing/confirming/confirmed states are
 // derived from wagmi below — keeping them out of setState avoids the
@@ -392,50 +393,47 @@ export function PostTaskClient() {
           payout={form.payout}
         />
 
-        <button
-          onClick={submit}
-          disabled={
-            !ready ||
-            (authenticated && !canSubmit) ||
-            phase === "signing" ||
-            phase === "confirming"
-          }
-          className="btn btn-italic"
-          style={{
-            width: "100%",
-            height: 56,
-            fontSize: 20,
-            marginTop: 16,
-            cursor:
-              !ready ||
-              (authenticated && !canSubmit) ||
-              phase === "signing" ||
-              phase === "confirming"
-                ? "not-allowed"
-                : "pointer",
-            opacity:
-              !ready ||
-              (authenticated && !canSubmit) ||
-              phase === "signing" ||
-              phase === "confirming"
-                ? 0.6
-                : 1,
-          }}
-        >
-          {!ready
-            ? "Loading…"
-            : !authenticated
-              ? "Connect to post"
-              : !onGalileo
-                ? "Switch to 0G Galileo + post task"
-                : phase === "signing"
-                  ? "Awaiting signature…"
-                  : phase === "confirming"
-                    ? "Confirming on chain…"
-                    : phase === "confirmed"
-                      ? "Posted ✓ — opening auction"
-                      : "Post task on 0G Galileo"}
-        </button>
+        <div style={{ marginTop: 16 }}>
+          <WalletGate
+            title="Connect to post a task"
+            description={
+              <>
+                Posting fires <code>LedgerEscrow.postTask</code> on 0G Galileo
+                and locks your payout into escrow until the auction settles.
+                You&rsquo;ll sign once.
+              </>
+            }
+          >
+            <button
+              onClick={submit}
+              disabled={
+                !canSubmit || phase === "signing" || phase === "confirming"
+              }
+              className="btn btn-italic"
+              style={{
+                width: "100%",
+                height: 56,
+                fontSize: 20,
+                cursor:
+                  !canSubmit || phase === "signing" || phase === "confirming"
+                    ? "not-allowed"
+                    : "pointer",
+                opacity:
+                  !canSubmit || phase === "signing" || phase === "confirming"
+                    ? 0.6
+                    : 1,
+              }}
+            >
+              {phase === "signing"
+                ? "Awaiting signature…"
+                : phase === "confirming"
+                  ? "Confirming on chain…"
+                  : phase === "confirmed"
+                    ? "Posted ✓ — opening auction"
+                    : "Post task on 0G Galileo"}
+            </button>
+          </WalletGate>
+        </div>
 
         {errMsg && (
           <div
