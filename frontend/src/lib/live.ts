@@ -235,10 +235,9 @@ export function liveLotToLot(l: LiveLot): Lot {
   // for sale.
   const record = WORKERS.find((w) => w.tokenId === l.tokenId);
   const listed = record?.listing?.listed === true;
-  const askPrice =
-    record?.listing?.askPrice && record?.listing?.askPriceUnit
-      ? `${record.listing.askPrice} ${record.listing.askPriceUnit}`
-      : record?.listing?.askPrice;
+  // LotPlate renders "{lot.askPrice} 0G" — pass the bare numeric string,
+  // not "1.2 0G", or the card would render "1.2 0G 0G".
+  const askPrice = record?.listing?.askPrice;
   return {
     lot: l.lot,
     ens: l.ensName,

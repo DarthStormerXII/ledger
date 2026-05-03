@@ -62,7 +62,8 @@ export function LotPlate({
       </div>
       <div className="lot-name">{lot.ens}</div>
       <div className="lot-meta muted">
-        {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} 0G EARNED
+        {lot.jobs} JOBS · {lot.rating} ★ ·{" "}
+        {lot.earnedNum > 0 ? <>{lot.earned} 0G EARNED</> : <>ERC-8004 SEEDED</>}
       </div>
       {showPrice && lot.listed && lot.askPrice && (
         <div
@@ -249,19 +250,29 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
         },
         ...(hasTokenId
           ? [
-              { label: "Job count", value: String(lot.jobs) },
-              { label: "Average rating", value: `${lot.rating} / 5.00` },
-              { label: "Total earned", value: `${lot.earned} 0G` },
               {
-                label: "Disclosure",
+                label: "Feedback records",
+                value: String(lot.jobs),
+                caption:
+                  lot.earnedNum > 0
+                    ? "Live count from ERC-8004 getSummary."
+                    : "Live count from ERC-8004 getSummary. Records were seeded for the demo (no escrow flow yet) — see /proof for the disclosure.",
+              },
+              { label: "Average rating", value: `${lot.rating} / 5.00` },
+              {
+                label: "Escrow earnings",
                 value:
-                  "ERC-8004 values are read through the live registry path. Demo reputation records are seeded and disclosed on /proof.",
+                  lot.earnedNum > 0
+                    ? `${lot.earned} 0G`
+                    : "0 0G — no escrow releases yet",
+                caption:
+                  "Sum of bidAmount over LedgerEscrow.PaymentReleased events where worker == ownerOf(tokenId). Independent of ERC-8004 feedback count.",
               },
             ]
           : [
-              { label: "Job count", value: String(lot.jobs) },
+              { label: "Feedback records", value: String(lot.jobs) },
               { label: "Average rating", value: `${lot.rating} / 5.00` },
-              { label: "Total earned", value: `${lot.earned} 0G` },
+              { label: "Escrow earnings", value: `${lot.earned} 0G` },
               {
                 label: "Disclosure",
                 value: "No live token ID could be derived for this lot.",
