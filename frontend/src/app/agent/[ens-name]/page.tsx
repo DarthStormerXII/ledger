@@ -3,6 +3,7 @@ import { Shell } from "@/components/Shell";
 import { WorkerProfileClient } from "./WorkerProfileClient";
 import { getAllLots, liveLotToLot, getAllJobs, WORKERS } from "@/lib/live";
 import type { RecentJob, ProvenanceEvent } from "@/lib/data";
+import { ERC8004_REPUTATION_REGISTRY } from "@/lib/contracts";
 import { formatEther } from "viem";
 
 export const revalidate = 0;
@@ -24,15 +25,30 @@ export default async function AgentPage({
   // Build recent-jobs from on-chain escrow events where this worker won
   let recentJobs: RecentJob[] = [];
   let provenance: ProvenanceEvent[] = [];
+  let settlementProof:
+    | {
+        releaseTx?: string;
+        reputationRegistry: string;
+        memoryCID: string;
+      }
+    | undefined;
   try {
     const allJobs = await getAllJobs();
     const ownerLower = liveLot.owner.toLowerCase();
-    recentJobs = allJobs
-      .filter(
-        (j) =>
-          j.worker?.toLowerCase() === ownerLower &&
-          (j.status === "Released" || j.status === "Accepted"),
-      )
+    const workerJobs = allJobs.filter(
+      (j) =>
+        j.worker?.toLowerCase() === ownerLower &&
+        (j.status === "Released" || j.status === "Accepted"),
+    );
+    const releasedJob = workerJobs.find((j) => j.status === "Released");
+    if (releasedJob) {
+      settlementProof = {
+        releaseTx: releasedJob.releaseTx,
+        reputationRegistry: ERC8004_REPUTATION_REGISTRY,
+        memoryCID: liveLot.memoryCID,
+      };
+    }
+    recentJobs = workerJobs
       .slice(0, 6)
       .map((j) => ({
         date: "—",
@@ -67,6 +83,7 @@ export default async function AgentPage({
         }}
         recentJobs={recentJobs}
         provenance={provenance}
+        settlementProof={settlementProof}
       />
     </Shell>
   );

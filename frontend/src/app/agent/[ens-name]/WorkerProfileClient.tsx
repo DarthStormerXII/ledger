@@ -2,7 +2,7 @@
 
 import { type ReactNode, useState } from "react";
 import type { Lot, RecentJob, ProvenanceEvent } from "@/lib/data";
-import { SettlementStrip } from "@/components/SettlementStrip";
+import { SettlementStrip, type SettlementProof } from "@/components/SettlementStrip";
 import { CapabilityRow } from "@/components/CapabilityRow";
 import { ReputationChart } from "@/components/ReputationChart";
 import { InheritanceModal } from "@/components/InheritanceModal";
@@ -13,6 +13,7 @@ export function WorkerProfileClient({
   liveProof,
   recentJobs,
   provenance,
+  settlementProof,
 }: {
   lot: Lot;
   liveProof: {
@@ -23,6 +24,7 @@ export function WorkerProfileClient({
   };
   recentJobs: RecentJob[];
   provenance: ProvenanceEvent[];
+  settlementProof?: SettlementProof;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -35,7 +37,7 @@ export function WorkerProfileClient({
 
   return (
     <div className="page" style={{ padding: 40 }}>
-      <SettlementStrip />
+      <SettlementStrip proof={settlementProof} />
 
       {/* HEADER BAND */}
       <div

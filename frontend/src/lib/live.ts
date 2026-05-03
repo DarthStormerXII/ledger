@@ -378,9 +378,12 @@ export type LiveJob = {
   deadline: bigint;
   minReputation: bigint;
   bidAmount: bigint;
+  resultHash: Hex;
   status: TaskStatus;
   postedTx: Hex;
   postedBlock: bigint;
+  releaseTx?: Hex;
+  releaseBlock?: bigint;
 };
 
 // Maps a LiveJob → the legacy Job shape consumed by JobsListClient.
@@ -409,11 +412,26 @@ export function liveJobToJob(j: LiveJob): Job {
 }
 
 export async function getAllJobs(): Promise<LiveJob[]> {
-  const postedLogs = await galileoClient.getLogs({
-    address: LEDGER_ESCROW_ADDRESS,
-    event: ESCROW_ABI[1],
-    fromBlock: 0n,
-  });
+  const [postedLogs, releaseLogs] = await Promise.all([
+    galileoClient.getLogs({
+      address: LEDGER_ESCROW_ADDRESS,
+      event: ESCROW_ABI[1],
+      fromBlock: 0n,
+    }),
+    galileoClient.getLogs({
+      address: LEDGER_ESCROW_ADDRESS,
+      event: ESCROW_ABI[3],
+      fromBlock: 0n,
+    }),
+  ]);
+  const releaseByTask = new Map<Hex, { txHash: Hex; blockNumber: bigint }>();
+  for (const release of releaseLogs) {
+    if (!release.args?.taskId || !release.transactionHash) continue;
+    releaseByTask.set(release.args.taskId as Hex, {
+      txHash: release.transactionHash,
+      blockNumber: release.blockNumber ?? 0n,
+    });
+  }
 
   const jobs: LiveJob[] = [];
   for (const log of postedLogs) {
@@ -435,6 +453,7 @@ export async function getAllJobs(): Promise<LiveJob[]> {
         Hex,
         number,
       ];
+      const release = releaseByTask.get(log.args.taskId as Hex);
       jobs.push({
         taskId: log.args.taskId as Hex,
         buyer: t[0],
@@ -444,9 +463,12 @@ export async function getAllJobs(): Promise<LiveJob[]> {
         deadline: t[3],
         minReputation: t[4],
         bidAmount: t[5],
+        resultHash: t[7],
         status: STATUS_LABEL[t[8]] ?? "Posted",
         postedTx: log.transactionHash ?? "0x0",
         postedBlock: log.blockNumber ?? 0n,
+        releaseTx: release?.txHash,
+        releaseBlock: release?.blockNumber,
       });
     } catch {
       // skip

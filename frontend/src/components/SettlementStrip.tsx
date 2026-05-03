@@ -1,24 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { SettlementLeg } from "./SettlementLeg";
+import { baseSepoliaAddr, galileoTx, ogStorageCid } from "@/lib/contracts";
 
-/**
- * Wide horizontal strip with three real settlement legs (USDC paid on Base,
- * Reputation recorded on Base, 0G Storage CID). Every 8 seconds the strip
- * briefly flips a leg into PENDING_RECONCILE to show the two-phase commit.
- */
-export function SettlementStrip() {
-  const [pending, setPending] = useState<number | null>(null);
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      const which = Math.floor(Math.random() * 3);
-      setPending(which);
-      window.setTimeout(() => setPending(null), 1800);
-    }, 8000);
-    return () => window.clearInterval(id);
-  }, []);
+export type SettlementProof = {
+  releaseTx?: string;
+  reputationRegistry: string;
+  memoryCID: string;
+};
 
+export function SettlementStrip({ proof }: { proof?: SettlementProof }) {
+  const settled = Boolean(proof?.releaseTx);
   return (
     <div
       style={{
@@ -39,26 +31,36 @@ export function SettlementStrip() {
         }}
       >
         <SettlementLeg
-          pending={pending === 0}
-          label="USDC PAID ON BASE"
-          hash="0x9a4f…ec21"
-          href="https://sepolia.basescan.org"
+          pending={!settled}
+          label="0G ESCROW RELEASE"
+          hash={proof?.releaseTx ? shortValue(proof.releaseTx) : "no release tx"}
+          href={proof?.releaseTx ? galileoTx(proof.releaseTx) : undefined}
         />
         <SettlementLeg
-          pending={pending === 1}
-          label="REPUTATION RECORDED"
-          hash="0x33ad…b0e2"
-          href="https://sepolia.basescan.org"
+          pending={!settled}
+          label="REPUTATION REGISTRY"
+          hash={shortValue(proof?.reputationRegistry ?? "not recorded")}
+          href={proof?.reputationRegistry ? baseSepoliaAddr(proof.reputationRegistry) : undefined}
         />
         <SettlementLeg
-          pending={pending === 2}
+          pending={!settled}
           label="0G STORAGE CID"
-          hash="bafy…7e3p"
+          hash={shortValue(proof?.memoryCID ?? "not resolved")}
+          href={proof?.memoryCID ? ogStorageCid(proof.memoryCID) : undefined}
         />
       </div>
-      <span className="pill" style={{ color: "var(--ledger-success)" }}>
-        <span className="dot"></span>SETTLED
+      <span
+        className="pill"
+        style={{ color: settled ? "var(--ledger-success)" : "var(--ledger-warning)" }}
+      >
+        <span className="dot"></span>
+        {settled ? "SETTLED" : "NO RELEASE"}
       </span>
     </div>
   );
+}
+
+function shortValue(value: string) {
+  if (value.length <= 18) return value;
+  return `${value.slice(0, 8)}…${value.slice(-6)}`;
 }

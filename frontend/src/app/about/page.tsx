@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
-import { LOTS } from "@/lib/data";
+import { getAllLots, liveLotToLot } from "@/lib/live";
+import { DEMO_OWNER_A, DEMO_OWNER_B, DEMO_TRANSFER_TX, galileoTx } from "@/lib/contracts";
 
-export default function AboutPage() {
-  const lot = LOTS[0]!;
+export default async function AboutPage() {
+  const lots = (await getAllLots().catch(() => [])).map(liveLotToLot);
+  const lot = lots[0];
   return (
     <Shell>
       <div className="page">
@@ -157,52 +159,60 @@ export default function AboutPage() {
                     className="lot-num"
                     style={{ color: "var(--ledger-ink)" }}
                   >
-                    LOT {lot.lot}
+                    LOT {lot?.lot ?? "—"}
                   </span>
                   <span
                     className="caps-sm"
                     style={{ color: "var(--ledger-oxblood)" }}
                   >
-                    LISTED
+                    LIVE
                   </span>
                 </div>
-                <div
-                  style={{
-                    aspectRatio: 1,
-                    border: "1px solid var(--ledger-ink)",
-                    padding: 28,
-                    background: "var(--ledger-paper)",
-                  }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={lot.avatar}
-                    alt=""
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "contain",
-                    }}
-                  />
-                </div>
-                <div
-                  style={{
-                    fontFamily: "var(--ledger-font-display)",
-                    fontStyle: "italic",
-                    fontWeight: 800,
-                    fontSize: 22,
-                    letterSpacing: "-0.02em",
-                    color: "var(--ledger-ink)",
-                  }}
-                >
-                  {lot.ens}
-                </div>
-                <div
-                  className="caps-sm"
-                  style={{ color: "var(--ledger-ink-muted)" }}
-                >
-                  {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} USDC EARNED
-                </div>
+                {lot ? (
+                  <>
+                    <div
+                      style={{
+                        aspectRatio: 1,
+                        border: "1px solid var(--ledger-ink)",
+                        padding: 28,
+                        background: "var(--ledger-paper)",
+                      }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={lot.avatar}
+                        alt=""
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </div>
+                    <div
+                      style={{
+                        fontFamily: "var(--ledger-font-display)",
+                        fontStyle: "italic",
+                        fontWeight: 800,
+                        fontSize: 22,
+                        letterSpacing: "-0.02em",
+                        color: "var(--ledger-ink)",
+                      }}
+                    >
+                      {lot.ens}
+                    </div>
+                    <div
+                      className="caps-sm"
+                      style={{ color: "var(--ledger-ink-muted)" }}
+                    >
+                      {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} 0G EARNED
+                    </div>
+                  </>
+                ) : (
+                  <div className="caps-md" style={{ color: "var(--ledger-ink-muted)" }}>
+                    NO LIVE WORKER INFTS FOUND
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -257,7 +267,7 @@ export default function AboutPage() {
               gap: 16,
             }}
           >
-            {LOTS.slice(0, 3).map((l, i) => (
+            {lots.slice(0, 3).map((l) => (
               <div
                 key={l.lot}
                 style={{
@@ -304,7 +314,7 @@ export default function AboutPage() {
                   className="italic-num text-oxblood"
                   style={{ fontSize: 24, marginTop: 8 }}
                 >
-                  {(4.5 + i * 0.18).toFixed(2)} USDC
+                  {l.earned} 0G realized
                 </div>
               </div>
             ))}
@@ -366,7 +376,7 @@ export default function AboutPage() {
                 className="mono"
                 style={{ fontSize: 14, color: "var(--ledger-ink)" }}
               >
-                0x111a…3010
+                {shortAddress(DEMO_OWNER_A)}
               </div>
               <div
                 className="caps-sm"
@@ -375,11 +385,17 @@ export default function AboutPage() {
                   marginTop: 24,
                 }}
               >
-                SOLD FOR
+                TRANSFER TX
               </div>
-              <div className="italic-num text-oxblood" style={{ fontSize: 36 }}>
-                850.00 USDC
-              </div>
+              <a
+                href={galileoTx(DEMO_TRANSFER_TX)}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="italic-num text-oxblood"
+                style={{ fontSize: 24 }}
+              >
+                {shortHash(DEMO_TRANSFER_TX)} ↗
+              </a>
             </div>
             <div style={{ textAlign: "center" }}>
               <div
@@ -391,22 +407,24 @@ export default function AboutPage() {
                   background: "var(--ledger-paper)",
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={lot.avatar}
-                  alt=""
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "contain",
-                  }}
-                />
+                {lot && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={lot.avatar}
+                    alt=""
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                )}
               </div>
               <div
                 className="caps-sm"
                 style={{ color: "var(--ledger-oxblood)", marginTop: 8 }}
               >
-                LOT {lot.lot} →
+                LOT {lot?.lot ?? "001"} →
               </div>
             </div>
             <div style={{ textAlign: "right" }}>
@@ -420,7 +438,7 @@ export default function AboutPage() {
                 className="mono"
                 style={{ fontSize: 14, color: "var(--ledger-ink)" }}
               >
-                0x742d…bEb1
+                {shortAddress(DEMO_OWNER_B)}
               </div>
               <div
                 className="caps-sm"
@@ -443,4 +461,12 @@ export default function AboutPage() {
       </div>
     </Shell>
   );
+}
+
+function shortAddress(value: string) {
+  return `${value.slice(0, 6)}…${value.slice(-4)}`;
+}
+
+function shortHash(value: string) {
+  return `${value.slice(0, 8)}…${value.slice(-6)}`;
 }
