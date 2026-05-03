@@ -906,3 +906,167 @@ body.surface-ink {
   outline: 1.5px solid var(--ledger-oxblood);
   outline-offset: 2px;
 }
+
+/* ===== /PROOF — JUDGE-PLAYABILITY PACK ===== */
+
+.proof-hero-h1 {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(64px, 9vw, 128px);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+  color: var(--ledger-paper);
+  margin: 0 0 24px;
+}
+
+.proof-hero-blurb {
+  font-size: clamp(15px, 1.4vw, 18px);
+  color: var(--ledger-ink-muted);
+  max-width: 720px;
+  line-height: 1.6;
+  margin: 0 0 24px;
+}
+
+.proof-anchors {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 12px;
+}
+
+.proof-section {
+  padding: 56px 40px;
+  scroll-margin-top: 96px;
+}
+@media (max-width: 768px) {
+  .proof-section {
+    padding: 48px 20px;
+  }
+}
+
+.proof-section-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+  gap: 64px;
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .proof-section-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.proof-section-title {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-size: clamp(36px, 4.4vw, 56px);
+  letter-spacing: -0.03em;
+  color: var(--ledger-paper);
+  margin: 0 0 24px;
+  line-height: 1;
+}
+
+.proof-section-blurb {
+  font-size: 15px;
+  color: var(--ledger-ink-muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 640px;
+}
+
+.proof-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.proof-row {
+  border-bottom: 1px solid var(--ledger-border-on-dark);
+}
+
+.proof-row-label {
+  padding: 16px 24px 16px 0;
+  vertical-align: top;
+  width: 280px;
+  color: var(--ledger-ink-muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.proof-row-cell {
+  padding: 16px 0;
+  vertical-align: top;
+}
+
+.proof-value-mono {
+  font-family: var(--ledger-font-mono);
+  font-size: 12px;
+  color: var(--ledger-paper);
+  word-break: break-all;
+  line-height: 1.55;
+}
+
+.proof-value-text {
+  font-family: var(--ledger-font-body);
+  font-size: 14px;
+  color: var(--ledger-paper);
+  line-height: 1.55;
+}
+
+.proof-value-link {
+  border-bottom: 1px solid var(--ledger-gold-dim);
+  color: var(--ledger-gold-leaf);
+}
+
+.proof-row-caption {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ledger-ink-muted);
+  line-height: 1.6;
+  max-width: 60ch;
+}
+
+/* Stack label above value on tablet/mobile so long mono strings have full width */
+@media (max-width: 768px) {
+  .proof-row,
+  .proof-row-label,
+  .proof-row-cell {
+    display: block;
+    width: 100%;
+  }
+  .proof-row-label {
+    padding: 14px 0 4px;
+  }
+  .proof-row-cell {
+    padding: 0 0 14px;
+  }
+  .proof-row {
+    border-bottom: 1px solid var(--ledger-border-on-dark);
+  }
+}
+
+.proof-code-block {
+  font-family: var(--ledger-font-mono);
+  font-size: 13px;
+  color: var(--ledger-paper);
+  background: var(--ledger-ink-elevated);
+  padding: 24px;
+  border: 1px solid var(--ledger-border-on-dark);
+  overflow-x: auto;
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  line-height: 1.6;
+  white-space: pre;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+@media (max-width: 768px) {
+  .proof-code-block {
+    font-size: 11px;
+    padding: 16px;
+  }
+}

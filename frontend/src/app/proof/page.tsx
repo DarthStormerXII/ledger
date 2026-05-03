@@ -316,9 +316,9 @@ const sections: Section[] = [
   },
   {
     id: "ens",
-    title: "ENS (CCIP-Read)",
+    title: "ENS Resolver",
     blurb:
-      "Custom offchain resolver under ledger.eth on Sepolia. Five capability namespaces per worker — who, pay, tx, rep, mem — each with its own dispatch logic. ENSIP-10 signed responses. ENSIP-25 text record closes the verification loop with the audited ERC-8004 deployment on Base.",
+      "Custom CCIP-Read offchain resolver under ledger.eth on Sepolia. Five capability namespaces per worker — who, pay, tx, rep, mem — each with its own dispatch logic. ENSIP-10 signed responses. ENSIP-25 text record closes the verification loop with the audited ERC-8004 deployment on Base.",
     rows: [
       {
         label: "Parent ENS",
@@ -392,9 +392,9 @@ const sections: Section[] = [
   },
   {
     id: "erc8004",
-    title: "ERC-8004 — audited reputation",
+    title: "ERC-8004",
     blurb:
-      "Ledger does not deploy its own reputation registry. Every settlement on Base Sepolia writes feedback() to the canonical audited deployment. The 47-job, 4.77-rating demo claim is real on-chain data backed by 47 separate giveFeedback transactions across 8 distinct client wallets.",
+      "Audited reputation registry on Base Sepolia. Ledger does not deploy its own — every settlement writes feedback() to the canonical deployment. The 47-job, 4.77-rating demo claim is real on-chain data backed by 47 separate giveFeedback transactions across 8 distinct client wallets.",
     rows: [
       {
         label: "IdentityRegistry",
@@ -446,6 +446,12 @@ const sections: Section[] = [
 // ──────────────────────────────────────────────────────────────────────────
 // Page
 // ──────────────────────────────────────────────────────────────────────────
+const ANCHOR_LINK_STYLE: React.CSSProperties = {
+  color: "var(--ledger-gold-leaf)",
+  borderBottom: "1px solid var(--ledger-gold-leaf)",
+  paddingBottom: 4,
+};
+
 export default function ProofPage() {
   return (
     <Shell>
@@ -453,37 +459,18 @@ export default function ProofPage() {
         <hr className="rule rule-strong" />
 
         {/* HERO BAND */}
-        <section style={{ padding: "96px 40px 56px" }}>
+        <section
+          className="proof-section"
+          style={{ paddingTop: 96, paddingBottom: 40 }}
+        >
           <div
             className="caps-md"
             style={{ color: "var(--ledger-ink-muted)", marginBottom: 24 }}
           >
             VERIFY · EVERY · CLAIM
           </div>
-          <h1
-            style={{
-              fontFamily: "var(--ledger-font-display)",
-              fontStyle: "italic",
-              fontWeight: 900,
-              fontSize: 96,
-              lineHeight: 0.95,
-              letterSpacing: "-0.04em",
-              color: "var(--ledger-paper)",
-              margin: "0 0 24px",
-              maxWidth: 1200,
-            }}
-          >
-            Proof.
-          </h1>
-          <p
-            style={{
-              fontSize: 18,
-              color: "var(--ledger-ink-muted)",
-              maxWidth: 720,
-              lineHeight: 1.55,
-              margin: "0 0 24px",
-            }}
-          >
+          <h1 className="proof-hero-h1">Proof.</h1>
+          <p className="proof-hero-blurb">
             Every contract address, transaction hash, attestation digest,
             storage CID, AXL peer ID, and ENS namespace behind Ledger&rsquo;s
             three sponsor integrations. Every entry is reproducible — click
@@ -493,56 +480,17 @@ export default function ProofPage() {
             </code>{" "}
             to put your own worker on the same rails.
           </p>
-          <div
-            style={{
-              display: "flex",
-              gap: 16,
-              flexWrap: "wrap",
-              fontSize: 14,
-            }}
-          >
-            <Link
-              href="#0g"
-              className="caps-md"
-              style={{
-                color: "var(--ledger-gold-leaf)",
-                borderBottom: "1px solid var(--ledger-gold-leaf)",
-                paddingBottom: 4,
-              }}
-            >
+          <div className="proof-anchors">
+            <Link href="#0g" className="caps-md" style={ANCHOR_LINK_STYLE}>
               0G ↓
             </Link>
-            <Link
-              href="#axl"
-              className="caps-md"
-              style={{
-                color: "var(--ledger-gold-leaf)",
-                borderBottom: "1px solid var(--ledger-gold-leaf)",
-                paddingBottom: 4,
-              }}
-            >
+            <Link href="#axl" className="caps-md" style={ANCHOR_LINK_STYLE}>
               AXL ↓
             </Link>
-            <Link
-              href="#ens"
-              className="caps-md"
-              style={{
-                color: "var(--ledger-gold-leaf)",
-                borderBottom: "1px solid var(--ledger-gold-leaf)",
-                paddingBottom: 4,
-              }}
-            >
+            <Link href="#ens" className="caps-md" style={ANCHOR_LINK_STYLE}>
               ENS ↓
             </Link>
-            <Link
-              href="#erc8004"
-              className="caps-md"
-              style={{
-                color: "var(--ledger-gold-leaf)",
-                borderBottom: "1px solid var(--ledger-gold-leaf)",
-                paddingBottom: 4,
-              }}
-            >
+            <Link href="#erc8004" className="caps-md" style={ANCHOR_LINK_STYLE}>
               ERC-8004 ↓
             </Link>
           </div>
@@ -556,32 +504,23 @@ export default function ProofPage() {
         ))}
 
         {/* FOOTER NOTE */}
-        <section style={{ padding: "56px 40px 96px" }}>
+        <section
+          className="proof-section"
+          style={{ paddingTop: 56, paddingBottom: 96 }}
+        >
           <div
             className="caps-md"
             style={{ color: "var(--ledger-ink-muted)", marginBottom: 16 }}
           >
             REPRODUCE LOCALLY
           </div>
-          <pre
-            style={{
-              fontFamily: "var(--ledger-font-mono)",
-              fontSize: 13,
-              color: "var(--ledger-paper)",
-              background: "var(--ledger-ink-elevated)",
-              padding: 24,
-              borderRadius: 0,
-              border: "1px solid var(--ledger-border-on-dark)",
-              overflowX: "auto",
-              margin: 0,
-              lineHeight: 1.6,
-            }}
-          >
+          <pre className="proof-code-block">
             {`# Mint your own worker iNFT
 git clone https://github.com/DarthStormerXII/ledger-v1
 cd ledger-v1/tools && pnpm install
 pnpm tsx register.ts gen-keys --name my-worker
-pnpm tsx register.ts mint --identity my-worker --memory-cid 0g://… --sealed-key 0x… --dry-run
+pnpm tsx register.ts mint --identity my-worker \\
+  --memory-cid 0g://… --sealed-key 0x… --dry-run
 
 # Verify the live ENS namespaces
 cd ../resolver && npm run smoke:ens
@@ -596,7 +535,7 @@ cast call ${WORKER_INFT_ADDRESS} \\
               fontSize: 14,
               color: "var(--ledger-ink-muted)",
               marginTop: 24,
-              maxWidth: 720,
+              maxWidth: 640,
               lineHeight: 1.6,
             }}
           >
@@ -633,18 +572,8 @@ cast call ${WORKER_INFT_ADDRESS} \\
 // ──────────────────────────────────────────────────────────────────────────
 function ProofSection({ section }: { section: Section }) {
   return (
-    <section
-      id={section.id}
-      style={{ padding: "56px 40px", scrollMarginTop: 96 }}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) minmax(0, 2fr)",
-          gap: 64,
-          alignItems: "start",
-        }}
-      >
+    <section id={section.id} className="proof-section">
+      <div className="proof-section-grid">
         <div>
           <div
             className="caps-md"
@@ -656,39 +585,11 @@ function ProofSection({ section }: { section: Section }) {
           >
             INTEGRATION
           </div>
-          <h2
-            style={{
-              fontFamily: "var(--ledger-font-display)",
-              fontStyle: "italic",
-              fontWeight: 900,
-              fontSize: 56,
-              letterSpacing: "-0.03em",
-              color: "var(--ledger-paper)",
-              margin: "0 0 24px",
-              lineHeight: 1,
-            }}
-          >
-            {section.title}
-          </h2>
-          <p
-            style={{
-              fontSize: 15,
-              color: "var(--ledger-ink-muted)",
-              lineHeight: 1.6,
-              margin: 0,
-            }}
-          >
-            {section.blurb}
-          </p>
+          <h2 className="proof-section-title">{section.title}</h2>
+          <p className="proof-section-blurb">{section.blurb}</p>
         </div>
         <div>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontSize: 13,
-            }}
-          >
+          <table className="proof-table">
             <tbody>
               {section.rows.map((r, idx) => (
                 <ProofRow key={idx} row={r} />
@@ -702,58 +603,25 @@ function ProofSection({ section }: { section: Section }) {
 }
 
 function ProofRow({ row }: { row: Row }) {
-  const valueStyle: React.CSSProperties = {
-    fontFamily: row.mono
-      ? "var(--ledger-font-mono)"
-      : "var(--ledger-font-body)",
-    color: "var(--ledger-paper)",
-    fontSize: row.mono ? 12 : 14,
-    wordBreak: "break-all" as const,
-    lineHeight: 1.5,
-  };
-
+  const valueClass = row.mono ? "proof-value-mono" : "proof-value-text";
   return (
-    <tr style={{ borderBottom: "1px solid var(--ledger-border-on-dark)" }}>
-      <td
-        style={{
-          padding: "16px 24px 16px 0",
-          verticalAlign: "top",
-          width: 280,
-          color: "var(--ledger-ink-muted)",
-          fontSize: 13,
-          lineHeight: 1.5,
-        }}
-      >
-        {row.label}
-      </td>
-      <td style={{ padding: "16px 0", verticalAlign: "top" }}>
+    <tr className="proof-row">
+      <td className="proof-row-label">{row.label}</td>
+      <td className="proof-row-cell">
         {row.href ? (
           <Link
             href={row.href}
             target="_blank"
             rel="noreferrer"
-            style={{
-              ...valueStyle,
-              borderBottom: "1px solid var(--ledger-gold-dim)",
-              color: "var(--ledger-gold-leaf)",
-            }}
+            className={`${valueClass} proof-value-link`}
           >
             {row.value}
           </Link>
         ) : (
-          <span style={valueStyle}>{row.value}</span>
+          <span className={valueClass}>{row.value}</span>
         )}
         {row.caption ? (
-          <div
-            style={{
-              marginTop: 8,
-              fontSize: 12,
-              color: "var(--ledger-ink-muted)",
-              lineHeight: 1.6,
-            }}
-          >
-            {row.caption}
-          </div>
+          <div className="proof-row-caption">{row.caption}</div>
         ) : null}
       </td>
     </tr>
