@@ -553,7 +553,7 @@ function JobsGrid({
               <div className="job-card-buyer">
                 <span className="caps-sm muted">BUYER</span>
                 <a
-                  href={galileoAddr(j.employer)}
+                  href={galileoAddr(j.buyerAddress ?? j.employer)}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="mono job-card-buyer-link"
@@ -704,7 +704,7 @@ function JobsTable({
                 </td>
                 <td>
                   <a
-                    href={galileoAddr(j.employer)}
+                    href={galileoAddr(j.buyerAddress ?? j.employer)}
                     target="_blank"
                     rel="noreferrer noopener"
                     className="mono jobs-table-buyer"

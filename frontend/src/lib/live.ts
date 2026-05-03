@@ -559,7 +559,12 @@ export function liveJobToJob(j: LiveJob): Job {
     id: j.taskId,
     title: "",
     desc: "",
+    // Display-shortened — used inline in tables/cards.
     employer: `${j.buyer.slice(0, 6)}…${j.buyer.slice(-4)}`,
+    // Full address — for href / explorer links. Anyone constructing a chain
+    // explorer URL must use buyerAddress, not employer (which has a literal
+    // "…" that 404s the explorer).
+    buyerAddress: j.buyer,
     payout: `${formatEther(j.payment)} 0G`,
     bond: j.bidAmount > 0n ? `${formatEther(j.bidAmount)} 0G bid` : "—",
     timeLeft,

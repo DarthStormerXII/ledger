@@ -21,7 +21,10 @@ export interface Job {
   id: string;
   title: string;
   desc: string;
+  /** Display-shortened buyer address (e.g. "0x6B9a…eC00"). USE FOR DISPLAY ONLY. */
   employer: string;
+  /** Full unshortened buyer address. USE for href / explorer links. */
+  buyerAddress?: string;
   payout: string;
   bond: string;
   timeLeft: number;
