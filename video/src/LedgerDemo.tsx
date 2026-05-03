@@ -111,15 +111,15 @@ export const LedgerDemo = () => {
           position: 'absolute',
           top: 36,
           left: 44,
-          width: 176,
-          height: 48,
+          width: 320,
+          height: 86,
           display: 'flex',
           alignItems: 'center',
           opacity: 0.88,
         }}
       >
         <Img
-          src={staticFile('ledger-logo-horizontal.png')}
+          src={staticFile('ledger-logo-horizontal-light.png')}
           style={{
             width: '100%',
             height: '100%',
