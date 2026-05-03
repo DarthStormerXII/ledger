@@ -275,3 +275,126 @@ All three additionally accept the operational fields (`api_port: 9002`, `bridge_
 4. **Three-way fan-out:** A sends to B and C; both receive. Confirms the mesh is doing real routing.
 
 ---
+
+## Proving P2P realness in a demo
+
+This is the section the redteam cares about. The hostile reviewer's hypothesis: *"You started 3 processes on one machine, named them differently, and called it P2P."*
+
+### What artifacts judges can grep for
+
+1. **Three distinct ed25519 public keys** — committed as `node-{1,2,3}.pub`, full hex.
+2. **Three distinct Yggdrasil IPv6 addresses** in `200::/7`, deterministically derived from those keys (judge can repro derivation).
+3. **Three distinct host networks** — VM 1 on AWS, VM 2 on GCP (different cloud = stronger proof), laptop on residential ISP. Self-reported via `https://api.ipify.org` sidecar.
+4. **Live `/topology` JSON** from all three nodes, side-by-side in the dashboard, refreshing every 5s.
+5. **Packet log** — every `/send` and `/recv` with timestamp, source key, dest key, bytes. Downloadable JSON.
+6. **Server access logs** from cloud VMs showing peering TCP connections from 2 distinct remote IPs.
+7. **tcpdump screenshot** on the bootstrap showing TLS on 9001 from two remote IPs.
+
+### What artifacts a hostile reviewer would demand
+
+- "Show me residential NAT" → `traceroute 8.8.8.8` + `whois <egress-ip>` showing the ISP. Save to `proof/laptop-environment.txt`.
+- "Show me messages aren't pre-baked" → live demo accepts a judge-typed nonce, sends it from node 1, other two display it within seconds. Or CLI: `npx ledger send --to node-2 "<nonce>"` then `recv --on node-2`.
+- "Show me you're not piping over a backchannel" → kill the bootstrap mid-demo. Mesh degrades. Restart. Mesh recovers. Proves AXL is the dependency.
+- "Show me encryption" → `tcpdump` on 9001 shows TLS handshake then opaque ciphertext.
+
+### Concrete checklist of "this is real" evidence
+
+- [ ] `proof/topology-node-1.json`, `topology-node-2.json`, `topology-node-3.json` — committed snapshots taken at submission time.
+- [ ] `proof/keys-summary.txt` — the three pubkey hex strings + three IPv6 addresses, plus a one-line `python -c "..."` repro to derive the IPv6 from the pubkey.
+- [ ] `proof/host-environment.txt` — per node: cloud provider, public IPv4, ASN, ISP. Generated automatically.
+- [ ] `proof/packet-log.json` — chronological log of every cross-node message during the demo.
+- [ ] `proof/screenshots/` — tcpdump on bootstrap, dashboard with all 3 nodes lit up, live message flowing.
+- [ ] `proof/video.mp4` (≤2 min) — judge types nonce, watches it propagate. Dashboard timeline shows the cross-node packets.
+- [ ] **Red team script:** `scripts/redteam-verify.sh` — a 30-second runnable check that hits each node's `/topology`, asserts distinct keys, sends a random nonce from node 1, asserts it arrives at nodes 2 and 3.
+
+---
+
+## Bounty rules
+
+### Pool + amount
+
+- **Total: $5,000** for "Best Application of Agent eXchange Layer (AXL)".
+- 1st: **$2,500**
+- 2nd: **$1,500**
+- 3rd: **$1,000**
+
+### Judging criteria
+
+Per `ethglobal.com/events/openagents/prizes/gensyn`:
+
+1. **Depth of AXL integration** — is AXL doing real work, or is it a thin afterthought?
+2. **Quality of code**.
+3. **Clear documentation**.
+4. **Working examples**.
+
+Plus the hard qualification line: *"AXL must enable inter-agent or inter-node communication (no centralized message broker substitution); must demonstrate communication across separate AXL nodes, not just in-process."*
+
+### Artifacts rewarded
+
+Implicit from the criteria, **not enumerated**:
+- A demo that runs and shows cross-node traffic.
+- README explaining how AXL is used.
+- Working code in the GitHub repo.
+
+Winners get *"fast-tracked into the Gensyn Foundation grant programme"* — meaningful upside beyond the $5k.
+
+### Submission requirements
+
+ETHGlobal-standard: project on the ETHGlobal platform with title, description, demo video, GitHub link, deployed URL. **Specifics for the AXL track were not enumerated on the prizes page** — we should confirm via the workshop video or the Gensyn Discord during the build window. **`[UNVERIFIED]`** whether they require a screen-recording of cross-node traffic or accept code + topology screenshots.
+
+### Two suggested tracks
+
+- **Agent Town** — multi-agent simulation with personalities, AXL-mediated communication, watchable.
+- **Decentralised Agent Messaging** — discovery + group formation + p2p chat, "Telegram for AI agents".
+
+**Ledger fits comfortably as a custom proposal under the second** ("agent marketplaces, self-organising working groups" is verbatim from the bounty page) — the judges already have language for what we're building.
+
+---
+
+## Support + community
+
+- **Discord**: linked from `gensyn.ai` (Community section). Active during hackathons. **Must join early on day 1** to get the AXL channel and sponsor mention.
+- **Workshop video**: referenced on the prizes page; specific link not extracted — should appear in the ETHGlobal event materials before April 24.
+- **GitHub Issues**: `github.com/gensyn-ai/axl/issues` — 1 open at time of research, ~3 PRs in flight. Low traffic but active.
+- **No Telegram or office-hours schedule documented** in research sources. **`[UNVERIFIED]`** — confirm via Discord on hackathon kickoff.
+
+---
+
+## Open questions
+
+1. **`[UNVERIFIED]`** Bootstrap time over a real residential NAT — measure on day 1.
+2. **`[UNVERIFIED]`** Does `/send` retry, or is loss fully on us? Inferred: fully on us. Confirm in `cmd/node/`.
+3. **`[UNVERIFIED]`** Ordering during spanning-tree reshuffles. Treat as eventually-delivered, add app-level dedupe.
+4. **Decide:** Port `gossipsub.py` to TS or run as Python sidecar? Recommend **port to TS** — fewer moving parts.
+5. **Decide:** MCP/A2A or raw `/send` + `/recv`? Recommend **raw**. MCP/A2A adds Python deps without bounty value for our use case.
+6. **Decide:** One bootstrap node or two? Recommend **one + docs** explaining how to scale.
+7. **Sponsor:** Specific submission artifacts beyond ETHGlobal default? Ask Discord day 1.
+8. **Sponsor:** Novelty bonus or pure rubric? Two-sided agent marketplace is novel — surface it in writeup.
+
+---
+
+## Direct URLs
+
+- AXL docs: https://docs.gensyn.ai/tech/agent-exchange-layer
+- AXL repo: https://github.com/gensyn-ai/axl
+- AXL README: https://github.com/gensyn-ai/axl/blob/main/README.md
+- AXL API doc: https://github.com/gensyn-ai/axl/blob/main/docs/api.md
+- AXL configuration doc: https://github.com/gensyn-ai/axl/blob/main/docs/configuration.md
+- AXL architecture doc: https://github.com/gensyn-ai/axl/blob/main/docs/architecture.md
+- AXL examples doc: https://github.com/gensyn-ai/axl/blob/main/docs/examples.md
+- AXL integrations doc: https://github.com/gensyn-ai/axl/blob/main/docs/integrations.md
+- Python client: https://github.com/gensyn-ai/axl/tree/main/examples/python-client
+- GossipSub example: https://github.com/gensyn-ai/axl/tree/main/examples/python-client/gossipsub
+- Convergecast example: https://github.com/gensyn-ai/axl/blob/main/examples/python-client/convergecast.py
+- AXL announcement post: https://blog.gensyn.ai/introducing-axl/
+- Gensyn org GitHub: https://github.com/gensyn-ai
+- Collaborative autoresearch demo (canonical AXL app): https://github.com/gensyn-ai/collaborative-autoresearch-demo
+- ETHGlobal Open Agents event: https://ethglobal.com/events/openagents
+- ETHGlobal Open Agents prizes: https://ethglobal.com/events/openagents/prizes
+- Gensyn bounty page: https://ethglobal.com/events/openagents/prizes/gensyn
+- Yggdrasil project: https://yggdrasil-network.github.io/
+- Yggdrasil FAQ (NAT confirmation): https://yggdrasil-network.github.io/faq.html
+- Yggdrasil Go implementation: https://github.com/yggdrasil-network/yggdrasil-go
+- Yggdrasil public peer list: https://github.com/yggdrasil-network/public-peers
+- Gensyn website: https://gensyn.ai/
+- Gensyn AXL launch tweet: https://x.com/gensynai/status/2044467361550348406

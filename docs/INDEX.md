@@ -37,5 +37,3 @@ For per-doc edit lists, see `../tools/council/STAGE3_CHAIRMAN.md` §5.
 - `../tools/council_alt/STAGE3_CHAIRMAN.md` — the ENS Slot-3 integration shape
 - `../proofs/` — sponsor-grade evidence files (built during execution)
 - `../tools/research/` — deep sponsor research briefs (0G, Gensyn, KeeperHub-no-longer-targeted, ENS)
-<!-- updated 2026-05-02 with council pivot summary -->
-<!-- 2026-05-02 11:24 IST joanna: docs/INDEX: timestamp post-council update --> (1)
