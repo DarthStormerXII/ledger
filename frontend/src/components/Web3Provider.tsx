@@ -38,8 +38,12 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: "dark",
           accentColor: "#A91B0D",
-          logo: "https://ledger-open-agents.vercel.app/assets/logos/lockup/ledger_logo_horizontal_transparent.png",
+          logo: "https://ledger-open-agents.vercel.app/assets/logos/privy/ledger_logo_180x90.png",
           showWalletLoginFirst: false,
+        },
+        legal: {
+          termsAndConditionsUrl: "https://ledger-open-agents.vercel.app/terms",
+          privacyPolicyUrl: "https://ledger-open-agents.vercel.app/privacy",
         },
         loginMethods: ["wallet", "email", "google"],
         embeddedWallets: {

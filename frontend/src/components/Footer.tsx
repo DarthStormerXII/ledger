@@ -7,6 +7,7 @@ export function Footer() {
       </span>
       <div className="footer-links">
         <a href="/pitch">Pitch</a>
+        <a href="/proof">Proof</a>
         <a
           href="https://github.com/DarthStormerXII/ledger"
           target="_blank"
@@ -28,6 +29,8 @@ export function Footer() {
         >
           X
         </a>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
       </div>
     </footer>
   );
