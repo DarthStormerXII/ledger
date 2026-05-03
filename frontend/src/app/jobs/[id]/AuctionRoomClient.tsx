@@ -1,11 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { Job, Lot } from "@/lib/data";
 import { AxlTopology } from "@/components/AxlTopology";
 import { AXL_CAPTURED_PROOF } from "@/lib/axl-proof";
 import { LEDGER_ESCROW_ADDRESS, galileoTx, galileoAddr } from "@/lib/contracts";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
+import { keccak256, toHex, parseAbi, type Hex } from "viem";
+import { galileo } from "@/lib/chains";
+
+const RELEASE_PAYMENT_ABI = parseAbi([
+  "function releasePayment(bytes32 taskId, bytes32 resultHash) external",
+]);
 
 /**
  * AuctionRoomClient — live auction view for one task.
@@ -247,11 +258,92 @@ export function AuctionRoomClient({
   const meshSize =
     bridgeStatus === "live" && topology?.peers ? peerCount + 1 : 0;
 
+  // ── Lifecycle from AXL events ───────────────────────────────────────────
+  // The lead worker emits BID_ACCEPTED → WORK_STARTED → WORK_COMPLETE on the
+  // AXL feed as it drives the on-chain accept and simulates work. We
+  // derive the live status from those events so the UI reacts faster than
+  // the SSR cache refresh (revalidate=60s on the page).
+  const axlLifecycle = useMemo(() => {
+    let accepted = false;
+    let workStarted = false;
+    let workComplete = false;
+    let acceptTx: string | null = null;
+    let acceptedWorker: string | null = null;
+    for (const m of recvMessages) {
+      const p = m.payload as {
+        type?: string;
+        taskId?: string;
+        onchainTx?: string;
+        worker?: string;
+      };
+      if (!p || p.taskId !== job.id) continue;
+      if (p.type === "BID_ACCEPTED") {
+        accepted = true;
+        acceptTx = p.onchainTx ?? null;
+        acceptedWorker = p.worker ?? null;
+      } else if (p.type === "WORK_STARTED") {
+        workStarted = true;
+      } else if (p.type === "WORK_COMPLETE") {
+        workComplete = true;
+      }
+    }
+    return { accepted, workStarted, workComplete, acceptTx, acceptedWorker };
+  }, [recvMessages, job.id]);
+
   // ── Status-aware header copy ────────────────────────────────────────────
-  // The top strip and the bidder panel both need to behave differently
-  // depending on where the task is in its lifecycle.
-  const status = receipt?.status ?? "Posted";
+  // Live status: prefer AXL events (faster) over the SSR receipt status
+  // (which lags behind by up to revalidate=60s).
+  const ssrStatus = receipt?.status ?? "Posted";
+  const status: typeof ssrStatus =
+    ssrStatus === "Released" ||
+    ssrStatus === "Cancelled" ||
+    ssrStatus === "Slashed"
+      ? ssrStatus
+      : axlLifecycle.accepted
+        ? "Accepted"
+        : ssrStatus;
   const isPosted = status === "Posted";
+
+  // ── Release Funds wallet wiring ─────────────────────────────────────────
+  const { address: connectedAddress } = useAccount();
+  const isBuyer =
+    !!connectedAddress &&
+    !!receipt?.buyer &&
+    connectedAddress.toLowerCase() === receipt.buyer.toLowerCase();
+  const {
+    writeContractAsync: releaseWrite,
+    isPending: releaseSigning,
+    data: releaseHash,
+  } = useWriteContract();
+  const { isLoading: releaseConfirming, isSuccess: releaseConfirmed } =
+    useWaitForTransactionReceipt({
+      hash: releaseHash,
+      chainId: galileo.id,
+      query: { enabled: !!releaseHash },
+    });
+  const [releaseError, setReleaseError] = useState<string | null>(null);
+  const handleRelease = async () => {
+    setReleaseError(null);
+    try {
+      // resultHash is informational; bind it to the worker-reported summary.
+      const resultHash = keccak256(toHex(`released:${job.id}:${Date.now()}`));
+      await releaseWrite({
+        address: LEDGER_ESCROW_ADDRESS,
+        abi: RELEASE_PAYMENT_ABI,
+        functionName: "releasePayment",
+        args: [job.id as Hex, resultHash],
+        chainId: galileo.id,
+      });
+    } catch (e) {
+      const msg = (e as Error).message ?? "release failed";
+      setReleaseError(msg.length > 200 ? `${msg.slice(0, 200)}…` : msg);
+    }
+  };
+  const showReleaseButton =
+    isBuyer &&
+    status === "Accepted" &&
+    !releaseConfirmed &&
+    ssrStatus !== "Released";
   const HEADER_LABEL: Record<typeof status, string> = {
     Posted: "LIVE AUCTION",
     Accepted: "ACCEPTED · IN PROGRESS",
@@ -435,6 +527,74 @@ export function AuctionRoomClient({
         missing={briefMissing}
         taskId={job.id}
       />
+
+      {/* LIFECYCLE STRIP — shows the auction's progress from Posted →
+          Accepted → Working → Complete. Driven by AXL events emitted by
+          the lead worker so the UI reacts faster than the SSR cache. */}
+      {(axlLifecycle.accepted ||
+        ssrStatus === "Accepted" ||
+        ssrStatus === "Released") && (
+        <div className="auction-lifecycle">
+          <div className="auction-lifecycle-phases">
+            <span
+              className={`lifecycle-phase ${axlLifecycle.accepted || ssrStatus !== "Posted" ? "is-done" : "is-active"}`}
+            >
+              <span className="lifecycle-dot" /> AUCTION
+            </span>
+            <span
+              className={`lifecycle-phase ${axlLifecycle.accepted || ssrStatus === "Accepted" || ssrStatus === "Released" ? "is-done" : ""}`}
+            >
+              <span className="lifecycle-dot" /> ACCEPTED
+            </span>
+            <span
+              className={`lifecycle-phase ${axlLifecycle.workStarted || axlLifecycle.workComplete || ssrStatus === "Released" ? "is-done" : axlLifecycle.accepted ? "is-active" : ""}`}
+            >
+              <span className="lifecycle-dot" /> WORKING
+            </span>
+            <span
+              className={`lifecycle-phase ${axlLifecycle.workComplete || ssrStatus === "Released" ? "is-done" : axlLifecycle.workStarted ? "is-active" : ""}`}
+            >
+              <span className="lifecycle-dot" /> COMPLETE
+            </span>
+            <span
+              className={`lifecycle-phase ${ssrStatus === "Released" || releaseConfirmed ? "is-done" : axlLifecycle.workComplete ? "is-active" : ""}`}
+            >
+              <span className="lifecycle-dot" /> RELEASED
+            </span>
+          </div>
+          {showReleaseButton && (
+            <div className="auction-lifecycle-cta">
+              <button
+                className="btn btn-tall btn-italic"
+                disabled={releaseSigning || releaseConfirming}
+                onClick={handleRelease}
+              >
+                {releaseSigning
+                  ? "Signing…"
+                  : releaseConfirming
+                    ? "Confirming…"
+                    : "Release funds to worker"}
+              </button>
+              {releaseError ? (
+                <div
+                  className="caps-sm"
+                  style={{ color: "var(--ledger-oxblood)", marginTop: 8 }}
+                >
+                  {releaseError}
+                </div>
+              ) : null}
+            </div>
+          )}
+          {releaseConfirmed && (
+            <div
+              className="caps-sm"
+              style={{ color: "var(--ledger-success)", marginTop: 8 }}
+            >
+              ✓ payment released — refresh to see the settled receipt
+            </div>
+          )}
+        </div>
+      )}
 
       {/* RICH RECEIPT PANEL — for tasks past the "Posted" state, the
           bid grid is empty by design; instead we show the full on-chain
