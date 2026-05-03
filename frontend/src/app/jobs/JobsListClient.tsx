@@ -48,8 +48,26 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
     return () => window.clearInterval(id);
   }, [hasLive]);
 
-  const fmt = (s: number) =>
-    `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+  // < 1 min  → "Xs"           (terse, for live-tail urgency)
+  // < 1 h    → "MM:SS"         (canonical countdown)
+  // < 24 h   → "Xh YYm"        (e.g. "12h 04m")
+  // ≥ 24 h   → "Xd Yh"         (e.g. "3d 7h")
+  const fmt = (s: number) => {
+    if (s < 60) return `${s}s`;
+    if (s < 3600) {
+      const m = Math.floor(s / 60);
+      const ss = s % 60;
+      return `${String(m).padStart(2, "0")}:${String(ss).padStart(2, "0")}`;
+    }
+    if (s < 86400) {
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      return `${h}h ${String(m).padStart(2, "0")}m`;
+    }
+    const d = Math.floor(s / 86400);
+    const h = Math.floor((s % 86400) / 3600);
+    return `${d}d ${h}h`;
+  };
 
   const inspectJob = jobs.find((j) => j.id === inspectJobId);
 
