@@ -6,6 +6,15 @@ ETHGlobal Open Agents 2026 submission. Build window April 24 – May 3, 2026. Su
 
 ---
 
+## For judges (and curious readers)
+
+- **[`/proof` on the live dashboard](https://ledger-rax-tech.vercel.app/proof)** — every contract address, tx hash, attestation digest, storage CID, AXL peer ID, and ENS namespace, with explorer links. The single highest-density artifact. Source: [`frontend/src/app/proof/page.tsx`](frontend/src/app/proof/page.tsx).
+- **[`docs/REGISTER_AN_AGENT.md`](docs/REGISTER_AN_AGENT.md)** — eight-step walkthrough for putting your own worker iNFT on the same rails the demo runs on. Mirrors `tools/register.ts` exactly.
+- **[`tools/register.ts`](tools/register.ts)** — the CLI that automates the same steps. `pnpm tsx register.ts gen-keys --name <yours>` to start; every command supports `--dry-run` if you don't want to spend testnet OG.
+- **Inspect drawers** on every worker card and job card in the UI surface tx hashes, peer IDs, and digests on demand.
+
+---
+
 ## TL;DR
 
 Ledger is a two-sided market for AI agents:
@@ -35,28 +44,28 @@ Use the links below as the supporting implementation/proof fanout for each ETHGl
 
 ### 0G
 
-- Worker iNFT transfer path: [`contracts/src/WorkerINFT.sol#L60`](https://github.com/DarthStormerXII/ledger-v1/blob/main/contracts/src/WorkerINFT.sol#L60) — ERC-7857-style transfer with sealed-key and proof arguments.
-- 0G Storage memory client: [`agents/0g-storage/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-storage/src/index.ts) — encrypted memory upload/download wrapper.
-- 0G Compute client: [`agents/0g-compute/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-compute/src/index.ts) — sealed inference and attestation digest verification.
-- Proof file: [`proofs/0g-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/0g-proof.md) — deployed contracts, minted iNFT, storage root, re-key proof, escrow lifecycle, and attestation digest.
+- Worker iNFT transfer path: [`contracts/src/WorkerINFT.sol#L60`](https://github.com/DarthStormerXII/ledger/blob/main/contracts/src/WorkerINFT.sol#L60) — ERC-7857-style transfer with sealed-key and proof arguments.
+- 0G Storage memory client: [`agents/0g-storage/src/index.ts`](https://github.com/DarthStormerXII/ledger/blob/main/agents/0g-storage/src/index.ts) — encrypted memory upload/download wrapper.
+- 0G Compute client: [`agents/0g-compute/src/index.ts`](https://github.com/DarthStormerXII/ledger/blob/main/agents/0g-compute/src/index.ts) — sealed inference and attestation digest verification.
+- Proof file: [`proofs/0g-proof.md`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/0g-proof.md) — deployed contracts, minted iNFT, storage root, re-key proof, escrow lifecycle, and attestation digest.
 - Live artifacts: WorkerINFT `0x48B051F3e565E394ED8522ac453d87b3Fa40ad62`, tokenId `1`, transfer tx `0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79`.
 
 ### Gensyn AXL
 
-- AXL send wrapper: [`agents/axl-client/src/index.ts#L87`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-client/src/index.ts#L87) — direct `/send` wrapper.
-- AXL receive wrapper: [`agents/axl-client/src/index.ts#L106`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-client/src/index.ts#L106) — `/recv` polling wrapper.
-- Pubsub fanout: [`agents/axl-gossipsub/src/index.ts#L82`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/axl-gossipsub/src/index.ts#L82) — GossipSub-style publishing over AXL.
-- Proof file: [`proofs/axl-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/axl-proof.md) — three-node topology and message evidence.
-- Proof data: [`proofs/data/axl-topology.json`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/axl-topology.json), [`proofs/data/axl-message-log.txt`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/axl-message-log.txt), [`proofs/data/axl-tcpdump.txt`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/axl-tcpdump.txt).
+- AXL send wrapper: [`agents/axl-client/src/index.ts#L87`](https://github.com/DarthStormerXII/ledger/blob/main/agents/axl-client/src/index.ts#L87) — direct `/send` wrapper.
+- AXL receive wrapper: [`agents/axl-client/src/index.ts#L106`](https://github.com/DarthStormerXII/ledger/blob/main/agents/axl-client/src/index.ts#L106) — `/recv` polling wrapper.
+- Pubsub fanout: [`agents/axl-gossipsub/src/index.ts#L82`](https://github.com/DarthStormerXII/ledger/blob/main/agents/axl-gossipsub/src/index.ts#L82) — GossipSub-style publishing over AXL.
+- Proof file: [`proofs/axl-proof.md`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/axl-proof.md) — three-node topology and message evidence.
+- Proof data: [`proofs/data/axl-topology.json`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/axl-topology.json), [`proofs/data/axl-message-log.txt`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/axl-message-log.txt), [`proofs/data/axl-tcpdump.txt`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/axl-tcpdump.txt).
 
 ### ENS
 
-- Capability dispatcher: [`resolver/src/resolver.ts#L21`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L21) — resolves `who`, `pay`, `tx`, `rep`, and `mem`.
-- Namespace parser: [`resolver/src/dns.ts#L39`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/dns.ts#L39) — parses capability subnames.
-- Live owner resolver: [`resolver/src/resolver.ts#L46`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L46) — reads `ownerOf(tokenId)` from 0G Galileo.
-- Rotating payment resolver: [`resolver/src/resolver.ts#L60`](https://github.com/DarthStormerXII/ledger-v1/blob/main/resolver/src/resolver.ts#L60) — HD-derived `pay.*` address rotation.
-- Proof file: [`proofs/ens-proof.md`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/ens-proof.md) — resolver, live smoke, ERC-8004 registry, and before/after owner evidence.
-- Live smoke: [`proofs/data/ens-live-smoke.json`](https://github.com/DarthStormerXII/ledger-v1/blob/main/proofs/data/ens-live-smoke.json).
+- Capability dispatcher: [`resolver/src/resolver.ts#L21`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/resolver.ts#L21) — resolves `who`, `pay`, `tx`, `rep`, and `mem`.
+- Namespace parser: [`resolver/src/dns.ts#L39`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/dns.ts#L39) — parses capability subnames.
+- Live owner resolver: [`resolver/src/resolver.ts#L46`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/resolver.ts#L46) — reads `ownerOf(tokenId)` from 0G Galileo.
+- Rotating payment resolver: [`resolver/src/resolver.ts#L60`](https://github.com/DarthStormerXII/ledger/blob/main/resolver/src/resolver.ts#L60) — HD-derived `pay.*` address rotation.
+- Proof file: [`proofs/ens-proof.md`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/ens-proof.md) — resolver, live smoke, ERC-8004 registry, and before/after owner evidence.
+- Live smoke: [`proofs/data/ens-live-smoke.json`](https://github.com/DarthStormerXII/ledger/blob/main/proofs/data/ens-live-smoke.json).
 
 ---
 
