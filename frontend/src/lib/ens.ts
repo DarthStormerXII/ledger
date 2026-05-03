@@ -2,11 +2,10 @@
 
 import { sepoliaClient, galileoClient, baseSepoliaClient } from "./clients";
 import {
-  ERC8004_REPUTATION_REGISTRY,
   WORKER_INFT_ABI,
   WORKER_INFT_ADDRESS,
 } from "./contracts";
-import type { Address, Hex } from "viem";
+import type { Address } from "viem";
 import { namehash, normalize } from "viem/ens";
 
 export type Namespace = "who" | "pay" | "tx" | "rep" | "mem";
@@ -38,10 +37,7 @@ export async function resolveNamespace(
   parent: string,
   workerSeed: {
     tokenId: number;
-    payRotation: { address: Address; nonce: number }[];
-    payMasterPubkey: Hex;
-    memCid: string;
-    attestationDigest: Hex;
+    memoryCID?: string;
   },
 ): Promise<NamespaceResolution> {
   const t0 = performance.now();
@@ -66,81 +62,52 @@ export async function resolveNamespace(
     }
 
     if (ns === "pay") {
-      // Rotation rendered from seed (master pubkey + nonce-derived addresses).
-      const rows = workerSeed.payRotation.map((r) => ({
-        label: `@ nonce ${r.nonce}`,
-        value: r.address,
-      }));
-      const latest = workerSeed.payRotation[0]?.address ?? "0x";
       return {
         namespace: ns,
         fullName,
-        value: latest,
-        rows,
+        value: "not configured",
         latencyMs: Math.round(performance.now() - t0),
-        ok: true,
-        raw: {
-          method: "HD-derivation",
-          masterPubkey: workerSeed.payMasterPubkey,
-          rotation: workerSeed.payRotation,
-        },
+        ok: false,
+        raw: { reason: "No live pay resolver record is configured." },
       };
     }
 
     if (ns === "tx") {
-      // Receipt key/value table from the live release tx.
-      const rows = [
-        { label: "task_id", value: "0xffa92cfe…1bb81" },
-        { label: "submitted_at", value: new Date().toISOString() },
-        {
-          label: "worker_signature",
-          value: "0x3b7e…c4f1",
-        },
-        { label: "result_cid", value: "0g://0xd8fb…2c4" },
-      ];
       return {
         namespace: ns,
-        fullName: `tx.0xffa9…1bb81.${workerLabel}.${parent}`,
-        value: "Receipt: lot 047 — released",
-        rows,
+        fullName,
+        value: "not selected",
         latencyMs: Math.round(performance.now() - t0),
-        ok: true,
-        raw: { source: "0G Storage", chainId: 16602 },
+        ok: false,
+        raw: { reason: "Choose a live escrow task before resolving tx.*." },
       };
     }
 
     if (ns === "rep") {
-      const rows = [
-        {
-          label: "ai.rep.registry",
-          value: ERC8004_REPUTATION_REGISTRY,
-        },
-        { label: "ai.rep.count", value: "47" },
-        { label: "ai.rep.avg", value: "4.7" },
-      ];
       return {
         namespace: ns,
         fullName,
-        value: "ERC-8004 · 47 records · ★4.7",
-        rows,
+        value: "read through live.ts",
         latencyMs: Math.round(performance.now() - t0),
-        ok: true,
-        raw: {
-          chainId: 84532,
-          registry: ERC8004_REPUTATION_REGISTRY,
-          chain: "base-sepolia",
-        },
+        ok: false,
+        raw: { reason: "ERC-8004 summaries are read by the live data layer." },
       };
     }
 
     if (ns === "mem") {
+      const metadata = (await galileoClient.readContract({
+        address: WORKER_INFT_ADDRESS,
+        abi: WORKER_INFT_ABI,
+        functionName: "getMetadata",
+        args: [BigInt(workerSeed.tokenId)],
+      })) as { memoryCID?: string };
       return {
         namespace: ns,
         fullName,
-        value: workerSeed.memCid,
+        value: metadata.memoryCID ?? workerSeed.memoryCID ?? "",
         latencyMs: Math.round(performance.now() - t0),
         ok: true,
-        raw: { source: "0G Storage", text: "ai.mem.cid" },
+        raw: { method: "getMetadata", chainId: 16602 },
       };
     }
   } catch (err) {

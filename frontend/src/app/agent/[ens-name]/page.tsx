@@ -59,6 +59,12 @@ export default async function AgentPage({
     <Shell>
       <WorkerProfileClient
         lot={lot}
+        liveProof={{
+          tokenId: Number(liveLot.tokenId),
+          memoryCID: liveLot.memoryCID,
+          agentId: liveLot.agentId.toString(),
+          owner: liveLot.owner,
+        }}
         recentJobs={recentJobs}
         provenance={provenance}
       />

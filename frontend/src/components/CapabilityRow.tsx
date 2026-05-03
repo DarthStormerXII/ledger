@@ -17,11 +17,6 @@ export function CapabilityRow({
 }) {
   const [open, setOpen] = useState(false);
   const valueText = typeof value === "string" ? value : String(value);
-  const sigSeed =
-    valueText
-      .split(" ")[0]
-      ?.replace(/[^a-fA-F0-9]/g, "")
-      .padEnd(8, "0") || "00000000";
   return (
     <div style={{ borderBottom: "1px solid rgba(245,241,232,0.16)" }}>
       <div
@@ -66,7 +61,7 @@ export function CapabilityRow({
           }}
         >
           <div className="caps-sm muted" style={{ marginBottom: 6 }}>
-            RESOLVER GATEWAY RESPONSE
+            RESOLUTION SOURCE
           </div>
           <div
             className="mono"
@@ -78,7 +73,7 @@ export function CapabilityRow({
               wordBreak: "break-all",
             }}
           >
-            {`{"node":"${rowKey}.${ensName}","value":"${valueText.split(" ")[0]}","sig":"0x${sigSeed.repeat(8).slice(0, 64)}"}`}
+            {`{"node":"${rowKey}.${ensName}","value":"${valueText.split(" ")[0]}","source":"live-or-explicitly-disclosed"}`}
           </div>
         </div>
       )}

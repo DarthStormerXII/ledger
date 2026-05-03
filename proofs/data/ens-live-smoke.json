@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-05-02T16:46:14.066Z",
+  "generatedAt": "2026-05-03T12:45:56.270Z",
   "status": {
     "pass": true
   },
   "chain": {
     "rpcUrl": "https://evmrpc-testnet.0g.ai",
     "chainId": "16602",
-    "latestBlock": 31133047
+    "latestBlock": 31298803
   },
   "contracts": {
     "workerInftAddress": "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
@@ -37,7 +37,7 @@
     }
   ],
   "gateway": {
-    "parentName": "ledger-demo.eth",
+    "parentName": "ledger.eth",
     "whoGatewayOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
     "pay1": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
     "pay2": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
@@ -46,7 +46,7 @@
     "repRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713"
   },
   "memory": {
-    "liveMemoryPointer": "",
-    "liveMemoryPointerError": "execution reverted (no data present; likely require(false) occurred (action=\"call\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x7488888d0000000000000000000000000000000000000000000000000000000000000001\", \"to\": \"0x48B051F3e565E394ED8522ac453d87b3Fa40ad62\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.16.0)"
+    "liveMemoryPointer": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
+    "liveMemoryPointerError": ""
   }
 }

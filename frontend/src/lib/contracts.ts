@@ -87,6 +87,30 @@ export const WORKER_INFT_ABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [{ internalType: "uint256", name: "tokenId", type: "uint256" }],
+    name: "getMetadata",
+    outputs: [
+      {
+        components: [
+          { internalType: "string", name: "agentName", type: "string" },
+          { internalType: "bytes", name: "sealedKey", type: "bytes" },
+          { internalType: "string", name: "memoryCID", type: "string" },
+          {
+            internalType: "string",
+            name: "initialReputationRef",
+            type: "string",
+          },
+          { internalType: "uint64", name: "updatedAt", type: "uint64" },
+        ],
+        internalType: "struct WorkerINFT.AgentMetadata",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
 ] as const;
 
 export const LEDGER_ESCROW_ABI = [
@@ -117,6 +141,32 @@ export const LEDGER_ESCROW_ABI = [
     name: "postTask",
     outputs: [],
     stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "taskId", type: "bytes32" },
+      { internalType: "uint256", name: "workerTokenId", type: "uint256" },
+      { internalType: "uint256", name: "bidAmount", type: "uint256" },
+      { internalType: "uint256", name: "bondAmount", type: "uint256" },
+    ],
+    name: "acceptTokenBid",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "taskId", type: "bytes32" }],
+    name: "payoutRecipient",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "", type: "bytes32" }],
+    name: "taskWorkerTokenIds",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -154,6 +204,31 @@ export const LEDGER_ESCROW_ABI = [
       },
     ],
     name: "TaskPosted",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "WorkerTokenAttached",
     type: "event",
   },
 ] as const;

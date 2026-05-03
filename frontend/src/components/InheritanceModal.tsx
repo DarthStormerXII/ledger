@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import type { Lot } from "@/lib/data";
-import { DEMO_OWNER_A, DEMO_OWNER_B } from "@/lib/contracts";
 import { shortAddr } from "./useLiveOwner";
 import { resolveWho } from "@/lib/ens";
 
-type Phase = "ready" | "transferring" | "complete";
+type Phase = "checking" | "blocked";
 
 export function InheritanceModal({
   lot,
@@ -15,42 +14,36 @@ export function InheritanceModal({
   lot: Lot;
   onClose: () => void;
 }) {
-  const [phase, setPhase] = useState<Phase>("ready");
-  const [pStarted, setPStarted] = useState(false);
-  const [resolved, setResolved] = useState<string>(shortAddr(DEMO_OWNER_A));
+  const [phase, setPhase] = useState<Phase>("checking");
+  const [resolved, setResolved] = useState<string>(lot.ownerShort);
 
-  const confirm = () => {
-    setPhase("transferring");
-    setPStarted(true);
-    window.setTimeout(() => setPhase("complete"), 1600);
-  };
-
-  // After "complete", re-resolve who.* live from chain.
+  // Re-resolve who.* live from chain. This modal never simulates a transfer.
   useEffect(() => {
-    if (phase !== "complete") return;
     let cancelled = false;
-    resolveWho(1)
+    const tokenId = Number.parseInt(lot.lot, 10);
+    resolveWho(Number.isFinite(tokenId) ? tokenId : 1)
       .then((live) => {
         if (cancelled) return;
         setResolved(shortAddr(live));
+        setPhase("blocked");
       })
       .catch(() => {
         if (cancelled) return;
-        setResolved(shortAddr(DEMO_OWNER_B));
+        setPhase("blocked");
       });
     return () => {
       cancelled = true;
     };
-  }, [phase]);
+  }, [lot.lot]);
 
   // ESC to cancel
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && phase === "ready") onClose();
+      if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [phase, onClose]);
+  }, [onClose]);
 
   return (
     <div
@@ -77,7 +70,7 @@ export function InheritanceModal({
             color: "var(--ledger-paper)",
           }}
         >
-          Transfer Lot {lot.lot}.
+          Live ownership for Lot {lot.lot}.
         </h2>
 
         {/* Center stage */}
@@ -94,19 +87,16 @@ export function InheritanceModal({
           <div
             style={{
               textAlign: "right",
-              opacity:
-                phase === "complete" ? 0.3 : phase === "transferring" ? 0.5 : 1,
-              transition: "opacity 1.5s ease-out",
             }}
           >
             <div className="caps-sm muted" style={{ marginBottom: 6 }}>
-              FROM
+              CURRENT OWNER
             </div>
             <div
               className="mono"
               style={{ fontSize: 16, color: "var(--ledger-paper)" }}
             >
-              {shortAddr(DEMO_OWNER_A)}
+              {resolved}
             </div>
           </div>
 
@@ -136,51 +126,18 @@ export function InheritanceModal({
           <div
             style={{
               textAlign: "left",
-              opacity: phase === "ready" ? 0.4 : 1,
-              transform: phase === "ready" ? "scale(0.97)" : "scale(1)",
-              transition: "opacity 1.2s ease-out, transform 1.2s ease-out",
             }}
           >
             <div className="caps-sm muted" style={{ marginBottom: 6 }}>
-              TO
+              SALE STATUS
             </div>
             <div
               className="mono"
               style={{ fontSize: 16, color: "var(--ledger-paper)" }}
             >
-              {shortAddr(DEMO_OWNER_B)}
+              No live sale contract
             </div>
           </div>
-
-          {pStarted && (
-            <div
-              aria-hidden
-              style={{
-                position: "absolute",
-                left: 0,
-                top: "50%",
-                right: 0,
-                height: 0,
-                pointerEvents: "none",
-              }}
-            >
-              {Array.from({ length: 12 }).map((_, i) => (
-                <span
-                  key={i}
-                  style={{
-                    position: "absolute",
-                    width: 4,
-                    height: 4,
-                    background: "var(--ledger-oxblood)",
-                    borderRadius: 0,
-                    top: -2,
-                    left: "20%",
-                    animation: `particle-${i % 2} 1.5s ease-in-out ${i * 0.07}s 1`,
-                  }}
-                />
-              ))}
-            </div>
-          )}
         </div>
 
         {/* Live ENS resolution */}
@@ -201,8 +158,7 @@ export function InheritanceModal({
             who.{lot.ens} → {resolved}
           </div>
           <div className="mono muted" style={{ fontSize: 11, marginTop: 8 }}>
-            no ENS transaction · no migration · CCIP-Read off-chain resolver
-            follows ownerOf()
+            who.{lot.ens} reads current WorkerINFT.ownerOf on 0G Galileo.
           </div>
         </div>
 
@@ -214,8 +170,8 @@ export function InheritanceModal({
             marginBottom: 24,
           }}
         >
-          <Row label="Sale price" value={`${lot.askPrice} USDC`} italic />
-          <Row label="Network fee" value="≈ 0.0024 USDC" mono />
+          <Row label="Sale price" value={lot.askPrice ? `${lot.askPrice} 0G` : "—"} italic />
+          <Row label="Transfer tx" value="not submitted" mono />
           <Row
             label="Settles on"
             value={
@@ -236,28 +192,11 @@ export function InheritanceModal({
             className="btn-text"
             style={{ padding: "12px 22px", color: "rgba(245,241,232,0.6)" }}
           >
-            Cancel
+            Close
           </button>
-          {phase === "ready" && (
-            <button
-              onClick={confirm}
-              className="btn btn-italic"
-              style={{ padding: "14px 28px" }}
-            >
-              Confirm Transfer
-            </button>
-          )}
-          {phase === "transferring" && (
-            <button disabled className="btn" style={{ opacity: 0.6 }}>
-              Transferring…
-            </button>
-          )}
-          {phase === "complete" && (
-            <button onClick={onClose} className="btn">
-              Lot {lot.lot} — sold for {lot.askPrice} USDC. Provenance updated.
-              Close.
-            </button>
-          )}
+          <button disabled className="btn" style={{ opacity: 0.6 }}>
+            {phase === "checking" ? "Checking live owner..." : "No live sale to execute"}
+          </button>
         </div>
       </div>
     </div>

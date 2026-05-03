@@ -9,6 +9,7 @@ import type {
 const WORKER_INFT_ABI = [
   "function ownerOf(uint256 tokenId) view returns (address)",
   "function getMemoryPointer(uint256 tokenId) view returns (string)",
+  "function getMetadata(uint256 tokenId) view returns ((string agentName, bytes sealedKey, string memoryCID, string initialReputationRef, uint64 updatedAt))",
 ];
 
 const payCounters = new Map<string, bigint>();
@@ -130,6 +131,14 @@ export async function resolveMemoryPointer(
     WORKER_INFT_ABI,
     provider,
   );
+  try {
+    const metadata = (await contract.getMetadata(tokenId)) as {
+      memoryCID?: string;
+    };
+    if (metadata.memoryCID) return metadata.memoryCID;
+  } catch {
+    // Older WorkerINFT variants exposed getMemoryPointer directly.
+  }
   return (await contract.getMemoryPointer(tokenId)) as string;
 }
 

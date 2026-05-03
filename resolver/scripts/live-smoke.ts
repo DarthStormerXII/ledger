@@ -11,6 +11,7 @@ const repoRoot = resolve(__dirname, "../..");
 const WORKER_INFT_ABI = [
   "function ownerOf(uint256 tokenId) view returns (address)",
   "function getMemoryPointer(uint256 tokenId) view returns (string)",
+  "function getMetadata(uint256 tokenId) view returns ((string agentName, bytes sealedKey, string memoryCID, string initialReputationRef, uint64 updatedAt))",
   "event Transfer(address indexed from,address indexed to,uint256 indexed tokenId)"
 ];
 
@@ -49,9 +50,18 @@ async function main(): Promise<void> {
   let liveMemoryPointer = "";
   let liveMemoryPointerError = "";
   try {
-    liveMemoryPointer = (await contract.getMemoryPointer(tokenId)) as string;
+    const metadata = (await contract.getMetadata(tokenId)) as { memoryCID?: string };
+    liveMemoryPointer = metadata.memoryCID ?? "";
   } catch (error) {
-    liveMemoryPointerError = error instanceof Error ? error.message : String(error);
+    try {
+      liveMemoryPointer = (await contract.getMemoryPointer(tokenId)) as string;
+    } catch (fallbackError) {
+      liveMemoryPointerError =
+        fallbackError instanceof Error ? fallbackError.message : String(fallbackError);
+      if (!liveMemoryPointerError && error instanceof Error) {
+        liveMemoryPointerError = error.message;
+      }
+    }
   }
 
   const transferLogs = await contract.queryFilter(

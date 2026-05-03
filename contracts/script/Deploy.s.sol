@@ -33,7 +33,7 @@ contract Deploy {
         vm.startBroadcast(privateKey);
         oracle = new MockTEEOracle(keccak256(DEMO_VALID_PROOF));
         workerINFT = new WorkerINFT(address(oracle));
-        escrow = new LedgerEscrow(reputationRegistry);
+        escrow = new LedgerEscrow(reputationRegistry, address(workerINFT));
         identityRegistry = new LedgerIdentityRegistry();
         vm.stopBroadcast();
     }

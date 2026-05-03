@@ -10,23 +10,28 @@ import { useLiveOwner, shortAddr } from "@/components/useLiveOwner";
 
 export function WorkerProfileClient({
   lot,
+  liveProof,
   recentJobs,
   provenance,
 }: {
   lot: Lot;
+  liveProof: {
+    tokenId: number;
+    memoryCID: string;
+    agentId: string;
+    owner: string;
+  };
   recentJobs: RecentJob[];
   provenance: ProvenanceEvent[];
 }) {
   const [open, setOpen] = useState(false);
 
-  // Live ownerOf() for Lot 047 — anchors the WHO row to chain truth.
-  // Other lots fall back to the seeded ownerShort.
-  const isAnchored = lot.lot === "047";
-  const { owner: liveOwner, live } = useLiveOwner(1, undefined);
+  const { owner: liveOwner, live } = useLiveOwner(liveProof.tokenId, undefined);
   const whoValue =
-    isAnchored && liveOwner
+    liveOwner
       ? `${shortAddr(liveOwner)}${live ? "  · live" : ""}`
-      : lot.ownerShort;
+      : shortAddr(liveProof.owner);
+  const memoryValue = shortValue(liveProof.memoryCID);
 
   return (
     <div className="page" style={{ padding: 40 }}>
@@ -125,7 +130,7 @@ export function WorkerProfileClient({
             onClick={() => navigator.clipboard?.writeText(lot.owner)}
             title="Click to copy"
           >
-            {lot.owner}
+            {liveOwner ?? liveProof.owner}
           </div>
           {lot.listed && (
             <>
@@ -169,26 +174,29 @@ export function WorkerProfileClient({
               rowKey="pay"
               ensName={lot.ens}
               label="PAY.*"
-              value="0x9c2e…f471 @0"
-              sub="+ 0x33ad…b0e2 @1"
+              value="not configured"
+              sub="no live pay resolver record"
             />
             <CapabilityRow
               rowKey="tx"
               ensName={lot.ens}
               label="TX.*"
-              value="bafyb…7e3p"
+              value={recentJobs.length ? "escrow task history" : "no task receipt selected"}
+              sub={recentJobs.length ? "from live LedgerEscrow task reads" : undefined}
             />
             <CapabilityRow
               rowKey="rep"
               ensName={lot.ens}
               label="REP.*"
-              value={`${lot.jobs} SIGNED RECORDS`}
+              value={`${lot.jobs} ERC-8004 RECORDS`}
+              sub={`agent ${liveProof.agentId}`}
             />
             <CapabilityRow
               rowKey="mem"
               ensName={lot.ens}
               label="MEM.*"
-              value="bafkr…81rt"
+              value={memoryValue}
+              sub="WorkerINFT.getMetadata().memoryCID"
             />
           </div>
 
@@ -201,7 +209,7 @@ export function WorkerProfileClient({
             }}
           >
             <div className="caps-sm muted" style={{ marginBottom: 6 }}>
-              0G COMPUTE — TEE ATTESTATION
+              0G COMPUTE — TEE SHIM DISCLOSED
             </div>
             <div
               style={{
@@ -214,13 +222,13 @@ export function WorkerProfileClient({
                 className="mono"
                 style={{ fontSize: 11, color: "var(--ledger-paper)" }}
               >
-                0x9a4f…ec21
+                MockTEEOracle
               </span>
               <span
                 className="caps-sm"
-                style={{ color: "var(--ledger-success)" }}
+                style={{ color: "var(--ledger-gold)" }}
               >
-                [✓] VERIFIED
+                DISCLOSED
               </span>
             </div>
           </div>
@@ -343,6 +351,11 @@ export function WorkerProfileClient({
       {open && <InheritanceModal lot={lot} onClose={() => setOpen(false)} />}
     </div>
   );
+}
+
+function shortValue(value: string) {
+  if (value.length <= 22) return value;
+  return `${value.slice(0, 10)}…${value.slice(-8)}`;
 }
 
 function StatCell({
