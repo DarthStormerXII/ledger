@@ -36,7 +36,7 @@ export function Web3Provider({ children }: { children: React.ReactNode }) {
       appId={appId}
       config={{
         appearance: {
-          theme: "dark",
+          theme: "#f5f1e8",
           accentColor: "#A91B0D",
           logo: "https://ledger-open-agents.vercel.app/assets/logos/privy/ledger_logo_180x90.png",
           showWalletLoginFirst: false,
