@@ -40,6 +40,7 @@ export type AgentKitBidDecision = {
     capabilityMemoryCID?: string;
     payAddresses?: [string, string];
     payChanged?: boolean;
+    identityMode?: "names-only" | "direct-ownerOf" | "gateway";
     identityVerified: boolean;
     reputation: {
       jobCount: number;

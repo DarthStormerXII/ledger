@@ -96,6 +96,7 @@ export class LedgerAgentRuntime {
           ? workerContext.capabilities.payAddresses[0].toLowerCase() !==
             workerContext.capabilities.payAddresses[1].toLowerCase()
           : undefined,
+        identityMode: workerContext.capabilities.resolutionMode,
         identityVerified: Boolean(
           workerContext.capabilities.whoOwner &&
             addressesEqual(

@@ -47,8 +47,9 @@ const runtime = new LedgerAgentRuntime({
   adapters: {
     memory: createZeroGMemoryAdapter(),
     inference: createDeterministicReasoner({
-      output:
-        "Dry-run reasoner selected the task because worker-001 has matching research reputation.",
+      output: allowLocalDryRun
+        ? "Local dry-run generated a structurally valid bid without ENS reputation proof."
+        : "Dry-run reasoner selected the task after live ENS owner, memory, and reputation proof checks.",
       attestationDigest: `0x${"0".repeat(64)}`,
     }),
     ownership: createZeroGOwnershipAdapter({ demoOnly: true }),

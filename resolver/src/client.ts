@@ -28,7 +28,9 @@ export type CapabilitySnapshot = {
   payAddresses?: [string, string];
   txIntent?: string;
   repCount?: string;
+  repAverage?: string;
   memoryCid?: string;
+  resolutionMode?: "names-only" | "direct-ownerOf" | "gateway";
 };
 
 const WORKER_INFT_ABI = [
@@ -117,19 +119,25 @@ export class LedgerCapabilityClient {
     txId?: string,
   ): Promise<CapabilitySnapshot> {
     const names = this.names(workerLabel, txId);
-    const snapshot: CapabilitySnapshot = { names };
+    const snapshot: CapabilitySnapshot = { names, resolutionMode: "names-only" };
 
     if (this.workerInftAddress) {
       snapshot.whoOwner = await this.ownerOf(tokenId);
+      snapshot.resolutionMode = "direct-ownerOf";
     }
 
     if (this.gatewayUrl) {
+      snapshot.resolutionMode = "gateway";
       snapshot.whoOwner = await this.gatewayAddr(names.who);
       snapshot.payAddresses = [
         await this.gatewayAddr(names.pay),
         await this.gatewayAddr(names.pay),
       ];
       snapshot.repCount = await this.gatewayText(names.rep, "ai.rep.count");
+      snapshot.repAverage = await this.gatewayText(
+        names.rep,
+        "ai.rep.average",
+      );
       snapshot.memoryCid = await this.gatewayText(names.mem, "ai.mem.cid");
       if (names.tx) {
         snapshot.txIntent = await this.gatewayText(names.tx, "ai.tx.intent");

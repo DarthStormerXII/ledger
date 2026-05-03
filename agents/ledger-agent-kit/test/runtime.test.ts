@@ -67,6 +67,7 @@ describe("LedgerAgentRuntime", () => {
       ensName: "who.worker-001.ledger.eth",
       capabilityOwner: "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
       capabilityMemoryCID: "0g://memory-root",
+      identityMode: "gateway",
       identityVerified: true,
     });
     expect(decision.reasoning.attestationDigest).toMatch(/^0x[0-9a-f]{64}$/);
@@ -232,6 +233,7 @@ function fakeIdentityAdapter(
         whoOwner: "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
         repCount: "47",
         memoryCid: "0g://memory-root",
+        resolutionMode: "gateway",
         ...overrides,
       };
     },
