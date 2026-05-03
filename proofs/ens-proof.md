@@ -1,6 +1,6 @@
 # ENS Proof
 
-*Status: Sepolia ENS CCIP-Read integration live-smoked on May 2, 2026. `ledger.eth` is wired to the deployed Sepolia resolver; `who`, `pay`, `tx`, `rep`, and `mem` namespace handlers exist; Sepolia ENS resolution smoke passed.*
+*Status: Sepolia ENS CCIP-Read integration live-smoked on May 3, 2026. `ledger.eth` now points to the new immutable-URL resolver served via the durable `resolver.fierypools.fun` Cloudflare named tunnel; `who`, `pay`, `tx`, `rep`, and `mem` namespace handlers exist; Sepolia ENS resolution smoke passed.*
 
 ## What we used
 
@@ -10,14 +10,14 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
 
 - **Parent ENS name:** `ledger.eth` on Sepolia
 - **Parent owner:** `0x32FE11d9900D63350016374BE98ff37c3Af75847`
-- **Sepolia CCIP resolver contract:** `0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531`
-- **Resolver deploy tx:** `0x74d55556d94084420fdcb928d7cea8c76c434c1d5cc074a58c8fb3a54106193d`
-- **Set resolver tx:** `0x9758ba4bc7c1583d5590000d219443330c4122ae2ac7a9dc2670dee7ce8695f5`
-- **CCIP gateway URL:** `https://9e04-124-123-105-119.ngrok-free.app/{sender}/{data}` for the demo window
-- **Resolver signer:** `0x3f37270ef375c20CD0b218B94454557005CfB248`
+- **Sepolia CCIP resolver contract (current):** `0xd94cC429058E5495a57953c7896661542648E1B3`
+- **Set resolver tx (current pointer):** `0xc49a3288274156d826bec3898bf31c15121a90d3bf885f39a8cb74ba67d89caf`
+- **CCIP gateway URL (durable):** `https://resolver.fierypools.fun/{sender}/{data}` (Cloudflare named tunnel `kosyn-cre`)
+- **Resolver signer:** `0x32FE11d9900D63350016374BE98ff37c3Af75847`
 - **App integration contract:** `resolver/ledger.capabilities.json`
 - **Typed integration client:** `resolver/src/client.ts`
 - **Live smoke artifacts:** `proofs/data/ens-live-smoke.json`, `proofs/data/ens-sepolia-resolve.json`
+- **Prior resolver (superseded May 3):** `0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531` — replaced because its `url` was set to a rotating ngrok host. The new contract bakes the durable cloudflared URL in `immutable` form via constructor.
 
 ## Contracts
 
@@ -33,13 +33,22 @@ Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. Five capabilit
 - `pay.worker-001.ledger.eth` resolved twice to two different HD-derived addresses:
   - latest smoke: `0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC`
   - latest smoke: `0x90F79bf6EB2c4f870365E785982E1f101E93b906`
-- `rep.worker-001.ledger.eth` text smoke:
-  - `ai.rep.registry = 0x8004B663056A597Dffe9eCcC1965A193B7388713`
-  - `ai.rep.count = 47`
+- `rep.worker-001.ledger.eth` text smoke (now backed by live ERC-8004 records, not env cache):
+  - `ai.rep.registry = 0x8004B663056A597Dffe9eCcC1965A193B7388713` (ReputationRegistry on Base Sepolia)
+  - `ai.rep.agent = 5444` (registered ERC-8004 IdentityRegistry tokenId for the demo worker)
+  - `ai.rep.count = 47` — 47 distinct `giveFeedback` records on-chain across 8 distinct client wallets
+  - `ai.rep.average = 4.77` — direct `getSummary(5444, [clients...], "", "")` returns `count=47, sumValue=224190000000000000000, decimals=18`
 - `mem.worker-001.ledger.eth` text smoke:
   - `ai.mem.cid = 0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
+- `tx.escrow-release-001.worker-001.ledger.eth` text smoke (5th namespace):
+  - `ai.tx.intent = release-payment`
+  - `ai.tx.outcome = released`
+  - `ai.tx.chain = 0g-galileo:16602`
+  - `ai.tx.amount = 0.1`
+  - `ai.tx.cid = 0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4`
+  - `ai.tx.receipt` includes the on-chain `releasePayment` tx hash `0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c` and the escrow taskId `0xffa92cfef48d8c4ec2432e2aa82a02b67a1a05a1a2a9f3977377faf2d1b8bb81`
 - `ledger.eth` parent text smoke:
-  - `agent-registration = {"standard":"ENSIP-25","registry":"0x8004B663056A597Dffe9eCcC1965A193B7388713","chain":"base-sepolia","chainId":84532,"agentId":"1"}`
+  - `agent-registration = {"standard":"ENSIP-25","registry":"0x8004B663056A597Dffe9eCcC1965A193B7388713","chain":"base-sepolia","chainId":84532,"agentId":"5444","identityRegistry":"0x8004A818BFB912233c491871b3d84c89A494BD9e"}`
 
 ## Inheritance Flip
 
@@ -55,7 +64,7 @@ Historical on-chain proof from the already-completed transfer:
 
 - This Foundry install exposes `cast resolve-name`, not `cast resolve`, and `cast resolve-name` did not follow ENSIP-10 wildcard parents. Final smoke uses `ethers` against the Sepolia ENS registry with CCIP-Read enabled; artifact: `proofs/data/ens-sepolia-resolve.json`.
 - Direct `getMemoryPointer(1)` on the deployed `WorkerINFT` currently reverts; resolver `mem.*` is using the lead-provided memory CID via `MEMORY_POINTERS_JSON`.
-- Gateway uptime currently depends on the local resolver process plus ngrok tunnel staying alive. For production durability, deploy `resolver/` to Vercel or a Cloudflare named tunnel with the same env values and then deploy/update the resolver URL.
+- Gateway uptime is now durable: served via the `kosyn-cre` Cloudflare named tunnel routing `resolver.fierypools.fun → localhost:8787`. Both the Node resolver and `cloudflared` are supervised by `launchd` (`com.ledger.resolver`, `com.cloudflared.kosyn-cre`) with `KeepAlive: true`, so they survive Mac sleep, reboots, and accidental kills. See `resolver/supervise/README.md` for setup. The signing key lives in `~/.config/ledger-resolver/env` (mode 0600), outside the repo.
 
 ## Reproduction
 

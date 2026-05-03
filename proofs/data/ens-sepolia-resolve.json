@@ -1,22 +1,34 @@
 {
-  "generatedAt": "2026-05-02T20:30:07.071Z",
-  "status": {
-    "pass": true
+  "ledger.eth": {
+    "resolver": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "agent-registration": "{\"standard\":\"ENSIP-25\",\"registry\":\"0x8004B663056A597Dffe9eCcC1965A193B7388713\",\"chain\":\"base-sepolia\",\"chainId\":84532,\"agentId\":\"5444\",\"identityRegistry\":\"0x8004A818BFB912233c491871b3d84c89A494BD9e\"}"
   },
-  "parentName": "ledger.eth",
-  "rpcUrl": "https://ethereum-sepolia-rpc.publicnode.com",
-  "resolved": {
-    "whoName": "who.worker-001.ledger.eth",
-    "whoOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
-    "payName": "pay.worker-001.ledger.eth",
-    "pay1": "0x15d34AAf54267DB7D7c367839AAf71A00a2C6A65",
-    "pay2": "0x9965507D1a55bcC2695C58ba16FB37d819B0A4dc",
-    "payChanged": true,
-    "memName": "mem.worker-001.ledger.eth",
-    "memoryCid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
-    "repName": "rep.worker-001.ledger.eth",
-    "repRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
-    "repCount": "47",
-    "agentRegistration": "{\"standard\":\"ENSIP-25\",\"registry\":\"0x8004B663056A597Dffe9eCcC1965A193B7388713\",\"chain\":\"base-sepolia\",\"chainId\":84532,\"agentId\":\"1\"}"
+  "who.worker-001.ledger.eth": {
+    "resolver": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "addr": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b"
+  },
+  "rep.worker-001.ledger.eth": {
+    "resolver": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "registry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
+    "count": "47",
+    "average": "4.77",
+    "agent": "5444"
+  },
+  "pay.worker-001.ledger.eth": {
+    "resolver": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "addr": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
+  },
+  "mem.worker-001.ledger.eth": {
+    "resolver": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "cid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4"
+  },
+  "tx.escrow-release-001.worker-001.ledger.eth": {
+    "resolver": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "cid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
+    "intent": "release-payment",
+    "outcome": "released",
+    "chain": "0g-galileo:16602",
+    "amount": "0.1",
+    "receipt": "{\"txHash\":\"0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c\",\"taskId\":\"0xffa92cfef48d8c4ec2432e2aa82a02b67a1a05a1a2a9f3977377faf2d1b8bb81\",\"status\":3,\"escrow\":\"0x12D2162F47AAAe1B0591e898648605daA186D644\"}"
   }
 }
