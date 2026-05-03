@@ -25,14 +25,10 @@ export function Reveal({
 }) {
   const ref = useRef<HTMLElement | null>(null);
   // Lazy initialiser: respects reduced motion synchronously without a setState.
-  const [shown, setShown] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  });
+  const [shown, setShown] = useState<boolean>(false);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const node = ref.current;
     if (!node) return;
     const obs = new IntersectionObserver(
@@ -52,10 +48,15 @@ export function Reveal({
     return () => obs.disconnect();
   }, [once, threshold]);
 
+  const reduced =
+    typeof window !== "undefined" &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const duration = reduced ? 0 : 700;
+
   const style: React.CSSProperties = {
     opacity: shown ? 1 : 0,
     transform: shown ? "translateY(0)" : "translateY(24px)",
-    transition: `opacity 700ms cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform 700ms cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
+    transition: `opacity ${duration}ms cubic-bezier(0.22,1,0.36,1) ${reduced ? 0 : delay}ms, transform ${duration}ms cubic-bezier(0.22,1,0.36,1) ${reduced ? 0 : delay}ms`,
   };
 
   if (as === "li") {
