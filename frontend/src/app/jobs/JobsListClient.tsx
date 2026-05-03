@@ -3,16 +3,29 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { Job } from "@/lib/data";
+import {
+  InspectDrawer,
+  InspectPill,
+  type InspectGroup,
+} from "@/components/InspectDrawer";
+import {
+  LEDGER_ESCROW_ADDRESS,
+  DEMO_TASK_ID,
+  DEMO_RELEASE_TX,
+} from "@/lib/contracts";
 
 export function JobsListClient({ jobs }: { jobs: Job[] }) {
   const router = useRouter();
   const [tick, setTick] = useState(0);
+  const [inspectJobId, setInspectJobId] = useState<string | null>(null);
   useEffect(() => {
     const id = window.setInterval(() => setTick((t) => t + 1), 1000);
     return () => window.clearInterval(id);
   }, []);
   const fmt = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+
+  const inspectJob = jobs.find((j) => j.id === inspectJobId);
 
   return (
     <div className="page" style={{ padding: 40 }}>
@@ -105,13 +118,114 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
                   {j.payout} USDC
                 </span>
               </div>
-              <div style={{ width: 100, textAlign: "right" }}>
+              <div
+                style={{
+                  width: 140,
+                  textAlign: "right",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: 8,
+                }}
+              >
                 <span className="caps-sm muted">[{j.bids} BIDS]</span>
+                <InspectPill onClick={() => setInspectJobId(j.id)} />
               </div>
             </div>
           );
         })}
       </div>
+
+      <InspectDrawer
+        open={inspectJob !== undefined}
+        onClose={() => setInspectJobId(null)}
+        title={inspectJob?.title ?? ""}
+        subtitle={
+          inspectJob
+            ? `${inspectJob.id} · auction over Gensyn AXL · escrow on Base Sepolia`
+            : undefined
+        }
+        groups={inspectJob ? buildJobInspectGroups(inspectJob) : []}
+      />
     </div>
   );
+}
+
+function buildJobInspectGroups(job: Job): InspectGroup[] {
+  const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
+  const galileoAddr = (a: string) =>
+    `https://chainscan-galileo.0g.ai/address/${a}`;
+  return [
+    {
+      title: "AUCTION (AXL MESH)",
+      rows: [
+        { label: "Job ID", value: job.id, mono: true },
+        { label: "Buyer", value: job.employer },
+        {
+          label: "Channel",
+          value: "#ledger-jobs (gossipsub fork)",
+          mono: true,
+        },
+        {
+          label: "Message types",
+          value: "TASK_POSTED → BID → BID_ACCEPTED → AUCTION_CLOSED → RESULT",
+          mono: true,
+        },
+        {
+          label: "Encryption",
+          value: "Hop-by-hop TLS + end-to-end payload (two layers)",
+        },
+        {
+          label: "Bootstrap",
+          value: "tls://66.51.123.38:9001 (sjc) — kill-resilient",
+          mono: true,
+        },
+      ],
+    },
+    {
+      title: "ESCROW (BASE SEPOLIA / 0G GALILEO)",
+      rows: [
+        {
+          label: "LedgerEscrow contract",
+          value: LEDGER_ESCROW_ADDRESS,
+          href: galileoAddr(LEDGER_ESCROW_ADDRESS),
+          mono: true,
+        },
+        { label: "Payment", value: `${job.payout} USDC` },
+        { label: "Worker bond", value: `${job.bond} USDC` },
+        { label: "Time left", value: `${job.timeLeft}s · deadline-anchored` },
+        {
+          label: "taskId derivation",
+          value: "keccak256(buyer ‖ nonce ‖ block.timestamp)",
+          mono: true,
+        },
+        {
+          label: "Settlement model",
+          value:
+            "Two-phase commit, eventually consistent ~10s; 'pending_reconcile' on UI if a leg lags",
+        },
+      ],
+    },
+    {
+      title: "REPRESENTATIVE LIVE TASK",
+      rows: [
+        {
+          label: "Demo taskId",
+          value: DEMO_TASK_ID,
+          mono: true,
+        },
+        {
+          label: "Demo releasePayment tx",
+          value: DEMO_RELEASE_TX,
+          href: galileoTx(DEMO_RELEASE_TX),
+          mono: true,
+        },
+        {
+          label: "Note",
+          value:
+            "Auction logic is real; live escrow on Galileo. ERC-8004 feedback() to 0x8004B663… on Base Sepolia is wired into releasePayment.",
+        },
+      ],
+    },
+  ];
 }
