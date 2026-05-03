@@ -364,15 +364,31 @@ async function pinTo0g(payload: Buffer): Promise<string | null> {
         if (treeErr) throw treeErr;
         // `tx` is an object { txHash, rootHash, txSeq } on this SDK version,
         // not a string — extract the actual hash so the CID query string is
-        // a real on-chain reference instead of "[object Object]".
+        // a real on-chain reference instead of "[object Object]". `txSeq` is
+        // what storagescan-galileo's /submission/<n> page indexes by, so we
+        // append it to the CID URL too — the auction-room "View on
+        // explorer" link reads it back out.
+        const txObj =
+          tx && typeof tx === "object" ? (tx as Record<string, unknown>) : {};
         const txHash =
-          tx && typeof tx === "object" && "txHash" in tx
-            ? String((tx as { txHash: unknown }).txHash)
+          typeof txObj.txHash === "string"
+            ? txObj.txHash
             : typeof tx === "string"
               ? tx
               : "";
+        const txSeq =
+          typeof txObj.txSeq === "number"
+            ? String(txObj.txSeq)
+            : typeof txObj.txSeq === "string"
+              ? txObj.txSeq
+              : "";
         const root = tree.rootHash();
-        return txHash ? `0g://${root}?tx=${txHash}` : `0g://${root}`;
+        const params: string[] = [];
+        if (txHash) params.push(`tx=${txHash}`);
+        if (txSeq) params.push(`txSeq=${txSeq}`);
+        return params.length
+          ? `0g://${root}?${params.join("&")}`
+          : `0g://${root}`;
       }
     } finally {
       await file.close?.();

@@ -3087,3 +3087,85 @@ body.surface-ink {
   overflow: hidden;
   font-size: clamp(13px, 1.6vw, 22px);
 }
+
+/* ===== Auction-room brief skeletons =====
+   Used while /api/jobs/brief is still resolving — typically the first
+   ~6–15s after a freshly-posted task while the 0G pin is in-flight. The
+   shimmer reads as "data on its way" so the user doesn't briefly see
+   "(no title pinned)" placeholders that imply absence. */
+@keyframes auction-shimmer {
+  0% { background-position: -120% 0; }
+  100% { background-position: 220% 0; }
+}
+.auction-skeleton {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    rgba(245, 241, 232, 0.06) 0%,
+    rgba(245, 241, 232, 0.16) 50%,
+    rgba(245, 241, 232, 0.06) 100%
+  );
+  background-size: 200% 100%;
+  animation: auction-shimmer 1.4s linear infinite;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.auction-skeleton-chip {
+  width: 88px;
+  height: 18px;
+}
+.auction-skeleton-title-wrap {
+  margin: 8px 0 18px;
+}
+.auction-skeleton-title {
+  width: 64%;
+  max-width: 580px;
+  height: 56px;
+}
+.auction-skeleton-desc-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.auction-skeleton-desc {
+  width: 100%;
+  max-width: 720px;
+  height: 16px;
+}
+.auction-skeleton-desc-short {
+  width: 60%;
+  max-width: 440px;
+}
+
+/* Brief-panel CID link group — download + explorer buttons sit beside the
+   shortened rootHash so judges can either grab the JSON or jump to the
+   storagescan submission page in one click. */
+.job-brief-cid-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.job-brief-cid-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-family: var(--ledger-font-mono);
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  color: var(--ledger-gold-dim);
+  border-radius: 2px;
+  text-decoration: none;
+  transition:
+    background 160ms ease-out,
+    color 160ms ease-out,
+    border-color 160ms ease-out;
+}
+.job-brief-cid-link:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--ledger-gold);
+  border-color: var(--ledger-gold);
+}

@@ -261,13 +261,20 @@ export function AuctionRoomClient({
     Slashed: "var(--ledger-oxblood)",
   };
   // No invented title — every posted task MUST have title/description/category
-  // pinned to the brief. If the brief is missing we render an explicit
-  // "(no title pinned)" placeholder so a judge can tell the difference between
-  // a real, pinned title and a missing one. Anything else would imply the
-  // task was posted properly when it wasn't.
-  const titleMissing = !brief?.title;
-  const descMissing = !brief?.description;
-  const categoryMissing = !brief?.category;
+  // pinned to the brief. Three terminal states:
+  //   - briefLoading   → fetch hasn't returned yet OR brief was just POSTed
+  //                       and is still pinning (~6–15s on 0G). Show shimmer
+  //                       skeleton, not "(no title pinned)" — that placeholder
+  //                       implies a definite absence and would be misleading
+  //                       on a freshly-posted task.
+  //   - briefAbsent    → registry returned a confirmed 404 (pre-fix task or
+  //                       direct-contract post). Show explicit
+  //                       "(no title pinned)" italic placeholder.
+  //   - briefPresent   → real fields. Render normally.
+  const briefLoading = brief === null && !briefMissing;
+  const titleMissing = briefMissing && !brief?.title;
+  const descMissing = briefMissing && !brief?.description;
+  const categoryMissing = briefMissing && !brief?.category;
 
   return (
     <div className="page jobs-page-wrap">
@@ -289,7 +296,9 @@ export function AuctionRoomClient({
             <span style={{ color: HEADER_TONE[status] }}>
               {HEADER_LABEL[status]}
             </span>
-            {categoryMissing ? (
+            {briefLoading ? (
+              <span className="auction-skeleton auction-skeleton-chip" />
+            ) : categoryMissing ? (
               <span
                 className="caps-sm"
                 style={{
@@ -312,7 +321,11 @@ export function AuctionRoomClient({
               </span>
             )}
           </div>
-          {titleMissing ? (
+          {briefLoading ? (
+            <div className="auction-skeleton-title-wrap">
+              <span className="auction-skeleton auction-skeleton-title" />
+            </div>
+          ) : titleMissing ? (
             <h1
               className="auction-title"
               style={{ color: "rgba(245,241,232,0.4)", fontStyle: "italic" }}
@@ -323,7 +336,12 @@ export function AuctionRoomClient({
           ) : (
             <h1 className="auction-title">{brief!.title}.</h1>
           )}
-          {descMissing ? (
+          {briefLoading ? (
+            <div className="auction-skeleton-desc-wrap">
+              <span className="auction-skeleton auction-skeleton-desc" />
+              <span className="auction-skeleton auction-skeleton-desc auction-skeleton-desc-short" />
+            </div>
+          ) : descMissing ? (
             <p
               className="auction-desc"
               style={{ color: "rgba(245,241,232,0.4)", fontStyle: "italic" }}
@@ -1143,8 +1161,28 @@ function JobBriefPanel({
       </div>
     );
   }
-  const ogStorageHref = cid
-    ? `https://indexer-storage-testnet-turbo.0g.ai/file?root=${cid.replace(/^0g:\/\//, "").split("?")[0]}`
+  // The CID format we persist is: 0g://<rootHash>?tx=<txHash>&txSeq=<n>
+  // (txSeq is only present on briefs pinned after the dual-link landed).
+  // Download URL hits the indexer's /file endpoint (same behaviour as
+  // before — clicking the link triggers a direct download). The explorer
+  // URL goes to storagescan-galileo's /submission/<txSeq> page so judges
+  // can see the on-chain submission record.
+  const cidParse = cid
+    ? (() => {
+        const noScheme = cid.replace(/^0g:\/\//, "");
+        const [root, query = ""] = noScheme.split("?");
+        const params = new URLSearchParams(query);
+        return {
+          root,
+          txSeq: params.get("txSeq") || null,
+        };
+      })()
+    : null;
+  const ogDownloadHref = cidParse?.root
+    ? `https://indexer-storage-testnet-turbo.0g.ai/file?root=${cidParse.root}`
+    : null;
+  const ogExplorerHref = cidParse?.txSeq
+    ? `https://storagescan-galileo.0g.ai/submission/${cidParse.txSeq}`
     : null;
   return (
     <div className="job-brief-panel">
@@ -1161,19 +1199,33 @@ function JobBriefPanel({
             </span>
           )}
           {cid ? (
-            ogStorageHref ? (
-              <a
-                href={ogStorageHref}
-                target="_blank"
-                rel="noreferrer noopener"
-                className="mono job-brief-cid"
-                title={cid}
-              >
-                {short(cid, 14, 8)} ↗
-              </a>
-            ) : (
-              <span className="mono job-brief-cid">{short(cid, 14, 8)}</span>
-            )
+            <span className="job-brief-cid-group">
+              <span className="mono job-brief-cid" title={cid}>
+                {short(cid, 14, 8)}
+              </span>
+              {ogDownloadHref ? (
+                <a
+                  href={ogDownloadHref}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="job-brief-cid-link"
+                  title="Download brief JSON from 0G Storage indexer"
+                >
+                  ⤓ Download
+                </a>
+              ) : null}
+              {ogExplorerHref ? (
+                <a
+                  href={ogExplorerHref}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="job-brief-cid-link"
+                  title="View submission on 0G Storagescan"
+                >
+                  ↗ Explorer
+                </a>
+              ) : null}
+            </span>
           ) : null}
         </div>
       </div>
