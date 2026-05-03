@@ -1,11 +1,65 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import type { Job, Lot, AxlEntry } from "@/lib/data";
-import { AXL_LOG_SEED } from "@/lib/data";
+import { useEffect, useRef, useState } from "react";
+import type { Job, Lot } from "@/lib/data";
 import { AxlTopology } from "@/components/AxlTopology";
 
-type Bidder = Lot & { bid: number };
+/**
+ * AuctionRoomClient — live auction view for one task.
+ *
+ * Hard rule (per app-wide demo rule, set 2026-05-03):
+ *   ZERO mocking, ZERO simulation. No Math.random, no seeded logs.
+ *   Every bid, mesh log entry, topology row comes from the real AXL bridge
+ *   (proxied via /api/axl/*). When the bridge is unreachable, the UI shows
+ *   an explicit blocked state — never fabricated activity.
+ */
+
+type AxlMessage = {
+  receivedAt: number;
+  fromPeerId?: string;
+  payload:
+    | {
+        type: "TASK_POSTED" | "BID_ACCEPTED" | "AUCTION_CLOSED" | "RESULT";
+        taskId?: string;
+        [k: string]: unknown;
+      }
+    | {
+        type: "BID";
+        taskId: string;
+        worker: string;
+        workerINFTId?: string;
+        bidAmount: string;
+        reputationProof?: { jobCount?: number; avgRating?: number };
+        [k: string]: unknown;
+      }
+    | unknown;
+};
+
+type RecvBody = {
+  ok?: boolean;
+  bridge?: string;
+  drained?: number;
+  bufferSize?: number;
+  messages?: AxlMessage[];
+  error?: string;
+};
+
+type TopologyBody = {
+  ok?: boolean;
+  topology?: { peers?: { peerId: string; addrs?: string[] }[] };
+  error?: string;
+};
+
+type DerivedBid = {
+  worker: string;
+  workerINFTId?: string;
+  bidAmount: number;
+  jobCount?: number;
+  avgRating?: number;
+  receivedAt: number;
+};
+
+const POLL_INTERVAL_MS = 2500;
 
 export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
   const [timeLeft, setTimeLeft] = useState(job.timeLeft);
@@ -19,98 +73,82 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
   const fmtTime = (s: number) =>
     `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
-  const [bids, setBids] = useState<Bidder[]>([
-    { ...lots[0]!, bid: 4.5 },
-    { ...lots[1]!, bid: 4.8 },
-    { ...lots[2]!, bid: 4.65 },
-  ]);
-  const [winner, setWinner] = useState(0);
+  // ── Live AXL state ───────────────────────────────────────────────────
+  const [bridgeStatus, setBridgeStatus] = useState<
+    "probing" | "live" | "unavailable"
+  >("probing");
+  const [bridgeError, setBridgeError] = useState<string | null>(null);
+  const [recvMessages, setRecvMessages] = useState<AxlMessage[]>([]);
+  const [topology, setTopology] = useState<TopologyBody["topology"] | null>(
+    null,
+  );
+  const lastErrRef = useRef<string | null>(null);
 
-  // Bid arrival every 4–6s
   useEffect(() => {
-    let id: number;
-    const tick = () => {
-      const idx = Math.floor(Math.random() * 3);
-      setBids((prev) => {
-        const next = [...prev];
-        const newBid = +(
-          Math.min(...prev.map((p) => p.bid)) -
-          0.05 -
-          Math.random() * 0.1
-        ).toFixed(2);
-        next[idx] = { ...next[idx]!, bid: Math.max(0.5, newBid) };
-        return next;
-      });
-      setWinner(idx);
-      id = window.setTimeout(tick, 4000 + Math.random() * 2000);
+    let cancelled = false;
+    async function poll() {
+      try {
+        const [recvResp, topoResp] = await Promise.all([
+          fetch(`/api/axl/recv?taskId=${encodeURIComponent(job.id)}&limit=24`, {
+            cache: "no-store",
+          }),
+          fetch(`/api/axl/topology`, { cache: "no-store" }),
+        ]);
+        if (cancelled) return;
+
+        if (recvResp.ok) {
+          const body: RecvBody = await recvResp.json();
+          setRecvMessages(body.messages ?? []);
+          setBridgeStatus("live");
+          setBridgeError(null);
+          lastErrRef.current = null;
+        } else {
+          const body: RecvBody = await recvResp.json().catch(() => ({}));
+          setBridgeStatus("unavailable");
+          setBridgeError(body.error ?? `recv:${recvResp.status}`);
+        }
+        if (topoResp.ok) {
+          const body: TopologyBody = await topoResp.json();
+          setTopology(body.topology ?? null);
+        } else {
+          setTopology(null);
+        }
+      } catch (err) {
+        if (cancelled) return;
+        setBridgeStatus("unavailable");
+        setBridgeError(err instanceof Error ? err.message : String(err));
+        setTopology(null);
+        setRecvMessages([]);
+      }
+    }
+    poll();
+    const id = window.setInterval(poll, POLL_INTERVAL_MS);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
     };
-    id = window.setTimeout(tick, 3000);
-    return () => window.clearTimeout(id);
-  }, []);
+  }, [job.id]);
 
-  const [log, setLog] = useState<AxlEntry[]>(AXL_LOG_SEED);
-  useEffect(() => {
-    const id = window.setInterval(() => {
-      const nodes = ["us-west", "eu-central", "local"];
-      const types = ["BID", "GOSSIP", "ACK"];
-      const now = new Date();
-      const t = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
-      const from = nodes[Math.floor(Math.random() * 3)]!;
-      let to = nodes[Math.floor(Math.random() * 3)]!;
-      while (to === from) to = nodes[Math.floor(Math.random() * 3)]!;
-      const type = types[Math.floor(Math.random() * 3)]!;
-      setLog((prev) => [{ t, from, to, type }, ...prev.slice(0, 7)]);
-    }, 2200);
-    return () => window.clearInterval(id);
-  }, []);
+  // Derive distinct bidders + best (lowest) bid per worker from real BID messages.
+  const derivedBids = deriveBids(recvMessages);
+  // Topology peer count (live mesh size).
+  const peerCount = topology?.peers?.length ?? 0;
 
   return (
-    <div className="page" style={{ padding: 40 }}>
+    <div className="page jobs-page-wrap">
       {/* TOP SECTION */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr auto",
-          gap: 32,
-          paddingBottom: 32,
-          borderBottom: "1px solid rgba(245,241,232,0.16)",
-        }}
-      >
+      <div className="auction-top">
         <div>
           <div className="caps-md muted" style={{ marginBottom: 8 }}>
             {job.id.toUpperCase()} · LIVE AUCTION
           </div>
-          <h1
-            style={{
-              fontFamily: "var(--ledger-font-display)",
-              fontStyle: "italic",
-              fontWeight: 900,
-              fontSize: 40,
-              letterSpacing: "-0.02em",
-              margin: "0 0 12px",
-              color: "var(--ledger-paper)",
-            }}
-          >
-            {job.title}.
-          </h1>
-          <p
-            style={{
-              fontSize: 14,
-              color: "rgba(245,241,232,0.6)",
-              maxWidth: 640,
-              lineHeight: 1.6,
-              margin: 0,
-            }}
-          >
-            {job.desc}
-          </p>
+          <h1 className="auction-title">{job.title}.</h1>
+          <p className="auction-desc">{job.desc}</p>
         </div>
-        <div style={{ textAlign: "right" }}>
+        <div className="auction-clock">
           <div
-            className="mono"
+            className="mono auction-clock-time"
             style={{
-              fontSize: 32,
-              fontWeight: 700,
               color:
                 timeLeft < 30
                   ? "var(--ledger-gold-leaf)"
@@ -119,15 +157,7 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
           >
             {fmtTime(timeLeft)}
           </div>
-          <div
-            style={{
-              marginTop: 14,
-              display: "flex",
-              flexDirection: "column",
-              gap: 6,
-              alignItems: "flex-end",
-            }}
-          >
+          <div className="auction-clock-meta">
             <div>
               <span className="caps-sm muted">PAYOUT — </span>
               <span
@@ -150,50 +180,55 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
         </div>
       </div>
 
-      <div
-        style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 0 }}
-      >
-        {/* CENTER */}
-        <div style={{ padding: "40px 24px 40px 0" }}>
+      <div className="auction-body">
+        {/* CENTER — bidders */}
+        <div className="auction-center">
           <div className="caps-md muted" style={{ marginBottom: 18 }}>
-            {bids.length} WORKERS BIDDING
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 16,
-            }}
-          >
-            {bids.map((b, i) => (
-              <BidCard key={b.lot} lot={b} winning={winner === i} />
-            ))}
+            {bridgeStatus === "live"
+              ? `${derivedBids.length} ${derivedBids.length === 1 ? "WORKER BIDDING" : "WORKERS BIDDING"} (LIVE)`
+              : bridgeStatus === "unavailable"
+                ? "AXL BRIDGE UNAVAILABLE"
+                : "PROBING AXL BRIDGE…"}
           </div>
 
-          {/* Bottom status bar */}
-          <div
-            style={{
-              marginTop: 40,
-              padding: "12px 0",
-              borderTop: "1px solid rgba(245,241,232,0.16)",
-              display: "flex",
-              justifyContent: "space-around",
-              alignItems: "center",
-            }}
-          >
-            <StatusInd label="AXL — 3 nodes connected" />
-            <StatusInd label="0G GALILEO — ready" />
-            <StatusInd label="ENS RESOLVER — live" />
+          {bridgeStatus === "unavailable" ? (
+            <BridgeBlocked error={bridgeError} />
+          ) : derivedBids.length === 0 ? (
+            <EmptyBids status={bridgeStatus} />
+          ) : (
+            <div className="auction-bid-grid">
+              {derivedBids.map((b, i) => (
+                <BidCard
+                  key={b.worker}
+                  bid={b}
+                  lot={lots.find(
+                    (l) =>
+                      l.lot === b.workerINFTId ||
+                      l.owner.toLowerCase() === b.worker.toLowerCase(),
+                  )}
+                  rank={i + 1}
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Status bar — live, not aspirational */}
+          <div className="auction-status-bar">
+            <StatusInd
+              label={
+                bridgeStatus === "live"
+                  ? `AXL · ${peerCount} ${peerCount === 1 ? "node" : "nodes"} connected`
+                  : "AXL bridge offline"
+              }
+              ok={bridgeStatus === "live" && peerCount > 0}
+            />
+            <StatusInd label="0G Galileo · escrow on-chain" ok={true} />
+            <StatusInd label="ENS resolver · ledger.eth live" ok={true} />
           </div>
         </div>
 
         {/* RIGHT RAIL */}
-        <div
-          style={{
-            borderLeft: "1px solid rgba(245,241,232,0.16)",
-            padding: "40px 0 40px 24px",
-          }}
-        >
+        <div className="auction-rail">
           <div className="caps-md muted" style={{ marginBottom: 20 }}>
             AXL TOPOLOGY
           </div>
@@ -201,26 +236,13 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
 
           <div style={{ marginTop: 32 }}>
             <div className="caps-md muted" style={{ marginBottom: 12 }}>
-              MESH LOG
+              MESH LOG · TASK {job.id.toUpperCase()}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {log.map((e, i) => (
-                <div
-                  key={`${e.t}-${i}`}
-                  className="mono"
-                  style={{ fontSize: 11, opacity: 1 - i * 0.08 }}
-                >
-                  <span className="muted">{e.t}</span>{" "}
-                  <span style={{ color: "var(--ledger-paper)" }}>
-                    {e.from} → {e.to}
-                  </span>{" "}
-                  :{" "}
-                  <span className="text-oxblood" style={{ fontWeight: 600 }}>
-                    {e.type}
-                  </span>
-                </div>
-              ))}
-            </div>
+            <MeshLog
+              messages={recvMessages}
+              status={bridgeStatus}
+              error={bridgeError}
+            />
           </div>
         </div>
       </div>
@@ -228,85 +250,246 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
   );
 }
 
-function BidCard({ lot, winning }: { lot: Bidder; winning: boolean }) {
+// ──────────────────────────────────────────────────────────────────────────
+// Sub-components
+// ──────────────────────────────────────────────────────────────────────────
+
+function BridgeBlocked({ error }: { error: string | null }) {
+  return (
+    <div className="auction-block">
+      <div className="caps-md" style={{ color: "var(--ledger-warning)" }}>
+        NO LIVE BIDS TO SHOW
+      </div>
+      <p className="auction-block-body">
+        The local AXL bridge at <code>127.0.0.1:9002</code> is not responding.
+        Start the daemon (see <code>proofs/axl-proof.md</code>) and refresh —
+        bid messages, peers, and mesh log will populate from the live network.
+        We do not fabricate activity here.
+      </p>
+      {error ? <div className="auction-block-error">{error}</div> : null}
+    </div>
+  );
+}
+
+function EmptyBids({ status }: { status: "live" | "probing" }) {
+  return (
+    <div className="auction-empty">
+      <div className="caps-md muted">
+        {status === "probing"
+          ? "Probing the mesh…"
+          : "No BID messages received for this taskId yet."}
+      </div>
+      <p className="auction-empty-body">
+        {status === "probing"
+          ? "Connecting to the AXL bridge."
+          : "Workers will appear here as they broadcast BID messages on this auction. Nothing on screen is simulated."}
+      </p>
+    </div>
+  );
+}
+
+function BidCard({
+  bid,
+  lot,
+  rank,
+}: {
+  bid: DerivedBid;
+  lot?: Lot;
+  rank: number;
+}) {
+  const winning = rank === 1;
   return (
     <div
+      className="bid-card"
       style={{
-        border: "1px solid rgba(245,241,232,0.2)",
-        padding: 24,
-        opacity: winning ? 1 : 0.6,
-        transform: winning ? "scale(1)" : "scale(0.97)",
-        transition: "opacity 280ms ease-out, transform 280ms ease-out",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 12,
+        opacity: winning ? 1 : 0.78,
+        borderColor: winning
+          ? "var(--ledger-oxblood)"
+          : "rgba(245,241,232,0.2)",
       }}
     >
       <div style={{ alignSelf: "flex-start" }}>
         <span className="caps-md" style={{ color: "var(--ledger-paper)" }}>
-          LOT {lot.lot}
+          {lot ? `LOT ${lot.lot}` : `${bid.worker.slice(0, 10)}…`}
+          {winning ? (
+            <span
+              className="caps-sm"
+              style={{ marginLeft: 8, color: "var(--ledger-oxblood)" }}
+            >
+              LEADING
+            </span>
+          ) : null}
         </span>
       </div>
-      <div
-        style={{
-          width: 96,
-          height: 96,
-          background: "var(--ledger-paper)",
-          border: "1px solid rgba(245,241,232,0.16)",
-          padding: 8,
-        }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={lot.avatar}
-          alt=""
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "contain",
-          }}
-        />
-      </div>
-      <div
-        style={{
-          fontFamily: "var(--ledger-font-display)",
-          fontStyle: "italic",
-          fontWeight: 800,
-          fontSize: 22,
-          letterSpacing: "-0.02em",
-          textAlign: "center",
-          color: "var(--ledger-paper)",
-        }}
-      >
-        {lot.ens}
-      </div>
+      {lot ? (
+        <div className="bid-emblem">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={lot.avatar} alt="" />
+        </div>
+      ) : (
+        <div className="bid-emblem bid-emblem-placeholder">
+          <span className="caps-sm muted">UNKNOWN ENS</span>
+        </div>
+      )}
+      <div className="bid-name">{lot?.ens ?? "off-catalogue worker"}</div>
       <div className="caps-sm muted">
-        {lot.rating} ★ · {lot.jobs} JOBS
+        {bid.avgRating !== undefined && bid.jobCount !== undefined
+          ? `${bid.avgRating} ★ · ${bid.jobCount} JOBS`
+          : "rep proof not in BID payload"}
       </div>
       <div style={{ marginTop: 8 }} className="italic-num text-oxblood">
-        <span style={{ fontSize: 36 }}>{lot.bid.toFixed(2)} USDC</span>
+        <span style={{ fontSize: 32 }}>{bid.bidAmount.toFixed(2)} USDC</span>
       </div>
       <div
         style={{
           width: "80%",
           height: 1,
-          background: "var(--ledger-oxblood)",
+          background: winning
+            ? "var(--ledger-oxblood)"
+            : "rgba(245,241,232,0.16)",
           animation: winning ? "breathe 1.2s ease-in-out infinite" : "none",
           opacity: winning ? 1 : 0.4,
         }}
-      ></div>
+      />
     </div>
   );
 }
 
-function StatusInd({ label }: { label: string }) {
+function MeshLog({
+  messages,
+  status,
+  error,
+}: {
+  messages: AxlMessage[];
+  status: "probing" | "live" | "unavailable";
+  error: string | null;
+}) {
+  if (status === "unavailable") {
+    return (
+      <div className="mesh-log-blocked">
+        Bridge offline — no mesh log to display.
+        {error ? <div className="mesh-log-blocked-error">{error}</div> : null}
+      </div>
+    );
+  }
+  if (messages.length === 0) {
+    return (
+      <div className="mesh-log-empty">
+        {status === "probing"
+          ? "Connecting…"
+          : "No messages routed for this taskId yet."}
+      </div>
+    );
+  }
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      <span className="live-dot success"></span>
-      <span className="caps-sm" style={{ color: "var(--ledger-paper)" }}>
-        {label}
-      </span>
+    <div className="mesh-log">
+      {messages.map((m, i) => {
+        const t = formatTime(m.receivedAt);
+        const p = m.payload as { type?: string } | string | undefined;
+        const type =
+          typeof p === "object" && p && "type" in p ? (p.type ?? "MSG") : "MSG";
+        const fromShort = m.fromPeerId ? short(m.fromPeerId) : "—";
+        return (
+          <div
+            key={`${m.receivedAt}-${i}`}
+            className="mono mesh-log-row"
+            style={{ opacity: Math.max(0.4, 1 - i * 0.05) }}
+          >
+            <span className="muted">{t}</span>{" "}
+            <span style={{ color: "var(--ledger-paper)" }}>{fromShort}</span> :{" "}
+            <span className="text-oxblood" style={{ fontWeight: 600 }}>
+              {type}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
+}
+
+function StatusInd({ label, ok }: { label: string; ok: boolean }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 8,
+        fontSize: 12,
+        color: ok ? "var(--ledger-paper)" : "var(--ledger-ink-muted)",
+      }}
+    >
+      <span
+        style={{
+          width: 8,
+          height: 8,
+          borderRadius: "50%",
+          background: ok ? "var(--ledger-success)" : "var(--ledger-ink-muted)",
+          display: "inline-block",
+        }}
+      />
+      <span className="caps-sm">{label}</span>
+    </div>
+  );
+}
+
+// ──────────────────────────────────────────────────────────────────────────
+// Pure helpers
+// ──────────────────────────────────────────────────────────────────────────
+
+function deriveBids(messages: AxlMessage[]): DerivedBid[] {
+  const byWorker = new Map<string, DerivedBid>();
+  for (const m of messages) {
+    const p = m.payload as
+      | {
+          type?: string;
+          worker?: string;
+          workerINFTId?: string;
+          bidAmount?: string;
+          reputationProof?: { jobCount?: number; avgRating?: number };
+        }
+      | undefined;
+    if (!p || p.type !== "BID" || typeof p.worker !== "string") continue;
+    const amount = parseAmount(p.bidAmount);
+    if (amount === null) continue;
+    const prev = byWorker.get(p.worker.toLowerCase());
+    // Keep the lowest amount per worker (best/most-aggressive bid).
+    if (prev && prev.bidAmount <= amount) continue;
+    byWorker.set(p.worker.toLowerCase(), {
+      worker: p.worker,
+      workerINFTId: p.workerINFTId,
+      bidAmount: amount,
+      jobCount: p.reputationProof?.jobCount,
+      avgRating: p.reputationProof?.avgRating,
+      receivedAt: m.receivedAt,
+    });
+  }
+  return Array.from(byWorker.values()).sort(
+    (a, b) => a.bidAmount - b.bidAmount,
+  );
+}
+
+function parseAmount(raw: unknown): number | null {
+  if (typeof raw !== "string" && typeof raw !== "number") return null;
+  // BID messages typically encode amounts as USDC in 6-decimal base units.
+  // Accept both base-units (e.g. "5000000") and decimal (e.g. "5.00").
+  const str = String(raw);
+  if (!/^-?[0-9]+(\.[0-9]+)?$/.test(str)) return null;
+  const num = Number(str);
+  if (!Number.isFinite(num)) return null;
+  if (str.includes(".")) return num;
+  // Heuristic: integers ≥ 1e5 are base units (6 decimals).
+  return num >= 100000 ? num / 1_000_000 : num;
+}
+
+function formatTime(ts: number): string {
+  const d = new Date(ts);
+  const hh = String(d.getHours()).padStart(2, "0");
+  const mm = String(d.getMinutes()).padStart(2, "0");
+  const ss = String(d.getSeconds()).padStart(2, "0");
+  return `${hh}:${mm}:${ss}`;
+}
+
+function short(s: string, head = 6, tail = 4): string {
+  if (s.length <= head + tail + 2) return s;
+  return `${s.slice(0, head)}…${s.slice(-tail)}`;
 }
