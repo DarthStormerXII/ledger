@@ -28,6 +28,162 @@ type Phase = LocalPhase | "signing" | "confirming" | "confirmed";
 
 const MIN_GAS_OG = parseEther("0.0005"); // tiny floor for postTask gas
 
+type TaskCategory =
+  | "research"
+  | "data"
+  | "code"
+  | "creative"
+  | "ops"
+  | "trading"
+  | "other";
+
+/**
+ * Per-category demoable task templates. On every fresh /post visit, one
+ * template is picked at random and pre-fills the form so the live demo
+ * doesn't always show the same task. The user can still edit any field.
+ *
+ * Hard rule: every entry must be plausible work an autonomous agent could
+ * actually do. No filler, no "lorem ipsum", no joke entries — judges may
+ * see any one of these in a recording.
+ */
+const TASK_TEMPLATES: Record<
+  TaskCategory,
+  Array<{ title: string; desc: string; tags: string }>
+> = {
+  research: [
+    {
+      title: "Base Yield Scout",
+      desc: "Survey Base L2 yield opportunities. Return a ranked snapshot of top 12 vaults — APR, TVL, audit firm, last incident.",
+      tags: "yield, base, defi",
+    },
+    {
+      title: "ZK Stack Survey",
+      desc: "Compare zkSync Era, Linea, Scroll, and Polygon zkEVM on prover throughput, finality time, EVM equivalence, and tooling maturity. Return a JSON matrix with citations.",
+      tags: "zk, l2, research",
+    },
+    {
+      title: "Restaking Risk Profile",
+      desc: "Profile the top EigenLayer AVSs by slashing surface area, validator count, and operator concentration. Flag any AVS with >40% operator overlap with another.",
+      tags: "restaking, eigenlayer, risk",
+    },
+    {
+      title: "DAO Treasury Audit",
+      desc: "Map current treasury composition for the top 5 governance tokens by market cap. Stables ratio, native exposure, runway in months at current burn.",
+      tags: "dao, treasury, audit",
+    },
+  ],
+  data: [
+    {
+      title: "DefiLlama Snapshot Cleaner",
+      desc: "Pull TVL by protocol for the last 30 days, dedupe forks, normalize chain naming, return canonical CSV with one row per (protocol, day, chain).",
+      tags: "defillama, tvl, etl",
+    },
+    {
+      title: "ENS Subname Census",
+      desc: "Count active subnames under the top 50 parent ENS names. Active = at least one resolver record set. Return JSON keyed by parent name with subname totals + delta vs 30d ago.",
+      tags: "ens, census, data",
+    },
+    {
+      title: "Validator Performance Stream",
+      desc: "Aggregate Beacon Chain proposer effectiveness for the last 7 days. Flag validators with <90% performance. Return JSONL, one record per validator.",
+      tags: "ethereum, validators, perf",
+    },
+  ],
+  code: [
+    {
+      title: "Solidity Gas Audit",
+      desc: "Review three Foundry contracts I'll attach for redundant SLOAD patterns and storage packing wins. Return a unified diff with measured gas savings per change.",
+      tags: "solidity, gas, audit",
+    },
+    {
+      title: "ABI to TS Generator",
+      desc: "Generate a typed TS client for the LedgerEscrow ABI using viem. Single-file ESM output, zero deps beyond viem. Include JSDoc on every public function.",
+      tags: "viem, codegen, typescript",
+    },
+    {
+      title: "Subgraph Manifest Drafter",
+      desc: "Draft a Graph subgraph manifest for an ERC-721 collection at the address I'll provide. Index Transfer events with metadata fetch and IPFS pinning. Return manifest.yaml + schema.graphql.",
+      tags: "thegraph, subgraph, indexing",
+    },
+  ],
+  creative: [
+    {
+      title: "Worker Card Cover Art",
+      desc: "Generate a 6-frame cinematic cover image set for a new worker iNFT. Style: Wes Anderson + Foundation by Asimov. SVG output, 1024x1024, exported individually.",
+      tags: "art, svg, brand",
+    },
+    {
+      title: "Demo Voiceover Script",
+      desc: "Write a 90-second product demo VO script for an autonomous DeFi vault scout agent. Calm tone, single voice, no hype. End on a single concrete claim a judge can verify.",
+      tags: "copy, vo, demo",
+    },
+    {
+      title: "Twitter Thread Drafter",
+      desc: "Draft a 7-tweet thread explaining ERC-8004 reputation portability for a non-technical audience. End with a CTA to view a live agent profile. No emojis.",
+      tags: "social, copy, erc8004",
+    },
+  ],
+  ops: [
+    {
+      title: "Vercel Outage Triage",
+      desc: "Bisect the last 200 deployments to find which commit introduced a TS type-check failure. Return the offending commit hash + a one-line fix sketch.",
+      tags: "vercel, ci, triage",
+    },
+    {
+      title: "Deploy Checklist Generator",
+      desc: "Write a pre-flight checklist for promoting a Solidity contract from Sepolia testnet to a chain mainnet. Cover verify, source publish, monitoring, and rollback. Markdown output.",
+      tags: "deploy, ops, checklist",
+    },
+    {
+      title: "On-chain Monitoring Setup",
+      desc: "Spec a Tenderly Web3Action that pages on any unusual transferFrom from our worker iNFT contract — i.e. transfer to a freshly funded wallet within 24h of mint. Include the JS handler.",
+      tags: "tenderly, monitor, ops",
+    },
+  ],
+  trading: [
+    {
+      title: "USDC Stablecoin Arb Window",
+      desc: "Identify current arbitrage opportunities for USDC across Curve, Uniswap V3, and PancakeSwap pools with TVL > $10k. Filter by net spread > 12 bps after gas. Return JSON.",
+      tags: "arbitrage, usdc, dex",
+    },
+    {
+      title: "Funding Rate Spread Tracker",
+      desc: "Compare BTC perp funding rates across Hyperliquid, dYdX v4, and GMX v2. Return the 8-hour rate snapshot with gap-to-mean and where funding is paying. JSON one row per venue.",
+      tags: "perp, funding, derivatives",
+    },
+    {
+      title: "Memecoin Sentiment Pulse",
+      desc: "Scrape the last 48h of Twitter/Farcaster mentions for the top 20 BASE memecoins by 24h volume. Return polarity-scored list (-1 to 1) plus mention count delta vs prior 48h.",
+      tags: "sentiment, memes, base",
+    },
+  ],
+  other: [
+    {
+      title: "Open-Source Bounty Triage",
+      desc: "Find 5 GitHub issues tagged 'good first issue' that match a TypeScript + viem + Next.js stack. Return ranked by repo health (stars, recent commits, PR turnaround). Markdown table.",
+      tags: "oss, bounty, triage",
+    },
+    {
+      title: "Conference Schedule Optimizer",
+      desc: "Given an ETHGlobal hackathon schedule, build a 3-day attendance plan that minimizes overlap between must-see workshops and key sponsor office hours. ICS export.",
+      tags: "ops, planning, ics",
+    },
+  ],
+};
+
+function pickRandomTemplate(): {
+  category: TaskCategory;
+  title: string;
+  desc: string;
+  tags: string;
+} {
+  const cats = Object.keys(TASK_TEMPLATES) as TaskCategory[];
+  const cat = cats[Math.floor(Math.random() * cats.length)]!;
+  const pool = TASK_TEMPLATES[cat];
+  const t = pool[Math.floor(Math.random() * pool.length)]!;
+  return { category: cat, title: t.title, desc: t.desc, tags: t.tags };
+}
+
 export function PostTaskClient() {
   const router = useRouter();
   const { ready, authenticated, login } = usePrivy();
@@ -41,24 +197,42 @@ export function PostTaskClient() {
     query: { enabled: !!address },
   });
 
+  // Static SSR defaults — first paint matches whatever Vercel cached for
+  // the static /post page. Once the client mounts we swap in a random
+  // template from TASK_TEMPLATES so each demo run shows something
+  // different. Doing the swap in useEffect (not useState's lazy
+  // initializer) avoids a hydration mismatch between server-rendered
+  // HTML and the random pick on the client.
   const [form, setForm] = useState({
     title: "Base Yield Scout",
-    desc: "Surveying Base Layer-2 yield opportunities. Returns ranked APR snapshot of top 12 vaults.",
+    desc: "Survey Base L2 yield opportunities. Return a ranked snapshot of top 12 vaults — APR, TVL, audit firm, last incident.",
     payout: "0.005", // native OG (the LedgerEscrow takes msg.value=payment)
     bond: "0.0005",
     timeLimit: "02:00", // mm:ss; converted to deadline below
     minRep: "0",
     minJobs: "0",
     tags: "yield, base, defi",
-    category: "research" as
-      | "research"
-      | "data"
-      | "code"
-      | "creative"
-      | "ops"
-      | "trading"
-      | "other",
+    category: "research" as TaskCategory,
   });
+  // Pick a random template exactly once on first client render so the
+  // form lands on something fresh per demo. We DON'T use a deps array
+  // that includes any state — only first mount.
+  // Ref guards against the swap firing twice (e.g. React strict-mode
+  // double-render in dev) which would double-randomise after the user
+  // started typing.
+  const randomedRef = useRef(false);
+  useEffect(() => {
+    if (randomedRef.current) return;
+    randomedRef.current = true;
+    const t = pickRandomTemplate();
+    setForm((prev) => ({
+      ...prev,
+      title: t.title,
+      desc: t.desc,
+      tags: t.tags,
+      category: t.category,
+    }));
+  }, []);
   // `localPhase` only holds states the UI sets directly. The wagmi-driven
   // states are derived in `phase` below — that avoids mirroring external
   // state with setState (react-hooks/set-state-in-effect).
