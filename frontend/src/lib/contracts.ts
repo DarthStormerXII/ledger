@@ -263,10 +263,13 @@ export function sepoliaAddr(addr: string) {
 }
 export function ogStorageCid(cid: string) {
   const root = cid.replace(/^0g:\/\//, "");
-  // The official 0G storage explorer addresses the upload by its tx hash on
-  // the storage flow contract. The "root" portion of an `0g://...` URI is
-  // the storage transaction hash, so /tx/<root> is the canonical view.
-  return `https://storagescan-galileo.0g.ai/tx/${root}`;
+  // 0G Storage CIDs are Merkle roots of the encrypted blob — NOT tx
+  // hashes. The chainscan/storagescan explorers don't index by root, so
+  // /tx/<root> 404s. The 0G Storage indexer node serves the encrypted
+  // blob bytes directly when queried by root, which is the canonical
+  // verification surface: judges can curl this URL and decrypt with the
+  // iNFT's sealed key to prove byte-equality with the original upload.
+  return `https://indexer-storage-testnet-turbo.0g.ai/file?root=${root}`;
 }
 
 /* === ENS app explorer (Sepolia testnet) === */

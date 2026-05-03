@@ -951,7 +951,7 @@ function JobBriefPanel({
     );
   }
   const ogStorageHref = cid
-    ? `https://storagescan-galileo.0g.ai/file/${cid.replace(/^0g:\/\//, "").split("?")[0]}`
+    ? `https://indexer-storage-testnet-turbo.0g.ai/file?root=${cid.replace(/^0g:\/\//, "").split("?")[0]}`
     : null;
   return (
     <div className="job-brief-panel">

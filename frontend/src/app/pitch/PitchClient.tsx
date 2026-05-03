@@ -732,7 +732,7 @@ function Mechanic() {
             <ProofRow
               label="Live memory CID"
               value={PROOFS.memCid}
-              href={`https://storagescan-galileo.0g.ai/tx/${PROOFS.memCid.replace(
+              href={`https://indexer-storage-testnet-turbo.0g.ai/file?root=${PROOFS.memCid.replace(
                 "0g://",
                 "",
               )}`}
