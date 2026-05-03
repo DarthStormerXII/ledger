@@ -906,6 +906,13 @@ body.surface-ink {
   outline: 1.5px solid var(--ledger-oxblood);
   outline-offset: 2px;
 }
+/* Inputs use a bottom-border focus indicator (.input:focus above) — suppress
+ * the global focus-visible rectangle on them so the underline is the only
+ * affordance. */
+.input:focus,
+.input:focus-visible {
+  outline: none;
+}
 
 /* ===== /PROOF — JUDGE-PLAYABILITY PACK ===== */
 

@@ -107,6 +107,55 @@ export const LEDGER_ESCROW_ABI = [
     stateMutability: "view",
     type: "function",
   },
+  {
+    inputs: [
+      { internalType: "bytes32", name: "taskId", type: "bytes32" },
+      { internalType: "uint256", name: "payment", type: "uint256" },
+      { internalType: "uint256", name: "deadline", type: "uint256" },
+      { internalType: "uint256", name: "minReputation", type: "uint256" },
+    ],
+    name: "postTask",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "taskId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "buyer",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "payment",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "deadline",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "minReputation",
+        type: "uint256",
+      },
+    ],
+    name: "TaskPosted",
+    type: "event",
+  },
 ] as const;
 
 /* === Block explorers === */
