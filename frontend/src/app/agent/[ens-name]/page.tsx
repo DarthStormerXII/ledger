@@ -60,7 +60,11 @@ async function fetchBlockTimes(blocks: bigint[]): Promise<Map<bigint, number>> {
   return out;
 }
 
-export const revalidate = 0;
+// Cache the SSR result for 60s. Without this every visitor re-runs the
+// multi-chain log scans below (Transfer events on Galileo, NewFeedback on
+// Base Sepolia, escrow task reads), and a cold render on the public RPC
+// can blow past 60s — the browser gives up on a blank page.
+export const revalidate = 60;
 
 export default async function AgentPage({
   params,
@@ -86,8 +90,10 @@ export default async function AgentPage({
         memoryCID: string;
       }
     | undefined;
+  // Single getAllJobs() call shared between recent-jobs and provenance blocks
+  // — used to be called twice, doubling the chain reads on every render.
+  const allJobs = await getAllJobs().catch(() => []);
   try {
-    const allJobs = await getAllJobs();
     const ownerLower = liveLot.owner.toLowerCase();
     const workerJobs = allJobs.filter(
       (j) =>
@@ -129,15 +135,20 @@ export default async function AgentPage({
 
   // Real provenance from WorkerINFT Transfer events for this lot's tokenId.
   // Mint = Transfer(0x0, owner, tokenId); subsequent rows are owner→owner.
+  // We cap the lookback at ~10 days of Galileo (block time ~3s ⇒ 288k blocks).
+  // Scanning from block 0 made the public RPC time out; this window still
+  // covers any iNFT minted during the demo cycle.
   try {
     const tokenId = BigInt(liveLot.tokenId);
+    const tip = await galileoClient.getBlockNumber().catch(() => 0n);
+    const fromBlock = tip > 288_000n ? tip - 288_000n : 0n;
     const transferLogs = await galileoClient.getLogs({
       address: WORKER_INFT_ADDRESS,
       event: parseAbiItem(
         "event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)",
       ),
       args: { tokenId },
-      fromBlock: 0n,
+      fromBlock,
     });
     const provBlocks = transferLogs.map((l) => l.blockNumber ?? 0n);
     const provTimes = await fetchBlockTimes(provBlocks);
@@ -157,7 +168,8 @@ export default async function AgentPage({
       };
     });
     // Append release events (settlements) for jobs this worker won.
-    const releasedJobs = (await getAllJobs()).filter(
+    // Reuses the hoisted allJobs — no second getAllJobs() roundtrip.
+    const releasedJobs = allJobs.filter(
       (j) =>
         j.worker?.toLowerCase() === liveLot.owner.toLowerCase() &&
         j.status === "Released" &&
