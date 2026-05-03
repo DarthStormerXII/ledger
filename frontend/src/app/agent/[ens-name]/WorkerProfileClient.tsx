@@ -78,11 +78,20 @@ export function WorkerProfileClient({
   const whoValue = liveOwner
     ? `${shortAddr(liveOwner)}${live ? "  · live" : ""}`
     : shortAddr(liveProof.owner);
-  const memoryValue = shortValue(liveProof.memoryCID);
+  // Detect sentinel CIDs (all-f / all-0 / mass-mint placeholders like
+  // 0xff…ff1) so we don't pretend an unpinned mint has real memory.
+  const memoryHasContent = !isSentinelCid(liveProof.memoryCID);
+  const memoryValue = memoryHasContent
+    ? shortValue(liveProof.memoryCID)
+    : "(no memory pinned yet)";
+  // Pay namespace works for EVERY worker now — the resolver derives at
+  // path `<tokenId>/<nonce>` so each worker has its own rotating sequence.
+  // Demo-pinned snapshots live for tokenId 1; others get the resolver
+  // description.
   const payValue =
     liveProof.tokenId === 1
       ? `${shortAddr(DEMO_PAY_NONCE_0)} → ${shortAddr(DEMO_PAY_NONCE_1)}`
-      : "not configured";
+      : "live HD-derived (rotating)";
 
   return (
     <div className="page worker-profile-page">
@@ -228,8 +237,12 @@ export function WorkerProfileClient({
               ensName={lot.ens}
               label="MEM.*"
               value={memoryValue}
-              valueRaw={liveProof.memoryCID}
-              sub="WorkerINFT.getMetadata().memoryCID"
+              valueRaw={memoryHasContent ? liveProof.memoryCID : undefined}
+              sub={
+                memoryHasContent
+                  ? "WorkerINFT.getMetadata().memoryCID"
+                  : "WorkerINFT.getMetadata() returns the empty sentinel for this token"
+              }
             />
           </div>
 
@@ -490,6 +503,27 @@ export function WorkerProfileClient({
 function shortValue(value: string) {
   if (value.length <= 22) return value;
   return `${value.slice(0, 10)}…${value.slice(-8)}`;
+}
+
+// Mirrors the resolver-side detector. Treats all-f / all-0 / mass-mint
+// placeholder CIDs (long run of one char then a tokenId terminator) as
+// "no real CID" so the UI doesn't link to garbage on the storage explorer.
+function isSentinelCid(cid: string | undefined | null): boolean {
+  if (!cid) return true;
+  const hex = cid
+    .replace(/^0g:\/\//, "")
+    .split("?")[0]
+    .toLowerCase();
+  if (!/^0x/.test(hex)) return false;
+  const body = hex.slice(2);
+  if (/^f+$/u.test(body) || /^0+$/u.test(body)) return true;
+  if (body.length >= 32) {
+    const first = body[0];
+    let runLen = 0;
+    while (runLen < body.length && body[runLen] === first) runLen++;
+    if (runLen >= body.length - 4) return true;
+  }
+  return false;
 }
 
 function StatCell({

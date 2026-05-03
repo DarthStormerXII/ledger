@@ -423,9 +423,17 @@ const sections: Section[] = [
           "Cloudflare named tunnel `kosyn-cre` → localhost:8787. Survives client IP changes and Wi-Fi reconnects.",
       },
       {
-        label: "who.worker-001.ledger.eth",
+        label: "worker-001.ledger.eth (root)",
         value: DEMO_OWNER_B,
         href: ensSepoliaName(`worker-001.${LEDGER_ENS_PARENT}`),
+        mono: true,
+        caption:
+          "Worker root — resolves to the same live owner as who.* and surfaces description/url/notice text records so the ENS app shows real content.",
+      },
+      {
+        label: "who.worker-001.ledger.eth",
+        value: DEMO_OWNER_B,
+        href: ensSepoliaName(`who.worker-001.${LEDGER_ENS_PARENT}`),
         mono: true,
         caption:
           "Reads ownerOf(1) on Galileo, 30s TTL cache. Ownership flips without a new ENS transaction.",
