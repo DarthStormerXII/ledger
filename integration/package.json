@@ -1,0 +1,27 @@
+{
+  "name": "@ledger/integration",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:integration": "tsx runner.ts",
+    "demo:run": "tsx scenarios/01_happy_path_full_lifecycle.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@ledger/0g-compute": "file:../agents/0g-compute",
+    "@ledger/0g-integration": "file:../agents/0g-integration",
+    "@ledger/0g-storage": "file:../agents/0g-storage",
+    "@ledger/axl-client": "file:../agents/axl-client",
+    "@ledger/axl-gossipsub": "file:../agents/axl-gossipsub",
+    "@ledger/axl-runtime": "file:../agents/axl-runtime",
+    "@ledger/ens-resolver": "file:../resolver",
+    "ethers": "^6.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
