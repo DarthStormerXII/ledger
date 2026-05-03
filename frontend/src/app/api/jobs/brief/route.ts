@@ -4,6 +4,62 @@ import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { neon } from "@neondatabase/serverless";
+import { createPublicClient, http } from "viem";
+
+// 0G Storage Flow contract on Galileo. Every uploadFile/upload call emits a
+// `Submit` event from this contract; the first 32-byte slot of the event's
+// data is the submissionIndex (== txSeq) — the integer that storagescan
+// indexes by at /submission/<n>.
+const ZG_FLOW_CONTRACT = "0x22e03a6a89b950f1c82ec5e74f8eca321a105296";
+const ZG_FLOW_SUBMIT_TOPIC =
+  "0x167ce04d2aa1981994d3a31695da0d785373335b1078cec239a1a3a2c7675555";
+
+const galileoClient = createPublicClient({
+  transport: http(process.env.GALILEO_RPC ?? "https://evmrpc-testnet.0g.ai", {
+    retryCount: 3,
+    timeout: 8000,
+  }),
+});
+
+async function resolveTxSeqFromHash(txHash: string): Promise<string | null> {
+  try {
+    const receipt = await galileoClient.getTransactionReceipt({
+      hash: txHash as `0x${string}`,
+    });
+    for (const log of receipt.logs) {
+      if (
+        log.address.toLowerCase() === ZG_FLOW_CONTRACT.toLowerCase() &&
+        log.topics[0] === ZG_FLOW_SUBMIT_TOPIC
+      ) {
+        // First 32 bytes of `data` = submissionIndex (uint256, big-endian).
+        const hex = log.data.slice(2, 66);
+        if (hex.length !== 64) return null;
+        return BigInt("0x" + hex).toString();
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+// Append `txSeq` to an existing CID query string. Idempotent.
+function cidWithTxSeq(cid: string, txSeq: string): string {
+  if (cid.includes(`txSeq=${txSeq}`)) return cid;
+  if (cid.includes("txSeq=")) {
+    return cid.replace(/txSeq=[^&]*/, `txSeq=${txSeq}`);
+  }
+  return cid.includes("?") ? `${cid}&txSeq=${txSeq}` : `${cid}?txSeq=${txSeq}`;
+}
+
+function cidExtractTx(cid: string): {
+  tx: string | null;
+  txSeq: string | null;
+} {
+  const q = cid.split("?")[1] ?? "";
+  const params = new URLSearchParams(q);
+  return { tx: params.get("tx"), txSeq: params.get("txSeq") };
+}
 
 /**
  * Job-brief storage layer.
@@ -532,6 +588,22 @@ export async function GET(req: Request) {
     if (fromDb) {
       cache.set(taskIdLower, fromDb);
       entry = fromDb;
+    }
+  }
+  // Backfill txSeq for briefs pinned before we started capturing it. The
+  // CID query already has tx=<hash>; we read the tx receipt on Galileo,
+  // find the Submit event from the 0G Storage Flow contract, and append
+  // txSeq=<n>. Persisted back to DB so subsequent reads skip the lookup.
+  if (entry && entry.cid) {
+    const { tx, txSeq } = cidExtractTx(entry.cid);
+    if (tx && !txSeq) {
+      const resolved = await resolveTxSeqFromHash(tx);
+      if (resolved) {
+        const newCid = cidWithTxSeq(entry.cid, resolved);
+        entry = { ...entry, cid: newCid };
+        cache.set(taskIdLower, entry);
+        await dbUpsert(entry);
+      }
     }
   }
   if (!entry) {
