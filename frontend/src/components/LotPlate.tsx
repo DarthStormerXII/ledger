@@ -59,7 +59,7 @@ export function LotPlate({
       </div>
       <div className="lot-name">{lot.ens}</div>
       <div className="lot-meta muted">
-        {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} USDC EARNED
+        {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} 0G EARNED
       </div>
       {showPrice && lot.listed && lot.askPrice && (
         <div
@@ -73,7 +73,7 @@ export function LotPlate({
         >
           <span className="caps-sm muted">ASKING</span>
           <span className="italic-num text-oxblood" style={{ fontSize: 22 }}>
-            {lot.askPrice} USDC
+            {lot.askPrice} 0G
           </span>
         </div>
       )}
@@ -223,7 +223,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               { label: "agentId", value: "5444", mono: true },
               { label: "Job count", value: String(lot.jobs) },
               { label: "Average rating", value: `${lot.rating} / 5.00` },
-              { label: "Total earned", value: `${lot.earned} USDC` },
+              { label: "Total earned", value: `${lot.earned} 0G` },
               {
                 label: "Disclosure",
                 value:
@@ -233,7 +233,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
           : [
               { label: "Job count", value: String(lot.jobs) },
               { label: "Average rating", value: `${lot.rating} / 5.00` },
-              { label: "Total earned", value: `${lot.earned} USDC` },
+              { label: "Total earned", value: `${lot.earned} 0G` },
               {
                 label: "Disclosure",
                 value:

@@ -73,7 +73,7 @@ export function WorkerProfileClient({
             marginBottom: 24,
           }}
         >
-          {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} USDC REALIZED
+          {lot.jobs} JOBS · {lot.rating} ★ · {lot.earned} 0G REALIZED
         </div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <span className="pill pill-paper">ERC-7857 · 0G iNFT DRAFT</span>
@@ -143,7 +143,7 @@ export function WorkerProfileClient({
                 className="italic-num text-oxblood"
                 style={{ fontSize: 32, marginBottom: 18 }}
               >
-                {lot.askPrice} USDC
+                {lot.askPrice} 0G
               </div>
               <button
                 className="btn btn-tall btn-italic"
@@ -255,7 +255,7 @@ export function WorkerProfileClient({
             </span>
           }
         />
-        <StatCell label="TOTAL REALIZED" value={lot.earned} unit="USDC" />
+        <StatCell label="TOTAL REALIZED" value={lot.earned} unit="0G" />
         <StatCell label="DAYS ACTIVE" value={lot.daysActive} />
       </div>
 
@@ -302,7 +302,7 @@ export function WorkerProfileClient({
                 <td>{r.title}</td>
                 <td className="num">
                   <span className="italic-num">{r.realized}</span>{" "}
-                  <span className="caps-sm muted">USDC</span>
+                  <span className="caps-sm muted">0G</span>
                 </td>
                 <td className="num">
                   <span className="italic-num">{r.rating}</span>{" "}
@@ -338,7 +338,7 @@ export function WorkerProfileClient({
               className="italic-num"
               style={{ fontSize: 18, color: "var(--ledger-paper)" }}
             >
-              {p.price ? `${p.price} USDC` : "—"}
+              {p.price ? `${p.price} 0G` : "—"}
             </span>
             <span
               className="caps-sm"

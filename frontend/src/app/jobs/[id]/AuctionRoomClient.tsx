@@ -164,7 +164,7 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
                 className="italic-num"
                 style={{ fontSize: 18, color: "var(--ledger-paper)" }}
               >
-                {job.payout} USDC
+                {job.payout}
               </span>
             </div>
             <div>
@@ -173,7 +173,7 @@ export function AuctionRoomClient({ job, lots }: { job: Job; lots: Lot[] }) {
                 className="italic-num"
                 style={{ fontSize: 18, color: "var(--ledger-paper)" }}
               >
-                {job.bond} USDC
+                {job.bond}
               </span>
             </div>
           </div>
@@ -338,7 +338,7 @@ function BidCard({
           : "rep proof not in BID payload"}
       </div>
       <div style={{ marginTop: 8 }} className="italic-num text-oxblood">
-        <span style={{ fontSize: 32 }}>{bid.bidAmount.toFixed(2)} USDC</span>
+        <span style={{ fontSize: 32 }}>{bid.bidAmount.toFixed(2)} 0G</span>
       </div>
       <div
         style={{
@@ -470,7 +470,7 @@ function deriveBids(messages: AxlMessage[]): DerivedBid[] {
 
 function parseAmount(raw: unknown): number | null {
   if (typeof raw !== "string" && typeof raw !== "number") return null;
-  // BID messages typically encode amounts as USDC in 6-decimal base units.
+  // BID messages typically encode amounts as 0G-native values in base units.
   // Accept both base-units (e.g. "5000000") and decimal (e.g. "5.00").
   const str = String(raw);
   if (!/^-?[0-9]+(\.[0-9]+)?$/.test(str)) return null;

@@ -28,28 +28,9 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
   const inspectJob = jobs.find((j) => j.id === inspectJobId);
 
   return (
-    <div className="page" style={{ padding: 40 }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-          marginBottom: 32,
-        }}
-      >
-        <h1
-          style={{
-            fontFamily: "var(--ledger-font-display)",
-            fontStyle: "italic",
-            fontWeight: 900,
-            fontSize: 64,
-            letterSpacing: "-0.03em",
-            margin: 0,
-            color: "var(--ledger-paper)",
-          }}
-        >
-          Live jobs.
-        </h1>
+    <div className="page jobs-page-wrap">
+      <div className="jobs-page-header">
+        <h1>Live jobs.</h1>
         <span className="caps-md muted">{jobs.length} ACTIVE</span>
       </div>
       <div>
@@ -59,30 +40,10 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
             <div
               key={j.id}
               onClick={() => router.push(`/jobs/${j.id}`)}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr auto auto",
-                alignItems: "center",
-                padding: "20px 0",
-                borderBottom: "1px solid rgba(245,241,232,0.16)",
-                cursor: "pointer",
-                height: 84,
-                gap: 32,
-              }}
+              className="jobs-row"
             >
-              <div>
-                <div
-                  style={{
-                    fontFamily: "var(--ledger-font-display)",
-                    fontStyle: "italic",
-                    fontWeight: 800,
-                    fontSize: 24,
-                    letterSpacing: "-0.02em",
-                    color: "var(--ledger-paper)",
-                  }}
-                >
-                  {j.title}
-                </div>
+              <div style={{ minWidth: 0 }}>
+                <div className="job-title-display">{j.title}</div>
                 <div
                   className="mono muted"
                   style={{ fontSize: 12, marginTop: 4 }}
@@ -91,6 +52,7 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
                 </div>
               </div>
               <div
+                className="jobs-row-time"
                 style={{
                   textAlign: "right",
                   display: "flex",
@@ -101,7 +63,7 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
                 <span
                   className="mono"
                   style={{
-                    fontSize: 24,
+                    fontSize: 22,
                     fontWeight: 500,
                     color:
                       t < 30
@@ -113,15 +75,14 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
                 </span>
                 <span
                   className="italic-num"
-                  style={{ fontSize: 18, color: "var(--ledger-paper)" }}
+                  style={{ fontSize: 16, color: "var(--ledger-paper)" }}
                 >
-                  {j.payout} USDC
+                  {j.payout}
                 </span>
               </div>
               <div
+                className="jobs-row-bids"
                 style={{
-                  width: 140,
-                  textAlign: "right",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "flex-end",
@@ -191,8 +152,8 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
           href: galileoAddr(LEDGER_ESCROW_ADDRESS),
           mono: true,
         },
-        { label: "Payment", value: `${job.payout} USDC` },
-        { label: "Worker bond", value: `${job.bond} USDC` },
+        { label: "Payment", value: job.payout },
+        { label: "Worker bond", value: job.bond },
         { label: "Time left", value: `${job.timeLeft}s · deadline-anchored` },
         {
           label: "taskId derivation",
