@@ -103,7 +103,7 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
         title={inspectJob?.title ?? ""}
         subtitle={
           inspectJob
-            ? `${inspectJob.id} · auction over Gensyn AXL · escrow on Base Sepolia`
+            ? `${inspectJob.id} · auction over Gensyn AXL · escrow on 0G Galileo`
             : undefined
         }
         groups={inspectJob ? buildJobInspectGroups(inspectJob) : []}
@@ -163,7 +163,7 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
         {
           label: "Settlement model",
           value:
-            "Two-phase commit, eventually consistent ~10s; 'pending_reconcile' on UI if a leg lags",
+            "Native 0G escrow settlement plus ERC-8004 feedback on Base Sepolia.",
         },
       ],
     },
@@ -184,7 +184,7 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
         {
           label: "Note",
           value:
-            "Auction logic is real; live escrow on Galileo. ERC-8004 feedback() to 0x8004B663… on Base Sepolia is wired into releasePayment.",
+            "Auction posting and the representative release tx are live on Galileo. Token-owned payout routing is implemented in source/tests and requires escrow redeploy before it is production-live.",
         },
       ],
     },

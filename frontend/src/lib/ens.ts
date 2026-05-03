@@ -27,9 +27,8 @@ export interface NamespaceResolution {
 }
 
 /**
- * Resolve a single namespace for a worker iNFT. Falls back to the live
- * chain reads where ENS CCIP-Read isn't available client-side (the gateway
- * is behind ngrok and may not be reachable from the browser).
+ * Resolve a single namespace for a worker iNFT. Falls back to live chain
+ * reads when client-side ENS CCIP-Read is not the most reliable path.
  */
 export async function resolveNamespace(
   ns: Namespace,

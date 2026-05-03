@@ -33,7 +33,6 @@ export const metadata = {
 const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
 const galileoAddr = (a: string) =>
   `https://chainscan-galileo.0g.ai/address/${a}`;
-const baseTx = (h: string) => `https://sepolia.basescan.org/tx/${h}`;
 const baseAddr = (a: string) => `https://sepolia.basescan.org/address/${a}`;
 const sepoliaAddr = (a: string) => `https://sepolia.etherscan.io/address/${a}`;
 const sepoliaTx = (h: string) => `https://sepolia.etherscan.io/tx/${h}`;
@@ -117,6 +116,8 @@ const sections: Section[] = [
         value: LEDGER_ESCROW_ADDRESS,
         href: galileoAddr(LEDGER_ESCROW_ADDRESS),
         mono: true,
+        caption:
+          "Current deployed escrow proves live post/accept/release settlement. The upgraded token-owned payout methods are implemented and tested in source, but this address has not been redeployed to that version yet.",
       },
       {
         label: "LedgerIdentityRegistry",
@@ -230,6 +231,8 @@ const sections: Section[] = [
         value: DEMO_RELEASE_TX,
         href: galileoTx(DEMO_RELEASE_TX),
         mono: true,
+        caption:
+          "Legacy live release tx. It proves escrow settlement; it does not yet prove token-owned ownerOf-at-payment routing.",
       },
       {
         label: "Demo task ID",
@@ -305,8 +308,18 @@ const sections: Section[] = [
           "Verified end-to-end on 2026-05-02T16:28:18Z across the live mesh.",
       },
       {
+        label: "Qualification boundary",
+        value: "Separate AXL nodes, not in-process",
+        caption:
+          "Two Fly.io regions plus one residential NAT laptop. The app did not replace AXL with a centralized broker.",
+      },
+      {
         label: "Topology snapshot",
         value: "proofs/data/axl-topology.json",
+      },
+      {
+        label: "Full-cycle event log",
+        value: "proofs/data/axl-full-cycle.json",
       },
       {
         label: "TCP packet capture",
@@ -354,7 +367,7 @@ const sections: Section[] = [
         value: DEMO_OWNER_B,
         mono: true,
         caption:
-          "Reads ownerOf(1) on Galileo, 30s TTL cache. Same address chain returns cross-network.",
+          "Reads ownerOf(1) on Galileo, 30s TTL cache. Ownership flips without a new ENS transaction.",
       },
       {
         label: "pay.worker-001.ledger.eth (rotation 0)",
@@ -382,7 +395,7 @@ const sections: Section[] = [
       {
         label: "ledger.eth ENSIP-25 text record",
         value:
-          'agent-registration={"standard":"ENSIP-25","registry":"0x8004B663…","chain":"base-sepolia","chainId":84532,"agentId":"1"}',
+          'agent-registration={"standard":"ENSIP-25","registry":"0x8004B663…","chain":"base-sepolia","chainId":84532,"agentId":"5444"}',
       },
       {
         label: "Live smoke artifact",

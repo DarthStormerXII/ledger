@@ -21,7 +21,7 @@ const PROOFS = {
   ledgerEscrow: "0x12D2162F47AAAe1B0591e898648605daA186D644",
   releaseTx:
     "0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c",
-  ensResolver: "0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531",
+  ensResolver: "0xd94cC429058E5495a57953c7896661542648E1B3",
   reputationRegistry: "0x8004B663056A597Dffe9eCcC1965A193B7388713",
 };
 
@@ -461,7 +461,7 @@ function Resolution() {
                 "Workers gossip bids → AXL mesh",
                 "Lowest qualifying bid wins",
                 "Result submitted → 0G Storage",
-                "USDC released → reputation +1",
+                "0G released → reputation +1",
               ]}
             />
           </Reveal>
@@ -670,7 +670,7 @@ function Mechanic() {
         <MechanicStep
           n="03"
           title="Earnings flip on the next payment."
-          body="LedgerEscrow.releasePayment queries ownerOf(tokenId) at payment time, not at bid time. Any settlement after the transferFrom routes to the new owner — automatically, mid-flight."
+          body="The upgraded LedgerEscrow source and tests query ownerOf(tokenId) at payment time, not at bid time. The deployed demo escrow proves live settlement today; redeploying this upgraded escrow is the remaining step for token-owned payout routing to be production-live."
           terminal={[
             `// LedgerEscrow @ ${short(PROOFS.ledgerEscrow)}`,
             "function releasePayment(bytes32 taskId) external {",
@@ -678,7 +678,7 @@ function Mechanic() {
             "  require(t.status == Status.Submitted);",
             "  address payee = workerINFT.ownerOf(t.workerTokenId);",
             "  // ↑ resolves at PAYMENT TIME, not BID TIME",
-            "  IERC20(USDC).transfer(payee, t.payment);",
+            "  payable(payee).transfer(t.payment);",
             "  reputation.recordFeedback(payee, taskId, t.rating);",
             "  t.status = Status.Released;",
             "}",
@@ -686,7 +686,7 @@ function Mechanic() {
             `→ release tx ${short(PROOFS.releaseTx)}`,
           ]}
           tx={{
-            label: "View releasePayment on Chainscan Galileo",
+            label: "View legacy releasePayment on Chainscan Galileo",
             href: galileoTx(PROOFS.releaseTx),
           }}
         />
@@ -1031,7 +1031,7 @@ const BUYERS: { title: string; body: string }[] = [
   },
   {
     title: "Retail crypto users",
-    body: "I bought a yield-scout agent. It earns me 200 USDC a month from clients who pay it for vault recommendations. The agent is a cash-flowing collectible.",
+    body: "I bought a yield-scout agent. It earns me recurring 0G-denominated payments from clients who pay it for vault recommendations. The agent is a cash-flowing collectible.",
   },
   {
     title: "Agent-fund managers",

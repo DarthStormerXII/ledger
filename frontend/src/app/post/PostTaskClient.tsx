@@ -130,8 +130,9 @@ export function PostTaskClient() {
       setLocalPhase("failed");
       return;
     }
-    // Derive a unique taskId from buyer + title + nonce.
-    const seed = `${address}-${form.title.trim()}-${Date.now()}-${Math.random()}`;
+    // Derive a unique taskId from buyer + title + a browser-crypto nonce.
+    const nonce = crypto.getRandomValues(new Uint32Array(4)).join("-");
+    const seed = `${address}-${form.title.trim()}-${Date.now()}-${nonce}`;
     const taskId = keccak256(toHex(seed));
     // Convert MM:SS time-limit into an absolute deadline (unix seconds, on-chain time).
     const [mm, ss] = form.timeLimit.split(":").map((n) => parseInt(n, 10));

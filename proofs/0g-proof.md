@@ -69,6 +69,8 @@ The installed live network listed two services at test time: one chatbot and one
 - `releasePayment` tx: `0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c`
 - Final task status readback: `3` (`Released`)
 
+Escrow limitation as of May 3, 2026: the deployed `LedgerEscrow` above is the live settlement contract used for this proof, but it is the legacy deployed version. The repository source and Foundry tests now include token-owned payout routing (`acceptTokenBid`, `taskWorkerTokenIds`, `payoutRecipient`, and `releasePayment` resolving `ownerOf(tokenId)` at payment time). That upgraded escrow still needs to be redeployed and seeded before the ownerOf-at-payment inheritance payout claim is live on Galileo.
+
 ## Live ERC-8004 Reputation Proof
 
 The 0G iNFT references reputation via the canonical ERC-8004 ReputationRegistry on Base Sepolia (`0x8004B663056A597Dffe9eCcC1965A193B7388713`). The demo worker is registered in the ERC-8004 IdentityRegistry (`0x8004A818BFB912233c491871b3d84c89A494BD9e`) at agentId `5444`, and 47 distinct `giveFeedback` records have been submitted by 8 different client wallets to back the "47 jobs, 4.77 average" demo claim.

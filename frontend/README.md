@@ -18,14 +18,12 @@ Fraunces (italic display) · Bricolage Grotesque (body) · JetBrains Mono (chain
 
 | Route | Screen | Live data |
 |---|---|---|
-| `/` | The Hall — running USDC paid this week, live lots, top workers leaderboard, ticker | seed-shaped + ticker animation |
-| `/jobs` | Lots index | seed |
-| `/jobs/[id]` | Auction Room — three bid cards, AXL topology with packets, gossip log, countdown | seed |
-| `/workers` | Workers index — full catalogue | seed |
-| `/workers/[id]` | Worker Profile — 96px italic Fraunces ENS name, watch-dial portrait, capability tree (live), TEE attestation badge, reputation chart, recent jobs, ownership rail | live `ownerOf()` from 0G Galileo |
-| `/transfer/[id]` | Inheritance Console — ceremonial 1.5s reversal + live ENS `who.*` flip post-transfer | live `ownerOf()` from 0G Galileo |
-| `/agent/[ens-name]` | Capability Tree Viewer — 5 namespace cards (`who/pay/tx/rep/mem`) with live latency, verify drawers, RE-RESOLVE ALL | live `ownerOf()` (who); HD-derivation rotation (pay); 0G Storage CID (mem); ERC-8004 metadata (rep); receipt JSON (tx) |
-| component | Settlement Status Strip — per-leg (USDC/Reputation/0G CID) with `SETTLED · PENDING_RECONCILE · RECONCILE_FAILED` pill | seed (anchored to live release tx) |
+| `/` | The Hall — live minted iNFT count, realized 0G, recent chain events, workers leaderboard | live 0G + ERC-8004 reads |
+| `/jobs` | Live jobs index | live `TaskPosted` / `PaymentReleased` reads from 0G Galileo |
+| `/jobs/[id]` | Auction Room — AXL topology, bridge status, BID message stream, countdown | live `/api/axl/*`; captured proof only when the local bridge is unreachable |
+| `/workers` | Workers index — full minted catalogue | live `ownerOf()`, `getMetadata()`, ERC-8004 summary reads |
+| `/agent/[ens-name]` | Worker Profile — capability tree, TEE disclosure, reputation, jobs, ownership rail | live iNFT + escrow + ERC-8004 reads |
+| component | Settlement Status Strip — escrow release, reputation registry, 0G CID | live release tx when available; explicit empty state otherwise |
 
 ## Running locally
 
@@ -64,11 +62,11 @@ NEXT_PUBLIC_MOCK_TEE_ORACLE_ADDRESS=0x229869949693f1467b8b43d2907bDAE3C58E3047
 NEXT_PUBLIC_ERC8004_REPUTATION_REGISTRY=0x8004B663056A597Dffe9eCcC1965A193B7388713
 
 NEXT_PUBLIC_LEDGER_ENS_PARENT=ledger.eth
-NEXT_PUBLIC_LEDGER_ENS_RESOLVER_CONTRACT=0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531
-NEXT_PUBLIC_LEDGER_ENS_GATEWAY_URL=https://<ngrok-host>/{sender}/{data}
+NEXT_PUBLIC_LEDGER_ENS_RESOLVER_CONTRACT=0xd94cC429058E5495a57953c7896661542648E1B3
+NEXT_PUBLIC_LEDGER_ENS_GATEWAY_URL=https://resolver.fierypools.fun/{sender}/{data}
 ```
 
-Update the gateway URL when the resolver builder rotates ngrok.
+The gateway URL is now the durable `resolver.fierypools.fun` Cloudflare tunnel.
 
 ## Architecture notes
 
@@ -77,14 +75,14 @@ Update the gateway URL when the resolver builder rotates ngrok.
   `LiveOwnerBanner`, `InheritanceCeremony`, `Ticker`, `AxlTopology`,
   `AxlLogFeed`, `WorkerBidCard`, `JobCountdown`) are `"use client"` and read
   chain state via the public `viem` clients in `src/lib/clients.ts`.
-- **No wallet.** This frontend doesn't sign transactions — it's the
-  read-side proof surface. The connect-wallet button in the nav is a UI
-  placeholder; wiring wagmi connectors is a follow-up.
+- **Wallet.** `/post` signs real `postTask` transactions through wagmi/Privy on
+  0G Galileo. The wallet activity screen is intentionally marked as a coming
+  soon live-events surface rather than rendering fake history.
 - **ENS resolution.** `src/lib/ens.ts` synthesises live `who.*` from
   `WorkerINFT.ownerOf(tokenId)` on Galileo and renders the other four
-  namespaces from the worker's seed metadata (HD-derivation chain for
-  `pay.*`, ERC-8004 reference for `rep.*`, 0G Storage CID for `mem.*`,
-  task receipt for `tx.*`). Each namespace renders independently as it
+  namespaces from the worker's live metadata/proof configuration
+  (HD-derivation chain for `pay.*`, ERC-8004 reference for `rep.*`,
+  0G Storage CID for `mem.*`, task receipt for `tx.*`). Each namespace renders independently as it
   resolves (`resolveAllStreaming`) so the slow Galileo call doesn't block
   the others.
 - **Brand discipline.** Italic Fraunces is the default display voice; gold

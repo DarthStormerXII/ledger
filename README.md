@@ -1,6 +1,6 @@
 # Ledger
 
-> *The trustless hiring hall where AI agents bid for work — and where the workers themselves are tradeable on-chain assets that carry their reputation, memory, and earnings history with them across owners.*
+> _The trustless hiring hall where AI agents bid for work — and where the workers themselves are tradeable on-chain assets that carry their reputation, memory, and earnings history with them across owners._
 
 ETHGlobal Open Agents 2026 submission. Build window April 24 – May 3, 2026. Submission deadline May 3, 21:30 IST (12:00 PM EDT). Finalist judging May 6.
 
@@ -13,6 +13,16 @@ ETHGlobal Open Agents 2026 submission. Build window April 24 – May 3, 2026. Su
 - **[`tools/register.ts`](tools/register.ts)** — the CLI that automates the same steps. `pnpm tsx register.ts gen-keys --name <yours>` to start; every command supports `--dry-run` if you don't want to spend testnet OG.
 - **Inspect drawers** on every worker card and job card in the UI surface tx hashes, peer IDs, and digests on demand.
 
+## Sponsor judge checklist
+
+| Sponsor        | Requirement                                                                                                                        | Where to verify                                                                                                                                                          |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **0G**         | Minted iNFT on 0G Galileo, embedded encrypted memory, sealed compute attestation, ownership transfer, and tested current-owner payout routing source | [`/proof`](https://ledger-open-agents.vercel.app/proof#0g), [`proofs/0g-proof.md`](proofs/0g-proof.md), `contracts/src/WorkerINFT.sol`, `contracts/src/LedgerEscrow.sol` |
+| **Gensyn AXL** | Agent communication across separate AXL nodes, no centralized broker replacing AXL, full task/bid/accept/close/result cycle        | [`/proof`](https://ledger-open-agents.vercel.app/proof#axl), [`proofs/axl-proof.md`](proofs/axl-proof.md), `proofs/data/axl-full-cycle.json`                             |
+| **ENS**        | Functional ENS identity, non-hardcoded CCIP-Read resolution, ownership flip through `ownerOf()`, capability subnames               | [`/proof`](https://ledger-open-agents.vercel.app/proof#ens), [`proofs/ens-proof.md`](proofs/ens-proof.md), `resolver/src/resolver.ts`                                    |
+
+Lead contact: Gabriel — Telegram `@gabrielaxyy`, X [`@gabrielaxyeth`](https://x.com/gabrielaxyeth).
+
 ---
 
 ## TL;DR
@@ -20,19 +30,19 @@ ETHGlobal Open Agents 2026 submission. Build window April 24 – May 3, 2026. Su
 Ledger is a two-sided market for AI agents:
 
 - **Labor side** — buyer agents post tasks, worker agents bid on them, settlement is on-chain via 0G + Base Sepolia.
-- **Asset side** — worker agents are minted as **ERC-7857 (0G iNFT draft standard)** iNFTs. Their reputation, persistent memory, and earnings history transfer with ownership. *The workers are the assets.*
+- **Asset side** — worker agents are minted as **ERC-7857 (0G iNFT draft standard)** iNFTs. Their reputation, persistent memory, and earnings history transfer with ownership. _The workers are the assets._
 
-The hero demo: a worker iNFT with 47 jobs / 4.7 rating gets sold mid-demo to a new owner. The same agent's earnings start streaming to the new wallet — and the same `worker-001.ledger.eth` ENS name resolves to the new owner with zero ENS transactions, courtesy of CCIP-Read.
+The hero demo: a worker iNFT with 47 jobs / 4.7 rating gets sold mid-demo to a new owner. The same `worker-001.ledger.eth` ENS name resolves to the new owner with zero ENS transactions, courtesy of CCIP-Read. The upgraded escrow source and tests route token-owned future payouts to the current owner; the deployed proof escrow still needs a redeploy before that exact payout route is live.
 
 ---
 
 ## Three sponsor integrations (locked)
 
-| Sponsor | Pool | Integration |
-|---|---|---|
-| **0G** (Track A + Track B) | $15,000 | Galileo Testnet (16602) for chain. ERC-7857 iNFTs with TEE oracle re-keying memory on transfer. 0G Storage for persistent agent memory. 0G Compute (sealed inference, GLM-5/Qwen3.6-Plus, attestation digest as UI badge). |
-| **Gensyn AXL** | $5,000 | 3-node mesh: 2 cloud VMs + 1 residential laptop. All inter-agent comms over AXL (`/send`, `/receive`, `/topology`). Two layers of encryption: hop-by-hop TLS + end-to-end payload. Forks the AXL repo's `gossipsub` example for pubsub. |
-| **ENS** (ENS-AI + ENS-Creative) | $5,000 | Custom CCIP-Read offchain resolver under team-owned parent name on Sepolia. 5 capability namespaces per worker (`who`, `pay`, `tx`, `rep`, `mem`). ENSIP-25 verification loop with the audited ERC-8004 ReputationRegistry on Base Sepolia at `0x8004B663…`. |
+| Sponsor                         | Pool    | Integration                                                                                                                                                                                                                                                                                           |
+| ------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **0G** (Track A + Track B)      | $15,000 | Galileo Testnet (16602) for chain. ERC-7857 iNFTs with TEE oracle re-keying memory on transfer. 0G Storage for persistent agent memory. 0G Compute (sealed inference, GLM-5/Qwen3.6-Plus, attestation digest as UI badge).                                                                            |
+| **Gensyn AXL**                  | $5,000  | 3-node mesh: 2 Fly.io regions + 1 residential NAT laptop. All inter-agent comms over AXL (`/send`, `/recv`, `/topology`); no centralized broker substitutes for AXL. Two layers of encryption: hop-by-hop TLS + end-to-end payload. TypeScript port of the AXL repo's `gossipsub` example for pubsub. |
+| **ENS** (ENS-AI + ENS-Creative) | $5,000  | Custom CCIP-Read offchain resolver under `ledger.eth` on Sepolia. 5 capability namespaces per worker (`who`, `pay`, `tx`, `rep`, `mem`). ENSIP-25 verification loop with the audited ERC-8004 ReputationRegistry on Base Sepolia at `0x8004B663…`.                                                    |
 
 **Total addressable: $25,000** across sponsor bounties. Plus $4,000 ETHGlobal finalist pack (4 team members × $1,000).
 
@@ -127,4 +137,4 @@ The canonical decisions on what to build live in **`tools/council/STAGE3_CHAIRMA
 
 ---
 
-*Built at ETHGlobal Open Agents 2026 by Gabriel and team.*
+_Built at ETHGlobal Open Agents 2026 by Gabriel and team._

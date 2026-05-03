@@ -10,12 +10,10 @@ import {
   MOCK_TEE_ORACLE_ADDRESS,
   ERC8004_REPUTATION_REGISTRY,
   DEMO_TOKEN_ID,
-  DEMO_OWNER_B,
   DEMO_MEMORY_CID,
   DEMO_ATTESTATION_DIGEST,
   DEMO_MINT_TX,
   DEMO_TRANSFER_TX,
-  DEMO_RELEASE_TX,
 } from "@/lib/contracts";
 
 export function LotPlate({
@@ -97,11 +95,9 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
   const galileoAddr = (a: string) =>
     `https://chainscan-galileo.0g.ai/address/${a}`;
 
-  // Lot 047 is the demo's hero worker. We map its on-chain receipts to the
-  // live token #1 artefacts. Other lots show identity-only data and link to
-  // /proof for the system-wide receipts.
-  const isHero = lot.lot === "047";
-  const tokenId = isHero ? Number(DEMO_TOKEN_ID) : null;
+  const tokenId = Number.parseInt(lot.lot, 10);
+  const hasTokenId = Number.isFinite(tokenId) && tokenId > 0;
+  const isDemoToken = tokenId === Number(DEMO_TOKEN_ID);
   const subname = `${lot.ens.split(".")[0]}.${LEDGER_ENS_PARENT}`;
 
   const groups: InspectGroup[] = [
@@ -114,7 +110,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
           href: galileoAddr(WORKER_INFT_ADDRESS),
           mono: true,
         },
-        ...(tokenId !== null
+        ...(hasTokenId
           ? [
               {
                 label: "Token ID",
@@ -123,28 +119,26 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               },
               {
                 label: "ownerOf(tokenId)",
-                value: DEMO_OWNER_B,
-                href: galileoAddr(DEMO_OWNER_B),
+                value: lot.owner,
+                href: galileoAddr(lot.owner),
                 mono: true,
               },
-              {
-                label: "Mint tx",
-                value: DEMO_MINT_TX,
-                href: galileoTx(DEMO_MINT_TX),
-                mono: true,
-              },
-              {
-                label: "Last transfer tx",
-                value: DEMO_TRANSFER_TX,
-                href: galileoTx(DEMO_TRANSFER_TX),
-                mono: true,
-              },
-              {
-                label: "Last release tx",
-                value: DEMO_RELEASE_TX,
-                href: galileoTx(DEMO_RELEASE_TX),
-                mono: true,
-              },
+              ...(isDemoToken
+                ? [
+                    {
+                      label: "Mint tx",
+                      value: DEMO_MINT_TX,
+                      href: galileoTx(DEMO_MINT_TX),
+                      mono: true,
+                    },
+                    {
+                      label: "Last transfer tx",
+                      value: DEMO_TRANSFER_TX,
+                      href: galileoTx(DEMO_TRANSFER_TX),
+                      mono: true,
+                    },
+                  ]
+                : []),
             ]
           : [
               {
@@ -154,8 +148,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               },
               {
                 label: "Note",
-                value:
-                  "This lot uses catalogue seed data. Full live token #1 receipts on /proof.",
+                value: "Token ID could not be derived from the live lot number.",
               },
             ]),
         {
@@ -180,7 +173,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
         },
       ],
     },
-    ...(isHero
+    ...(isDemoToken
       ? [
           {
             title: "0G STORAGE & COMPUTE",
@@ -218,16 +211,15 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
           href: `https://sepolia.basescan.org/address/${ERC8004_REPUTATION_REGISTRY}`,
           mono: true,
         },
-        ...(isHero
+        ...(hasTokenId
           ? [
-              { label: "agentId", value: "5444", mono: true },
               { label: "Job count", value: String(lot.jobs) },
               { label: "Average rating", value: `${lot.rating} / 5.00` },
               { label: "Total earned", value: `${lot.earned} 0G` },
               {
                 label: "Disclosure",
                 value:
-                  "These ERC-8004 records were seeded for the demo. The registry read path is real — full disclosure on /proof.",
+                  "ERC-8004 values are read through the live registry path. Demo reputation records are seeded and disclosed on /proof.",
               },
             ]
           : [
@@ -236,8 +228,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               { label: "Total earned", value: `${lot.earned} 0G` },
               {
                 label: "Disclosure",
-                value:
-                  "Catalogue seed data — not on-chain. Hero lot 047 has live receipts on /proof.",
+                value: "No live token ID could be derived for this lot.",
               },
             ]),
       ],
