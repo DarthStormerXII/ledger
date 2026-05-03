@@ -26,8 +26,8 @@ const serviceInterface = new Interface([
 
 const tokenId = BigInt(process.env.DEMO_TOKEN_ID ?? "1");
 const workerLabel = process.env.DEMO_WORKER_LABEL ?? "worker-001";
-const oldOwnerBlock = Number.parseInt(process.env.DEMO_OLD_OWNER_BLOCK ?? "31130502", 10);
-const newOwnerBlock = Number.parseInt(process.env.DEMO_NEW_OWNER_BLOCK ?? "31130543", 10);
+const oldOwnerBlock = Number.parseInt(process.env.DEMO_OLD_OWNER_BLOCK ?? "31312412", 10);
+const newOwnerBlock = Number.parseInt(process.env.DEMO_NEW_OWNER_BLOCK ?? "31312433", 10);
 const sender = process.env.RESOLVER_CONTRACT_ADDRESS ?? "0x000000000000000000000000000000000000dEaD";
 
 async function main(): Promise<void> {

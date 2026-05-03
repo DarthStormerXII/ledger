@@ -2,7 +2,7 @@
   "scenario": "11_live_ens_resolution",
   "pass": true,
   "reasons": [],
-  "durationMs": 892,
+  "durationMs": 2187,
   "artifacts": {
     "parentName": "ledger.eth",
     "gatewayUrl": "https://resolver.fierypools.fun",

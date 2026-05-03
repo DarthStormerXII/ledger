@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [ledger] recent context, 2026-05-03 7:32pm GMT+5:30
+# [ledger] recent context, 2026-05-03 8:49pm GMT+5:30
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 50 obs (21,430t read) | 3,241,955t work | 99% savings
+Stats: 50 obs (20,659t read) | 2,163,495t work | 99% savings
 
 ### May 2, 2026
 S638 Ledger Branding — Generate logo and all branding images (corrected to: write paste-ready prompts instead after user feedback about wasted Higgsfield credits) (May 2 at 7:47 PM)
@@ -21,56 +21,56 @@ S650 Ledger Integration Suite — Final Clean State Confirmed, 11/11 Repeatable 
 S662 Ledger — TEAM.md creation + dual-remote push setup for Vercel auto-deploy via CipherKuma/ledger (May 2 at 10:47 PM)
 ### May 3, 2026
 S663 Ledger Frontend — Env Var Audit for Vercel Deployment (May 3 at 12:29 PM)
-2820 6:43p 🔵 LedgerEscrow.sol payoutRecipient() — Confirms Inheritance Earnings Routing On-Chain
-2821 " 🟣 AuctionRoom — CapturedAxlProof Panel Shown as Fallback When Live Bridge Unavailable
-2824 6:45p 🔵 Forge Tests — All 5 Pass Including testTokenBidPaysCurrentINftOwnerAtRelease
-2825 " 🔵 Integration Tests — 11/11 Pass Including Live ENS and Cross-Chain Scenarios
-2826 " 🔵 ENS Live Smoke Test — who.worker-001.ledger.eth Resolves Correctly on Sepolia
-2827 " 🔵 Next.js Build Succeeds — 15 Routes Compiled, TypeScript Clean
-2828 6:47p 🔵 Live Pages Take 13-15s to Load Due to 0G Galileo RPC Reads — Timeout Gotcha
-2829 6:48p ⚖️ Ledger Hackathon — ETHGlobal Open Agents 2026 Final Demo Video Script Completed
-2830 6:49p 🔵 Ledger Frontend — AXL Job Page Confirmed Live Data, ENS Agent Page Screenshot Captured
-2831 6:50p 🔵 Ledger AXL API Endpoints Return 503 — AXL Node Not Running During Screenshot Session
-2832 6:51p 🔵 Ledger Agent Profile Page — "CAPABILITY TREE" Expect Check Hung for 2+ Minutes
-2833 " 🔵 Ledger Job Page Has .captured-proof-panel Element — AXL Proof Panel Renders Successfully
-2834 6:52p 🔵 Ledger Frontend Screenshot Set Complete — Three Key Assets Captured for Hackathon Demo Video
-2835 6:53p 🔵 Ledger Frontend Multi-Viewport Screenshots Captured — Polish QA Pass Running on Homepage
-2836 6:54p 🔵 Ledger Job Detail Page Multi-Viewport Screenshots Captured Successfully
-2837 " 🔵 Ledger Agent Profile Page Multi-Viewport Screenshots — Still Running After 60+ Seconds Total
-2838 6:56p 🔵 Ledger Frontend CSS Design System — Custom Token System with Tailwind v4, Dark/Paper Surface Modes
-2840 " 🔴 Ledger Job Detail Page — Fixed Mobile Overflow on AXL Proof Panel and Auction Blocks
-2841 6:57p 🔴 Ledger Frontend Nav — Responsive Collapse at 900px Confirmed in CSS
-2844 6:58p 🔵 Ledger Job Detail Page CSS Fix Validated — v2 Viewport Screenshots Captured at All Breakpoints
-2845 7:02p ⚖️ Ledger Hackathon — ETHGlobal Open Agents 2026 Sponsor Prize Strategy Assessment
-2846 " 🔄 Ledger Frontend globals.css — Worker Profile and Settlement Strip CSS Classes Added
-2847 7:04p 🔵 Ledger Integration Test Suite — 11/11 Scenarios Pass Against Live 0G Galileo RPC
-2848 " 🔵 Ledger ENS Resolution — Live worker-001.ledger.eth Namespace Fully Resolved on Sepolia
-2849 " 🔵 Ledger Frontend Route Map — 15 Routes, Next.js 16.2.4, Serving on Port 3002
-2850 " 🔵 Ledger Frontend Page Verification — Key Pages Confirmed Rendering on localhost:3002
-2851 7:05p 🔵 Ledger ENS Integration Gap — Integration Test Uses Stale ngrok URL and Old Resolver Address
-2852 " ✅ Ledger Submission Doc and Codebase — ENS Gateway URL and Resolver Address Globally Updated
-2853 " 🔵 Ledger Codebase State — Comprehensive Diff View of All Changed Files Since Last Commit
-2856 7:06p 🔴 Ledger ENS Integration Test — Scenario 11 Now Passes with Live Gateway Resolution
-2857 7:12p 🔵 Ledger Video Directory — Screenplay Files and Remotion Build Setup Confirmed
-2858 7:16p 🔵 Ledger Demo Video — Higgsfield Shot Assets Found with Durations and File Sizes
-2859 " 🔵 Ledger Project Full Artifact Map — Proofs, Agents, Video, Submission, Integration Confirmed
-2860 7:20p ⚖️ Ledger Track A Agent Kit — Isolated Framework Layer Planned Without Disturbing App
-2861 " 🔵 Ledger 0G Storage Agent — AES-256-CTR Encrypted Memory with MemoryStorageAdapter and Live 0G SDK Path
-2862 " 🔵 Ledger 0G Compute Agent — Live Inference via createZGComputeNetworkBroker with Attestation Digest
-2863 " 🔵 Ledger Git Status — 35 Modified Files Plus 3 New Untracked Files Before Track A Kit Work
-2864 7:21p 🟣 Ledger Agent Kit (@ledger/agent-kit) — New Track A Framework Package Created
-2865 7:23p 🟣 Ledger Agent Kit — Tests Pass and Example Agent Runs with Live 0G Data
-2866 " 🔵 Ledger Demo Video — 9 Screen Recording Segments Still Needed, Cinematic/Sponsor/Outro Complete
-2867 " 🔵 Ledger ETHGlobal Submission Dashboard — Blocked on Magic-Link Auth for Final Paste
-2868 7:24p ✅ Ledger Submission Pack — 0G Track A Description Updated and Contract Addresses Filled In
-2869 " 🔵 Ledger GitHub URL Mismatch — README Uses DarthStormerXII/ledger, SUBMISSION.md Uses DarthStormerXII/ledger-v1
-2870 7:25p 🔴 README.md — All 15 Sponsor Code Links Fixed from DarthStormerXII/ledger to DarthStormerXII/ledger-v1
-2871 " ✅ Ledger Submission Pack — All Remaining Placeholders Replaced with Live Proof Values
-2872 7:26p 🔵 Ledger Submission Files — Zero Remaining Placeholders in All Submission-Critical Documents
-2874 7:27p 🔵 Ledger Sponsor Integration Packages — All Tests and Typechecks Pass Across 0G, AXL, and Agent Kit
-2875 " 🔵 Ledger Full Stack Verification — All 5 Forge Tests, 11 Integration Scenarios, and ENS Live Smoke Pass
-2876 7:29p 🔵 Ledger Demo Video — Remotion Composition Structure: 212s, 30fps, 5 Video Assets, 11 App Recording Slots
-2877 " 🔵 Ledger Frontend Build — Next.js 15 Routes Build Clean, 49 Modified + 17 New Untracked Files Total
+2909 8:02p 🔵 ETHGlobal Tech Stack — Databases and Design Fields Set to "None"
+2910 " 🔵 Ledger Demo Video Assets — Draft and Source Clips Present in video/
+2911 8:03p 🔵 ETHGlobal Submission Content Defined — Prize IDs, Proof URLs, and Descriptions Finalized
+2913 8:05p 🔵 SSH Heredoc Fix — Local cat Pipe Avoids zsh Glob Expansion on M2
+2915 8:06p 🟣 ETHGlobal Select Prizes Tab — All Three Prize Applications Filled and Confirmed
+2916 " 🔵 cmux Workspace Topology — Ledger Workspace Active on surface:49 with 5 Workspaces
+2917 8:08p 🔴 Marketplace Card UI Bugs Fixed — Double "0G" Unit and Misleading "0 EARNED" Label
+2918 " 🟣 New Contract Addresses Deployed and Vercel Env Vars Updated
+2919 " 🟣 Job Brief Architecture — 0G Storage Pin + Server-Side Cache Chosen; /api/jobs/brief Route Created
+2920 " 🟣 Ledger /register Page Shipped — 8-Step Agent Registration UI Live on Vercel
+2921 8:09p 🟣 All 0G Galileo Contracts Source-Verified and Addresses Propagated Across Full Codebase
+2922 " 🟣 /api/jobs/brief Route — Full Implementation with 0G Storage Pin, Categories, and In-Memory Cache
+2923 " 🔴 RegisterClient.tsx Lint Errors Fixed — Unused Imports and JSX Apostrophe Escaping
+2925 8:12p 🔴 ENS Resolver Gateway WorkerINFT Address Updated — Live Smoke Passed After Restart
+2926 " 🟣 Vercel Deployment via Prebuilt — New Deploy at ledger-two-red.vercel.app
+2927 " 🟣 Jobs UI — Real Brief Titles, Category Chips, and 0G-Pinned Brief Indicator on All Cards
+2928 8:14p 🟣 ledger-open-agents.vercel.app Alias Repointed to Verified-Address Deployment
+2929 " 🟣 AuctionRoomClient — 0G Brief Fetching and Real Title/Description Rendering Added
+2930 " 🔴 proof/page.tsx Source Verification Labels Added for All Three Sponsor Contract Groups
+2931 " 🔵 Stale Escrow Address Remaining in AuctionRoomClient TaskReceiptPanel — Needs Fix
+2932 8:16p 🟣 contract-verification.json Created — Machine-Readable Verification Record for All Ledger Contracts
+2933 " 🔵 Critical Sync Gap — seeded-workers.json References Tokens That Don't Exist on New WorkerINFT
+2934 " 🟣 AuctionRoomClient — JobBriefPanel Component Added with Full 0G CID Display and Requirements
+2935 " 🔵 Wallet Connection Gate Requirement — All Write-Transaction UI Must Prompt Wallet Connection
+2936 8:18p 🟣 WalletGate Component Created — Reusable Wallet Connection Gate for All Write-Transaction UI
+2937 " 🔵 pre-demo-check.md Has Stale Contract Addresses — Phase 3 Probes Old WorkerINFT and LedgerEscrow
+2938 " 🔵 Large Uncommitted Diff Committed — HEAD Now at 8d64755 Including Brief Storage and Wallet Gate
+2939 8:19p 🟣 Worker Re-Sync Committed — 4 Workers Re-Minted on New WorkerINFT Contract
+2940 8:21p ✅ docs/SUBMISSION.md Fully Updated — Sync Marker, Commit-Anchored Line URLs, New Contract Addresses
+2941 8:22p 🟣 tools/submission/sync-state.mjs Created — Automated Submission Freshness Check Script
+2942 8:23p 🔴 sync-state.mjs Self-Scan False Positive Fixed — Own File Excluded from Stale Address Search
+2943 " ✅ docs/SUBMISSION.md — Contract Verification Details, Backup Deployment, and External Contracts Section Added
+2944 8:24p ✅ SUBMISSION.md Sync Marker Updated to Commit 8c6ae44 — WalletGate Commit Captured
+2945 " 🔴 sync-state.mjs Second False Positive Fixed — SUBMISSION.md Warning Text Excluded from Stale Scan
+2946 8:25p 🟣 /sync-submission Project Command Created — 5-Phase ETHGlobal Draft Sync Workflow
+2949 8:26p 🔵 playwright-cli-sessions Browser Status/Navigate State Mismatch on M2 — Stale SSH Tunnel
+2950 8:29p 🔵 Live /proof Page Still Serving Pre-Redeploy Addresses — Uncommitted Changes Not Yet Deployed
+2951 " 🟣 tools/submission/ethglobal-fill-details.mjs Created — Playwright Exec Script for ETHGlobal Form Fill
+2952 8:30p ⚖️ Ledger Hackathon — ETHGlobal Open Agents 2026 Demo Video Screen Recording Specs Finalized
+2953 " ⚖️ Ledger Hackathon — Gensyn AXL and 0G iNFT Prize Track Requirements Analyzed
+2959 8:33p 🔵 Ledger ETHGlobal Submission — Full Technical State and Contract Addresses Confirmed
+2960 " 🔵 Ledger Repo — 44 Modified/Untracked Files Including Integration Proofs and Verified Contracts at Submission Time
+2963 8:40p 🔵 Ledger — LITE_SUBMISSION.md Confirmed with Demo Video URL and Condensed Sponsor Copy
+2964 8:41p ✅ Ledger LITE_SUBMISSION.md — Description and How It's Made Sections Substantially Rewritten
+2965 8:43p ⚖️ Ledger Demo Video — Replace Single Code Line with Rich Sponsor Integration Showcase
+2966 8:44p 🔵 Ledger Submission Docs — "Line Of Code" Field Locations and Rich Fanout Already in README
+2967 8:45p ✅ Ledger Submission Docs — "Line Of Code" Fields Replaced with README Anchor Fanout Links
+2968 8:48p 🔵 Ledger Repo — .vercel/output (26MB) Not in .gitignore, tools/dist/ Added
+2969 8:49p 🔴 SUBMISSION.md Heading Corruption — "The #" Prepended by Patch Application
+2970 " 🔵 Ledger Repo — .vercel/output Not Gitignored, contracts/verified Untracked
 
-Access 3242k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 2163k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>

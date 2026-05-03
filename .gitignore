@@ -42,6 +42,8 @@ forge-cache/
 .codex/
 .Codex/
 .claude/
+.vercel/
 .tmp/
 *.swp
 tools/llm-council/
+tools/dist/

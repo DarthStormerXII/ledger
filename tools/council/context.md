@@ -1741,10 +1741,11 @@ broker. Every on-chain action (payment, reputation update, escrow release)
 is submitted through KeeperHub's MCP server, with demonstrated gas-spike 
 resilience via private mempool rerouting.
 
-Reputation is recorded on a minimal ERC-8004 registry deployed on 0G 
-Sepolia. Settlement is USDC on Base Sepolia. Bid bonds use x402-style 
-micropayments. The dashboard is Next.js 14 with shadcn/ui, with live AXL 
-event streaming via Server-Sent Events.
+Reputation is read from the audited ERC-8004 registry deployment on Base
+Sepolia. Settlement is native 0G escrow on Galileo, where bid bonds and
+payments are released to the current iNFT owner at settlement time. The
+dashboard is Next.js 14 with shadcn/ui, with live AXL event streaming via
+Server-Sent Events.
 
 The most interesting build problem was the inheritance flow: when a 
 worker iNFT transfers mid-flight, the next earned payment must flow to 

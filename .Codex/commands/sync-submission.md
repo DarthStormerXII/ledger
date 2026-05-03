@@ -45,15 +45,15 @@ If state changed, update:
 - live route checks
 - production and backup aliases
 - contract verification lane
-- commit-pinned line-of-code URLs
+- sponsor line-of-code / proof-fanout links
 
-Run `node tools/submission/sync-state.mjs --json` again. Continue only when `submissionHasHead=true` and stale hits are empty.
+Run `node tools/submission/sync-state.mjs --json` again. Continue only when public refs are current, live routes are HTTP 200, the contract manifest is present, stale hits are empty, and `materialUpdateNeeded=false`. `submissionHasHead` is diagnostic only because a committed file cannot reliably contain its own final commit hash.
 
 ## Phase 3 — Decide Whether ETHGlobal Needs Editing
 
 Update the live ETHGlobal draft only for material changes:
 
-- repository URL or commit-pinned code anchors changed
+- repository URL or sponsor proof-fanout links changed
 - live deployment/proof URL changed
 - contract addresses, verification status, or proof files changed
 - sponsor prize text changed

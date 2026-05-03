@@ -148,14 +148,14 @@ This pattern compounds quality across sessions.
 
 | Owner | Action | Doc reference |
 |---|---|---|
-| Friend 1 | Wire LedgerEscrow `releasePayment` to call `feedback()` on the audited ERC-8004 ReputationRegistry on Base Sepolia | `docs/02_ARCHITECTURE.md` §2.3, §4 |
-| Friend 3 | Implement on-chain bid bond escrow logic on Base Sepolia (no x402 — that was HTTP middleware, not an escrow primitive) | `docs/02_ARCHITECTURE.md` §3 |
+| Friend 1 | Wire LedgerEscrow `releasePayment` to resolve the current `WorkerINFT.ownerOf(tokenId)` on 0G Galileo before payout | `docs/02_ARCHITECTURE.md` §2.3, §4 |
+| Friend 3 | Implement on-chain bid bond escrow logic on 0G Galileo (no x402 — that was HTTP middleware, not an escrow primitive) | `docs/02_ARCHITECTURE.md` §3 |
 | Friend 1 | Register parent ENS name on Sepolia (e.g. `ledger.eth` or fallback `ledger-agents.eth`) — Sepolia faucet ETH first | `docs/02_ARCHITECTURE.md` §2.5 |
 | Friend 1 | Skeleton CCIP-Read offchain resolver for `who.<agent>.<parent>.eth` proxying `ownerOf()` from 0G Galileo (16602). Deploy to Vercel/Cloudflare. | `docs/02_ARCHITECTURE.md` §2.5 |
 | Friend 2 | Build Worker Profile screen in Claude Design — include ENS name in 96px Fraunces + capability tree on the right | `docs/05_CLAUDE_DESIGN_BRIEF.md` §B Screen 3 |
 
 **End of Day 3 deliverables (evidence artifacts):**
-- [ ] LedgerEscrow successfully writes an ERC-8004 feedback record on Base Sepolia — tx hash captured
+- [ ] LedgerEscrow successfully releases payment to the current iNFT owner on 0G Galileo — tx hash captured
 - [ ] Bid bonds locked + returned correctly — two tx hashes captured
 - [ ] Parent ENS name owned on Sepolia — `app.ens.domains/sepolia/<name>` screenshot
 - [ ] CCIP-Read resolver skeleton deployed and reachable — HTTPS endpoint live

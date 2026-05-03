@@ -309,10 +309,10 @@ Track B is the live iNFT worker proof. WorkerINFT is deployed on 0G Galileo at `
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger/blob/8c6ae44a42f19ec451778d96ccdeeb2d552464e5/agents/ledger-agent-kit/src/runtime.ts#L19
+https://github.com/DarthStormerXII/ledger#0g
 ```
 
-Representative line: `LedgerAgentRuntime`, the framework core that turns 0G iNFT ownership, 0G Storage memory, 0G Compute reasoning, ENS identity, and AXL transport into a reusable agent runtime. Supporting Track B proof links live in `README.md#sponsor-submission-code-links` and `proofs/0g-proof.md`.
+Representative link: the 0G sponsor code/proof fanout for Track A framework tooling plus Track B iNFT worker proof. It links to `@ledger/agent-kit`, the working example agent, WorkerINFT/LedgerEscrow, 0G Storage, 0G Compute, proof artifacts, deployed addresses, and the live transfer evidence.
 
 #### Star Rating / Ease Rating
 
@@ -343,10 +343,10 @@ Ledger maps AXL's service registry / tool marketplace framing onto a live agent 
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger/blob/8c6ae44a42f19ec451778d96ccdeeb2d552464e5/agents/axl-client/src/index.ts#L92
+https://github.com/DarthStormerXII/ledger#gensyn-axl
 ```
 
-Representative line: `AxlClient.send(...)`, the direct `/send` wrapper. Supporting proof links live in `README.md#sponsor-submission-code-links` and `proofs/axl-proof.md`.
+Representative link: the Gensyn AXL sponsor code/proof fanout for the direct send/receive wrappers, GossipSub fanout, three-node topology, proof file, message logs, tcpdump evidence, and full Ledger auction cycle.
 
 #### Star Rating / Ease Rating
 
@@ -381,10 +381,10 @@ Ledger uses ENS as the agent identity and capability layer. The resolver gateway
 #### Line Of Code
 
 ```text
-https://github.com/DarthStormerXII/ledger/blob/8c6ae44a42f19ec451778d96ccdeeb2d552464e5/resolver/src/resolver.ts#L26
+https://github.com/DarthStormerXII/ledger#ens
 ```
 
-Representative line: `resolveName(...)`, the capability namespace dispatcher. Supporting proof links live in `README.md#sponsor-submission-code-links` and `proofs/ens-proof.md`.
+Representative link: the ENS sponsor code/proof fanout for the resolver dispatcher, namespace parser, live 0G `ownerOf()` resolver, rotating payment resolver, proof file, and smoke-test artifacts.
 
 #### Star Rating / Ease Rating
 

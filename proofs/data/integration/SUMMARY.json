@@ -1,5 +1,5 @@
 {
-  "runAt": "2026-05-03T13:57:29.364Z",
+  "runAt": "2026-05-03T14:07:25.902Z",
   "preflight": {
     "galileoLive": true,
     "galileoChainId": 16602,
@@ -15,12 +15,12 @@
   "totalScenarios": 11,
   "passed": 11,
   "failed": 0,
-  "totalDurationMs": 4510,
+  "totalDurationMs": 5817,
   "scenarios": [
     {
       "name": "01_happy_path_full_lifecycle",
       "pass": true,
-      "durationMs": 52,
+      "durationMs": 36,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 2,
@@ -33,7 +33,7 @@
     {
       "name": "02_inheritance_happy_path",
       "pass": true,
-      "durationMs": 40,
+      "durationMs": 45,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 1,
@@ -46,7 +46,7 @@
     {
       "name": "03_auction_no_bids_cancel",
       "pass": true,
-      "durationMs": 234,
+      "durationMs": 224,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 2,
@@ -57,7 +57,7 @@
     {
       "name": "04_worker_timeout_bond_slash",
       "pass": true,
-      "durationMs": 42,
+      "durationMs": 57,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 1,
@@ -69,7 +69,7 @@
     {
       "name": "05_multi_bid_lowest_wins",
       "pass": true,
-      "durationMs": 23,
+      "durationMs": 15,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 3,
@@ -79,7 +79,7 @@
     {
       "name": "06_reputation_gating",
       "pass": true,
-      "durationMs": 7,
+      "durationMs": 21,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 2,
@@ -89,7 +89,7 @@
     {
       "name": "07_cross_chain_eventual_consistency",
       "pass": true,
-      "durationMs": 3062,
+      "durationMs": 3077,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 1,
@@ -102,7 +102,7 @@
     {
       "name": "08_axl_node_disconnect_recovery",
       "pass": true,
-      "durationMs": 53,
+      "durationMs": 52,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 2,
@@ -115,7 +115,7 @@
     {
       "name": "09_compute_attestation_failure_reject",
       "pass": true,
-      "durationMs": 52,
+      "durationMs": 49,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 1,
@@ -129,7 +129,7 @@
     {
       "name": "10_concurrent_tasks",
       "pass": true,
-      "durationMs": 53,
+      "durationMs": 54,
       "reasons": [],
       "eventCounts": {
         "BidReceived": 6,
@@ -142,7 +142,7 @@
     {
       "name": "11_live_ens_resolution",
       "pass": true,
-      "durationMs": 892,
+      "durationMs": 2187,
       "reasons": []
     }
   ]

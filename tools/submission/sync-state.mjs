@@ -126,6 +126,7 @@ function anchor(path, symbol) {
 }
 
 const head = git(["rev-parse", "HEAD"]);
+const submissionText = readRel("docs/SUBMISSION.md");
 const state = {
   capturedAt: new Date().toISOString(),
   head,
@@ -135,7 +136,11 @@ const state = {
   publicRefs: Object.fromEntries(publicRepos.map((repo) => [repo, publicRef(repo)])),
   live: Object.fromEntries(await Promise.all(livePaths.map(async (path) => [path, await httpStatus(path)]))),
   contractManifest: manifest(),
-  submissionHasHead: readRel("docs/SUBMISSION.md").includes(head),
+  submissionHasHead: submissionText.includes(head),
+  submissionHasSyncMarker: submissionText.includes("## Current Submission Sync Marker"),
+  submissionUsesSponsorFanoutLinks: ["#0g", "#gensyn-axl", "#ens"].every((anchor) =>
+    submissionText.includes(`https://github.com/DarthStormerXII/ledger${anchor}`),
+  ),
   codeAnchors: {
     zeroG: anchor("agents/ledger-agent-kit/src/runtime.ts", "export class LedgerAgentRuntime"),
     gensyn: anchor("agents/axl-client/src/index.ts", "async send("),
@@ -153,7 +158,10 @@ for (const [path, status] of Object.entries(state.live)) {
   if (status !== 200) material.push(`${liveBase}${path} returned ${status}`);
 }
 if (!state.contractManifest) material.push("proofs/data/contract-verification.json is missing");
-if (!state.submissionHasHead) material.push("docs/SUBMISSION.md does not contain current HEAD");
+if (!state.submissionHasSyncMarker) material.push("docs/SUBMISSION.md is missing the sync marker");
+if (!state.submissionUsesSponsorFanoutLinks) {
+  material.push("docs/SUBMISSION.md line-of-code fields do not use sponsor fanout links");
+}
 if (state.staleHits.length) material.push("stale redeploy addresses or tx hashes found");
 if (state.dirty.some((entry) => entry.includes("proofs/data/contract-verification.json"))) {
   material.push("contract verification manifest is not committed yet");
@@ -171,6 +179,10 @@ if (process.argv.includes("--json")) {
   process.stdout.write(`Subject: ${state.headSubject}\n`);
   process.stdout.write(`origin/main: ${state.originMain}\n`);
   process.stdout.write(`Dirty entries: ${state.dirty.length}\n`);
+  process.stdout.write(`Submission sync marker: ${state.submissionHasSyncMarker ? "present" : "missing"}\n`);
+  process.stdout.write(
+    `Submission contains current HEAD: ${state.submissionHasHead ? "yes" : "no"} (diagnostic only)\n`,
+  );
   process.stdout.write(`Material update needed: ${state.materialUpdateNeeded ? "yes" : "no"}\n`);
   if (material.length) {
     process.stdout.write(`Reasons:\n${material.map((r) => `- ${r}`).join("\n")}\n`);

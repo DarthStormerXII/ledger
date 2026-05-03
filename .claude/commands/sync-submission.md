@@ -58,15 +58,15 @@ If the state changed, update the sync marker in `docs/SUBMISSION.md` before touc
   - Ledger contracts on 0G Galileo are ChainScan exact-match verified
   - LedgerOffchainResolver on Sepolia is Sourcify verified
   - ERC-8004 Base Sepolia contracts are external references, not Ledger deployments
-- commit-pinned line-of-code URLs
+- sponsor line-of-code / proof-fanout links
 
-Run `node tools/submission/sync-state.mjs --json` again. Continue only when `submissionHasHead=true` and stale hits are empty.
+Run `node tools/submission/sync-state.mjs --json` again. Continue only when public refs are current, live routes are HTTP 200, the contract manifest is present, stale hits are empty, and `materialUpdateNeeded=false`. `submissionHasHead` is diagnostic only because a committed file cannot reliably contain its own final commit hash.
 
 ## Phase 3 — Decide Whether ETHGlobal Needs Editing
 
 Only update the live ETHGlobal draft for material changes:
 
-- repository URL or commit-pinned code anchors changed
+- repository URL or sponsor proof-fanout links changed
 - live deployment/proof URL changed
 - contract addresses, verification status, or proof files changed
 - sponsor prize text changed
