@@ -25,6 +25,10 @@ export type AxlMessage = {
 // the same node process. Acceptable for the single-process demo bridge.
 const ring: AxlMessage[] = [];
 
+// Cursor into the local bids JSONL feed. We track how many lines we've
+// already drained so we don't re-emit the same BIDs every poll.
+let feedCursor = 0;
+
 function pushRing(msg: AxlMessage) {
   ring.push(msg);
   if (ring.length > RING_CAP) ring.splice(0, ring.length - RING_CAP);
@@ -79,7 +83,34 @@ export async function GET(req: Request) {
   const taskId = url.searchParams.get("taskId")?.toLowerCase();
 
   const drainResult = await drainUpstream();
-  if (!drainResult.ok && ring.length === 0) {
+
+  // Local feed sidecar — see worker-agent.mjs and feed-server.mjs.
+  // AXL drops self-addressed messages so when the bridge is co-located with
+  // worker subscribers (single-host demo), BIDs back to the buyer never land
+  // in /recv. The feed-server on port 9003 mirrors the bids/tasks JSONL
+  // files and we drain it here.
+  let feedDrained = 0;
+  try {
+    const resp = await fetch(`${AXL_BRIDGE}/feed/bids?since=${feedCursor}`, {
+      cache: "no-store",
+      signal: AbortSignal.timeout(2000),
+    });
+    if (resp.ok) {
+      const body = (await resp.json()) as {
+        lines?: unknown[];
+        total?: number;
+      };
+      for (const payload of body.lines ?? []) {
+        pushRing({ receivedAt: Date.now(), payload });
+        feedDrained++;
+      }
+      if (typeof body.total === "number") feedCursor = body.total;
+    }
+  } catch {
+    /* feed offline is fine — ring still has prior messages */
+  }
+
+  if (!drainResult.ok && feedDrained === 0 && ring.length === 0) {
     return NextResponse.json(
       {
         error: "axl_bridge_unavailable",
@@ -104,7 +135,7 @@ export async function GET(req: Request) {
   return NextResponse.json({
     ok: true,
     bridge: AXL_BRIDGE,
-    drained: drainResult.drained,
+    drained: drainResult.drained + feedDrained,
     bufferSize: ring.length,
     messages: out,
   });

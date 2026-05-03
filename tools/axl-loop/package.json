@@ -1,0 +1,13 @@
+{
+  "name": "@ledger/axl-loop",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "bridge": "node task-bridge.mjs",
+    "worker": "node worker-agent.mjs"
+  },
+  "dependencies": {
+    "viem": "^2.48.8"
+  }
+}
