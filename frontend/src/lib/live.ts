@@ -9,7 +9,13 @@
  * That's deliberate: we want the dashboard to be honest about what's on chain.
  */
 
-import { type Address, type Hex, parseAbiItem, formatEther } from "viem";
+import {
+  type Address,
+  type Hex,
+  parseAbiItem,
+  formatEther,
+  formatUnits,
+} from "viem";
 import { galileoClient, baseSepoliaClient } from "./clients";
 import {
   WORKER_INFT_ADDRESS,
@@ -207,6 +213,9 @@ export function liveLotToLot(l: LiveLot): Lot {
     rating: l.rating,
     earned: l.earned,
     earnedNum: l.earnedNum,
+    // No marketplace listing primitive on chain yet — every lot is "not
+    // listed" until LedgerEscrow gets a listing surface. The marketplace
+    // page therefore renders empty by design (see app/marketplace/page).
     listed: false,
     avatar: l.avatar,
     mintedAt: "—",
@@ -299,10 +308,15 @@ export async function getAllLots(): Promise<LiveLot[]> {
           })) as readonly [bigint, bigint, number];
           jobs = Number(summary[0]);
           ratingRaw = summary[1];
+          const decimals = summary[2];
           if (jobs > 0) {
-            // sumValue / count, then divide by 10^valueDecimals
-            const avg = Number(ratingRaw / BigInt(jobs)) / 1e18;
-            rating = Math.round(avg * 100) / 100;
+            // ERC-8004's `sumValue` field returns the running AVERAGE
+            // already scaled by 10^valueDecimals, despite the misleading
+            // name. Confirmed empirically: 47 records targeting 4.77 avg
+            // returns sumValue=4770212765957446808 (= 4.77e18), not
+            // 47*4.77e18. So we format directly without dividing by count.
+            rating =
+              Math.round(Number(formatUnits(ratingRaw, decimals)) * 100) / 100;
           }
         } catch {
           // leave 0 — UI will show "no reputation yet"
