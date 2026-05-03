@@ -13,3 +13,4 @@
 <!-- 2026-05-03 09:35 IST joanna: research: submission day kickoff notes --> (2)
 <!-- 2026-05-03 11:11 IST joanna: research: pull quote locked --> (3)
 <!-- 2026-05-03 17:41 IST joanna: research: final orphan-mention QA --> (4)
+<!-- 2026-05-03 18:51 IST joanna: research: pre-submission checklist --> (5)
