@@ -844,6 +844,50 @@ function short(s: string, head = 6, tail = 4): string {
   return `${s.slice(0, head)}…${s.slice(-tail)}`;
 }
 
+/**
+ * Format a unix-second deadline as e.g. "May 3, 2026 8:53 PM".
+ * Avoids `toLocaleString()` because it produces locale-dependent output
+ * with seconds ("5/3/2026, 8:53:19 PM") that overflows the deadline card.
+ */
+function formatDeadline(unixSec: number): string {
+  const d = new Date(unixSec * 1000);
+  const month = d.toLocaleString("en-US", { month: "short" });
+  const day = d.getDate();
+  const year = d.getFullYear();
+  let hour = d.getHours();
+  const minutes = String(d.getMinutes()).padStart(2, "0");
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${month} ${day}, ${year} ${hour}:${minutes} ${ampm}`;
+}
+
+/**
+ * Format the on-chain `minReputation` integer back into a human rating.
+ * Two writers in the wild:
+ *   - PostTaskClient encodes as floor(rating * 100), so e.g. 4.5★ → 450.
+ *   - Some demo tasks were posted with a 1e18-scaled value (4.5 * 10^18).
+ * We pick the right scale by magnitude so older receipts still render.
+ */
+function formatMinReputation(raw: string | number | bigint): string {
+  let n: bigint;
+  try {
+    n = typeof raw === "bigint" ? raw : BigInt(String(raw));
+  } catch {
+    return String(raw);
+  }
+  if (n === 0n) return "0 ★";
+  const denom =
+    n >= 10_000_000_000_000n
+      ? 1_000_000_000_000_000_000n // 1e18 scale
+      : 100n; // *100 scale
+  // Get value with one decimal place by scaling up first.
+  const tenths = (n * 10n) / denom;
+  const whole = tenths / 10n;
+  const frac = tenths % 10n;
+  const numeric = frac === 0n ? `${whole}` : `${whole}.${frac}`;
+  return `${numeric} ★`;
+}
+
 // Short note shown in the BID HISTORY slot when the task has resolved and
 // the AXL ring has nothing for the taskId — happens often because the
 // auction closes before the bridge captures anything, or because the
@@ -1082,19 +1126,20 @@ function JobBriefPanel({
       );
     }
     return (
-      <div className="job-brief-panel job-brief-panel-missing">
-        <div className="caps-md" style={{ color: "var(--ledger-warning)" }}>
-          NO BRIEF PINNED FOR THIS TASK
-        </div>
-        <p className="job-brief-missing-body">
-          The on-chain <code>postTask</code> call only stores
-          {" (taskId, payment, deadline, minReputation). "}
-          For tasks posted via the Ledger UI, the human-readable brief (title /
-          description / requirements) is pinned to 0G Storage and referenced
-          through the brief route. This task pre-dates the brief route or was
-          posted out-of-band — only the on-chain receipt is available. taskId:{" "}
-          <span className="mono">{short(taskId, 8, 6)}</span>
-        </p>
+      <div className="job-brief-panel-stub">
+        <span
+          className="caps-sm"
+          style={{ color: "var(--ledger-warning)", letterSpacing: "0.14em" }}
+        >
+          ● NO BRIEF PINNED
+        </span>
+        <span className="caps-sm muted" style={{ fontSize: 11 }}>
+          taskId{" "}
+          <span className="mono" style={{ color: "var(--ledger-paper)" }}>
+            {short(taskId, 6, 4)}
+          </span>{" "}
+          · receipt below
+        </span>
       </div>
     );
   }
@@ -1269,7 +1314,7 @@ function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
               rel="noreferrer noopener"
               className="mono task-receipt-link task-receipt-link-sub"
             >
-              {receipt.worker} on Galileo ↗
+              {short(receipt.worker, 6, 4)} on Galileo ↗
             </a>
             {receipt.workerJobs != null && receipt.workerRating != null ? (
               <div className="task-receipt-card-rep caps-sm muted">
@@ -1304,8 +1349,11 @@ function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
         {/* TIMING */}
         <div className="task-receipt-card">
           <div className="caps-sm muted task-receipt-card-label">DEADLINE</div>
-          <div className="task-receipt-card-value italic-num">
-            {new Date(receipt.deadline * 1000).toLocaleString()}
+          <div
+            className="task-receipt-card-value italic-num task-receipt-card-value-fit"
+            title={new Date(receipt.deadline * 1000).toLocaleString()}
+          >
+            {formatDeadline(receipt.deadline)}
           </div>
           <div className="task-receipt-card-rep caps-sm muted">
             block ·{" "}
@@ -1317,7 +1365,7 @@ function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
             >
               #{receipt.postedBlock}
             </a>{" "}
-            · min reputation {receipt.minReputation}
+            · min reputation {formatMinReputation(receipt.minReputation)}
           </div>
         </div>
 
@@ -1356,14 +1404,12 @@ function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
                 ERC-8004 feedback registry ↗
               </a>
             ) : null}
-            <a
-              href={`https://chainscan-galileo.0g.ai/tx/${receipt.postedTx}#eventlog`}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="mono task-receipt-link"
-            >
-              Event log ↗
-            </a>
+            {/* "Event log" link removed: the postTask tx only emits the
+                TaskPosted event, which is one of many events in the lifecycle.
+                AcceptBid, releasePayment, ERC-8004 NewFeedback, and AXL
+                BID/RESULT messages all live in different places — pointing
+                at one tx's event log misrepresented the trail. The contract
+                address link above lets users browse all escrow events. */}
           </div>
         </div>
       </div>
