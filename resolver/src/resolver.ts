@@ -36,7 +36,10 @@ export async function resolveName(
   const parsed = parseLedgerName(name, config.parentName);
 
   if (kind === "addr") {
-    if (parsed.namespace === "who") {
+    // Worker root (`worker-NNN.<parent>`) and `who.*` both resolve to the
+    // current iNFT owner. This makes the ENS app surface a real Address
+    // record for the worker root, matching chase.uni.eth's UX.
+    if (parsed.namespace === "root" || parsed.namespace === "who") {
       return resolveWho(parsed.tokenId, config);
     }
     if (parsed.namespace === "pay") {
@@ -149,6 +152,56 @@ async function resolveText(
 ): Promise<string> {
   if (!key) return "";
 
+  if (parsed.namespace === "root") {
+    // Standard ENS keys the ENS app probes — return values so the Profile
+    // tab is populated for the worker root in the explorer.
+    if (key === "description") {
+      return `Ledger worker iNFT (tokenId ${parsed.tokenId.toString()}). Capabilities at who/pay/tx/rep/mem.${parsed.workerLabel}.${parsed.parentName}.`;
+    }
+    if (key === "url") {
+      return `https://ledger-open-agents.vercel.app/agent/${parsed.workerLabel}.${parsed.parentName}`;
+    }
+    if (key === "name") {
+      return `${parsed.workerLabel}.${parsed.parentName}`;
+    }
+    if (key === "notice") {
+      return "ENSIP-10 wildcard + CCIP-Read. Live ownerOf() on 0G Galileo. See ai.ledger.* keys for capability resolvers.";
+    }
+    if (key === "ai.ledger.namespace") {
+      return `root: live 0G Galileo WorkerINFT.ownerOf(${parsed.tokenId.toString()}), chainId=${config.ogChainId}`;
+    }
+    if (key === "ai.ledger.tokenId") {
+      return parsed.tokenId.toString();
+    }
+    if (key === "ai.ledger.capabilities") {
+      const base = `${parsed.workerLabel}.${parsed.parentName}`;
+      return `who.${base},pay.${base},tx.<txid>.${base},rep.${base},mem.${base}`;
+    }
+    if (key === "ai.ledger.registry") {
+      return config.reputationRegistryAddress;
+    }
+    return "";
+  }
+
+  // Standard ENS keys that the ENS app's Profile tab probes for every name.
+  // Returning values here makes who.* / pay.* / rep.* / mem.* render with
+  // real content in the explorer, not "0 records".
+  if (
+    parsed.namespace === "who" ||
+    parsed.namespace === "pay" ||
+    parsed.namespace === "rep" ||
+    parsed.namespace === "mem"
+  ) {
+    const standard = standardTextForNamespace(
+      parsed.namespace,
+      parsed.workerLabel,
+      parsed.tokenId,
+      parsed.parentName,
+      key,
+    );
+    if (standard !== null) return standard;
+  }
+
   if (parsed.namespace === "who") {
     if (key === "ai.ledger.namespace") {
       return `who: live 0G Galileo WorkerINFT.ownerOf(tokenId), chainId=${config.ogChainId}`;
@@ -179,6 +232,36 @@ async function resolveText(
   }
 
   return "";
+}
+
+function standardTextForNamespace(
+  namespace: "who" | "pay" | "rep" | "mem",
+  workerLabel: string,
+  tokenId: bigint,
+  parentName: string,
+  key: string,
+): string | null {
+  const fullName = `${namespace}.${workerLabel}.${parentName}`;
+  const summaries: Record<typeof namespace, string> = {
+    who: `Live ownerOf(${tokenId.toString()}) on 0G Galileo. Address rotates with every iNFT transfer — the resolver follows it cross-chain via CCIP-Read.`,
+    pay: `Fresh HD-derived payment address per resolution for ${workerLabel}. Each query bumps a nonce; the master is a parent xpub. See ai.pay.master.`,
+    rep: `Reputation summary for ${workerLabel} (ERC-8004 agentId ${tokenId.toString()}) on Base Sepolia. See ai.rep.* records for count, average, and registry address.`,
+    mem: `Encrypted memory pointer for ${workerLabel}. Returns the 0G Storage CID stored on the iNFT. AES-256-CTR encrypted client-side; re-keyed by the TEE on transfer.`,
+  };
+  switch (key) {
+    case "name":
+      return fullName;
+    case "description":
+      return summaries[namespace];
+    case "url":
+      return `https://ledger-open-agents.vercel.app/agent/${workerLabel}.${parentName}`;
+    case "notice":
+      return `ENSIP-10 wildcard + CCIP-Read. ${namespace}.* namespace for ${workerLabel}. Custom keys: ai.${namespace}.*`;
+    case "avatar":
+      return `https://api.dicebear.com/9.x/shapes/svg?seed=${workerLabel}-${namespace}`;
+    default:
+      return null;
+  }
 }
 
 function nextPayNonce(workerLabel: string): bigint {

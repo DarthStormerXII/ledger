@@ -1,10 +1,14 @@
 import { ensNormalize } from "ethers";
 
-export type Namespace = "who" | "pay" | "tx" | "rep" | "mem";
+// "root" means the worker label itself with no capability prefix
+// (e.g. `worker-001.ledger.eth`). It resolves to the live owner address
+// — same value as `who.*` — so the ENS app surfaces a real Address record
+// for the worker root, matching how chase.uni.eth / jesse.base.eth behave.
+export type Namespace = "root" | "who" | "pay" | "tx" | "rep" | "mem";
 
 export type ParsedName =
   | {
-      namespace: "who" | "pay" | "rep" | "mem";
+      namespace: "root" | "who" | "pay" | "rep" | "mem";
       workerLabel: string;
       tokenId: bigint;
       parentName: string;
@@ -50,8 +54,21 @@ export function parseLedgerName(
   }
 
   const relative = labels.slice(0, labels.length - parentLabels.length);
-  if (relative.length < 2) {
-    throw new Error(`Name ${name} does not include a capability namespace`);
+  if (relative.length === 0) {
+    throw new Error(`Name ${name} is the parent itself`);
+  }
+
+  // 1 label: worker root — `worker-NNN.<parent>`. Resolves like `who.*` so the
+  // ENS app shows an Address record for the worker name itself (matching
+  // chase.uni.eth / jesse.base.eth which resolve at the worker root too).
+  if (relative.length === 1) {
+    const [workerLabel] = relative;
+    return {
+      namespace: "root",
+      workerLabel,
+      tokenId: tokenIdFromWorker(workerLabel),
+      parentName,
+    };
   }
 
   const [namespace] = relative;
