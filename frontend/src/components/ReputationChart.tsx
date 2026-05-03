@@ -1,20 +1,63 @@
-// Static SVG line chart — direct port of the handoff component.
-const POINTS = [
-  3.2, 3.6, 4.0, 4.2, 4.1, 4.3, 4.5, 4.4, 4.6, 4.7, 4.7, 4.8, 4.7,
-];
+// Live ERC-8004 reputation history chart. Each point is a real NewFeedback
+// event on Base Sepolia, plotted in chronological order with the per-feedback
+// rating value (rather than the cumulative average — judges should see the
+// underlying signal, not a smoothed line). When the agent has no feedback yet
+// we show an explicit empty state instead of inventing points.
 
-export function ReputationChart() {
+export type RepPoint = { unixSec: number; value: number };
+
+function fmtDate(unixSec: number): string {
+  const d = new Date(unixSec * 1000);
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+}
+
+export function ReputationChart({ points }: { points?: RepPoint[] }) {
+  if (!points || points.length === 0) {
+    return (
+      <div
+        style={{
+          padding: "32px 0",
+          color: "rgba(245,241,232,0.5)",
+          fontSize: 13,
+          fontStyle: "italic",
+        }}
+      >
+        No ERC-8004 feedback recorded for this agent yet — chart populates once
+        the first <span className="mono">NewFeedback</span> event lands on Base
+        Sepolia.
+      </div>
+    );
+  }
+  // Single-point chart: still render the dot + axis label, no line.
   const w = 1000;
   const h = 200;
-  const xStep = w / (POINTS.length - 1);
-  const ymin = 2.5;
+  const ymin = 0;
   const ymax = 5;
-  const path = POINTS.map(
-    (p, i) =>
-      `${i === 0 ? "M" : "L"} ${i * xStep} ${
-        h - ((p - ymin) / (ymax - ymin)) * h
-      }`,
-  ).join(" ");
+  const xStep = points.length > 1 ? w / (points.length - 1) : 0;
+  const path = points
+    .map(
+      (p, i) =>
+        `${i === 0 ? "M" : "L"} ${i * xStep} ${
+          h - ((p.value - ymin) / (ymax - ymin)) * h
+        }`,
+    )
+    .join(" ");
+  const first = points[0];
+  const last = points[points.length - 1];
   return (
     <div style={{ width: "100%", height: 240, position: "relative" }}>
       <svg
@@ -35,18 +78,20 @@ export function ReputationChart() {
             strokeWidth="1"
           />
         ))}
-        <path
-          d={path}
-          fill="none"
-          stroke="var(--ledger-oxblood)"
-          strokeWidth="2"
-          vectorEffect="non-scaling-stroke"
-        />
-        {POINTS.map((p, i) => (
+        {points.length > 1 && (
+          <path
+            d={path}
+            fill="none"
+            stroke="var(--ledger-oxblood)"
+            strokeWidth="2"
+            vectorEffect="non-scaling-stroke"
+          />
+        )}
+        {points.map((p, i) => (
           <circle
             key={i}
-            cx={i * xStep}
-            cy={h - ((p - ymin) / (ymax - ymin)) * h}
+            cx={points.length > 1 ? i * xStep : w / 2}
+            cy={h - ((p.value - ymin) / (ymax - ymin)) * h}
             r="3"
             fill="var(--ledger-oxblood)"
           />
@@ -60,10 +105,15 @@ export function ReputationChart() {
         }}
       >
         <span className="mono muted" style={{ fontSize: 11 }}>
-          2026-04-14
+          {fmtDate(first.unixSec)}
         </span>
         <span className="mono muted" style={{ fontSize: 11 }}>
-          2026-05-02
+          {points.length === 1
+            ? `1 feedback`
+            : `${points.length} feedbacks · live ERC-8004`}
+        </span>
+        <span className="mono muted" style={{ fontSize: 11 }}>
+          {fmtDate(last.unixSec)}
         </span>
       </div>
     </div>
