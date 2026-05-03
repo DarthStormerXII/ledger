@@ -23,6 +23,51 @@ import {
 
 type DerivedStatus = "open" | "accepted" | "settled" | "cancelled" | "slashed";
 type ViewMode = "grid" | "table";
+type Category =
+  | "research"
+  | "data"
+  | "code"
+  | "creative"
+  | "ops"
+  | "trading"
+  | "other";
+
+type Brief = {
+  title: string;
+  description: string;
+  category: Category;
+  tags?: string[];
+  postedBy?: string;
+};
+type BriefEntry = {
+  taskId: string;
+  cid: string;
+  pinned: boolean;
+  brief: Brief;
+};
+type BriefsResponse = {
+  ok?: boolean;
+  briefs?: BriefEntry[];
+};
+
+const CATEGORY_LABEL: Record<Category, string> = {
+  research: "Research",
+  data: "Data",
+  code: "Code",
+  creative: "Creative",
+  ops: "Ops",
+  trading: "Trading",
+  other: "Other",
+};
+const CATEGORIES: Category[] = [
+  "research",
+  "data",
+  "code",
+  "creative",
+  "ops",
+  "trading",
+  "other",
+];
 
 const VIEW_STORAGE_KEY = "ledger.jobs.view";
 
@@ -107,10 +152,35 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
   const router = useRouter();
   const [tick, setTick] = useState(0);
   const [inspectJobId, setInspectJobId] = useState<string | null>(null);
-  // viewMode lives in localStorage; useStoredViewMode handles SSR snapshot
-  // ("grid"), client hydration, and storage-event sync without a
-  // setState-in-effect.
   const [viewMode, setView] = useStoredViewMode();
+
+  // Fetch all known briefs once on mount and re-poll every 6s so newly-posted
+  // tasks pick up their brief shortly after the buyer redirects here.
+  const [briefs, setBriefs] = useState<Map<string, BriefEntry>>(new Map());
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const r = await fetch("/api/jobs/brief", { cache: "no-store" });
+        if (!r.ok) return;
+        const body: BriefsResponse = await r.json();
+        if (cancelled || !body.briefs) return;
+        const next = new Map<string, BriefEntry>();
+        for (const b of body.briefs) next.set(b.taskId.toLowerCase(), b);
+        setBriefs(next);
+      } catch {
+        /* best-effort */
+      }
+    };
+    load();
+    const id = window.setInterval(load, 6000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, []);
+
+  const [activeCategory, setActiveCategory] = useState<Category | "all">("all");
 
   const hasLive = jobs.some((j) => {
     const s = deriveStatus(j.title);
@@ -122,6 +192,14 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
     return () => window.clearInterval(id);
   }, [hasLive]);
 
+  const visibleJobs =
+    activeCategory === "all"
+      ? jobs
+      : jobs.filter(
+          (j) =>
+            briefs.get(j.id.toLowerCase())?.brief.category === activeCategory,
+        );
+
   const inspectJob = jobs.find((j) => j.id === inspectJobId);
 
   const counts = jobs.reduce(
@@ -132,6 +210,20 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
     },
     {} as Record<DerivedStatus, number>,
   );
+
+  // Per-category counts (over all jobs, not just the visible filtered set).
+  const categoryCounts = (() => {
+    const c: Partial<Record<Category, number>> = {};
+    for (const j of jobs) {
+      const cat = briefs.get(j.id.toLowerCase())?.brief.category;
+      if (cat) c[cat] = (c[cat] ?? 0) + 1;
+    }
+    return c;
+  })();
+
+  const briefedCount = Array.from(briefs.values()).filter((b) =>
+    jobs.some((j) => j.id.toLowerCase() === b.taskId),
+  ).length;
 
   const openInspect = (id: string) => setInspectJobId(id);
   const openAuction = (id: string) => router.push(`/jobs/${id}`);
@@ -198,6 +290,36 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
         </div>
       </div>
 
+      {jobs.length > 0 && (
+        <div className="jobs-filter-bar">
+          <button
+            type="button"
+            className={`jobs-filter-chip ${activeCategory === "all" ? "is-active" : ""}`}
+            onClick={() => setActiveCategory("all")}
+          >
+            All <span className="jobs-filter-count">{jobs.length}</span>
+          </button>
+          {CATEGORIES.map((cat) => {
+            const n = categoryCounts[cat] ?? 0;
+            return (
+              <button
+                key={cat}
+                type="button"
+                disabled={n === 0}
+                className={`jobs-filter-chip ${activeCategory === cat ? "is-active" : ""}`}
+                onClick={() => setActiveCategory(cat)}
+              >
+                {CATEGORY_LABEL[cat]}{" "}
+                <span className="jobs-filter-count">{n}</span>
+              </button>
+            );
+          })}
+          <span className="jobs-filter-meta">
+            {briefedCount} of {jobs.length} have a 0G-pinned brief
+          </span>
+        </div>
+      )}
+
       {jobs.length === 0 && (
         <div className="job-empty">
           <div className="caps-md muted" style={{ marginBottom: 8 }}>
@@ -215,18 +337,38 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
         </div>
       )}
 
-      {jobs.length > 0 && viewMode === "grid" && (
+      {jobs.length > 0 && visibleJobs.length === 0 && (
+        <div className="job-empty">
+          <div className="caps-md muted" style={{ marginBottom: 8 }}>
+            NO TASKS IN{" "}
+            {CATEGORY_LABEL[activeCategory as Category].toUpperCase()}
+          </div>
+          <div style={{ color: "var(--ledger-ink-muted)", marginBottom: 16 }}>
+            Try a different category or clear the filter.
+          </div>
+          <button
+            className="btn btn-italic"
+            onClick={() => setActiveCategory("all")}
+          >
+            Clear filter →
+          </button>
+        </div>
+      )}
+
+      {visibleJobs.length > 0 && viewMode === "grid" && (
         <JobsGrid
-          jobs={jobs}
+          jobs={visibleJobs}
+          briefs={briefs}
           tick={tick}
           onInspect={openInspect}
           onOpen={openAuction}
         />
       )}
 
-      {jobs.length > 0 && viewMode === "table" && (
+      {visibleJobs.length > 0 && viewMode === "table" && (
         <JobsTable
-          jobs={jobs}
+          jobs={visibleJobs}
+          briefs={briefs}
           tick={tick}
           onInspect={openInspect}
           onOpen={openAuction}
@@ -253,11 +395,13 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
 // ────────────────────────────────────────────────────────────────────────────
 function JobsGrid({
   jobs,
+  briefs,
   tick,
   onInspect,
   onOpen,
 }: {
   jobs: Job[];
+  briefs: Map<string, BriefEntry>;
   tick: number;
   onInspect: (id: string) => void;
   onOpen: (id: string) => void;
@@ -271,6 +415,11 @@ function JobsGrid({
         const expired = isLive && t === 0;
         const timerColor =
           t < 30 && t > 0 ? "var(--ledger-gold-leaf)" : "var(--ledger-oxblood)";
+        const brief = briefs.get(j.id.toLowerCase())?.brief;
+        const titleText = brief?.title ?? "Untitled task";
+        const descText =
+          brief?.description ??
+          "Brief not pinned (pre-registry task) — full receipt on chain.";
         return (
           <div
             key={j.id}
@@ -283,9 +432,27 @@ function JobsGrid({
             }}
           >
             <div className="job-card-head">
-              <span className={`job-status-pill status-${status}`}>
-                ● {STATUS_LABEL[status]}
-              </span>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  flexWrap: "wrap",
+                }}
+              >
+                <span className={`job-status-pill status-${status}`}>
+                  ● {STATUS_LABEL[status]}
+                </span>
+                {brief ? (
+                  <span
+                    className={`category-chip is-static cat-${brief.category}`}
+                  >
+                    {CATEGORY_LABEL[brief.category]}
+                  </span>
+                ) : (
+                  <span className="job-card-no-brief">No 0G brief</span>
+                )}
+              </div>
               {isLive ? (
                 <div className="job-card-timer">
                   <span
@@ -321,8 +488,8 @@ function JobsGrid({
             </div>
 
             <div>
-              <div className="job-card-title">{j.title}.</div>
-              <div className="job-card-desc">{j.desc}</div>
+              <div className="job-card-title">{titleText}.</div>
+              <div className="job-card-desc">{descText}</div>
             </div>
 
             <div className="job-card-band">
@@ -387,11 +554,13 @@ function JobsGrid({
 // ────────────────────────────────────────────────────────────────────────────
 function JobsTable({
   jobs,
+  briefs,
   tick,
   onInspect,
   onOpen,
 }: {
   jobs: Job[];
+  briefs: Map<string, BriefEntry>;
   tick: number;
   onInspect: (id: string) => void;
   onOpen: (id: string) => void;
@@ -403,6 +572,7 @@ function JobsTable({
           <tr>
             <th>Status</th>
             <th>Task</th>
+            <th>Category</th>
             <th className="num">Payout</th>
             <th className="num">Bid</th>
             <th className="num">Bids</th>
@@ -422,6 +592,8 @@ function JobsTable({
                 ? "var(--ledger-gold-leaf)"
                 : "var(--ledger-oxblood)";
             const taskIdShort = `${j.id.slice(0, 8)}…${j.id.slice(-4)}`;
+            const brief = briefs.get(j.id.toLowerCase())?.brief;
+            const titleText = brief?.title ?? "Untitled task";
             return (
               <tr
                 key={j.id}
@@ -438,8 +610,21 @@ function JobsTable({
                   </span>
                 </td>
                 <td>
-                  <div className="jobs-table-task">{j.title}</div>
+                  <div className="jobs-table-task">{titleText}</div>
                   <div className="mono jobs-table-task-id">{taskIdShort}</div>
+                </td>
+                <td>
+                  {brief ? (
+                    <span
+                      className={`category-chip is-static cat-${brief.category}`}
+                    >
+                      {CATEGORY_LABEL[brief.category]}
+                    </span>
+                  ) : (
+                    <span className="muted" style={{ fontSize: 11 }}>
+                      —
+                    </span>
+                  )}
                 </td>
                 <td className="num italic-num jobs-table-payout">{j.payout}</td>
                 <td className="num mono jobs-table-bid">

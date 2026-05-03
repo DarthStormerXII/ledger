@@ -1753,6 +1753,232 @@ body.surface-ink {
   font-size: 13px;
 }
 
+/* ===== JOBS — category chips + filter bar + brief panel ===== */
+.category-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-family: var(--ledger-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ledger-ink-muted);
+  background: rgba(245, 241, 232, 0.04);
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s,
+    border-color 0.12s;
+}
+.category-chip:hover {
+  color: var(--ledger-paper);
+  border-color: rgba(245, 241, 232, 0.32);
+}
+.category-chip.is-selected {
+  background: var(--ledger-oxblood);
+  color: var(--ledger-paper);
+  border-color: var(--ledger-oxblood);
+}
+.category-chip.is-static {
+  cursor: default;
+  pointer-events: none;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 7px;
+}
+.category-chip.cat-research {
+  color: var(--ledger-gold-leaf);
+  border-color: rgba(200, 168, 92, 0.4);
+}
+.category-chip.cat-data {
+  color: var(--ledger-paper);
+  border-color: rgba(245, 241, 232, 0.32);
+}
+.category-chip.cat-code {
+  color: var(--ledger-success);
+  border-color: rgba(74, 107, 58, 0.5);
+}
+.category-chip.cat-creative {
+  color: var(--ledger-oxblood);
+  border-color: rgba(156, 42, 42, 0.5);
+}
+.category-chip.cat-ops {
+  color: var(--ledger-paper);
+  border-color: rgba(245, 241, 232, 0.24);
+}
+.category-chip.cat-trading {
+  color: var(--ledger-gold-leaf);
+  border-color: rgba(200, 168, 92, 0.32);
+}
+.category-chip.cat-other {
+  color: var(--ledger-ink-muted);
+  border-color: rgba(245, 241, 232, 0.18);
+}
+
+.jobs-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 12px 0;
+  border-top: 1px solid rgba(245, 241, 232, 0.08);
+  border-bottom: 1px solid rgba(245, 241, 232, 0.08);
+}
+.jobs-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  font-family: var(--ledger-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ledger-ink-muted);
+  background: transparent;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  cursor: pointer;
+  transition:
+    background 0.12s,
+    color 0.12s,
+    border-color 0.12s;
+}
+.jobs-filter-chip:hover:not(:disabled) {
+  color: var(--ledger-paper);
+  border-color: rgba(245, 241, 232, 0.32);
+}
+.jobs-filter-chip.is-active {
+  background: var(--ledger-oxblood);
+  color: var(--ledger-paper);
+  border-color: var(--ledger-oxblood);
+}
+.jobs-filter-chip:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+.jobs-filter-count {
+  font-size: 10px;
+  color: rgba(245, 241, 232, 0.55);
+  background: rgba(245, 241, 232, 0.06);
+  padding: 1px 5px;
+}
+.jobs-filter-chip.is-active .jobs-filter-count {
+  color: var(--ledger-paper);
+  background: rgba(245, 241, 232, 0.18);
+}
+.jobs-filter-meta {
+  margin-left: auto;
+  font-family: var(--ledger-font-mono);
+  font-size: 11px;
+  color: var(--ledger-ink-muted);
+}
+
+.job-card-no-brief {
+  font-family: var(--ledger-font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ledger-warning);
+  padding: 3px 7px;
+  border: 1px dashed rgba(184, 132, 58, 0.5);
+}
+
+/* ===== AUCTION ROOM — JOB BRIEF panel ===== */
+.job-brief-panel {
+  margin: 8px 0 24px;
+  padding: 22px 24px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: rgba(245, 241, 232, 0.025);
+}
+.job-brief-panel-loading {
+  background: rgba(245, 241, 232, 0.012);
+  text-align: center;
+}
+.job-brief-panel-missing {
+  border-color: rgba(184, 132, 58, 0.5);
+  background: rgba(184, 132, 58, 0.04);
+}
+.job-brief-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.job-brief-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.job-brief-status {
+  font-family: var(--ledger-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  padding: 3px 8px;
+  border: 1px solid currentColor;
+  text-transform: uppercase;
+}
+.job-brief-status-pinned {
+  color: var(--ledger-success);
+}
+.job-brief-status-pending {
+  color: var(--ledger-warning);
+}
+.job-brief-cid {
+  font-size: 11px;
+  color: var(--ledger-gold-leaf);
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(200, 168, 92, 0.5);
+}
+.job-brief-cid:hover {
+  border-bottom-color: var(--ledger-gold-leaf);
+}
+.job-brief-body {
+  color: var(--ledger-paper);
+  font-size: 15px;
+  line-height: 1.55;
+  margin-bottom: 14px;
+  white-space: pre-wrap;
+}
+.job-brief-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.job-brief-tag {
+  font-family: var(--ledger-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  padding: 3px 8px;
+  background: rgba(245, 241, 232, 0.04);
+  border: 1px solid rgba(245, 241, 232, 0.12);
+  color: var(--ledger-ink-muted);
+}
+.job-brief-reqs {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid rgba(245, 241, 232, 0.1);
+}
+.job-brief-req-val {
+  font-size: 18px;
+  color: var(--ledger-paper);
+  line-height: 1.1;
+  margin-top: 2px;
+}
+.job-brief-missing-body {
+  margin: 10px 0 0;
+  color: var(--ledger-ink-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  max-width: 680px;
+}
+
 /* ===== FOOTER — wrap nicely on mobile ===== */
 @media (max-width: 768px) {
   .footer {
@@ -2597,3 +2823,74 @@ body.surface-ink {
   word-break: break-all;
   line-height: 1.55;
 }
+
+/* ===== WalletGate — drop-in connect/switch prompt ===== */
+
+.walletgate-card {
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: var(--ledger-ink-elevated);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 640px;
+}
+.walletgate-card[data-state="switch"] {
+  border-color: var(--ledger-warning);
+}
+.walletgate-card[data-state="loading"] {
+  opacity: 0.7;
+}
+
+.walletgate-eyebrow {
+  color: var(--ledger-gold-leaf);
+  letter-spacing: 0.14em;
+  font-size: 11px;
+}
+
+.walletgate-heading {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(20px, 2.6vw, 26px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--ledger-paper);
+  margin: 0;
+}
+
+.walletgate-body {
+  font-size: 13px;
+  color: var(--ledger-ink-muted);
+  line-height: 1.6;
+  margin: 0;
+  max-width: 60ch;
+}
+.walletgate-body strong {
+  color: var(--ledger-paper);
+  font-weight: 600;
+}
+.walletgate-body code {
+  font-family: var(--ledger-font-mono);
+  font-size: 0.9em;
+  background: rgba(245, 241, 232, 0.08);
+  color: var(--ledger-paper);
+  padding: 1px 5px;
+}
+
+.walletgate-link {
+  color: var(--ledger-gold-leaf);
+  border-bottom: 1px solid var(--ledger-gold-dim);
+}
+
+.walletgate-cta {
+  margin-top: 4px;
+}
+
+.walletgate-banner {
+  margin-bottom: 16px;
+}
+
+/* On block-mode gate, the card renders as the only content of its slot.
+   Spacing handled by parent .register-section / .post-section etc. */

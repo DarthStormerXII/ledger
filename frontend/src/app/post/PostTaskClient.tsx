@@ -49,6 +49,14 @@ export function PostTaskClient() {
     minRep: "0",
     minJobs: "0",
     tags: "yield, base, defi",
+    category: "research" as
+      | "research"
+      | "data"
+      | "code"
+      | "creative"
+      | "ops"
+      | "trading"
+      | "other",
   });
   // `localPhase` only holds states the UI sets directly. The wagmi-driven
   // states are derived in `phase` below — that avoids mirroring external
@@ -154,6 +162,38 @@ export function PostTaskClient() {
       });
       setSubmittedTx(hash);
       setSubmittedTaskId(taskId);
+
+      // Fire-and-forget pin the brief to 0G Storage via the server route.
+      // We snapshot the form values so later edits don't mutate this brief.
+      const tags = form.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter(Boolean);
+      const briefBody = {
+        taskId,
+        brief: {
+          title: form.title.trim(),
+          description: form.desc.trim(),
+          category: form.category,
+          tags,
+          minReputation: form.minRep,
+          minJobs: form.minJobs,
+          payoutOg: form.payout,
+          bondOg: form.bond,
+          deadlineSec: Number(deadlineSec),
+          postedAtMs: Date.now(),
+          postedBy: address,
+        },
+      };
+      fetch("/api/jobs/brief", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(briefBody),
+      }).catch((err) => {
+        // Brief pinning is best-effort — the on-chain task is already posted.
+        // The auction room shows a "brief not pinned" disclosure if it 404s.
+        console.warn("[post-task] brief pin failed", err);
+      });
     } catch (e) {
       const msg = (e as Error).message ?? "Transaction rejected";
       setErrMsg(msg.length > 200 ? `${msg.slice(0, 200)}…` : msg);
@@ -179,7 +219,11 @@ export function PostTaskClient() {
 
       <Section label="TASK BRIEF">
         <div
-          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 }}
+          style={{
+            display: "grid",
+            gridTemplateColumns: "2fr 3fr",
+            gap: 32,
+          }}
         >
           <Field label="TITLE">
             <input
@@ -196,6 +240,45 @@ export function PostTaskClient() {
               value={form.desc}
               onChange={(e) => set("desc", e.target.value)}
             />
+          </Field>
+        </div>
+        <div style={{ marginTop: 24 }}>
+          <Field label="CATEGORY">
+            <div
+              role="radiogroup"
+              aria-label="Job category"
+              style={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 8,
+              }}
+            >
+              {(
+                [
+                  ["research", "Research"],
+                  ["data", "Data"],
+                  ["code", "Code"],
+                  ["creative", "Creative"],
+                  ["ops", "Ops"],
+                  ["trading", "Trading"],
+                  ["other", "Other"],
+                ] as const
+              ).map(([value, label]) => {
+                const selected = form.category === value;
+                return (
+                  <button
+                    key={value}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    className={`category-chip ${selected ? "is-selected" : ""}`}
+                    onClick={() => setForm((f) => ({ ...f, category: value }))}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
           </Field>
         </div>
       </Section>

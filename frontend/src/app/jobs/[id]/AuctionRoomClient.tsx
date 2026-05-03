@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { Job, Lot } from "@/lib/data";
 import { AxlTopology } from "@/components/AxlTopology";
 import { AXL_CAPTURED_PROOF } from "@/lib/axl-proof";
+import { LEDGER_ESCROW_ADDRESS } from "@/lib/contracts";
 
 /**
  * AuctionRoomClient — live auction view for one task.
@@ -135,6 +136,60 @@ export function AuctionRoomClient({
   );
   const lastErrRef = useRef<string | null>(null);
 
+  // ── Job brief (pinned to 0G Storage, fetched from /api/jobs/brief) ─────
+  const [brief, setBrief] = useState<{
+    title: string;
+    description: string;
+    category: string;
+    tags?: string[];
+    minReputation?: string;
+    minJobs?: string;
+    payoutOg?: string;
+    bondOg?: string;
+    deadlineSec?: number;
+    postedBy?: string;
+  } | null>(null);
+  const [briefCid, setBriefCid] = useState<string | null>(null);
+  const [briefPinned, setBriefPinned] = useState<boolean>(false);
+  const [briefMissing, setBriefMissing] = useState<boolean>(false);
+  useEffect(() => {
+    let cancelled = false;
+    async function loadBrief() {
+      try {
+        const r = await fetch(
+          `/api/jobs/brief?taskId=${encodeURIComponent(job.id)}`,
+          { cache: "no-store" },
+        );
+        if (cancelled) return;
+        if (r.status === 404) {
+          setBriefMissing(true);
+          return;
+        }
+        if (!r.ok) return;
+        const body = await r.json();
+        if (cancelled) return;
+        if (body?.brief) {
+          setBrief(body.brief);
+          setBriefCid(typeof body.cid === "string" ? body.cid : null);
+          setBriefPinned(!!body.pinned);
+          setBriefMissing(false);
+        }
+      } catch {
+        /* best-effort; surface as "no brief" */
+      }
+    }
+    loadBrief();
+    // Re-poll every 8s for the first ~30s after mount in case the buyer
+    // just landed here from /post and the brief is mid-pin.
+    const id = window.setInterval(loadBrief, 8000);
+    const stop = window.setTimeout(() => window.clearInterval(id), 30000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+      window.clearTimeout(stop);
+    };
+  }, [job.id]);
+
   useEffect(() => {
     let cancelled = false;
     async function poll() {
@@ -190,11 +245,26 @@ export function AuctionRoomClient({
       {/* TOP SECTION */}
       <div className="auction-top">
         <div>
-          <div className="caps-md muted" style={{ marginBottom: 8 }}>
+          <div
+            className="caps-md muted"
+            style={{
+              marginBottom: 8,
+              display: "flex",
+              gap: 10,
+              alignItems: "center",
+              flexWrap: "wrap",
+            }}
+          >
             <TaskIdHover taskId={job.id} /> · LIVE AUCTION
+            {brief ? (
+              <span className={`category-chip is-static cat-${brief.category}`}>
+                {brief.category.charAt(0).toUpperCase() +
+                  brief.category.slice(1)}
+              </span>
+            ) : null}
           </div>
-          <h1 className="auction-title">{job.title}.</h1>
-          <p className="auction-desc">{job.desc}</p>
+          <h1 className="auction-title">{brief?.title ?? "Untitled task"}.</h1>
+          <p className="auction-desc">{brief?.description ?? job.desc}</p>
         </div>
         <div className="auction-clock">
           <div
@@ -230,6 +300,17 @@ export function AuctionRoomClient({
           </div>
         </div>
       </div>
+
+      {/* JOB BRIEF — actual task content pinned to 0G Storage. Title and
+          description come from the brief; this panel surfaces the structured
+          requirements + the 0G CID so judges can verify the brief on-chain. */}
+      <JobBriefPanel
+        brief={brief}
+        cid={briefCid}
+        pinned={briefPinned}
+        missing={briefMissing}
+        taskId={job.id}
+      />
 
       {/* RICH RECEIPT PANEL — for tasks past the "Posted" state, the
           bid grid is empty by design; instead we show the full on-chain
@@ -664,6 +745,140 @@ function TaskIdHover({ taskId }: { taskId: string }) {
   );
 }
 
+// JobBriefPanel — surfaces the actual task content (title, description,
+// requirements, tags) plus the 0G Storage CID where the brief is pinned.
+function JobBriefPanel({
+  brief,
+  cid,
+  pinned,
+  missing,
+  taskId,
+}: {
+  brief: {
+    title: string;
+    description: string;
+    category: string;
+    tags?: string[];
+    minReputation?: string;
+    minJobs?: string;
+    payoutOg?: string;
+    bondOg?: string;
+    deadlineSec?: number;
+    postedBy?: string;
+  } | null;
+  cid: string | null;
+  pinned: boolean;
+  missing: boolean;
+  taskId: string;
+}) {
+  if (!brief) {
+    if (!missing) {
+      return (
+        <div className="job-brief-panel job-brief-panel-loading">
+          <div className="caps-md muted">FETCHING JOB BRIEF FROM 0G…</div>
+        </div>
+      );
+    }
+    return (
+      <div className="job-brief-panel job-brief-panel-missing">
+        <div className="caps-md" style={{ color: "var(--ledger-warning)" }}>
+          NO BRIEF PINNED FOR THIS TASK
+        </div>
+        <p className="job-brief-missing-body">
+          The on-chain <code>postTask</code> call only stores
+          {" (taskId, payment, deadline, minReputation). "}
+          For tasks posted via the Ledger UI, the human-readable brief (title /
+          description / requirements) is pinned to 0G Storage and referenced
+          through the brief route. This task pre-dates the brief route or was
+          posted out-of-band — only the on-chain receipt is available. taskId:{" "}
+          <span className="mono">{short(taskId, 8, 6)}</span>
+        </p>
+      </div>
+    );
+  }
+  const ogStorageHref = cid
+    ? `https://storagescan-galileo.0g.ai/file/${cid.replace(/^0g:\/\//, "").split("?")[0]}`
+    : null;
+  return (
+    <div className="job-brief-panel">
+      <div className="job-brief-head">
+        <div className="caps-md muted">JOB BRIEF · PINNED ON 0G STORAGE</div>
+        <div className="job-brief-meta">
+          {pinned ? (
+            <span className="job-brief-status job-brief-status-pinned">
+              ● PINNED
+            </span>
+          ) : (
+            <span className="job-brief-status job-brief-status-pending">
+              ● PIN PENDING
+            </span>
+          )}
+          {cid ? (
+            ogStorageHref ? (
+              <a
+                href={ogStorageHref}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mono job-brief-cid"
+                title={cid}
+              >
+                {short(cid, 14, 8)} ↗
+              </a>
+            ) : (
+              <span className="mono job-brief-cid">{short(cid, 14, 8)}</span>
+            )
+          ) : null}
+        </div>
+      </div>
+
+      <div className="job-brief-body">{brief.description}</div>
+
+      {brief.tags && brief.tags.length > 0 ? (
+        <div className="job-brief-tags">
+          {brief.tags.map((t) => (
+            <span key={t} className="job-brief-tag">
+              {t}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="job-brief-reqs">
+        {brief.minReputation && Number(brief.minReputation) > 0 ? (
+          <div>
+            <div className="caps-sm muted">MIN REPUTATION</div>
+            <div className="italic-num job-brief-req-val">
+              {brief.minReputation}
+            </div>
+          </div>
+        ) : null}
+        {brief.minJobs && Number(brief.minJobs) > 0 ? (
+          <div>
+            <div className="caps-sm muted">MIN JOBS</div>
+            <div className="italic-num job-brief-req-val">{brief.minJobs}</div>
+          </div>
+        ) : null}
+        {brief.payoutOg ? (
+          <div>
+            <div className="caps-sm muted">POSTED PAYOUT</div>
+            <div className="italic-num job-brief-req-val">
+              {brief.payoutOg} 0G
+            </div>
+          </div>
+        ) : null}
+        {brief.bondOg ? (
+          <div>
+            <div className="caps-sm muted">SUGGESTED BOND</div>
+            <div className="italic-num job-brief-req-val">
+              {brief.bondOg} 0G
+            </div>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 // TaskReceiptPanel — rich on-chain detail for tasks past the auction phase.
 // Shows the winning worker (with reputation), bid + bond + payment math,
@@ -676,7 +891,7 @@ function TaskReceiptPanel({ receipt }: { receipt: LiveJobReceipt }) {
     `https://chainscan-galileo.0g.ai/address/${a}`;
   const ensApp = (n: string) =>
     `https://sepolia.app.ens.domains/${encodeURIComponent(n)}`;
-  const escrowAddr = "0x12D2162F47AAAe1B0591e898648605daA186D644";
+  const escrowAddr = LEDGER_ESCROW_ADDRESS;
   const erc8004 = "0x8004B663056A597Dffe9eCcC1965A193B7388713";
 
   const STATUS_TONE: Record<
