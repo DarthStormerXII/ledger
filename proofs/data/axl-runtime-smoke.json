@@ -1,0 +1,38 @@
+{
+  "capturedAt": "2026-05-02T16:48:32.646Z",
+  "api": "LedgerAxlRuntime.postTask/startPubSub",
+  "topic": "#ledger-jobs",
+  "taskId": "0x72756e74696d652d736d6f6b652d31373737373430353037393736",
+  "latencyMs": 1522,
+  "received": [
+    {
+      "node": "worker",
+      "message": {
+        "type": "TASK_POSTED",
+        "version": "1.0",
+        "taskId": "0x72756e74696d652d736d6f6b652d31373737373430353037393736",
+        "buyer": "0xBuyer",
+        "task": {
+          "title": "Runtime smoke",
+          "deadlineSeconds": 120
+        },
+        "postedAt": 1777740507
+      }
+    },
+    {
+      "node": "local",
+      "message": {
+        "type": "TASK_POSTED",
+        "version": "1.0",
+        "taskId": "0x72756e74696d652d736d6f6b652d31373737373430353037393736",
+        "buyer": "0xBuyer",
+        "task": {
+          "title": "Runtime smoke",
+          "deadlineSeconds": 120
+        },
+        "postedAt": 1777740507
+      }
+    }
+  ],
+  "pass": true
+}

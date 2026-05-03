@@ -1,0 +1,161 @@
+{
+  "capturedAt": "2026-05-02T16:28:38Z",
+  "hosts": {
+    "node-buyer-bootstrap": {
+      "provider": "Fly.io",
+      "region": "sjc",
+      "publicTcp": "66.51.123.38:9001",
+      "bridgeProxy": "http://127.0.0.1:9101 via fly proxy",
+      "app": "ledger-axl-usw-180526"
+    },
+    "node-worker-1": {
+      "provider": "Fly.io",
+      "region": "fra",
+      "publicTcp": "77.83.143.142:9001",
+      "bridgeProxy": "http://127.0.0.1:9102 via fly proxy",
+      "app": "ledger-axl-euc-180526"
+    },
+    "node-worker-2": {
+      "provider": "local",
+      "host": "Noir.local",
+      "nat": "residential/outbound-only",
+      "supervisor": "launchd gui/501/com.ledger.axl"
+    }
+  },
+  "topologies": {
+    "node-buyer-bootstrap": {
+      "our_ipv6": "200:b53e:9da0:323d:29c6:ead6:88cc:99fc",
+      "our_public_key": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+      "peers": [
+        {
+          "uri": "tls://172.16.15.170:53160",
+          "up": true,
+          "inbound": true,
+          "public_key": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "root": "",
+          "port": 1,
+          "coords": null
+        },
+        {
+          "uri": "tls://172.16.15.170:53162",
+          "up": true,
+          "inbound": true,
+          "public_key": "f274bf0f8dadfa028b75f73cf7b29c927ded368b6703caf403abdb0d9aa1fa64",
+          "root": "",
+          "port": 2,
+          "coords": null
+        }
+      ],
+      "tree": [
+        {
+          "public_key": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 71
+        },
+        {
+          "public_key": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 21
+        },
+        {
+          "public_key": "f274bf0f8dadfa028b75f73cf7b29c927ded368b6703caf403abdb0d9aa1fa64",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 65
+        }
+      ]
+    },
+    "node-worker-1": {
+      "our_ipv6": "200:1b16:81e0:e4a4:bfa:e914:1186:109a",
+      "our_public_key": "f274bf0f8dadfa028b75f73cf7b29c927ded368b6703caf403abdb0d9aa1fa64",
+      "peers": [
+        {
+          "uri": "tls://66.51.123.38:9001",
+          "up": true,
+          "inbound": false,
+          "public_key": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+          "root": "",
+          "port": 1,
+          "coords": null
+        },
+        {
+          "uri": "tls://172.16.9.50:48142",
+          "up": true,
+          "inbound": true,
+          "public_key": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "root": "",
+          "port": 2,
+          "coords": null
+        }
+      ],
+      "tree": [
+        {
+          "public_key": "f274bf0f8dadfa028b75f73cf7b29c927ded368b6703caf403abdb0d9aa1fa64",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 65
+        },
+        {
+          "public_key": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 21
+        },
+        {
+          "public_key": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 71
+        }
+      ]
+    },
+    "node-worker-2": {
+      "our_ipv6": "201:9bc1:7127:ac96:1ca8:6bdb:1823:dc85",
+      "our_public_key": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+      "peers": [
+        {
+          "uri": "tls://66.51.123.38:9001",
+          "up": true,
+          "inbound": false,
+          "public_key": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+          "root": "",
+          "port": 1,
+          "coords": null
+        },
+        {
+          "uri": "tls://77.83.143.142:9001",
+          "up": true,
+          "inbound": false,
+          "public_key": "f274bf0f8dadfa028b75f73cf7b29c927ded368b6703caf403abdb0d9aa1fa64",
+          "root": "",
+          "port": 2,
+          "coords": null
+        }
+      ],
+      "tree": [
+        {
+          "public_key": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 21
+        },
+        {
+          "public_key": "a560b12fe6e16b1c8a94bb99b3019fa6d5f490474c275a31848f022df3a170eb",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 71
+        },
+        {
+          "public_key": "f274bf0f8dadfa028b75f73cf7b29c927ded368b6703caf403abdb0d9aa1fa64",
+          "parent": "590fa3b614da78d5e50939f708dea209e5cfb5e7ae69f1220611d8eefcc95f4c",
+          "sequence": 65
+        }
+      ]
+    }
+  },
+  "recovery": {
+    "localSupervisor": "launchd gui/501/com.ledger.axl",
+    "restartTest": "Killed launchd child PID and verified automatic restart on localhost:9002",
+    "roundtripLog": "proofs/data/axl-launchd-roundtrip.log"
+  },
+  "proofs": {
+    "gossipsubFanout": "proofs/data/axl-gossipsub-fanout.json",
+    "bootstrapKill": "proofs/data/axl-kill-bootstrap.log",
+    "fullCycle": "proofs/data/axl-full-cycle.json",
+    "runtimeSmoke": "proofs/data/axl-runtime-smoke.json"
+  }
+}

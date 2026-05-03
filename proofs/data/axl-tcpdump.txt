@@ -1,0 +1,15 @@
+Connecting to fdaa:2e:19c5:a7b:7ea:2119:a191:2...
+tcpdump: data link type LINUX_SLL2
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on any, link-type LINUX_SLL2 (Linux cooked v2), snapshot length 262144 bytes
+12:44:08.454215 eth0  In  IP 172.16.15.170.59886 > 172.19.15.170.9001: Flags [.], ack 1388585212, win 57, options [nop,nop,TS val 4074830424 ecr 409120686], length 0
+12:44:08.454241 eth0  Out IP 172.19.15.170.9001 > 172.16.15.170.59886: Flags [.], ack 1, win 883, options [nop,nop,TS val 409122705 ecr 4074828405], length 0
+12:44:08.578223 eth0  In  IP 172.16.15.170.57430 > 172.19.15.170.9001: Flags [.], ack 1538248225, win 67, options [nop,nop,TS val 4074830548 ecr 409120827], length 0
+12:44:08.578254 eth0  Out IP 172.19.15.170.9001 > 172.16.15.170.57430: Flags [.], ack 1, win 1003, options [nop,nop,TS val 409122829 ecr 4074828545], length 0
+12:44:13.634246 eth0  In  IP 172.16.15.170.57430 > 172.19.15.170.9001: Flags [.], ack 1, win 67, options [nop,nop,TS val 4074835604 ecr 409122829], length 0
+12:44:13.634247 eth0  In  IP 172.16.15.170.59886 > 172.19.15.170.9001: Flags [.], ack 1, win 57, options [nop,nop,TS val 4074835604 ecr 409122705], length 0
+12:44:13.634279 eth0  Out IP 172.19.15.170.9001 > 172.16.15.170.57430: Flags [.], ack 1, win 1003, options [nop,nop,TS val 409127885 ecr 4074828545], length 0
+12:44:13.634295 eth0  Out IP 172.19.15.170.9001 > 172.16.15.170.59886: Flags [.], ack 1, win 883, options [nop,nop,TS val 409127885 ecr 4074828405], length 0
+8 packets captured
+9 packets received by filter
+0 packets dropped by kernel
