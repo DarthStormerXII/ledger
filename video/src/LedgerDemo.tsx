@@ -18,23 +18,47 @@ const SHOW_CAPTIONS = false;
 
 const sponsorProofs = [
   {
-    sponsor: "ERC-7857",
+    sponsor: "0G",
     logo: "sponsor-0g.png",
-    title: "Workers as ownable assets",
+    title: "Ownable worker assets",
+    proof: "Storage + compute proof",
     bullets: [
-      "Encrypted memory is sealed inside the iNFT — only the current owner can decrypt.",
-      "TEE attestations and compute proofs travel with the worker on transfer.",
-      "An iNFT is more than a tradable profile wrapper — it owns the agent's state.",
+      "Encrypted worker memory is stored as an asset-backed reference.",
+      "Compute proof references move with the worker during transfer.",
+      "0G makes the iNFT more than a tradable profile wrapper.",
     ],
   },
   {
-    sponsor: "ERC-8004",
+    sponsor: "ERC-7857 + ERC-8004",
     logo: "sponsor-erc8004.jpg",
-    title: "Portable on-chain reputation",
+    title: "Ownership + reputation standards",
+    proof: "Portable agent reputation",
     bullets: [
       "Completed jobs and ratings become market-readable reputation data.",
-      "Workers can be compared before a bid wins, not only after execution.",
-      "47 signed feedback records on agentId 5444, average 4.77 — verifiable now.",
+      "Workers can be compared before a bid wins.",
+      "47 signed feedback records, 4.77 average rating, verifiable now.",
+    ],
+  },
+  {
+    sponsor: "ENS",
+    logo: "sponsor-ens.png",
+    title: "Capability identity",
+    proof: "worker-001.ledger.eth",
+    bullets: [
+      "worker-001.ledger.eth stays stable as the worker changes state.",
+      "Records resolve owner, payment address, task, reputation, and memory.",
+      "The market talks to a name while answers update under that name.",
+    ],
+  },
+  {
+    sponsor: "Gensyn AXL",
+    logo: "sponsor-gensyn.png",
+    title: "Agent coordination",
+    proof: "Peer-to-peer labor mesh",
+    bullets: [
+      "Jobs broadcast peer to peer instead of through one central server.",
+      "Workers discover tasks, submit bids, and receive winner messages.",
+      "The mesh proves coordination across distributed agents.",
     ],
   },
 ];
@@ -246,7 +270,7 @@ const SponsorProofCards = ({ time }: { time: number }) => {
     <AbsoluteFill
       style={{
         background: "#000",
-        padding: "104px 78px 64px",
+        padding: "124px 78px 64px",
         opacity,
         display: "flex",
         flexDirection: "column",
@@ -254,34 +278,10 @@ const SponsorProofCards = ({ time }: { time: number }) => {
     >
       <div
         style={{
-          color: "#e8d4a0",
-          fontSize: 26,
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          marginBottom: 14,
-          flexShrink: 0,
-        }}
-      >
-        ERC standards
-      </div>
-      <div
-        style={{
-          color: "#f4efe3",
-          fontSize: 72,
-          lineHeight: 1.05,
-          fontWeight: 600,
-          letterSpacing: "-0.02em",
-          marginBottom: 36,
-          flexShrink: 0,
-        }}
-      >
-        ERC&#8209;7857 + ERC&#8209;8004.
-      </div>
-      <div
-        style={{
           display: "grid",
           gridTemplateColumns: "1fr 1fr",
-          gap: 36,
+          gridTemplateRows: "1fr 1fr",
+          gap: 20,
           flex: 1,
           minHeight: 0,
           width: "100%",
@@ -311,69 +311,101 @@ const SponsorProofCards = ({ time }: { time: number }) => {
                 opacity: cardOpacity,
                 transform: `translateY(${y}px)`,
                 background:
-                  "linear-gradient(135deg, rgba(244, 239, 227, 0.08), rgba(244, 239, 227, 0.02)), #0f0e0c",
-                borderRadius: 12,
-                padding: "44px 48px 48px",
+                  "linear-gradient(135deg, rgba(244, 239, 227, 0.1), rgba(244, 239, 227, 0.025)), #11100e",
+                borderRadius: 8,
+                padding: "24px 30px 24px",
                 height: "100%",
                 boxShadow: "0 26px 70px rgba(0, 0, 0, 0.42)",
                 display: "flex",
                 flexDirection: "column",
+                overflow: "hidden",
               }}
             >
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  gap: 28,
-                  marginBottom: 32,
+                  gap: 20,
+                  marginBottom: 16,
                   flexShrink: 0,
                 }}
               >
                 <Img
                   src={staticFile(proof.logo)}
                   style={{
-                    width: 132,
-                    height: 132,
+                    width: 102,
+                    height: 96,
                     objectFit: "contain",
                     flexShrink: 0,
                     filter: "drop-shadow(0 18px 34px rgba(0, 0, 0, 0.42))",
                   }}
                 />
                 <div>
-                  <div
-                    style={{
-                      color: "#e8d4a0",
-                      fontSize: 30,
-                      letterSpacing: "0.06em",
-                      marginBottom: 10,
-                    }}
-                  >
+                  <div style={{ color: "#e8d4a0", fontSize: 25, marginBottom: 7 }}>
                     {proof.sponsor}
                   </div>
                   <div
-                    style={{ color: "#f4efe3", fontSize: 40, lineHeight: 1.08 }}
+                    style={{ color: "#f4efe3", fontSize: 33, lineHeight: 1.08 }}
                   >
                     {proof.title}
                   </div>
                 </div>
               </div>
-              <ul
+              <div
                 style={{
                   color: "#d8cfbe",
-                  fontSize: 28,
-                  lineHeight: 1.42,
-                  margin: 0,
-                  marginTop: 6,
-                  paddingLeft: 30,
+                  fontSize: 25,
+                  lineHeight: 1.24,
+                  marginTop: 2,
                   display: "flex",
                   flexDirection: "column",
-                  gap: 16,
+                  justifyContent: "space-between",
+                  flex: 1,
+                  minHeight: 0,
                 }}
               >
-                {proof.bullets.map((bullet) => (
-                  <li key={bullet}>{bullet}</li>
+                {proof.bullets.map((bullet, bulletIndex) => (
+                  <div
+                    key={bullet}
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      paddingTop: bulletIndex === 0 ? 0 : 9,
+                      borderTop:
+                        bulletIndex === 0
+                          ? "none"
+                          : "1px solid rgba(244, 239, 227, 0.12)",
+                    }}
+                  >
+                    <div
+                      style={{
+                        color: "#e8d4a0",
+                        fontSize: 25,
+                        lineHeight: 1.18,
+                        flexShrink: 0,
+                      }}
+                    >
+                      •
+                    </div>
+                    <div>{bullet}</div>
+                  </div>
                 ))}
-              </ul>
+              </div>
+              <div
+                style={{
+                  color: "#e8d4a0",
+                  fontSize: 20,
+                  lineHeight: 1,
+                  letterSpacing: "0.08em",
+                  textTransform: "uppercase",
+                  marginTop: 14,
+                  paddingTop: 12,
+                  borderTop: "1px solid rgba(232, 212, 160, 0.18)",
+                  flexShrink: 0,
+                }}
+              >
+                {proof.proof}
+              </div>
             </div>
           );
         })}
