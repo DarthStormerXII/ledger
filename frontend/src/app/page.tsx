@@ -1,16 +1,45 @@
 import Link from "next/link";
 import { Shell } from "@/components/Shell";
 import { LotPlate } from "@/components/LotPlate";
-import { LOTS, TICKER_EVENTS } from "@/lib/data";
+import {
+  getHallStats,
+  getAllLots,
+  getRecentEvents,
+  liveLotToLot,
+} from "@/lib/live";
+import { formatEther } from "viem";
 
-export default function HallPage() {
-  // Triple the ticker so the marquee loop reads as continuous.
-  const ticker = [...TICKER_EVENTS, ...TICKER_EVENTS, ...TICKER_EVENTS];
+// Live testnet reads — never cache for the demo window.
+export const revalidate = 0;
+
+export default async function HallPage() {
+  // Run reads in parallel; tolerate failures so the page still renders.
+  const [stats, lots, events] = await Promise.all([
+    getHallStats().catch(() => ({
+      activeLots: 0,
+      realizedTotal: 0n,
+      bidsToday: 0,
+      hammerRecord: 0n,
+      hammerLot: undefined,
+    })),
+    getAllLots().catch(() => []),
+    getRecentEvents(12).catch(() => []),
+  ]);
+
+  const realized = formatNum(formatEther(stats.realizedTotal));
+  const hammer = formatNum(formatEther(stats.hammerRecord));
+  const ticker = events.length
+    ? [...events, ...events, ...events]
+    : [
+        {
+          text: "Live testnet — no recent events yet. Mint or post a task to see the feed.",
+          txHash: "0x0",
+        },
+      ];
 
   return (
     <Shell>
       <div className="page">
-        {/* Top rule */}
         <hr className="rule rule-strong" />
 
         {/* HERO BAND */}
@@ -19,7 +48,7 @@ export default function HallPage() {
             className="caps-md"
             style={{ color: "var(--ledger-ink-muted)", marginBottom: 24 }}
           >
-            THIS WEEK
+            REALIZED ON CHAIN
           </div>
           <div
             style={{
@@ -33,7 +62,7 @@ export default function HallPage() {
               fontFeatureSettings: '"tnum"',
             }}
           >
-            47,238.50{" "}
+            {realized}{" "}
             <span
               style={{
                 fontFamily: "var(--ledger-font-body)",
@@ -45,18 +74,18 @@ export default function HallPage() {
                 marginLeft: 12,
               }}
             >
-              USDC
+              0G
             </span>
           </div>
           <div
             className="caps-md"
             style={{ color: "var(--ledger-ink-muted)", marginTop: 24 }}
           >
-            REALIZED ACROSS LEDGER
+            ACROSS ALL LEDGER ESCROW RELEASES
           </div>
         </section>
 
-        {/* MID STAT BAND */}
+        {/* MID STAT BAND — live counts */}
         <hr className="rule rule-strong" />
         <section
           style={{
@@ -65,9 +94,19 @@ export default function HallPage() {
             padding: "32px 40px",
           }}
         >
-          <StatItem value="247" label="Active lots" />
-          <StatItem value="1,847" label="Bids placed today" />
-          <StatItem value="2,400" label="USDC · Hammer record (Lot 047)" gold />
+          <StatItem
+            value={String(stats.activeLots)}
+            label="Active lots (iNFTs minted)"
+          />
+          <StatItem
+            value={String(stats.bidsToday)}
+            label="Bids accepted · last 24h"
+          />
+          <StatItem
+            value={hammer}
+            label={`0G · Largest single release${stats.hammerLot ? ` (${stats.hammerLot})` : ""}`}
+            gold
+          />
         </section>
         <hr className="rule rule-strong" />
 
@@ -99,23 +138,27 @@ export default function HallPage() {
               className="btn-text"
               style={{ color: "var(--ledger-oxblood)", fontSize: 14 }}
             >
-              View all 247 lots →
+              View all {lots.length} lots →
             </Link>
           </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 24,
-            }}
-          >
-            {LOTS.map((l) => (
-              <LotPlate key={l.lot} lot={l} />
-            ))}
-          </div>
+          {lots.length === 0 ? (
+            <EmptyHint message="No iNFTs on chain yet. Run tools/register.ts to mint one." />
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: 24,
+              }}
+            >
+              {lots.slice(0, 4).map((l) => (
+                <LotPlate key={l.lot} lot={liveLotToLot(l)} />
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* TICKER */}
+        {/* TICKER — live event tail */}
         <div
           className="ticker"
           style={{ background: "var(--ledger-paper-warm)" }}
@@ -127,7 +170,7 @@ export default function HallPage() {
                 className="ticker-item"
                 style={{ color: "var(--ledger-ink)" }}
               >
-                {e}{" "}
+                {e.text}{" "}
                 <span className="ticker-sep" style={{ marginLeft: 64 }}>
                   ·
                 </span>
@@ -137,6 +180,32 @@ export default function HallPage() {
         </div>
       </div>
     </Shell>
+  );
+}
+
+function formatNum(s: string) {
+  const n = Number(s);
+  if (!Number.isFinite(n)) return "0.00";
+  return n.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 4,
+  });
+}
+
+function EmptyHint({ message }: { message: string }) {
+  return (
+    <div
+      style={{
+        padding: "60px 40px",
+        textAlign: "center",
+        border: "1px dashed rgba(15,15,18,0.2)",
+        borderRadius: 8,
+        color: "var(--ledger-ink-muted)",
+        fontSize: 14,
+      }}
+    >
+      {message}
+    </div>
   );
 }
 

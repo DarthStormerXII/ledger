@@ -1,11 +1,15 @@
 import { Shell } from "@/components/Shell";
 import { WorkersClient } from "./WorkersClient";
-import { LOTS } from "@/lib/data";
+import { getAllLots, liveLotToLot } from "@/lib/live";
 
-export default function WorkersPage() {
+export const revalidate = 0;
+
+export default async function WorkersPage() {
+  const liveLots = await getAllLots().catch(() => []);
+  const lots = liveLots.map(liveLotToLot);
   return (
     <Shell>
-      <WorkersClient lots={LOTS} />
+      <WorkersClient lots={lots} />
     </Shell>
   );
 }

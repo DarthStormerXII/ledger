@@ -1,11 +1,15 @@
 import { Shell } from "@/components/Shell";
 import { JobsListClient } from "./JobsListClient";
-import { JOBS } from "@/lib/data";
+import { getAllJobs, liveJobToJob } from "@/lib/live";
 
-export default function JobsListPage() {
+export const revalidate = 0;
+
+export default async function JobsListPage() {
+  const liveJobs = await getAllJobs().catch(() => []);
+  const jobs = liveJobs.map(liveJobToJob);
   return (
     <Shell>
-      <JobsListClient jobs={JOBS} />
+      <JobsListClient jobs={jobs} />
     </Shell>
   );
 }

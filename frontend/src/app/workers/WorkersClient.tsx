@@ -36,7 +36,7 @@ export function WorkersClient({
   const title = marketplaceOnly ? "The marketplace." : "The catalogue.";
   const meta = marketplaceOnly
     ? `${lots.length} LISTED FOR SALE`
-    : `247 ACTIVE LOTS · 89 LISTED FOR SALE`;
+    : `${all.length} ACTIVE LOTS · LIVE ON 0G GALILEO`;
 
   return (
     <div className="page" style={{ padding: 40 }}>

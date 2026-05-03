@@ -1,0 +1,80 @@
+{
+  "capturedAt": "2026-05-03T12:32:42.258Z",
+  "workers": [
+    {
+      "label": "worker-001",
+      "agentName": "ledger-worker-001",
+      "tokenId": 1,
+      "galileoOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+      "ensName": "worker-001.ledger.eth",
+      "erc8004AgentId": "5444",
+      "targetReputation": {
+        "count": 47,
+        "average": 4.77
+      }
+    },
+    {
+      "label": "worker-002",
+      "agentName": "owl-watcher",
+      "tokenId": 2,
+      "galileoOwner": "0xc5C0F4Dfb21df5B57ce3B549ce0a392380665799",
+      "ensName": "worker-002.ledger.eth",
+      "erc8004AgentId": "5445",
+      "targetReputation": {
+        "count": 12,
+        "average": 4.6
+      }
+    },
+    {
+      "label": "worker-003",
+      "agentName": "hex-scout",
+      "tokenId": 3,
+      "galileoOwner": "0x2ABA575b44E6f5B72dfa1BC00Fc910DD84DA9f86",
+      "ensName": "worker-003.ledger.eth",
+      "erc8004AgentId": "5446",
+      "targetReputation": {
+        "count": 23,
+        "average": 4.8
+      }
+    },
+    {
+      "label": "worker-004",
+      "agentName": "triad-runner",
+      "tokenId": 4,
+      "galileoOwner": "0x3bb8F7AE39aA1626ED06a320cEF56c17c0a5A736",
+      "ensName": "worker-004.ledger.eth",
+      "erc8004AgentId": "5447",
+      "targetReputation": {
+        "count": 31,
+        "average": 4.7
+      }
+    },
+    {
+      "label": "worker-005",
+      "agentName": "yield-archivist",
+      "tokenId": 5,
+      "galileoOwner": "0xaBfa8cbB269f20382e62C4dFaFdac1Bf29634E44",
+      "ensName": "worker-005.ledger.eth",
+      "erc8004AgentId": "5448",
+      "targetReputation": {
+        "count": 47,
+        "average": 4.9
+      }
+    }
+  ],
+  "feedbackClients": [
+    "0xb0D4EaaCa7DeBD2cDCE89C732fd4e25545625175",
+    "0x427fd64Cac647c95A0E6677f50fe9cd1EA325d20",
+    "0x99a928CE6dE3D1265ebdF042aF94AC2275569C44",
+    "0x719647237ED1f8f08437806826dde868A5524140",
+    "0x007AAA9De2F9f694cE189EbC10C40F139877A01b",
+    "0xF4c48baD81D3F3c023C7c1D1d71E0B162Ae54C12",
+    "0x5119D14319921D6A89052AA29C1767Da2f008791",
+    "0x3D0E1626f00ff963f2b7437468c730246F4247d2"
+  ],
+  "escrowTasks": {
+    "open": "0x41fb552d879bdbb260fc63886ea879b2860ebda6d5c80214ab1c41cd71624c03",
+    "accepted": "0x8ec4a6c9d8b445c8ed18cc09d38299d61c9fdf9f98bbf3a4e17065935e8e72f4",
+    "released": "0x298ac2ca398bf3eea5ef9479e80c72e45285dbeafa0689d0272eb91926f3cd90"
+  }
+}
