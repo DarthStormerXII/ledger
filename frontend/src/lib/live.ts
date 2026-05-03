@@ -62,6 +62,7 @@ const AVATAR_BY_TOKEN_ID: Record<string, string> = {
   "3": "/assets/avatars/ledger_lot_049.png",
   "4": "/assets/avatars/ledger_lot_050.png",
   "5": "/assets/avatars/ledger_lot_050.png",
+  "6": "/assets/avatars/ledger_lot_047.png",
 };
 
 function avatarForTokenId(tokenId: bigint): string {

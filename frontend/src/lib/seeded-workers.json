@@ -72,6 +72,23 @@
         "askPriceUnit": "0G",
         "listedAt": "2026-05-03T19:35:00Z"
       }
+    },
+    {
+      "label": "worker-006",
+      "agentName": "ledger-worker-006",
+      "tokenId": 6,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-006.ledger.eth",
+      "erc8004AgentId": "6",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.05",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T13:00:00Z",
+        "onChain": true,
+        "marketplaceTx": "0x06ee531cd60632fea79a4dae958b58eb2cd59a92e58ed0656549397a523438d3"
+      }
     }
   ],
   "feedbackClients": [
