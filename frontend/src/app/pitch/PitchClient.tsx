@@ -1566,7 +1566,7 @@ function EndCard() {
             }}
           >
             <a
-              href="https://github.com"
+              href="https://github.com/DarthStormerXII/ledger"
               target="_blank"
               rel="noreferrer noopener"
               className="hover-oxblood"
@@ -1575,7 +1575,7 @@ function EndCard() {
             </a>
             <span>·</span>
             <a
-              href="https://github.com"
+              href="https://ethglobal.com/showcase/ledger-bineb"
               target="_blank"
               rel="noreferrer noopener"
               className="hover-oxblood"
@@ -1583,8 +1583,17 @@ function EndCard() {
               Demo video
             </a>
             <span>·</span>
-            <Link href="/" className="hover-oxblood">
-              README
+            <a
+              href="https://x.com/gabrielaxyeth"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="hover-oxblood"
+            >
+              X
+            </a>
+            <span>·</span>
+            <Link href="/proof" className="hover-oxblood">
+              Proof
             </Link>
           </div>
         </Reveal>
