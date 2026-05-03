@@ -45,6 +45,14 @@ export const DEMO_OWNER_B: Address =
   "0x6641221B1cb66Dc9f890350058A7341eF0eD600b";
 export const DEMO_MEMORY_CID =
   "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4";
+// 0G Storage flow contract (every Submission event lands here)
+export const ZEROG_STORAGE_FLOW_CONTRACT: Address =
+  "0x22e03a6a89b950f1c82ec5e74f8eca321a105296";
+// Sequential submission index emitted by the storage flow contract on
+// upload — decoded from the Submission event in the demo's upload tx
+// (0xc6cd5ca5…20eb5ca, log[0] data first uint256 = 0x1193b = 71995).
+// This is what storagescan's /submission/<id> page renders.
+export const DEMO_STORAGE_SUBMISSION_INDEX = 71995;
 export const DEMO_ATTESTATION_DIGEST =
   "0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950";
 export const DEMO_TRANSFER_TX =
@@ -261,14 +269,42 @@ export function sepoliaTx(tx: string) {
 export function sepoliaAddr(addr: string) {
   return `https://sepolia.etherscan.io/address/${addr}`;
 }
+/**
+ * Browseable explorer URL for an `0g://...` Memory CID.
+ *
+ * 0G Storage CIDs are Merkle roots, NOT tx hashes — chainscan/storagescan
+ * `/tx/<root>` 404s, and the indexer's `/file?root=...` endpoint returns
+ * the raw encrypted blob bytes (which a browser auto-downloads as
+ * unrenderable binary — bad UX).
+ *
+ * The storage flow contract emits a sequential `submissionIndex` on every
+ * upload, and storagescan-galileo's `/submission/<index>` page renders a
+ * proper UI for that submission. So we map root → submissionIndex when
+ * known, and fall back to the storage flow contract's address page for
+ * unknown roots (browseable list of all submissions, still useful).
+ *
+ * Indexes are only known for the demo blob today; future iNFTs minted via
+ * /register would need an indexer that records `submissionIndex` at upload
+ * time. Adding that is a follow-up.
+ */
 export function ogStorageCid(cid: string) {
   const root = cid.replace(/^0g:\/\//, "");
-  // 0G Storage CIDs are Merkle roots of the encrypted blob — NOT tx
-  // hashes. The chainscan/storagescan explorers don't index by root, so
-  // /tx/<root> 404s. The 0G Storage indexer node serves the encrypted
-  // blob bytes directly when queried by root, which is the canonical
-  // verification surface: judges can curl this URL and decrypt with the
-  // iNFT's sealed key to prove byte-equality with the original upload.
+  if (
+    root.toLowerCase() === DEMO_MEMORY_CID.replace(/^0g:\/\//, "").toLowerCase()
+  ) {
+    return `https://storagescan-galileo.0g.ai/submission/${DEMO_STORAGE_SUBMISSION_INDEX}`;
+  }
+  return `https://storagescan-galileo.0g.ai/address/${ZEROG_STORAGE_FLOW_CONTRACT}`;
+}
+
+/**
+ * Lower-level helper for callers who specifically want the raw encrypted
+ * blob bytes (e.g. a verify-roundtrip script, or a "download" affordance).
+ * Returns the indexer URL — clicking this in a browser will auto-download
+ * the binary, so prefer ogStorageCid() for any user-facing link.
+ */
+export function ogStorageRawBlob(cid: string) {
+  const root = cid.replace(/^0g:\/\//, "");
   return `https://indexer-storage-testnet-turbo.0g.ai/file?root=${root}`;
 }
 
