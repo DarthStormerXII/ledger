@@ -2906,3 +2906,162 @@ body.surface-ink {
 
 /* On block-mode gate, the card renders as the only content of its slot.
    Spacing handled by parent .register-section / .post-section etc. */
+
+/* ===== /jobs/[id] — RESOLVED AUCTION PANEL (winner spotlight + phase timeline) ===== */
+
+.resolved-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 28px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: var(--ledger-ink-elevated);
+}
+
+.resolved-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+.resolved-timeline-step {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.resolved-timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(245, 241, 232, 0.32);
+  background: transparent;
+  transition: all 200ms ease-out;
+}
+.resolved-timeline-dot[data-filled="1"] {
+  background: var(--ledger-success);
+  border-color: var(--ledger-success);
+  box-shadow: 0 0 12px rgba(74, 107, 58, 0.4);
+}
+.resolved-timeline-dot[data-terminal="1"] {
+  background: var(--ledger-oxblood);
+  border-color: var(--ledger-oxblood);
+  box-shadow: 0 0 12px rgba(156, 42, 42, 0.4);
+}
+.resolved-timeline-label {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--ledger-ink-muted);
+}
+.resolved-timeline-label[data-filled="1"] {
+  color: var(--ledger-paper);
+}
+.resolved-timeline-bar {
+  width: 48px;
+  height: 1.5px;
+  margin: 0 12px;
+  background: rgba(245, 241, 232, 0.16);
+  transition: background 200ms ease-out;
+}
+.resolved-timeline-bar[data-filled="1"] {
+  background: var(--ledger-success);
+}
+@media (max-width: 768px) {
+  .resolved-timeline-bar {
+    width: 24px;
+    margin: 0 6px;
+  }
+  .resolved-timeline-label {
+    font-size: 9px;
+  }
+}
+
+.resolved-winner-card {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  background: rgba(245, 241, 232, 0.02);
+  transition:
+    background 200ms ease-out,
+    border-color 200ms ease-out,
+    transform 200ms ease-out;
+  text-decoration: none;
+  color: inherit;
+}
+.resolved-winner-card:hover {
+  background: rgba(245, 241, 232, 0.04);
+  border-color: var(--ledger-gold-leaf);
+  transform: translateY(-1px);
+}
+@media (max-width: 520px) {
+  .resolved-winner-card {
+    grid-template-columns: 48px 1fr;
+    gap: 14px;
+  }
+  .resolved-winner-cta {
+    grid-column: 1 / -1;
+    text-align: right;
+    margin-top: 4px;
+  }
+}
+
+.resolved-winner-avatar {
+  width: 64px;
+  height: 64px;
+  background: var(--ledger-paper);
+  border: 1px solid rgba(245, 241, 232, 0.16);
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.resolved-winner-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+@media (max-width: 520px) {
+  .resolved-winner-avatar {
+    width: 48px;
+    height: 48px;
+    padding: 4px;
+  }
+}
+
+.resolved-winner-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.resolved-winner-name {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 800;
+  font-size: clamp(18px, 2.4vw, 22px);
+  letter-spacing: -0.02em;
+  color: var(--ledger-paper);
+  word-break: break-all;
+}
+.resolved-winner-rep {
+  font-size: 11px;
+}
+.resolved-winner-bid {
+  margin-top: 6px;
+  font-size: 18px;
+}
+
+.resolved-winner-cta {
+  color: var(--ledger-gold-leaf);
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  white-space: nowrap;
+  align-self: center;
+}
+
+.resolved-outcome {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(245, 241, 232, 0.08);
+}

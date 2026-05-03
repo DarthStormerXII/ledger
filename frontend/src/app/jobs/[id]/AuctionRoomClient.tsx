@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import type { Job, Lot } from "@/lib/data";
 import { AxlTopology } from "@/components/AxlTopology";
 import { AXL_CAPTURED_PROOF } from "@/lib/axl-proof";
@@ -443,7 +444,7 @@ export function AuctionRoomClient({
           </div>
 
           {!isPosted && derivedBids.length === 0 ? (
-            <ResolvedAuctionNote receipt={receipt} />
+            <ResolvedAuctionPanel receipt={receipt} lots={lots} />
           ) : bridgeStatus === "unavailable" ? (
             <>
               <BridgeBlocked error={bridgeError} />
@@ -847,42 +848,189 @@ function short(s: string, head = 6, tail = 4): string {
 // the AXL ring has nothing for the taskId — happens often because the
 // auction closes before the bridge captures anything, or because the
 // resolution happened in a previous demo session.
-function ResolvedAuctionNote({ receipt }: { receipt?: LiveJobReceipt }) {
+/**
+ * ResolvedAuctionPanel — replaces the text-wall placeholder with a
+ * phase-aware rich render of who won, what happened, and where in the
+ * lifecycle the task sits. No more anonymous "see panel above" copy.
+ *
+ * Layout:
+ *   1. Phase timeline (POSTED → ACCEPTED → DELIVERED → PAID), with
+ *      filled / pending dots reflecting the current escrow status.
+ *   2. Winner spotlight card — avatar + ENS name + reputation +
+ *      click-through to /agent/<ensName>. Greyed-out for Cancelled.
+ *   3. One-line outcome (e.g. "Saved 0.0002 0G vs ceiling" /
+ *      "Bond slashed: 0.0001 0G burned").
+ */
+function ResolvedAuctionPanel({
+  receipt,
+  lots,
+}: {
+  receipt?: LiveJobReceipt;
+  lots: Lot[];
+}) {
   const status = receipt?.status ?? "Posted";
-  const heading =
-    status === "Released"
-      ? "Auction resolved — payout released."
+
+  // Phase progression. For Released we light all 4. For Accepted the
+  // first 2. Cancelled/Slashed terminate early — render special state.
+  const phases =
+    status === "Cancelled"
+      ? ([
+          { key: "posted", label: "POSTED", filled: true },
+          {
+            key: "cancelled",
+            label: "CANCELLED",
+            filled: true,
+            terminal: true,
+          },
+        ] as const)
+      : status === "Slashed"
+        ? ([
+            { key: "posted", label: "POSTED", filled: true },
+            { key: "accepted", label: "ACCEPTED", filled: true },
+            {
+              key: "slashed",
+              label: "BOND SLASHED",
+              filled: true,
+              terminal: true,
+            },
+          ] as const)
+        : ([
+            { key: "posted", label: "POSTED", filled: true },
+            {
+              key: "accepted",
+              label: "ACCEPTED",
+              filled: status === "Accepted" || status === "Released",
+            },
+            {
+              key: "delivered",
+              label: "DELIVERED",
+              filled: status === "Released",
+            },
+            { key: "paid", label: "PAID", filled: status === "Released" },
+          ] as const);
+
+  // Winner lookup: try matching the receipt.worker address against the
+  // catalogue lots so we can pull avatar + reputation. Fall back to a
+  // DiceBear identicon when the winner isn't yet on the catalogue.
+  const matchedLot = receipt?.worker
+    ? lots.find((l) => l.owner.toLowerCase() === receipt.worker!.toLowerCase())
+    : null;
+  const winnerEnsName = matchedLot?.ens ?? receipt?.workerEnsName ?? null;
+  const winnerAvatar =
+    matchedLot?.avatar ??
+    (receipt?.worker
+      ? `https://api.dicebear.com/9.x/shapes/svg?seed=${receipt.worker}`
+      : null);
+  const winnerRep = matchedLot
+    ? `${matchedLot.jobs} jobs · ${matchedLot.rating} ★`
+    : receipt?.workerJobs != null && receipt?.workerRating != null
+      ? `${receipt.workerJobs} jobs · ${receipt.workerRating} ★`
+      : null;
+
+  const showWinner =
+    receipt?.worker &&
+    (status === "Accepted" || status === "Released" || status === "Slashed");
+
+  const outcomeNote =
+    status === "Released" && receipt?.bidAmountEth && receipt?.paymentEth
+      ? `Saved ${(Number(receipt.paymentEth) - Number(receipt.bidAmountEth)).toFixed(6)} 0G vs ceiling`
       : status === "Accepted"
-        ? "Bid accepted — work is in progress."
+        ? "Worker bond locked. Awaiting RESULT message…"
         : status === "Cancelled"
-          ? "Auction cancelled."
+          ? "No qualifying bids before the deadline. Reward returned to buyer."
           : status === "Slashed"
-            ? "Auction closed — bond slashed."
-            : "Auction resolved.";
-  const body =
-    status === "Released"
-      ? "The winning worker's address, accepted bid, and on-chain trail are in the receipt panel above. The live BID feed is only relevant while bidders are racing the clock — that phase is over for this taskId."
-      : status === "Accepted"
-        ? "The buyer has locked the worker in for delivery. The live BID feed is paused until the worker submits a result; the receipt panel above shows the locked worker + accepted bid."
-        : "The auction is closed. Settlement details (if any) are in the receipt panel above.";
+            ? "Worker missed the deadline. Bond burned."
+            : null;
+
   return (
-    <div
-      style={{
-        padding: "20px 24px",
-        border: "1px dashed rgba(245,241,232,0.16)",
-        borderRadius: 4,
-        color: "var(--ledger-ink-muted)",
-        fontSize: 13,
-        lineHeight: 1.6,
-      }}
-    >
-      <div
-        className="caps-md"
-        style={{ color: "var(--ledger-paper)", marginBottom: 6 }}
-      >
-        {heading}
+    <div className="resolved-panel">
+      {/* PHASE TIMELINE */}
+      <div className="resolved-timeline">
+        {phases.map((p, i) => (
+          <div key={p.key} className="resolved-timeline-step">
+            <span
+              className="resolved-timeline-dot"
+              data-filled={p.filled ? "1" : "0"}
+              data-terminal={"terminal" in p && p.terminal ? "1" : "0"}
+            />
+            <span
+              className="caps-sm resolved-timeline-label"
+              data-filled={p.filled ? "1" : "0"}
+            >
+              {p.label}
+            </span>
+            {i < phases.length - 1 ? (
+              <span
+                className="resolved-timeline-bar"
+                data-filled={p.filled && phases[i + 1].filled ? "1" : "0"}
+              />
+            ) : null}
+          </div>
+        ))}
       </div>
-      {body}
+
+      {/* WINNER SPOTLIGHT */}
+      {showWinner && winnerAvatar ? (
+        <Link
+          href={
+            winnerEnsName ? `/agent/${encodeURIComponent(winnerEnsName)}` : "#"
+          }
+          className="resolved-winner-card"
+        >
+          <div className="resolved-winner-avatar">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={winnerAvatar} alt="" />
+          </div>
+          <div className="resolved-winner-meta">
+            <div className="caps-sm muted">
+              {status === "Released"
+                ? "PAID TO"
+                : status === "Slashed"
+                  ? "WINNER (SLASHED)"
+                  : "WINNING WORKER"}
+            </div>
+            <div className="resolved-winner-name italic-num">
+              {winnerEnsName ?? short(receipt!.worker!, 6, 4)}
+            </div>
+            {winnerRep ? (
+              <div className="caps-sm muted resolved-winner-rep">
+                {winnerRep}
+              </div>
+            ) : null}
+            {receipt?.bidAmountEth ? (
+              <div className="resolved-winner-bid italic-num text-oxblood">
+                {receipt.bidAmountEth} 0G{" "}
+                <span
+                  className="caps-sm muted"
+                  style={{ marginLeft: 8, fontSize: 11 }}
+                >
+                  ACCEPTED BID
+                </span>
+              </div>
+            ) : null}
+          </div>
+          <span className="resolved-winner-cta caps-sm">View profile ↗</span>
+        </Link>
+      ) : null}
+
+      {/* OUTCOME LINE */}
+      {outcomeNote ? (
+        <div className="resolved-outcome">
+          <span
+            className="caps-sm"
+            style={{
+              color:
+                status === "Released"
+                  ? "var(--ledger-success)"
+                  : status === "Slashed"
+                    ? "var(--ledger-oxblood)"
+                    : "var(--ledger-ink-muted)",
+            }}
+          >
+            {outcomeNote}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }
