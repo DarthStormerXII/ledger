@@ -1161,12 +1161,12 @@ function JobBriefPanel({
       </div>
     );
   }
-  // The CID format we persist is: 0g://<rootHash>?tx=<txHash>&txSeq=<n>
-  // (txSeq is only present on briefs pinned after the dual-link landed).
+  // The CID format we persist is: 0g://<rootHash>?tx=<txHash>[&txSeq=<n>]
   // Download URL hits the indexer's /file endpoint (same behaviour as
   // before — clicking the link triggers a direct download). The explorer
-  // URL goes to storagescan-galileo's /submission/<txSeq> page so judges
-  // can see the on-chain submission record.
+  // URL goes to storagescan-galileo's /submission/<id> page; that route
+  // accepts either txSeq or txHash, so we prefer txSeq when present and
+  // fall back to txHash (which every CID has).
   const cidParse = cid
     ? (() => {
         const noScheme = cid.replace(/^0g:\/\//, "");
@@ -1174,6 +1174,7 @@ function JobBriefPanel({
         const params = new URLSearchParams(query);
         return {
           root,
+          tx: params.get("tx") || null,
           txSeq: params.get("txSeq") || null,
         };
       })()
@@ -1183,7 +1184,9 @@ function JobBriefPanel({
     : null;
   const ogExplorerHref = cidParse?.txSeq
     ? `https://storagescan-galileo.0g.ai/submission/${cidParse.txSeq}`
-    : null;
+    : cidParse?.tx
+      ? `https://storagescan-galileo.0g.ai/submission/${cidParse.tx}`
+      : null;
   return (
     <div className="job-brief-panel">
       <div className="job-brief-head">
