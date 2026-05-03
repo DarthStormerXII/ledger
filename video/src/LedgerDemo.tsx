@@ -14,6 +14,7 @@ import captionsData from './captions.json';
 import {segments} from './segments';
 
 const captions = captionsData satisfies Caption[];
+const SHOW_CAPTIONS = false;
 
 const formatTime = (seconds: number) => {
   const mins = Math.floor(seconds / 60);
@@ -22,9 +23,14 @@ const formatTime = (seconds: number) => {
 };
 
 const getActiveSegment = (time: number) => {
+  const current = segments.find((segment) => time >= segment.start && time < segment.end);
+
+  if (current) {
+    return current;
+  }
+
   return (
-    segments.find((segment) => time >= segment.start && time < segment.end) ??
-    segments[segments.length - 1]
+    [...segments].reverse().find((segment) => time >= segment.start) ?? segments[0]
   );
 };
 
@@ -74,12 +80,118 @@ export const LedgerDemo = () => {
         />
       </Sequence>
 
+      <Sequence from={Math.round(9 * fps)} durationInFrames={Math.round(13 * fps)}>
+        <OffthreadVideo
+          src={staticFile('thesis-background.mp4')}
+          muted
+          playbackRate={0.78}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+          }}
+        />
+      </Sequence>
+
+      {time >= 10 && time < 22 ? (
+        <AbsoluteFill
+          style={{
+            justifyContent: 'center',
+            alignItems: 'flex-end',
+            padding: '0 116px 0 0',
+            pointerEvents: 'none',
+          }}
+        >
+          <div
+            style={{
+              width: 560,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 18,
+              transform: `translateY(${interpolate(time, [10, 11.2], [24, 0], {
+                extrapolateLeft: 'clamp',
+                extrapolateRight: 'clamp',
+              })}px)`,
+              opacity: interpolate(time, [10, 11.2, 21.2, 22], [0, 1, 1, 0], {
+                extrapolateLeft: 'clamp',
+                extrapolateRight: 'clamp',
+              }),
+            }}
+          >
+            <div
+              style={{
+                color: '#f4efe3',
+                fontSize: 34,
+                lineHeight: 1.12,
+                letterSpacing: 0,
+                textShadow: '0 16px 36px rgba(0, 0, 0, 0.72)',
+              }}
+            >
+              AI agents already have wallets, identity, reputation, and payments.
+            </div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: 14,
+              }}
+            >
+              {[
+                ['21,000+', 'agents'],
+                ['100M+', 'agent payments'],
+              ].map(([value, label]) => (
+                <div
+                  key={value}
+                  style={{
+                    background: 'rgba(0, 0, 0, 0.54)',
+                    borderRadius: 8,
+                    padding: '18px 20px',
+                    boxShadow: '0 18px 48px rgba(0, 0, 0, 0.32)',
+                  }}
+                >
+                  <div style={{color: '#e8d4a0', fontSize: 38, lineHeight: 1}}>
+                    {value}
+                  </div>
+                  <div
+                    style={{
+                      color: '#bdb4a4',
+                      fontSize: 16,
+                      marginTop: 8,
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {label}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div
+              style={{
+                background: 'rgba(0, 0, 0, 0.58)',
+                borderRadius: 8,
+                padding: '18px 20px',
+                color: '#f4efe3',
+                fontSize: 24,
+                lineHeight: 1.2,
+                boxShadow: '0 18px 48px rgba(0, 0, 0, 0.32)',
+              }}
+            >
+              But there are still zero places where these agents can really hire
+              each other.
+            </div>
+          </div>
+        </AbsoluteFill>
+      ) : null}
+
       <AbsoluteFill
         style={{
           justifyContent: 'center',
           alignItems: 'center',
           padding: 96,
-          opacity: active.id === 'cinematic-open' ? 0 : cardOpacity * 0.72,
+          opacity:
+            active.id === 'cinematic-open' || active.id === 'thesis-one'
+              ? 0
+              : cardOpacity * 0.72,
         }}
       >
         <div
@@ -111,15 +223,15 @@ export const LedgerDemo = () => {
           position: 'absolute',
           top: 36,
           left: 44,
-          width: 320,
-          height: 86,
+          width: 220,
+          height: 68,
           display: 'flex',
           alignItems: 'center',
           opacity: 0.88,
         }}
       >
         <Img
-          src={staticFile('ledger-logo-horizontal-light.png')}
+          src={staticFile('ledger-logo-wordmark-full-light.png')}
           style={{
             width: '100%',
             height: '100%',
@@ -167,33 +279,35 @@ export const LedgerDemo = () => {
         </div>
       </div>
 
-      <div
-        style={{
-          position: 'absolute',
-          left: '50%',
-          bottom: 44,
-          transform: 'translateX(-50%)',
-          width: 'min(1180px, 82%)',
-          opacity: cardOpacity,
-          padding: '12px 22px',
-          borderRadius: 8,
-          background: 'rgba(0, 0, 0, 0.62)',
-          boxShadow: '0 18px 60px rgba(0, 0, 0, 0.38)',
-        }}
-      >
+      {SHOW_CAPTIONS ? (
         <div
           style={{
-            color: '#f4efe3',
-            textAlign: 'center',
-            fontSize: 23,
-            lineHeight: 1.32,
-            letterSpacing: 0,
-            textWrap: 'balance',
+            position: 'absolute',
+            left: '50%',
+            bottom: 44,
+            transform: 'translateX(-50%)',
+            width: 'min(1180px, 82%)',
+            opacity: cardOpacity,
+            padding: '12px 22px',
+            borderRadius: 8,
+            background: 'rgba(0, 0, 0, 0.62)',
+            boxShadow: '0 18px 60px rgba(0, 0, 0, 0.38)',
           }}
         >
-          {activeCaption?.text ?? ''}
+          <div
+            style={{
+              color: '#f4efe3',
+              textAlign: 'center',
+              fontSize: 23,
+              lineHeight: 1.32,
+              letterSpacing: 0,
+              textWrap: 'balance',
+            }}
+          >
+            {activeCaption?.text ?? ''}
+          </div>
         </div>
-      </div>
+      ) : null}
     </AbsoluteFill>
   );
 };
