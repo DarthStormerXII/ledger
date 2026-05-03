@@ -18,9 +18,13 @@ const PROOFS = {
     "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
   attestation:
     "0x59c79e5a43357945f442a2417cd7aabf2c74b19708dc97e839ec08e1ae223950",
-  ledgerEscrow: "0x12D2162F47AAAe1B0591e898648605daA186D644",
+  ledgerEscrow: "0xCAe1c804932AB07d3428774058eC14Fb4dfb2baB",
+  tokenTaskId:
+    "0x44ed5f980b1b92cde2970f38708dd17f0aaf31f814f3b2328badd2dc8dc2c7ae",
+  acceptTokenBidTx:
+    "0x327e0bffc45ee801a6676b69e85e5fd1cf83e9cc9e2ec9fc75e3d35f15f570cb",
   releaseTx:
-    "0x03a76e46f84701ca745bdbbe6f7b590a48ee31d99ba0404d71ee1be19d43d68c",
+    "0xe91e0b52dd0ba6095794f33cb77a9027c3cc97d78170f940d47b348fc1f8a95d",
   ensResolver: "0xd94cC429058E5495a57953c7896661542648E1B3",
   reputationRegistry: "0x8004B663056A597Dffe9eCcC1965A193B7388713",
 };
@@ -670,12 +674,15 @@ function Mechanic() {
         <MechanicStep
           n="03"
           title="Earnings flip on the next payment."
-          body="The upgraded LedgerEscrow source and tests query ownerOf(tokenId) at payment time, not at bid time. The deployed demo escrow proves live settlement today; redeploying this upgraded escrow is the remaining step for token-owned payout routing to be production-live."
+          body="The upgraded LedgerEscrow now lives on Galileo. The worker accepts through acceptTokenBid(tokenId=1), the task records that token, and releasePayment queries ownerOf(tokenId) at payment time."
           terminal={[
             `// LedgerEscrow @ ${short(PROOFS.ledgerEscrow)}`,
+            `bytes32 taskId = ${short(PROOFS.tokenTaskId)}`,
+            `acceptTokenBid(taskId, 1, bid, bond);`,
+            "",
             "function releasePayment(bytes32 taskId) external {",
             "  Task storage t = tasks[taskId];",
-            "  require(t.status == Status.Submitted);",
+            "  require(t.status == Status.Accepted);",
             "  address payee = workerINFT.ownerOf(t.workerTokenId);",
             "  // ↑ resolves at PAYMENT TIME, not BID TIME",
             "  payable(payee).transfer(t.payment);",
@@ -686,7 +693,7 @@ function Mechanic() {
             `→ release tx ${short(PROOFS.releaseTx)}`,
           ]}
           tx={{
-            label: "View legacy releasePayment on Chainscan Galileo",
+            label: "View token-owned releasePayment on Chainscan Galileo",
             href: galileoTx(PROOFS.releaseTx),
           }}
         />
@@ -725,7 +732,7 @@ function Mechanic() {
             <ProofRow
               label="Live memory CID"
               value={PROOFS.memCid}
-              href={`https://storagescan-galileo.0g.ai/file/${PROOFS.memCid.replace(
+              href={`https://storagescan-galileo.0g.ai/tx/${PROOFS.memCid.replace(
                 "0g://",
                 "",
               )}`}

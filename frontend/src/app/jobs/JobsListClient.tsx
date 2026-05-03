@@ -123,6 +123,16 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
         { label: "Job ID", value: job.id, mono: true },
         { label: "Buyer", value: job.employer },
         {
+          label: "AXL node source",
+          value: "github.com/gensyn-ai/axl",
+          href: "https://github.com/gensyn-ai/axl",
+        },
+        {
+          label: "Live mesh /topology",
+          value: "axl.fierypools.fun/topology",
+          href: "https://axl.fierypools.fun/topology",
+        },
+        {
           label: "Channel",
           value: "#ledger-jobs (gossipsub fork)",
           mono: true,
@@ -137,8 +147,9 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
           value: "Hop-by-hop TLS + end-to-end payload (two layers)",
         },
         {
-          label: "Bootstrap",
-          value: "tls://66.51.123.38:9001 (sjc) — kill-resilient",
+          label: "Bootstrap (Fly · sjc)",
+          value: "tls://66.51.123.38:9001 — kill-resilient",
+          href: "https://fly.io/apps/ledger-axl-usw-180526",
           mono: true,
         },
       ],
@@ -184,7 +195,7 @@ function buildJobInspectGroups(job: Job): InspectGroup[] {
         {
           label: "Note",
           value:
-            "Auction posting and the representative release tx are live on Galileo. Token-owned payout routing is implemented in source/tests and requires escrow redeploy before it is production-live.",
+            "Auction posting, token-owned bid acceptance, and releasePayment are live on Galileo. The representative task attaches tokenId 1 and payoutRecipient resolves to the current iNFT owner.",
         },
       ],
     },

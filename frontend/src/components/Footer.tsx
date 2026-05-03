@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export function Footer() {
   return (
     <footer className="footer">
@@ -6,8 +8,8 @@ export function Footer() {
         NO. 0001 — ETHGLOBAL OPEN AGENTS 2026
       </span>
       <div className="footer-links">
-        <a href="/pitch">Pitch</a>
-        <a href="/proof">Proof</a>
+        <Link href="/pitch">Pitch</Link>
+        <Link href="/proof">Proof</Link>
         <a
           href="https://github.com/DarthStormerXII/ledger"
           target="_blank"
@@ -29,8 +31,8 @@ export function Footer() {
         >
           X
         </a>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
+        <Link href="/terms">Terms</Link>
+        <Link href="/privacy">Privacy</Link>
       </div>
     </footer>
   );

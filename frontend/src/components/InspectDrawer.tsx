@@ -14,7 +14,13 @@ import Link from "next/link";
 
 export type InspectGroup = {
   title: string;
-  rows: { label: string; value: string; href?: string; mono?: boolean }[];
+  rows: {
+    label: string;
+    value: string;
+    href?: string;
+    mono?: boolean;
+    caption?: string;
+  }[];
 };
 
 export function InspectDrawer({
@@ -224,6 +230,18 @@ export function InspectDrawer({
                             {r.value}
                           </span>
                         )}
+                        {r.caption ? (
+                          <div
+                            style={{
+                              marginTop: 4,
+                              fontSize: 11,
+                              color: "var(--ledger-ink-muted)",
+                              lineHeight: 1.5,
+                            }}
+                          >
+                            {r.caption}
+                          </div>
+                        ) : null}
                       </td>
                     </tr>
                   ))}

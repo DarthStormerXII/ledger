@@ -15,10 +15,23 @@ import {
   DEMO_ATTESTATION_DIGEST,
   DEMO_TRANSFER_TX,
   DEMO_MINT_TX,
+  DEMO_ESCROW_DEPLOY_TX,
+  DEMO_POST_TASK_TX,
+  DEMO_ACCEPT_TOKEN_BID_TX,
   DEMO_RELEASE_TX,
+  DEMO_RESULT_HASH,
   DEMO_TASK_ID,
   DEMO_PAY_NONCE_0,
   DEMO_PAY_NONCE_1,
+  ensSepoliaName,
+  ledgerAxlTopology,
+  GENSYN_AXL_REPO,
+  FLY_BOOTSTRAP_APP,
+  FLY_WORKER_APP,
+  ERC8004_SPEC,
+  ERC7857_DRAFT,
+  GALILEO_TESTNET_DOCS,
+  ogStorageCid,
 } from "@/lib/contracts";
 
 export const metadata = {
@@ -49,11 +62,6 @@ const COMPUTE_LEDGER_TX =
   "0xc27d4f36505320f24f60d6ab6cc0e0cf7899b374def9ee953527c2d0aac78ff2";
 const COMPUTE_PROVIDER = "0xa48f01287233509FD694a22Bf840225062E67836";
 const COMPUTE_MODEL = "qwen/qwen-2.5-7b-instruct";
-
-const ESCROW_POST_TASK_TX =
-  "0x38edcfd048698b285596c4d192216b169288ff726bde228f96538aa4e20e2d15";
-const ESCROW_ACCEPT_BID_TX =
-  "0x4fbcc6bc57975d02557502c93c49732ec1df5ad9a4114d205ef88a8a2e16dd4e";
 
 const SEALED_KEY_AFTER_TRANSFER =
   "0x7365616c65642d666f722d726573657276652d6f776e6572";
@@ -103,7 +111,15 @@ const sections: Section[] = [
       {
         label: "Chain",
         value: "0G Galileo Testnet · chainId 16602",
+        href: GALILEO_TESTNET_DOCS,
         mono: true,
+        caption: "Official 0G developer docs — testnet overview.",
+      },
+      {
+        label: "iNFT spec",
+        value: "ERC-7857 (0G iNFT draft)",
+        href: ERC7857_DRAFT,
+        caption: "0G Labs reference implementation our WorkerINFT mirrors.",
       },
       {
         label: "WorkerINFT (ERC-7857 draft)",
@@ -117,7 +133,7 @@ const sections: Section[] = [
         href: galileoAddr(LEDGER_ESCROW_ADDRESS),
         mono: true,
         caption:
-          "Current deployed escrow proves live post/accept/release settlement. The upgraded token-owned payout methods are implemented and tested in source, but this address has not been redeployed to that version yet.",
+          "Upgraded live escrow. This address proves token-owned payout routing with acceptTokenBid, taskWorkerTokenIds, payoutRecipient, and releasePayment resolving ownerOf(tokenId) on Galileo.",
       },
       {
         label: "LedgerIdentityRegistry",
@@ -215,16 +231,32 @@ const sections: Section[] = [
           "Returned by broker.inference.verifyService. verifyAttestation() returned true.",
       },
       {
-        label: "Escrow postTask",
-        value: ESCROW_POST_TASK_TX,
-        href: galileoTx(ESCROW_POST_TASK_TX),
+        label: "Escrow deploy tx",
+        value: DEMO_ESCROW_DEPLOY_TX,
+        href: galileoTx(DEMO_ESCROW_DEPLOY_TX),
         mono: true,
       },
       {
-        label: "Escrow acceptBid",
-        value: ESCROW_ACCEPT_BID_TX,
-        href: galileoTx(ESCROW_ACCEPT_BID_TX),
+        label: "Escrow postTask",
+        value: DEMO_POST_TASK_TX,
+        href: galileoTx(DEMO_POST_TASK_TX),
         mono: true,
+      },
+      {
+        label: "Escrow acceptTokenBid",
+        value: DEMO_ACCEPT_TOKEN_BID_TX,
+        href: galileoTx(DEMO_ACCEPT_TOKEN_BID_TX),
+        mono: true,
+        caption:
+          "Token ID 1 is attached to the task; taskWorkerTokenIds(taskId) returns 1.",
+      },
+      {
+        label: "Escrow payoutRecipient(taskId)",
+        value: DEMO_OWNER_B,
+        href: galileoAddr(DEMO_OWNER_B),
+        mono: true,
+        caption:
+          "Direct RPC read resolves the payee from WorkerINFT.ownerOf(1), so the payout follows the current iNFT owner.",
       },
       {
         label: "Escrow releasePayment",
@@ -232,7 +264,12 @@ const sections: Section[] = [
         href: galileoTx(DEMO_RELEASE_TX),
         mono: true,
         caption:
-          "Legacy live release tx. It proves escrow settlement; it does not yet prove token-owned ownerOf-at-payment routing.",
+          "PaymentReleased event topic 2 is the current owner 0x6641…600b. Final task status readback is 3 (Released).",
+      },
+      {
+        label: "Result hash",
+        value: DEMO_RESULT_HASH,
+        mono: true,
       },
       {
         label: "Demo task ID",
@@ -248,8 +285,21 @@ const sections: Section[] = [
       "Three independent nodes — two cloud, one residential laptop. Full mesh via Yggdrasil over hop-by-hop TLS plus end-to-end payload encryption. Bootstrap-kill resilience verified; mesh stays connected without the seed peer.",
     rows: [
       {
+        label: "AXL node source",
+        value: "github.com/gensyn-ai/axl",
+        href: GENSYN_AXL_REPO,
+        caption: "Go binary every node runs — same source on Fly + laptop.",
+      },
+      {
+        label: "Live mesh /topology (judges)",
+        value: "axl.fierypools.fun/topology",
+        href: ledgerAxlTopology(),
+        caption: "Cloudflared tunnel → M2 HTTP bridge. Returns peers + IPv6.",
+      },
+      {
         label: "Bootstrap peer ID",
         value: AXL_BOOTSTRAP_PEER,
+        href: FLY_BOOTSTRAP_APP,
         mono: true,
         caption: "Fly.io · sjc · public TCP listener at 66.51.123.38:9001",
       },
@@ -261,6 +311,7 @@ const sections: Section[] = [
       {
         label: "Worker-1 peer ID",
         value: AXL_WORKER_1_PEER,
+        href: FLY_WORKER_APP,
         mono: true,
         caption: "Fly.io · fra · cloud worker, public listener for resilience",
       },
@@ -336,7 +387,9 @@ const sections: Section[] = [
       {
         label: "Parent ENS",
         value: `${LEDGER_ENS_PARENT} (Sepolia)`,
+        href: ensSepoliaName(LEDGER_ENS_PARENT),
         mono: true,
+        caption: "Open in the official ENS app to view records + signed text.",
       },
       {
         label: "Parent owner / signer",
@@ -365,6 +418,7 @@ const sections: Section[] = [
       {
         label: "who.worker-001.ledger.eth",
         value: DEMO_OWNER_B,
+        href: ensSepoliaName(`worker-001.${LEDGER_ENS_PARENT}`),
         mono: true,
         caption:
           "Reads ownerOf(1) on Galileo, 30s TTL cache. Ownership flips without a new ENS transaction.",
@@ -372,25 +426,30 @@ const sections: Section[] = [
       {
         label: "pay.worker-001.ledger.eth (rotation 0)",
         value: DEMO_PAY_NONCE_0,
+        href: ensSepoliaName(`pay.worker-001.${LEDGER_ENS_PARENT}`),
         mono: true,
         caption: "HD-derived from a parent xpub, indexed by tokenId + nonce.",
       },
       {
         label: "pay.worker-001.ledger.eth (rotation 1)",
         value: DEMO_PAY_NONCE_1,
+        href: ensSepoliaName(`pay.worker-001.${LEDGER_ENS_PARENT}`),
         mono: true,
       },
       {
         label: "rep.worker-001.ledger.eth",
         value:
           "ai.rep.registry=0x8004B663… · ai.rep.agent=5444 · count=47 · avg=4.77",
+        href: ensSepoliaName(`rep.worker-001.${LEDGER_ENS_PARENT}`),
         caption:
           "Live read from ERC-8004 ReputationRegistry on Base Sepolia. The 47 giveFeedback records were seeded for the demo (see ERC-8004 disclosure below) — the resolver path itself is real.",
       },
       {
         label: "mem.worker-001.ledger.eth",
         value: DEMO_MEMORY_CID,
+        href: ogStorageCid(DEMO_MEMORY_CID),
         mono: true,
+        caption: "Open the encrypted blob's tx on the 0G Storage explorer.",
       },
       {
         label: "ledger.eth ENSIP-25 text record",
@@ -409,6 +468,12 @@ const sections: Section[] = [
     blurb:
       "Audited reputation registry on Base Sepolia. Ledger does not deploy its own — every settlement writes feedback() to the canonical deployment. The 47-job, 4.77-rating demo number is reproducible on-chain (47 giveFeedback txs from 8 employer-agent keys) but those records were seeded for the demo, not earned organically. Honest disclosure on the last row.",
     rows: [
+      {
+        label: "Standard",
+        value: "ERC-8004 (EIPs.ethereum.org)",
+        href: ERC8004_SPEC,
+        caption: "Audited reputation registry standard the iNFT references.",
+      },
       {
         label: "IdentityRegistry",
         value: ERC8004_IDENTITY_ADDRESS,
@@ -529,8 +594,8 @@ export default function ProofPage() {
           </div>
           <pre className="proof-code-block">
             {`# Mint your own worker iNFT
-git clone https://github.com/DarthStormerXII/ledger-v1
-cd ledger-v1/tools && pnpm install
+git clone https://github.com/DarthStormerXII/ledger
+cd ledger/tools && pnpm install
 pnpm tsx register.ts gen-keys --name my-worker
 pnpm tsx register.ts mint --identity my-worker \\
   --memory-cid 0g://… --sealed-key 0x… --dry-run
@@ -554,7 +619,9 @@ cast call ${WORKER_INFT_ADDRESS} \\
           >
             Full walkthrough at{" "}
             <Link
-              href="https://github.com/DarthStormerXII/ledger-v1/blob/main/docs/REGISTER_AN_AGENT.md"
+              href="https://github.com/DarthStormerXII/ledger/blob/main/docs/REGISTER_AN_AGENT.md"
+              target="_blank"
+              rel="noreferrer noopener"
               style={{
                 color: "var(--ledger-gold-leaf)",
                 borderBottom: "1px solid var(--ledger-gold-dim)",
@@ -564,7 +631,9 @@ cast call ${WORKER_INFT_ADDRESS} \\
             </Link>
             . Source proofs at{" "}
             <Link
-              href="https://github.com/DarthStormerXII/ledger-v1/tree/main/proofs"
+              href="https://github.com/DarthStormerXII/ledger/tree/main/proofs"
+              target="_blank"
+              rel="noreferrer noopener"
               style={{
                 color: "var(--ledger-gold-leaf)",
                 borderBottom: "1px solid var(--ledger-gold-dim)",

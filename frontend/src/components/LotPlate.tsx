@@ -14,6 +14,11 @@ import {
   DEMO_ATTESTATION_DIGEST,
   DEMO_MINT_TX,
   DEMO_TRANSFER_TX,
+  galileoAddr,
+  galileoTx,
+  baseSepoliaAddr,
+  ensSepoliaName,
+  ogStorageCid,
 } from "@/lib/contracts";
 
 export function LotPlate({
@@ -91,10 +96,6 @@ export function LotPlate({
 }
 
 function buildLotInspectGroups(lot: Lot): InspectGroup[] {
-  const galileoTx = (h: string) => `https://chainscan-galileo.0g.ai/tx/${h}`;
-  const galileoAddr = (a: string) =>
-    `https://chainscan-galileo.0g.ai/address/${a}`;
-
   const tokenId = Number.parseInt(lot.lot, 10);
   const hasTokenId = Number.isFinite(tokenId) && tokenId > 0;
   const isDemoToken = tokenId === Number(DEMO_TOKEN_ID);
@@ -148,7 +149,8 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               },
               {
                 label: "Note",
-                value: "Token ID could not be derived from the live lot number.",
+                value:
+                  "Token ID could not be derived from the live lot number.",
               },
             ]),
         {
@@ -162,11 +164,42 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
     {
       title: "ENS — 5 CAPABILITY NAMESPACES",
       rows: [
-        { label: "who", value: `who.${subname}`, mono: true },
-        { label: "pay", value: `pay.${subname}`, mono: true },
-        { label: "tx", value: `tx.${subname}`, mono: true },
-        { label: "rep", value: `rep.${subname}`, mono: true },
-        { label: "mem", value: `mem.${subname}`, mono: true },
+        {
+          label: "Parent",
+          value: subname,
+          href: ensSepoliaName(subname),
+          mono: true,
+        },
+        {
+          label: "who",
+          value: `who.${subname}`,
+          href: ensSepoliaName(`who.${subname}`),
+          mono: true,
+        },
+        {
+          label: "pay",
+          value: `pay.${subname}`,
+          href: ensSepoliaName(`pay.${subname}`),
+          mono: true,
+        },
+        {
+          label: "tx",
+          value: `tx.${subname}`,
+          href: ensSepoliaName(`tx.${subname}`),
+          mono: true,
+        },
+        {
+          label: "rep",
+          value: `rep.${subname}`,
+          href: ensSepoliaName(`rep.${subname}`),
+          mono: true,
+        },
+        {
+          label: "mem",
+          value: `mem.${subname}`,
+          href: ensSepoliaName(`mem.${subname}`),
+          mono: true,
+        },
         {
           label: "Resolution",
           value: "ENSIP-10 CCIP-Read · 30s TTL · cross-chain reads on Galileo",
@@ -181,7 +214,10 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               {
                 label: "Memory CID",
                 value: DEMO_MEMORY_CID,
+                href: ogStorageCid(DEMO_MEMORY_CID),
                 mono: true,
+                caption:
+                  "Open the encrypted blob's tx on the 0G Storage explorer.",
               },
               {
                 label: "Encryption",
@@ -208,7 +244,7 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
         {
           label: "Registry",
           value: ERC8004_REPUTATION_REGISTRY,
-          href: `https://sepolia.basescan.org/address/${ERC8004_REPUTATION_REGISTRY}`,
+          href: baseSepoliaAddr(ERC8004_REPUTATION_REGISTRY),
           mono: true,
         },
         ...(hasTokenId
