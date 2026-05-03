@@ -7,3 +7,4 @@
 - Foundry workspace layout (single workspace for all 4 contracts)
 - council prompts: focus on adversarial review + demo polish
 - chairman synthesis pattern: rank + consensus + conflicts
+<!-- 2026-05-03 13:05 IST gabriel: todo: integration scenarios green --> (1)
