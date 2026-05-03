@@ -9,10 +9,12 @@ import { formatUnits } from "viem";
 import { galileo } from "@/lib/chains";
 
 const NAV_LINKS = [
+  { label: "Register", route: "/register" },
   { label: "Catalogue", route: "/" },
   { label: "Live Jobs", route: "/jobs" },
   { label: "Marketplace", route: "/marketplace" },
   { label: "How it Works", route: "/about" },
+  { label: "Pitch", route: "/pitch" },
 ];
 
 // Ledger is single-chain on the wallet side. All writes (postTask, mint,
