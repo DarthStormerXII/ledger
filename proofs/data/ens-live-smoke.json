@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-05-02T16:46:14.066Z",
+  "status": {
+    "pass": true
+  },
+  "chain": {
+    "rpcUrl": "https://evmrpc-testnet.0g.ai",
+    "chainId": "16602",
+    "latestBlock": 31133047
+  },
+  "contracts": {
+    "workerInftAddress": "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62",
+    "reputationRegistryAddress": "0x8004B663056A597Dffe9eCcC1965A193B7388713"
+  },
+  "token": {
+    "tokenId": "1",
+    "historicalOwnerBlock": 31130502,
+    "historicalOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+    "postTransferOwnerBlock": 31130543,
+    "postTransferOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+    "latestOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b"
+  },
+  "transferLogs": [
+    {
+      "blockNumber": 31130502,
+      "transactionHash": "0xc41cebd48d86382bba75d08fa514da2e151924c3f03dd7d2652992c693bd001f",
+      "from": "0x0000000000000000000000000000000000000000",
+      "to": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "tokenId": "1"
+    },
+    {
+      "blockNumber": 31130543,
+      "transactionHash": "0x3e6b0e4f27ee0796460407d084d9bc99f94a033f5b18073291af5899a8053a79",
+      "from": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "to": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+      "tokenId": "1"
+    }
+  ],
+  "gateway": {
+    "parentName": "ledger-demo.eth",
+    "whoGatewayOwner": "0x6641221B1cb66Dc9f890350058A7341eF0eD600b",
+    "pay1": "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+    "pay2": "0x70997970C51812dc3A010C7d01b50e0d17dc79C8",
+    "payChanged": true,
+    "memGatewayCid": "0g://0xd8fb3ad312ca5e9002f7bdd47d93839b9a6dcd83d396bb74a44a9f65344982c4",
+    "repRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713"
+  },
+  "memory": {
+    "liveMemoryPointer": "",
+    "liveMemoryPointerError": "execution reverted (no data present; likely require(false) occurred (action=\"call\", data=\"0x\", reason=\"require(false)\", transaction={ \"data\": \"0x7488888d0000000000000000000000000000000000000000000000000000000000000001\", \"to\": \"0x48B051F3e565E394ED8522ac453d87b3Fa40ad62\" }, invocation=null, revert=null, code=CALL_EXCEPTION, version=6.16.0)"
+  }
+}

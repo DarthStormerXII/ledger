@@ -1,0 +1,75 @@
+{
+  "scenario": "03_auction_no_bids_cancel",
+  "pass": true,
+  "reasons": [],
+  "durationMs": 244,
+  "artifacts": {
+    "taskId": "0x585dcdd2d1af8fc9c830a50d2c7a479c407bff875343b881e1352285b95b7921",
+    "postTx": "0xe5578964c2697a88df7d559dc94bdafa8c7f150579f4a4dd661ba5b17b48187e",
+    "cancelTx": "0x45b784b1e4113b53ecc3a2ae7769313a3b0ec21a0289757c63a541b7e5bb1e9a",
+    "bidsReceived": 2,
+    "qualifyingBids": 0,
+    "finalStatus": "Cancelled",
+    "eventCounts": {
+      "BidReceived": 2,
+      "TaskPosted": 1,
+      "Cancelled": 1
+    }
+  },
+  "events": [
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x585dcdd2d1af8fc9c830a50d2c7a479c407bff875343b881e1352285b95b7921",
+        "worker": "0x1111111111111111111111111111111111111111",
+        "workerINFTId": "1",
+        "workerPeerId": "wp-1",
+        "bidAmount": "800000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 5,
+          "avgRating": 3
+        },
+        "bidExpiresAt": 1777742293
+      },
+      "receivedAt": 1777742233
+    },
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x585dcdd2d1af8fc9c830a50d2c7a479c407bff875343b881e1352285b95b7921",
+        "worker": "0x2222222222222222222222222222222222222222",
+        "workerINFTId": "2",
+        "workerPeerId": "wp-2",
+        "bidAmount": "850000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 3,
+          "avgRating": 3.5
+        },
+        "bidExpiresAt": 1777742293
+      },
+      "receivedAt": 1777742233
+    },
+    {
+      "type": "TaskPosted",
+      "task": {
+        "taskId": "0x585dcdd2d1af8fc9c830a50d2c7a479c407bff875343b881e1352285b95b7921",
+        "title": "Summarize the latest 0G changelog",
+        "description": "Return a 200-word executive summary suitable for an AI buyer.",
+        "outputSchema": "{ summary: string }",
+        "payment": "1000000",
+        "bondRequirement": "100000",
+        "deadlineSeconds": 300,
+        "minReputation": 4.9
+      },
+      "postedAt": 1777742233,
+      "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb"
+    },
+    {
+      "type": "Cancelled",
+      "taskId": "0x585dcdd2d1af8fc9c830a50d2c7a479c407bff875343b881e1352285b95b7921",
+      "cancelledAt": 1777742233
+    }
+  ]
+}
