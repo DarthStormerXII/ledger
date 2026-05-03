@@ -424,22 +424,22 @@ import type { Job } from "./data";
 export function liveJobToJob(j: LiveJob): Job {
   const now = Math.floor(Date.now() / 1000);
   const timeLeft = Math.max(0, Number(j.deadline) - now);
-  const titles: Record<string, string> = {
-    Posted: "Open task",
-    Accepted: "Bid accepted",
-    Released: "Task settled",
-    Cancelled: "Cancelled",
-    Slashed: "Bond slashed",
-  };
+  // No invented titles or descriptions. Every posted task MUST have a title,
+  // description, and category pinned to the brief (0G Storage). We leave
+  // `title` and `desc` empty here; the rendering layer is responsible for
+  // showing a "(no title pinned)" placeholder when the brief lookup fails.
+  // Status (Posted / Accepted / etc.) is shown separately as a status pill,
+  // which is fact, not a stand-in title.
   return {
     id: j.taskId,
-    title: titles[j.status] ?? "Task",
-    desc: `${j.status === "Released" ? "Released " + formatEther(j.bidAmount) : "Reward " + formatEther(j.payment)} 0G · escrowed on Galileo · taskId ${j.taskId.slice(0, 10)}…`,
+    title: "",
+    desc: "",
     employer: `${j.buyer.slice(0, 6)}…${j.buyer.slice(-4)}`,
     payout: `${formatEther(j.payment)} 0G`,
     bond: j.bidAmount > 0n ? `${formatEther(j.bidAmount)} 0G bid` : "—",
     timeLeft,
     bids: j.worker ? 1 : 0,
+    status: j.status,
   };
 }
 

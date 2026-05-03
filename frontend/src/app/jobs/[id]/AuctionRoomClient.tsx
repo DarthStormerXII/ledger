@@ -259,16 +259,14 @@ export function AuctionRoomClient({
     Cancelled: "var(--ledger-ink-muted)",
     Slashed: "var(--ledger-oxblood)",
   };
-  const fallbackTitle =
-    status === "Released"
-      ? "Settled task"
-      : status === "Accepted"
-        ? "Task in progress"
-        : status === "Cancelled"
-          ? "Cancelled task"
-          : status === "Slashed"
-            ? "Slashed task"
-            : "Untitled task";
+  // No invented title — every posted task MUST have title/description/category
+  // pinned to the brief. If the brief is missing we render an explicit
+  // "(no title pinned)" placeholder so a judge can tell the difference between
+  // a real, pinned title and a missing one. Anything else would imply the
+  // task was posted properly when it wasn't.
+  const titleMissing = !brief?.title;
+  const descMissing = !brief?.description;
+  const categoryMissing = !brief?.category;
 
   return (
     <div className="page jobs-page-wrap">
@@ -290,15 +288,51 @@ export function AuctionRoomClient({
             <span style={{ color: HEADER_TONE[status] }}>
               {HEADER_LABEL[status]}
             </span>
-            {brief ? (
-              <span className={`category-chip is-static cat-${brief.category}`}>
-                {brief.category.charAt(0).toUpperCase() +
-                  brief.category.slice(1)}
+            {categoryMissing ? (
+              <span
+                className="caps-sm"
+                style={{
+                  padding: "2px 8px",
+                  border: "1px dashed rgba(245,241,232,0.2)",
+                  color: "rgba(245,241,232,0.4)",
+                  borderRadius: 2,
+                  letterSpacing: "0.1em",
+                }}
+                title="Brief not pinned — posted via direct contract call, not /post"
+              >
+                (no category pinned)
               </span>
-            ) : null}
+            ) : (
+              <span
+                className={`category-chip is-static cat-${brief!.category}`}
+              >
+                {brief!.category.charAt(0).toUpperCase() +
+                  brief!.category.slice(1)}
+              </span>
+            )}
           </div>
-          <h1 className="auction-title">{brief?.title ?? fallbackTitle}.</h1>
-          <p className="auction-desc">{brief?.description ?? job.desc}</p>
+          {titleMissing ? (
+            <h1
+              className="auction-title"
+              style={{ color: "rgba(245,241,232,0.4)", fontStyle: "italic" }}
+              title="Brief not pinned — posted via direct contract call, not /post"
+            >
+              (no title pinned)
+            </h1>
+          ) : (
+            <h1 className="auction-title">{brief!.title}.</h1>
+          )}
+          {descMissing ? (
+            <p
+              className="auction-desc"
+              style={{ color: "rgba(245,241,232,0.4)", fontStyle: "italic" }}
+            >
+              (no description pinned for this taskId — see brief panel below for
+              the on-chain receipt)
+            </p>
+          ) : (
+            <p className="auction-desc">{brief!.description}</p>
+          )}
         </div>
         <div className="auction-clock">
           {isPosted || status === "Accepted" ? (

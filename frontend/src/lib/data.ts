@@ -26,6 +26,10 @@ export interface Job {
   bond: string;
   timeLeft: number;
   bids: number;
+  // On-chain LedgerEscrow status — pure chain derivation, not brief content.
+  // Title/description/category live in the pinned brief; status is what the
+  // contract reports right now.
+  status?: "Posted" | "Accepted" | "Released" | "Cancelled" | "Slashed";
 }
 
 export interface RecentJob {

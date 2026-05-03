@@ -71,12 +71,24 @@ const CATEGORIES: Category[] = [
 
 const VIEW_STORAGE_KEY = "ledger.jobs.view";
 
-function deriveStatus(title: string): DerivedStatus {
-  if (title === "Bid accepted") return "accepted";
-  if (title === "Task settled") return "settled";
-  if (title === "Cancelled") return "cancelled";
-  if (title === "Bond slashed") return "slashed";
-  return "open";
+// Status comes straight from the LedgerEscrow.tasks() readback now (Job.status).
+// We used to derive it from the synthesized title string, but Job.title is now
+// reserved for the actual pinned brief title — empty string means "no brief
+// pinned for this taskId" rather than a status hint.
+function deriveStatus(j: Job): DerivedStatus {
+  switch (j.status) {
+    case "Accepted":
+      return "accepted";
+    case "Released":
+      return "settled";
+    case "Cancelled":
+      return "cancelled";
+    case "Slashed":
+      return "slashed";
+    case "Posted":
+    default:
+      return "open";
+  }
 }
 
 const STATUS_LABEL: Record<DerivedStatus, string> = {
@@ -183,7 +195,7 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
   const [activeCategory, setActiveCategory] = useState<Category | "all">("all");
 
   const hasLive = jobs.some((j) => {
-    const s = deriveStatus(j.title);
+    const s = deriveStatus(j);
     return s === "open" || s === "accepted";
   });
   useEffect(() => {
@@ -204,7 +216,7 @@ export function JobsListClient({ jobs }: { jobs: Job[] }) {
 
   const counts = jobs.reduce(
     (acc, j) => {
-      const s = deriveStatus(j.title);
+      const s = deriveStatus(j);
       acc[s] = (acc[s] ?? 0) + 1;
       return acc;
     },
@@ -409,17 +421,17 @@ function JobsGrid({
   return (
     <div className="jobs-grid">
       {jobs.map((j) => {
-        const status = deriveStatus(j.title);
+        const status = deriveStatus(j);
         const isLive = status === "open" || status === "accepted";
         const t = isLive ? Math.max(0, j.timeLeft - tick) : 0;
         const expired = isLive && t === 0;
         const timerColor =
           t < 30 && t > 0 ? "var(--ledger-gold-leaf)" : "var(--ledger-oxblood)";
         const brief = briefs.get(j.id.toLowerCase())?.brief;
-        const titleText = brief?.title ?? "Untitled task";
+        const titleText = brief?.title ?? "(no title pinned)";
         const descText =
-          brief?.description ??
-          "Brief not pinned (pre-registry task) — full receipt on chain.";
+          brief?.description ?? "(no description pinned for this task)";
+        const briefMissing = !brief;
         return (
           <div
             key={j.id}
@@ -488,8 +500,32 @@ function JobsGrid({
             </div>
 
             <div>
-              <div className="job-card-title">{titleText}.</div>
-              <div className="job-card-desc">{descText}</div>
+              <div
+                className="job-card-title"
+                style={
+                  briefMissing
+                    ? {
+                        color: "rgba(245,241,232,0.4)",
+                        fontStyle: "italic",
+                      }
+                    : undefined
+                }
+              >
+                {briefMissing ? titleText : `${titleText}.`}
+              </div>
+              <div
+                className="job-card-desc"
+                style={
+                  briefMissing
+                    ? {
+                        color: "rgba(245,241,232,0.4)",
+                        fontStyle: "italic",
+                      }
+                    : undefined
+                }
+              >
+                {descText}
+              </div>
             </div>
 
             <div className="job-card-band">
@@ -583,7 +619,7 @@ function JobsTable({
         </thead>
         <tbody>
           {jobs.map((j) => {
-            const status = deriveStatus(j.title);
+            const status = deriveStatus(j);
             const isLive = status === "open" || status === "accepted";
             const t = isLive ? Math.max(0, j.timeLeft - tick) : 0;
             const expired = isLive && t === 0;
@@ -593,7 +629,8 @@ function JobsTable({
                 : "var(--ledger-oxblood)";
             const taskIdShort = `${j.id.slice(0, 8)}…${j.id.slice(-4)}`;
             const brief = briefs.get(j.id.toLowerCase())?.brief;
-            const titleText = brief?.title ?? "Untitled task";
+            const titleText = brief?.title ?? "(no title pinned)";
+            const briefMissing = !brief;
             return (
               <tr
                 key={j.id}
@@ -610,7 +647,19 @@ function JobsTable({
                   </span>
                 </td>
                 <td>
-                  <div className="jobs-table-task">{titleText}</div>
+                  <div
+                    className="jobs-table-task"
+                    style={
+                      briefMissing
+                        ? {
+                            color: "rgba(245,241,232,0.4)",
+                            fontStyle: "italic",
+                          }
+                        : undefined
+                    }
+                  >
+                    {titleText}
+                  </div>
                   <div className="mono jobs-table-task-id">{taskIdShort}</div>
                 </td>
                 <td>

@@ -48,15 +48,13 @@ export default async function AgentPage({
         memoryCID: liveLot.memoryCID,
       };
     }
-    recentJobs = workerJobs
-      .slice(0, 6)
-      .map((j) => ({
-        date: "—",
-        employer: `${j.buyer.slice(0, 6)}…${j.buyer.slice(-4)}`,
-        title: j.status === "Released" ? "Task settled" : "Task in progress",
-        realized: `${formatEther(j.bidAmount)} 0G`,
-        rating: liveLot.rating || 5,
-      }));
+    recentJobs = workerJobs.slice(0, 6).map((j) => ({
+      date: "—",
+      employer: `${j.buyer.slice(0, 6)}…${j.buyer.slice(-4)}`,
+      title: "",
+      realized: `${formatEther(j.bidAmount)} 0G`,
+      rating: liveLot.rating || 5,
+    }));
   } catch {
     /* empty */
   }

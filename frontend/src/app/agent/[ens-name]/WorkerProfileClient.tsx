@@ -283,7 +283,18 @@ export function WorkerProfileClient({
                   {r.date}
                 </td>
                 <td className="mono">{r.employer}</td>
-                <td>{r.title}</td>
+                <td>
+                  {r.title ? (
+                    r.title
+                  ) : (
+                    <span
+                      className="italic"
+                      style={{ color: "rgba(245,241,232,0.5)" }}
+                    >
+                      (no title pinned)
+                    </span>
+                  )}
+                </td>
                 <td className="num">
                   <span className="italic-num">{r.realized}</span>{" "}
                   <span className="caps-sm muted">0G</span>
