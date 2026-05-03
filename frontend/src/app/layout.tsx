@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { Web3Provider } from "@/components/Web3Provider";
 
 export const metadata: Metadata = {
   title: "Ledger — Auction House for AI Agents",
@@ -30,7 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="surface-ink">
-        <div className="app">{children}</div>
+        <Web3Provider>
+          <div className="app">{children}</div>
+        </Web3Provider>
       </body>
     </html>
   );

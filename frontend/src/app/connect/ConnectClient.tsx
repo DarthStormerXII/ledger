@@ -1,24 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-
-type State = "idle" | "loading" | "connected";
-const WALLETS = ["MetaMask", "WalletConnect", "Coinbase Wallet"] as const;
+import { usePrivy } from "@privy-io/react-auth";
 
 export function ConnectClient() {
   const router = useRouter();
-  const [state, setState] = useState<State>("idle");
-  const [chosen, setChosen] = useState<string | null>(null);
+  const { ready, authenticated, login } = usePrivy();
 
-  const choose = (w: string) => {
-    setChosen(w);
-    setState("loading");
-    window.setTimeout(() => {
-      setState("connected");
-      window.setTimeout(() => router.push("/"), 1200);
-    }, 2000);
-  };
+  useEffect(() => {
+    if (ready && authenticated) {
+      router.replace("/");
+    }
+  }, [ready, authenticated, router]);
 
   return (
     <div
@@ -46,89 +40,49 @@ export function ConnectClient() {
             fontWeight: 900,
             fontSize: 32,
             letterSpacing: "-0.02em",
-            margin: "0 0 24px",
+            margin: "0 0 16px",
             color: "var(--ledger-ink)",
           }}
         >
           Connect.
         </h2>
+        <p
+          className="muted"
+          style={{ margin: "0 0 28px", fontSize: 14, lineHeight: 1.6 }}
+        >
+          Sign in with an external wallet (MetaMask, Coinbase Wallet,
+          WalletConnect) or create an embedded wallet via email or Google.
+          Funded testnet 0G is required for actions on Galileo; ETH on Sepolia
+          and Base Sepolia for ENS and ERC-8004 reads.
+        </p>
 
-        {state === "idle" && (
-          <div>
-            {WALLETS.map((w, i) => (
-              <div
-                key={w}
-                onClick={() => choose(w)}
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  padding: "18px 0",
-                  borderBottom:
-                    i < 2 ? "1px solid rgba(15,15,18,0.16)" : "none",
-                  cursor: "pointer",
-                }}
-                className="hover-oxblood"
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--ledger-font-display)",
-                    fontStyle: "italic",
-                    fontWeight: 700,
-                    fontSize: 22,
-                    color: "var(--ledger-ink)",
-                  }}
-                >
-                  {w}
-                </span>
-                <span
-                  className="caps-sm"
-                  style={{ color: "var(--ledger-ink-muted)" }}
-                >
-                  →
-                </span>
-              </div>
-            ))}
-          </div>
-        )}
+        <button
+          onClick={() => login()}
+          disabled={!ready}
+          className="btn"
+          style={{
+            width: "100%",
+            padding: "14px 18px",
+            fontSize: 15,
+            cursor: ready ? "pointer" : "wait",
+            opacity: ready ? 1 : 0.6,
+          }}
+        >
+          {ready ? "Open wallet" : "Loading…"}
+        </button>
 
-        {state === "loading" && chosen && (
-          <div style={{ textAlign: "center", padding: "40px 0" }}>
-            <div
-              style={{
-                width: 32,
-                height: 32,
-                border: "1px solid var(--ledger-oxblood)",
-                borderTopColor: "transparent",
-                borderRadius: "50%",
-                animation: "spin 0.8s linear infinite",
-                margin: "0 auto 18px",
-              }}
-            />
-            <div
-              className="caps-md"
-              style={{ color: "var(--ledger-ink-muted)" }}
-            >
-              CONNECTING TO {chosen.toUpperCase()}
-            </div>
-          </div>
-        )}
-
-        {state === "connected" && (
-          <div style={{ padding: "24px 0", textAlign: "center" }}>
-            <div
-              style={{
-                fontFamily: "var(--ledger-font-display)",
-                fontStyle: "italic",
-                fontWeight: 700,
-                fontSize: 18,
-                color: "var(--ledger-ink-soft)",
-              }}
-            >
-              Connected. 0x742d…bEb1.
-            </div>
-          </div>
-        )}
+        <div
+          className="caps-sm"
+          style={{
+            marginTop: 24,
+            color: "var(--ledger-ink-muted)",
+            fontSize: 11,
+            lineHeight: 1.5,
+          }}
+        >
+          BY CONNECTING YOU AGREE TO THE NETWORK&apos;S TESTNET TERMS · YOUR
+          KEYS NEVER LEAVE YOUR DEVICE
+        </div>
       </div>
     </div>
   );
