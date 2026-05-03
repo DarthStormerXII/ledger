@@ -23,6 +23,12 @@
       "targetReputation": {
         "count": 12,
         "average": 4.6
+      },
+      "listing": {
+        "listed": true,
+        "askPrice": "0.5",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-03T19:35:00Z"
       }
     },
     {
@@ -59,6 +65,12 @@
       "targetReputation": {
         "count": 47,
         "average": 4.9
+      },
+      "listing": {
+        "listed": true,
+        "askPrice": "1.2",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-03T19:35:00Z"
       }
     }
   ],

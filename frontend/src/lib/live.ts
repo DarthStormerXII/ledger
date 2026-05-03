@@ -36,6 +36,15 @@ export type WorkerRecord = {
   erc8004AgentId: bigint;
   // 8 deterministic client wallets that signed feedback for this agent
   feedbackClients: Address[];
+  // Optional manifest-driven listing for the marketplace. There's no on-chain
+  // listing primitive yet, so the manifest is the single source of truth for
+  // which iNFTs are for sale and at what price.
+  listing?: {
+    listed: boolean;
+    askPrice?: string;
+    askPriceUnit?: string;
+    listedAt?: string;
+  };
 };
 
 // Loaded at build time from proofs/data/seeded-workers.json (single source of truth)
@@ -69,6 +78,7 @@ export const WORKERS: WorkerRecord[] = (
   ensName: `${w.label}.ledger.eth`,
   erc8004AgentId: BigInt((w.erc8004AgentId as string) ?? 0),
   feedbackClients: FEEDBACK_CLIENTS,
+  listing: w.listing as WorkerRecord["listing"],
 }));
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -219,6 +229,16 @@ export type LiveLot = {
 import type { Lot } from "./data";
 
 export function liveLotToLot(l: LiveLot): Lot {
+  // Marketplace listings are manifest-driven for the demo (no on-chain
+  // listing primitive yet). The manifest at proofs/data/seeded-workers.json
+  // holds `listing.listed` + `listing.askPrice` for each worker that's up
+  // for sale.
+  const record = WORKERS.find((w) => w.tokenId === l.tokenId);
+  const listed = record?.listing?.listed === true;
+  const askPrice =
+    record?.listing?.askPrice && record?.listing?.askPriceUnit
+      ? `${record.listing.askPrice} ${record.listing.askPriceUnit}`
+      : record?.listing?.askPrice;
   return {
     lot: l.lot,
     ens: l.ensName,
@@ -228,10 +248,8 @@ export function liveLotToLot(l: LiveLot): Lot {
     rating: l.rating,
     earned: l.earned,
     earnedNum: l.earnedNum,
-    // No marketplace listing primitive on chain yet — every lot is "not
-    // listed" until LedgerEscrow gets a listing surface. The marketplace
-    // page therefore renders empty by design (see app/marketplace/page).
-    listed: false,
+    listed,
+    askPrice,
     avatar: l.avatar,
     mintedAt: "—",
     daysActive: 0,
