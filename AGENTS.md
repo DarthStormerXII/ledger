@@ -74,5 +74,3 @@ S650 Ledger Integration Suite — Final Clean State Confirmed, 11/11 Repeatable 
 
 Access 509k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
-<!-- 2026-05-02: updated CLI references after council stage 3 -->
-<!-- 2026-05-02 17:06 IST gabriel: AGENTS.md: refresh CLI references after council --> (1)
