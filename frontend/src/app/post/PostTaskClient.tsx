@@ -19,14 +19,11 @@ import {
   galileoTx,
 } from "@/lib/contracts";
 
-type Phase =
-  | "idle"
-  | "needs-login"
-  | "needs-chain"
-  | "signing"
-  | "confirming"
-  | "confirmed"
-  | "failed";
+// Local-action states only. The signing/confirming/confirmed states are
+// derived from wagmi below — keeping them out of setState avoids the
+// react-hooks/set-state-in-effect lint rule.
+type LocalPhase = "idle" | "needs-login" | "needs-chain" | "failed";
+type Phase = LocalPhase | "signing" | "confirming" | "confirmed";
 
 const MIN_GAS_OG = parseEther("0.0005"); // tiny floor for postTask gas
 
@@ -53,7 +50,10 @@ export function PostTaskClient() {
     minJobs: "0",
     tags: "yield, base, defi",
   });
-  const [phase, setPhase] = useState<Phase>("idle");
+  // `localPhase` only holds states the UI sets directly. The wagmi-driven
+  // states are derived in `phase` below — that avoids mirroring external
+  // state with setState (react-hooks/set-state-in-effect).
+  const [localPhase, setLocalPhase] = useState<LocalPhase>("idle");
   const [errMsg, setErrMsg] = useState<string | null>(null);
   const [submittedTx, setSubmittedTx] = useState<Hex | null>(null);
   const [submittedTaskId, setSubmittedTaskId] = useState<Hex | null>(null);
@@ -69,25 +69,24 @@ export function PostTaskClient() {
       query: { enabled: !!submittedTx },
     });
 
-  // Drive phase from wagmi states + post-confirmation redirect.
-  useMemo(() => {
-    if (isSigning) setPhase("signing");
-    else if (submittedTx && isConfirming) setPhase("confirming");
-    else if (submittedTx && isConfirmed) {
-      setPhase("confirmed");
-      // Hold for 1.4s so the user sees the hash, then route to the auction room.
-      window.setTimeout(() => {
-        if (submittedTaskId) router.push(`/jobs/${submittedTaskId}`);
-      }, 1400);
-    }
-  }, [
-    isSigning,
-    isConfirming,
-    isConfirmed,
-    submittedTx,
-    submittedTaskId,
-    router,
-  ]);
+  const phase: Phase = isSigning
+    ? "signing"
+    : submittedTx && isConfirming
+      ? "confirming"
+      : submittedTx && isConfirmed
+        ? "confirmed"
+        : localPhase;
+
+  // Fire the redirect exactly once after the receipt confirms.
+  const redirectedRef = useRef(false);
+  useEffect(() => {
+    if (!isConfirmed || !submittedTaskId || redirectedRef.current) return;
+    redirectedRef.current = true;
+    const t = window.setTimeout(() => {
+      router.push(`/jobs/${submittedTaskId}`);
+    }, 1400);
+    return () => window.clearTimeout(t);
+  }, [isConfirmed, submittedTaskId, router]);
 
   // Validation
   const payoutWei = (() => {
@@ -107,28 +106,28 @@ export function PostTaskClient() {
     setErrMsg(null);
     if (!ready) return;
     if (!authenticated) {
-      setPhase("needs-login");
+      setLocalPhase("needs-login");
       login();
       return;
     }
     if (!onGalileo) {
-      setPhase("needs-chain");
+      setLocalPhase("needs-chain");
       try {
         await switchChainAsync({ chainId: galileo.id });
       } catch (e) {
         setErrMsg(`Could not switch to 0G Galileo: ${(e as Error).message}`);
-        setPhase("failed");
+        setLocalPhase("failed");
         return;
       }
     }
     if (!validPayout) {
       setErrMsg("Payout must be greater than 0.");
-      setPhase("failed");
+      setLocalPhase("failed");
       return;
     }
     if (!validTimeLimit) {
       setErrMsg("Time limit must be in MM:SS form (e.g. 02:00).");
-      setPhase("failed");
+      setLocalPhase("failed");
       return;
     }
     // Derive a unique taskId from buyer + title + nonce.
@@ -141,7 +140,7 @@ export function PostTaskClient() {
       Math.max(0, Math.floor(parseFloat(form.minRep || "0") * 100)),
     );
 
-    setPhase("signing");
+    setLocalPhase("idle"); // wagmi `isSigning` will drive phase from here
     try {
       const hash = await writeContractAsync({
         address: LEDGER_ESCROW_ADDRESS,
@@ -153,11 +152,10 @@ export function PostTaskClient() {
       });
       setSubmittedTx(hash);
       setSubmittedTaskId(taskId);
-      setPhase("confirming");
     } catch (e) {
       const msg = (e as Error).message ?? "Transaction rejected";
       setErrMsg(msg.length > 200 ? `${msg.slice(0, 200)}…` : msg);
-      setPhase("failed");
+      setLocalPhase("failed");
     }
   };
 
@@ -379,7 +377,7 @@ export function PostTaskClient() {
           tx={submittedTx}
           onClose={() => {
             if (phase === "confirmed") {
-              setPhase("idle");
+              setLocalPhase("idle");
               setSubmittedTx(null);
               setSubmittedTaskId(null);
             }
