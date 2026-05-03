@@ -1,4 +1,10 @@
-import { Contract, HDNodeWallet, JsonRpcProvider, getAddress } from "ethers";
+import {
+  Contract,
+  HDNodeWallet,
+  JsonRpcProvider,
+  ZeroAddress,
+  getAddress,
+} from "ethers";
 import { parseLedgerName, type ParsedName } from "./dns.js";
 import type {
   ReputationSummary,
@@ -99,8 +105,10 @@ export function resolvePay(
 ): PayResolution {
   const account = getPayAccount(config);
   const nonce = nextPayNonce(workerLabel);
-  void tokenId;
-  const path = `0/${nonce.toString()}`;
+  // Path is tokenId-namespaced so each worker has its own address sequence.
+  // Without this, every worker's nonce-0 address would be identical
+  // (`m/44'/60'/0'/0/0` = the well-known Hardhat first account).
+  const path = `${tokenId.toString()}/${nonce.toString()}`;
   const child = account.derivePath(path);
 
   const resolution = {
@@ -294,16 +302,33 @@ async function standardTextForNamespace(
 
   if (namespace === "rep") {
     const summary = resolveRepSummary(workerLabel, tokenId, config);
+    let count: number | undefined =
+      typeof summary.count === "number" ? summary.count : undefined;
+    let average: number | undefined =
+      typeof summary.average === "number" ? summary.average : undefined;
+    const reg = summary.registry ?? config.reputationRegistryAddress;
+    const agentIdStr = summary.agentId ?? tokenId.toString();
+
+    // No seeded data → fall back to a LIVE ERC-8004 read on Base Sepolia
+    // so brand-new workers (and ones without REP_SUMMARIES_JSON entries)
+    // still get real reputation values in the description.
+    if (count === undefined || average === undefined) {
+      const live = await fetchLiveErc8004Summary(BigInt(agentIdStr), config);
+      if (live) {
+        count = live.count;
+        average = live.average;
+      }
+    }
+
+    const hasData = count !== undefined && average !== undefined;
     if (key === "description") {
-      const count = summary.count?.toString() ?? "—";
-      const avg = summary.average?.toString() ?? "—";
-      const reg = summary.registry ?? config.reputationRegistryAddress;
-      const agentId = summary.agentId ?? tokenId.toString();
-      return `${count} jobs · ${avg} ★ avg · ERC-8004 agentId ${agentId}. Audited registry on Base Sepolia: ${reg}. Cross-chain read.`;
+      if (hasData) {
+        return `${count!.toString()} jobs · ${average!.toFixed(2)} ★ avg · ERC-8004 agentId ${agentIdStr}. Audited registry on Base Sepolia: ${reg}. Cross-chain read.`;
+      }
+      return `No reputation history yet for ${workerLabel} (ERC-8004 agentId ${agentIdStr}). Settlements write feedback() to the audited registry on Base Sepolia: ${reg}.`;
     }
     if (key === "notice") {
-      const reg = summary.registry ?? config.reputationRegistryAddress;
-      return `ERC-8004 ReputationRegistry ${reg} on Base Sepolia. Live cross-chain read of agent reputation.`;
+      return `ERC-8004 ReputationRegistry ${reg} on Base Sepolia. ${hasData ? `Live cross-chain read: ${count} feedback entries.` : "No feedback() entries yet for this agent."}`;
     }
     return null;
   }
@@ -311,15 +336,18 @@ async function standardTextForNamespace(
   if (namespace === "mem") {
     try {
       const cid = await resolveMemoryPointer(workerLabel, tokenId, config);
+      const isSentinel = isSentinelCid(cid);
+      const cidValid = !!cid && !isSentinel;
       if (key === "description") {
-        return cid
-          ? `0G Storage memory CID: ${cid}. AES-256-CTR encrypted client-side, re-keyed by the TEE on every iNFT transfer so the new owner can decrypt and the old owner can't.`
-          : `Encrypted memory pointer for ${workerLabel}. iNFT memoryCID not yet set on Galileo.`;
+        if (cidValid) {
+          return `0G Storage memory CID: ${cid}. AES-256-CTR encrypted client-side, re-keyed by the TEE on every iNFT transfer so the new owner can decrypt and the old owner can't.`;
+        }
+        return `Encrypted memory pointer for ${workerLabel}. No memory has been pinned to 0G Storage for tokenId ${tokenId.toString()} yet — getMetadata() returns the empty sentinel.`;
       }
       if (key === "notice") {
-        return cid
+        return cidValid
           ? `Memory CID ${cid} — pulled live from WorkerINFT.getMetadata(${tokenId.toString()}).memoryCID on Galileo.`
-          : `mem.* namespace — live cross-chain read of WorkerINFT.getMetadata().memoryCID.`;
+          : `mem.* namespace — live cross-chain read of WorkerINFT.getMetadata().memoryCID. No CID set for this iNFT yet.`;
       }
     } catch {
       if (key === "description") {
@@ -438,4 +466,80 @@ function resolveMemText(key: string, cid: string): string {
     default:
       return "";
   }
+}
+
+// WorkerINFT.getMetadata returns 0xffffffff…ffff for tokens that haven't
+// pinned a memory blob yet. Treat that as "no CID" for description copy.
+function isSentinelCid(cid: string): boolean {
+  if (!cid) return true;
+  const hex = cid
+    .replace(/^0g:\/\//, "")
+    .split("?")[0]
+    .toLowerCase();
+  if (!/^0x/.test(hex)) return false;
+  const body = hex.slice(2);
+  // Pure all-f / all-0 sentinels.
+  if (/^f+$/u.test(body) || /^0+$/u.test(body)) return true;
+  // Mass-mint placeholders that share a long run of one character then a
+  // small tokenId terminator (e.g. 0xff…ff1, 0xff…ff2). Real SHA-256-style
+  // CIDs are never near-uniform — entropy is too high.
+  if (body.length >= 32) {
+    const first = body[0];
+    let runLen = 0;
+    while (runLen < body.length && body[runLen] === first) runLen++;
+    if (runLen >= body.length - 4) return true;
+  }
+  return false;
+}
+
+// Live ERC-8004 read on Base Sepolia. Used as a fallback when no seeded
+// REP_SUMMARIES_JSON entry exists for a worker — so brand-new agents get
+// real reputation values without per-agent config edits.
+const ERC8004_GETSUMMARY_ABI = [
+  "function getSummary(uint256 agentId, address[] feedbackAuthIds, string clientUrl, string requestId) view returns (uint64 count, int128 sumValue, uint8 decimals)",
+];
+const liveRepCache = new Map<
+  string,
+  { value: { count: number; average: number } | null; ts: number }
+>();
+const REP_CACHE_TTL_MS = 30_000;
+
+async function fetchLiveErc8004Summary(
+  agentId: bigint,
+  config: ResolverConfig,
+): Promise<{ count: number; average: number } | null> {
+  const cacheKey = `${config.reputationRegistryAddress}:${agentId.toString()}`;
+  const cached = liveRepCache.get(cacheKey);
+  if (cached && Date.now() - cached.ts < REP_CACHE_TTL_MS) {
+    return cached.value;
+  }
+  let value: { count: number; average: number } | null = null;
+  try {
+    if (config.reputationRegistryAddress === ZeroAddress) return null;
+    const provider = new JsonRpcProvider(config.baseSepoliaRpcUrl, 84532);
+    const contract = new Contract(
+      config.reputationRegistryAddress,
+      ERC8004_GETSUMMARY_ABI,
+      provider,
+    );
+    const result = (await contract.getSummary(agentId, [], "", "")) as [
+      bigint,
+      bigint,
+      bigint,
+    ];
+    const count = Number(result[0]);
+    if (count === 0) {
+      value = null;
+    } else {
+      const sumValue = result[1];
+      const decimals = Number(result[2]);
+      const denom = 10 ** decimals;
+      const average = Number(sumValue) / denom / count;
+      value = { count, average };
+    }
+  } catch {
+    value = null;
+  }
+  liveRepCache.set(cacheKey, { value, ts: Date.now() });
+  return value;
 }
