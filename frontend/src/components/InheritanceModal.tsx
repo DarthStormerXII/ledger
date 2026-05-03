@@ -170,7 +170,11 @@ export function InheritanceModal({
             marginBottom: 24,
           }}
         >
-          <Row label="Sale price" value={lot.askPrice ? `${lot.askPrice} 0G` : "—"} italic />
+          <Row
+            label="Sale price"
+            value={lot.askPrice ? `${lot.askPrice} 0G` : "—"}
+            italic
+          />
           <Row label="Transfer tx" value="not submitted" mono />
           <Row
             label="Settles on"
@@ -195,7 +199,9 @@ export function InheritanceModal({
             Close
           </button>
           <button disabled className="btn" style={{ opacity: 0.6 }}>
-            {phase === "checking" ? "Checking live owner..." : "No live sale to execute"}
+            {phase === "checking"
+              ? "Checking live owner..."
+              : "No live sale to execute"}
           </button>
         </div>
       </div>
