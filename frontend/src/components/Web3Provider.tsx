@@ -6,6 +6,24 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { http } from "viem";
 import { sepolia, baseSepolia, galileo } from "@/lib/chains";
 
+// Privy's price oracle calls a CoinGecko-style endpoint to render USD
+// equivalents next to native balances. Galileo (chainId 16602) isn't on
+// any price feed, so Privy logs `console.error("Unable to fetch token
+// price for chain with id 16602")` on every wallet open. Next.js 16's dev
+// overlay then surfaces it as a red error box, even though it's a
+// non-fatal warning that doesn't affect transactions. Filter only that
+// exact string — keep all other console.error output intact.
+if (typeof window !== "undefined") {
+  const PRIVY_PRICE_NOISE =
+    /Unable to fetch token price for chain with id (16602|11155111|84532)/;
+  const originalError = console.error;
+  console.error = (...args: unknown[]) => {
+    const msg = args.map((a) => (typeof a === "string" ? a : "")).join(" ");
+    if (PRIVY_PRICE_NOISE.test(msg)) return;
+    originalError(...args);
+  };
+}
+
 const queryClient = new QueryClient();
 
 // Galileo's RPC is sometimes slow to surface a receipt right after submit
