@@ -141,6 +141,7 @@ export function PostTaskClient() {
     );
 
     setLocalPhase("idle"); // wagmi `isSigning` will drive phase from here
+    redirectedRef.current = false; // allow the post-confirm redirect to fire for this submission
     try {
       const hash = await writeContractAsync({
         address: LEDGER_ESCROW_ADDRESS,

@@ -224,11 +224,21 @@ function buildLotInspectGroups(lot: Lot): InspectGroup[] {
               { label: "Job count", value: String(lot.jobs) },
               { label: "Average rating", value: `${lot.rating} / 5.00` },
               { label: "Total earned", value: `${lot.earned} USDC` },
+              {
+                label: "Disclosure",
+                value:
+                  "These ERC-8004 records were seeded for the demo. The registry read path is real — full disclosure on /proof.",
+              },
             ]
           : [
               { label: "Job count", value: String(lot.jobs) },
               { label: "Average rating", value: `${lot.rating} / 5.00` },
               { label: "Total earned", value: `${lot.earned} USDC` },
+              {
+                label: "Disclosure",
+                value:
+                  "Catalogue seed data — not on-chain. Hero lot 047 has live receipts on /proof.",
+              },
             ]),
       ],
     },

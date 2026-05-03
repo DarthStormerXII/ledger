@@ -372,7 +372,7 @@ const sections: Section[] = [
         value:
           "ai.rep.registry=0x8004B663… · ai.rep.agent=5444 · count=47 · avg=4.77",
         caption:
-          "Live read from ERC-8004 ReputationRegistry on Base Sepolia. 47 distinct giveFeedback records across 8 client wallets.",
+          "Live read from ERC-8004 ReputationRegistry on Base Sepolia. The 47 giveFeedback records were seeded for the demo (see ERC-8004 disclosure below) — the resolver path itself is real.",
       },
       {
         label: "mem.worker-001.ledger.eth",
@@ -394,7 +394,7 @@ const sections: Section[] = [
     id: "erc8004",
     title: "ERC-8004",
     blurb:
-      "Audited reputation registry on Base Sepolia. Ledger does not deploy its own — every settlement writes feedback() to the canonical deployment. The 47-job, 4.77-rating demo claim is real on-chain data backed by 47 separate giveFeedback transactions across 8 distinct client wallets.",
+      "Audited reputation registry on Base Sepolia. Ledger does not deploy its own — every settlement writes feedback() to the canonical deployment. The 47-job, 4.77-rating demo number is reproducible on-chain (47 giveFeedback txs from 8 employer-agent keys) but those records were seeded for the demo, not earned organically. Honest disclosure on the last row.",
     rows: [
       {
         label: "IdentityRegistry",
