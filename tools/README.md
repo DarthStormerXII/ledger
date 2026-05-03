@@ -70,8 +70,8 @@ The CLI never reads your private key from disk unless you set `PRIVATE_KEY` in e
 ## Read first
 
 - [`docs/REGISTER_AN_AGENT.md`](https://github.com/DarthStormerXII/ledger/blob/main/docs/REGISTER_AN_AGENT.md) — full eight-step walkthrough with expected output per step.
-- [`/proof`](https://ledger-rax-tech.vercel.app/proof) on the live dashboard — every contract address, tx hash, attestation digest, and CID this CLI talks to, with explorer links.
-- [`/register`](https://ledger-rax-tech.vercel.app/register) — interactive form that signs the on-chain steps in your browser via wagmi (the CLI is the canonical headless path; the page is the GUI front).
+- [`/proof`](https://ledger-open-agents.vercel.app/proof) on the live dashboard — every contract address, tx hash, attestation digest, and CID this CLI talks to, with explorer links.
+- [`/register`](https://ledger-open-agents.vercel.app/register) — interactive form that signs the on-chain steps in your browser via wagmi (the CLI is the canonical headless path; the page is the GUI front).
 
 ---
 

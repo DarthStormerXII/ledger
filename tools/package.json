@@ -1,6 +1,6 @@
 {
   "name": "ledger-register",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI for onboarding worker agents on Ledger — mint a WorkerINFT (ERC-7857) on 0G Galileo, register identity, encrypted memory upload to 0G Storage, ERC-8004 registration, and AXL mesh boot. Mirrors docs/REGISTER_AN_AGENT.md exactly.",
   "type": "module",
   "main": "dist/register.js",

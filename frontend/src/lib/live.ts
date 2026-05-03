@@ -139,10 +139,25 @@ export type RepPoint = { unixSec: number; value: number };
 // stay under the public RPC's 10_000-block range limit.
 export async function getRepHistory(
   agentId: bigint,
-  fromBlock: bigint = 30_000_000n,
+  /**
+   * `lookbackBlocks` defaults to ~5 days of Base Sepolia (≈ 200k blocks at
+   * 2s/block). Older feedback won't appear unless you pass a larger value.
+   * The window is intentionally narrow so the SSR /agent route stays fast —
+   * scanning the full chain history with eth_getLogs takes 60s+ via the
+   * public RPC and was hanging the page render (Vercel times out at 30s).
+   */
+  lookbackBlocks: bigint = 200_000n,
 ): Promise<RepPoint[]> {
+  // Wall-clock budget for the whole function. If a public RPC is slow or
+  // the chunked scan can't finish in time, return whatever we have so the
+  // page doesn't hang. Chart degrades to "no feedback yet" empty state.
+  const START_MS = Date.now();
+  const BUDGET_MS = 4000;
+  const overBudget = () => Date.now() - START_MS > BUDGET_MS;
+
   const tip = await baseSepoliaClient.getBlockNumber().catch(() => 0n);
   if (tip === 0n) return [];
+  const fromBlock = tip > lookbackBlocks ? tip - lookbackBlocks : 0n;
   const CHUNK = 9_000n;
   // Collect (blockNumber, rating) pairs as we go. We pull raw logs and
   // decodeEventLog each one because viem's getLogs auto-decode only fills
@@ -150,6 +165,7 @@ export async function getRepHistory(
   // valueDecimals that we need for the chart live in the data payload.
   const raw: Array<{ block: bigint; rating: number }> = [];
   for (let from = fromBlock; from <= tip; from += CHUNK + 1n) {
+    if (overBudget()) break;
     const to = from + CHUNK > tip ? tip : from + CHUNK;
     try {
       const chunk = await baseSepoliaClient.getLogs({
@@ -189,18 +205,37 @@ export async function getRepHistory(
   }
   if (raw.length === 0) return [];
   // Resolve block timestamps in parallel, deduping repeat block numbers.
+  // If we're already over budget, skip the second RPC pass entirely and
+  // approximate timestamps with a synthetic monotonic order — the chart
+  // still renders (using block-number proxy via x-axis order).
   const uniqueBlocks = Array.from(new Set(raw.map((r) => r.block)));
   const ts = new Map<bigint, number>();
-  await Promise.all(
-    uniqueBlocks.map(async (b) => {
-      try {
-        const block = await baseSepoliaClient.getBlock({ blockNumber: b });
-        ts.set(b, Number(block.timestamp));
-      } catch {
-        ts.set(b, 0);
-      }
-    }),
-  );
+  if (!overBudget()) {
+    await Promise.race([
+      Promise.all(
+        uniqueBlocks.map(async (b) => {
+          try {
+            const block = await baseSepoliaClient.getBlock({ blockNumber: b });
+            ts.set(b, Number(block.timestamp));
+          } catch {
+            ts.set(b, 0);
+          }
+        }),
+      ),
+      // Hard ceiling on the second pass so a slow RPC can't strand the
+      // overall request past the budget.
+      new Promise<void>((res) =>
+        setTimeout(res, Math.max(500, BUDGET_MS - (Date.now() - START_MS))),
+      ),
+    ]);
+  }
+  // Fallback: any block we couldn't fetch a timestamp for gets a synthetic
+  // increasing value, so the chart still orders correctly even when we ran
+  // out of time before resolving every getBlock.
+  const sortedBlocks = [...uniqueBlocks].sort((a, b) => Number(a - b));
+  sortedBlocks.forEach((b, i) => {
+    if (!ts.has(b)) ts.set(b, i + 1);
+  });
   return raw
     .map((r) => ({ unixSec: ts.get(r.block) ?? 0, value: r.rating }))
     .filter((p) => p.unixSec > 0)
