@@ -1,0 +1,417 @@
+@import "tailwindcss";
+
+/* === Ledger D1 Auction House — Design Tokens ===
+ * Marketing surfaces use paper-cream; product UI uses ink-deep.
+ * The product (this app) lives entirely in dark surface mode.
+ */
+
+:root {
+  /* Paper (marketing — kept for completeness, unused in product) */
+  --ledger-paper: #f5f1e8;
+  --ledger-paper-warm: #eae4d5;
+  --ledger-paper-dim: #d9d2bf;
+
+  /* Ink (product UI default) */
+  --ledger-ink-deep: #0a0a0e; /* page background */
+  --ledger-ink: #0f0f12; /* contrasting body color on paper */
+  --ledger-ink-warm: #13131a; /* zebra rows, secondary surfaces */
+  --ledger-ink-elevated: #18181e; /* cards, modals, lot plates */
+  --ledger-ink-soft: #2a2a30; /* secondary text on paper */
+  --ledger-ink-muted: #6e6e76; /* labels, captions */
+  --ledger-ink-border: rgba(245, 241, 232, 0.12);
+  --ledger-ink-border-strong: rgba(245, 241, 232, 0.22);
+
+  /* Brand accents — sparing */
+  --ledger-oxblood: #9c2a2a; /* SOLD / active / primary buttons / live-bid */
+  --ledger-oxblood-bright: #b13434;
+  --ledger-oxblood-dim: #7a1f1f;
+  --ledger-gold-leaf: #c8a85c; /* RECORD price, premium pill — max 2/screen */
+  --ledger-gold-dim: #a88b40;
+
+  /* Live activity tint (used sparingly for AXL pulses, latency-ok states) */
+  --ledger-live-blue: #79a2c4;
+
+  /* Semantic */
+  --ledger-success: #6b8a4f; /* moss — settled */
+  --ledger-warning: #b8843a; /* burnt amber — pending */
+  --ledger-danger: #8c2a2a; /* venous red — failed */
+
+  /* Type families (loaded via next/font in layout.tsx) */
+  --ledger-font-display:
+    var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
+  --ledger-font-body:
+    var(--font-bricolage), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --ledger-font-mono:
+    var(--font-jetbrains), ui-monospace, "SFMono-Regular", monospace;
+
+  /* Type scale */
+  --ledger-text-display-xl: 128px;
+  --ledger-text-display-lg: 96px;
+  --ledger-text-display-md: 64px;
+  --ledger-text-display-sm: 40px;
+  --ledger-text-body-lg: 18px;
+  --ledger-text-body-md: 16px;
+  --ledger-text-body-sm: 13px;
+  --ledger-text-mono-md: 14px;
+  --ledger-text-mono-sm: 12px;
+  --ledger-text-caps-md: 11px;
+  --ledger-text-caps-sm: 10px;
+
+  /* Tracking */
+  --ledger-tracking-display-xl: -0.04em;
+  --ledger-tracking-display-lg: -0.03em;
+  --ledger-tracking-display-md: -0.02em;
+  --ledger-tracking-display-sm: -0.01em;
+  --ledger-tracking-caps-md: 0.12em;
+  --ledger-tracking-caps-sm: 0.14em;
+
+  /* Layout */
+  --ledger-page-padding: 40px;
+  --ledger-page-padding-md: 24px;
+
+  /* Motion */
+  --ledger-duration-fast: 250ms;
+  --ledger-duration-roll: 500ms;
+  --ledger-duration-hammer: 800ms;
+  --ledger-duration-ceremony: 1500ms;
+  --ledger-easing-default: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Tailwind v4 theme bindings */
+@theme inline {
+  --color-background: var(--ledger-ink-deep);
+  --color-foreground: var(--ledger-paper);
+  --color-ink: var(--ledger-ink);
+  --color-ink-deep: var(--ledger-ink-deep);
+  --color-ink-warm: var(--ledger-ink-warm);
+  --color-ink-elevated: var(--ledger-ink-elevated);
+  --color-ink-muted: var(--ledger-ink-muted);
+  --color-ink-soft: var(--ledger-ink-soft);
+  --color-ink-border: var(--ledger-ink-border);
+  --color-paper: var(--ledger-paper);
+  --color-paper-warm: var(--ledger-paper-warm);
+  --color-oxblood: var(--ledger-oxblood);
+  --color-oxblood-bright: var(--ledger-oxblood-bright);
+  --color-oxblood-dim: var(--ledger-oxblood-dim);
+  --color-gold-leaf: var(--ledger-gold-leaf);
+  --color-gold-dim: var(--ledger-gold-dim);
+  --color-live-blue: var(--ledger-live-blue);
+  --color-success: var(--ledger-success);
+  --color-warning: var(--ledger-warning);
+  --color-danger: var(--ledger-danger);
+
+  --font-display: var(--ledger-font-display);
+  --font-body: var(--ledger-font-body);
+  --font-mono: var(--ledger-font-mono);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--ledger-ink-deep);
+  color: var(--ledger-paper);
+  font-family: var(--ledger-font-body);
+  font-size: var(--ledger-text-body-md);
+  font-feature-settings: "tnum", "ss01"; /* tabular figures, alt forms */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  min-height: 100dvh;
+  margin: 0;
+}
+
+::selection {
+  background: var(--ledger-oxblood);
+  color: var(--ledger-paper);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ledger-ink-elevated);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ledger-ink-soft);
+}
+
+/* === Display utilities (italic Fraunces is the brand voice) === */
+.ledger-display {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-feature-settings: "tnum";
+  letter-spacing: var(--ledger-tracking-display-md);
+}
+.ledger-display-roman {
+  font-family: var(--ledger-font-display);
+  font-style: normal;
+  font-weight: 900;
+  font-feature-settings: "tnum";
+  letter-spacing: var(--ledger-tracking-display-md);
+}
+.ledger-money {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: 800;
+  font-feature-settings: "tnum";
+  letter-spacing: var(--ledger-tracking-display-md);
+}
+.ledger-money-sold {
+  color: var(--ledger-oxblood-bright);
+}
+.ledger-money-record {
+  color: var(--ledger-gold-leaf);
+}
+.ledger-mono {
+  font-family: var(--ledger-font-mono);
+  font-feature-settings: "tnum", "zero";
+}
+.ledger-caps-md {
+  font-family: var(--ledger-font-body);
+  font-weight: 500;
+  font-size: var(--ledger-text-caps-md);
+  text-transform: uppercase;
+  letter-spacing: var(--ledger-tracking-caps-md);
+  color: var(--ledger-ink-muted);
+}
+.ledger-caps-sm {
+  font-family: var(--ledger-font-body);
+  font-weight: 500;
+  font-size: var(--ledger-text-caps-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--ledger-tracking-caps-sm);
+}
+
+/* === Lot plate (the primary catalogue unit) === */
+.ledger-plate {
+  border: 1px solid var(--ledger-ink-border);
+  background: var(--ledger-ink-elevated);
+  border-radius: 0;
+  padding: 24px;
+}
+.ledger-plate-flush {
+  border: 1px solid var(--ledger-ink-border);
+  background: transparent;
+  border-radius: 0;
+}
+
+/* === Pulse (cyan/oxblood breathing border for live/active states) === */
+@keyframes ledger-pulse-border {
+  0%,
+  100% {
+    border-color: var(--ledger-oxblood);
+    opacity: 0.55;
+  }
+  50% {
+    border-color: var(--ledger-oxblood-bright);
+    opacity: 1;
+  }
+}
+.ledger-pulse-border {
+  animation: ledger-pulse-border 2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ledger-pulse-border {
+    animation: none;
+    border-color: var(--ledger-oxblood);
+  }
+}
+
+/* === Pulse opacity (border-color preserved) === */
+@keyframes ledger-pulse-opacity {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.ledger-pulse-opacity {
+  animation: ledger-pulse-opacity 2s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ledger-pulse-opacity {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* === Pulse dot (small live indicator) === */
+@keyframes ledger-pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+.ledger-pulse-dot {
+  animation: ledger-pulse-dot 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ledger-pulse-dot {
+    animation: none;
+  }
+}
+
+/* === Heartbeat line for AXL connection in bid cards === */
+@keyframes ledger-heartbeat {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.ledger-heartbeat {
+  animation: ledger-heartbeat 1.2s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ledger-heartbeat {
+    animation: none;
+  }
+}
+
+/* === Marquee for the ticker rail === */
+@keyframes ledger-ticker-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.ledger-ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ledger-ticker-scroll 60s linear infinite;
+}
+.ledger-ticker-track:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ledger-ticker-track {
+    animation: none;
+  }
+}
+
+/* === Soft fade-in for newly-arriving content === */
+@keyframes ledger-arrive {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.ledger-arrive {
+  animation: ledger-arrive 200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* === Particle stream for the inheritance modal === */
+@keyframes ledger-particle-up {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-160px);
+    opacity: 0;
+  }
+}
+@keyframes ledger-particle-down {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(160px);
+    opacity: 0;
+  }
+}
+
+/* === Shimmer for digit-roll fallback === */
+@keyframes ledger-digit-roll {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.ledger-digit-roll {
+  display: inline-block;
+  animation: ledger-digit-roll 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Spinner */
+@keyframes ledger-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ledger-spin {
+  animation: ledger-spin 1s linear infinite;
+}
+
+/* Modal backdrop fade */
+@keyframes ledger-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.ledger-fade {
+  animation: ledger-fade 200ms ease-out;
+}
+
+/* Focus rings — subtle, oxblood */
+:focus-visible {
+  outline: 1.5px solid var(--ledger-oxblood);
+  outline-offset: 2px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Hide scrollbar variant for inline horizontal lists */
+.ledger-scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+.ledger-scrollbar-hidden {
+  scrollbar-width: none;
+}
