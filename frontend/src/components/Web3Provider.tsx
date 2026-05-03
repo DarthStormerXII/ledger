@@ -8,18 +8,29 @@ import { sepolia, baseSepolia, galileo } from "@/lib/chains";
 
 const queryClient = new QueryClient();
 
+// Galileo's RPC is sometimes slow to surface a receipt right after submit
+// (the read replica lags the sequencer by 5–15s). With viem's defaults
+// (~30s timeout, ~4s polling, 3 retries) the receipt-poll can time out
+// while the tx is mining successfully — Privy then surfaces that as
+// "Transaction receipt could not be found" and offers Retry, which
+// resubmits the same calldata and reverts via the contract's idempotency
+// guard. Stretch the polling envelope so the receipt arrives in-window.
 const wagmiConfig = createConfig({
   chains: [galileo, baseSepolia, sepolia],
+  pollingInterval: 2_000,
   transports: {
     [galileo.id]: http(
       process.env.NEXT_PUBLIC_GALILEO_RPC ?? "https://evmrpc-testnet.0g.ai",
+      { retryCount: 8, retryDelay: 1_500, timeout: 90_000 },
     ),
     [baseSepolia.id]: http(
       process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC ?? "https://sepolia.base.org",
+      { retryCount: 5, retryDelay: 1_500, timeout: 60_000 },
     ),
     [sepolia.id]: http(
       process.env.NEXT_PUBLIC_SEPOLIA_RPC ??
         "https://ethereum-sepolia-rpc.publicnode.com",
+      { retryCount: 5, retryDelay: 1_500, timeout: 60_000 },
     ),
   },
 });

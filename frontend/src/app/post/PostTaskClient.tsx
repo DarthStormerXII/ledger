@@ -152,20 +152,9 @@ export function PostTaskClient() {
 
     setLocalPhase("idle"); // wagmi `isSigning` will drive phase from here
     redirectedRef.current = false; // allow the post-confirm redirect to fire for this submission
-    try {
-      const hash = await writeContractAsync({
-        address: LEDGER_ESCROW_ADDRESS,
-        abi: LEDGER_ESCROW_ABI,
-        functionName: "postTask",
-        args: [taskId, payoutWei, deadlineSec, minReputation],
-        value: payoutWei,
-        chainId: galileo.id,
-      });
+    const onSubmitted = (hash: Hex) => {
       setSubmittedTx(hash);
       setSubmittedTaskId(taskId);
-
-      // Fire-and-forget pin the brief to 0G Storage via the server route.
-      // We snapshot the form values so later edits don't mutate this brief.
       const tags = form.tags
         .split(",")
         .map((t) => t.trim())
@@ -195,8 +184,35 @@ export function PostTaskClient() {
         // The auction room shows a "brief not pinned" disclosure if it 404s.
         console.warn("[post-task] brief pin failed", err);
       });
+    };
+    try {
+      const hash = await writeContractAsync({
+        address: LEDGER_ESCROW_ADDRESS,
+        abi: LEDGER_ESCROW_ABI,
+        functionName: "postTask",
+        args: [taskId, payoutWei, deadlineSec, minReputation],
+        value: payoutWei,
+        chainId: galileo.id,
+      });
+      onSubmitted(hash);
     } catch (e) {
       const msg = (e as Error).message ?? "Transaction rejected";
+      // Galileo's read replica sometimes lags the sequencer by 5–15s, so
+      // viem's waitForTransactionReceipt times out before the receipt
+      // surfaces — even though the tx is mining successfully. Privy
+      // bubbles that as "Transaction receipt with hash 0x… could not be
+      // found." Recover by extracting the hash and treating it as a
+      // submit; useWaitForTransactionReceipt will catch up on its own
+      // (transports retry for 90s).
+      const hashMatch = msg.match(/0x[0-9a-fA-F]{64}/);
+      const isReceiptDelay =
+        /receipt.+could not be found|may not be processed on a block|no matching receipts found/i.test(
+          msg,
+        );
+      if (hashMatch && isReceiptDelay) {
+        onSubmitted(hashMatch[0] as Hex);
+        return;
+      }
       setErrMsg(msg.length > 200 ? `${msg.slice(0, 200)}…` : msg);
       setLocalPhase("failed");
     }

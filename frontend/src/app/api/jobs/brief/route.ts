@@ -3,15 +3,18 @@ import { createHash, randomBytes } from "node:crypto";
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { neon } from "@neondatabase/serverless";
 
 /**
  * Job-brief storage layer.
  *
  *   Layer 1  — brief content lives in 0G Storage (real CID, judges can verify)
- *   Layer 2A — taskId → CID + content cache lives in this route's process memory
+ *   Layer 2  — (taskId → CID + brief) lookup lives in Neon Postgres so it
+ *              survives Vercel cold starts. A warm-instance Map fronts the
+ *              DB to keep repeat reads cheap.
  *
- * Why a server-side cache instead of an on-chain registry today: shipping
- * a `TaskBriefRegistry` Galileo contract costs a redeploy + ABI bump that
+ * Why Postgres for the lookup and not an on-chain registry: shipping a
+ * `TaskBriefRegistry` Galileo contract costs a redeploy + ABI bump that
  * isn't reachable in the submission window. The brief content itself is
  * still pinned to 0G Storage, which is the substantive on-chain claim;
  * the route only mediates the (taskId → CID) lookup. The plan is to
@@ -70,13 +73,145 @@ type Entry = {
   size: number;
 };
 
-// Module-level cache. Persists for the lifetime of a warm Vercel function
-// instance. Cold starts lose it — the brief survives because the CID lives
-// on 0G Storage, but the (taskId → CID) lookup needs to be re-POSTed.
+// Warm-instance cache fronting the Postgres lookup. The DB is the source of
+// truth — this just shaves a roundtrip on repeated GETs from the same warm
+// function. Cold starts will hit the DB once per taskId and re-warm.
 const cache = new Map<string, Entry>();
 
 const DEFAULT_INDEXER_RPC = "https://indexer-storage-testnet-turbo.0g.ai";
 const DEFAULT_GALILEO_RPC = "https://evmrpc-testnet.0g.ai";
+
+// Lazy Postgres handle. Falls back to memory-only when DATABASE_URL is unset
+// (local dev without Neon). The route still works in that mode but loses the
+// brief on cold start — same behaviour as the previous implementation.
+let sqlInstance: ReturnType<typeof neon> | null | undefined;
+let schemaReady: Promise<void> | null = null;
+
+function getSql(): ReturnType<typeof neon> | null {
+  if (sqlInstance !== undefined) return sqlInstance;
+  const url = process.env.DATABASE_URL;
+  if (!url) {
+    console.warn(
+      "[brief-route] DATABASE_URL unset — briefs will only persist in warm-instance memory.",
+    );
+    sqlInstance = null;
+    return null;
+  }
+  sqlInstance = neon(url);
+  return sqlInstance;
+}
+
+async function ensureSchema(): Promise<void> {
+  const sql = getSql();
+  if (!sql) return;
+  if (!schemaReady) {
+    schemaReady = (async () => {
+      await sql`
+        CREATE TABLE IF NOT EXISTS task_briefs (
+          task_id      TEXT PRIMARY KEY,
+          cid          TEXT NOT NULL,
+          brief        JSONB NOT NULL,
+          pinned       BOOLEAN NOT NULL DEFAULT FALSE,
+          pinned_at_ms BIGINT,
+          size_bytes   INTEGER NOT NULL,
+          created_at   TIMESTAMPTZ NOT NULL DEFAULT now()
+        )
+      `;
+    })().catch((err) => {
+      console.error("[brief-route] schema init failed:", err);
+      schemaReady = null;
+      throw err;
+    });
+  }
+  await schemaReady;
+}
+
+async function dbUpsert(entry: Entry): Promise<void> {
+  const sql = getSql();
+  if (!sql) return;
+  try {
+    await ensureSchema();
+    await sql`
+      INSERT INTO task_briefs (task_id, cid, brief, pinned, pinned_at_ms, size_bytes)
+      VALUES (${entry.taskId}, ${entry.cid}, ${JSON.stringify(entry.brief)}::jsonb,
+              ${entry.pinned}, ${entry.pinnedAtMs ?? null}, ${entry.size})
+      ON CONFLICT (task_id) DO UPDATE SET
+        cid          = EXCLUDED.cid,
+        brief        = EXCLUDED.brief,
+        pinned       = EXCLUDED.pinned,
+        pinned_at_ms = EXCLUDED.pinned_at_ms,
+        size_bytes   = EXCLUDED.size_bytes
+    `;
+  } catch (err) {
+    console.error("[brief-route] dbUpsert failed:", err);
+  }
+}
+
+async function dbGet(taskId: string): Promise<Entry | null> {
+  const sql = getSql();
+  if (!sql) return null;
+  try {
+    await ensureSchema();
+    const rows = (await sql`
+      SELECT task_id, cid, brief, pinned, pinned_at_ms, size_bytes
+      FROM task_briefs
+      WHERE task_id = ${taskId}
+      LIMIT 1
+    `) as Array<{
+      task_id: string;
+      cid: string;
+      brief: Brief;
+      pinned: boolean;
+      pinned_at_ms: string | null;
+      size_bytes: number;
+    }>;
+    if (rows.length === 0) return null;
+    const r = rows[0];
+    return {
+      taskId: r.task_id,
+      cid: r.cid,
+      brief: r.brief,
+      pinned: r.pinned,
+      pinnedAtMs: r.pinned_at_ms ? Number(r.pinned_at_ms) : undefined,
+      size: r.size_bytes,
+    };
+  } catch (err) {
+    console.error("[brief-route] dbGet failed:", err);
+    return null;
+  }
+}
+
+async function dbList(limit = 100): Promise<Entry[]> {
+  const sql = getSql();
+  if (!sql) return [];
+  try {
+    await ensureSchema();
+    const rows = (await sql`
+      SELECT task_id, cid, brief, pinned, pinned_at_ms, size_bytes
+      FROM task_briefs
+      ORDER BY created_at DESC
+      LIMIT ${limit}
+    `) as Array<{
+      task_id: string;
+      cid: string;
+      brief: Brief;
+      pinned: boolean;
+      pinned_at_ms: string | null;
+      size_bytes: number;
+    }>;
+    return rows.map((r) => ({
+      taskId: r.task_id,
+      cid: r.cid,
+      brief: r.brief,
+      pinned: r.pinned,
+      pinnedAtMs: r.pinned_at_ms ? Number(r.pinned_at_ms) : undefined,
+      size: r.size_bytes,
+    }));
+  } catch (err) {
+    console.error("[brief-route] dbList failed:", err);
+    return [];
+  }
+}
 
 function isHexTaskId(s: unknown): s is string {
   return typeof s === "string" && /^0x[0-9a-fA-F]{64}$/.test(s);
@@ -200,7 +335,17 @@ async function pinTo0g(payload: Buffer): Promise<string | null> {
         if (err) throw err;
         const [tree, treeErr] = await file.merkleTree();
         if (treeErr) throw treeErr;
-        return `0g://${tree.rootHash()}?tx=${tx}`;
+        // `tx` is an object { txHash, rootHash, txSeq } on this SDK version,
+        // not a string — extract the actual hash so the CID query string is
+        // a real on-chain reference instead of "[object Object]".
+        const txHash =
+          tx && typeof tx === "object" && "txHash" in tx
+            ? String((tx as { txHash: unknown }).txHash)
+            : typeof tx === "string"
+              ? tx
+              : "";
+        const root = tree.rootHash();
+        return txHash ? `0g://${root}?tx=${txHash}` : `0g://${root}`;
       }
     } finally {
       await file.close?.();
@@ -276,6 +421,7 @@ export async function POST(req: Request) {
     size: payload.byteLength,
   };
   cache.set(entry.taskId, entry);
+  await dbUpsert(entry);
 
   return NextResponse.json({
     ok: true,
@@ -290,21 +436,28 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const taskId = url.searchParams.get("taskId");
 
-  // No taskId → list all briefs known to this warm instance. The /jobs page
-  // calls this once per render to map taskId → brief without N round-trips.
+  // No taskId → list all briefs from Postgres (falls back to warm cache when
+  // DATABASE_URL is unset). The /jobs page calls this once per render to map
+  // taskId → brief without N round-trips.
   if (!taskId) {
-    const entries = Array.from(cache.values()).map((e) => ({
-      taskId: e.taskId,
-      cid: e.cid,
-      pinned: e.pinned,
-      pinnedAtMs: e.pinnedAtMs,
-      size: e.size,
-      brief: e.brief,
-    }));
+    let entries = await dbList(200);
+    if (entries.length === 0) {
+      entries = Array.from(cache.values());
+    } else {
+      // Refresh warm cache from DB so subsequent reads hit memory.
+      for (const e of entries) cache.set(e.taskId, e);
+    }
     return NextResponse.json({
       ok: true,
       count: entries.length,
-      briefs: entries,
+      briefs: entries.map((e) => ({
+        taskId: e.taskId,
+        cid: e.cid,
+        pinned: e.pinned,
+        pinnedAtMs: e.pinnedAtMs,
+        size: e.size,
+        brief: e.brief,
+      })),
     });
   }
 
@@ -314,12 +467,20 @@ export async function GET(req: Request) {
       { status: 400 },
     );
   }
-  const entry = cache.get(taskId.toLowerCase());
+  const taskIdLower = taskId.toLowerCase();
+  let entry = cache.get(taskIdLower);
+  if (!entry) {
+    const fromDb = await dbGet(taskIdLower);
+    if (fromDb) {
+      cache.set(taskIdLower, fromDb);
+      entry = fromDb;
+    }
+  }
   if (!entry) {
     return NextResponse.json(
       {
         error: "not_found",
-        hint: "Brief not in this instance's cache. Either it was posted to a different warm instance, or the task was posted before the brief route was deployed (pre-registry task).",
+        hint: "Brief not in registry. The task was posted before the brief route was deployed, or the POST never reached this route.",
       },
       { status: 404 },
     );
