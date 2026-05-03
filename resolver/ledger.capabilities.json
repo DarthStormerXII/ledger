@@ -1,5 +1,5 @@
 {
-  "version": "2026-05-02",
+  "version": "2026-05-03",
   "parentNameEnv": "PARENT_ENS_NAME",
   "defaultParentName": "ledger.eth",
   "sepolia": {
@@ -7,9 +7,9 @@
     "ensRegistry": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
     "parentName": "ledger.eth",
     "parentOwner": "0x32FE11d9900D63350016374BE98ff37c3Af75847",
-    "resolverAddress": "0xcfF2f12F0600CDcf1cebed43efF0A2F9a98ef531",
-    "gatewayUrlTemplate": "https://9e04-124-123-105-119.ngrok-free.app/{sender}/{data}",
-    "resolverSigner": "0x3f37270ef375c20CD0b218B94454557005CfB248"
+    "resolverAddress": "0xd94cC429058E5495a57953c7896661542648E1B3",
+    "gatewayUrlTemplate": "https://resolver.fierypools.fun/{sender}/{data}",
+    "resolverSigner": "0x32FE11d9900D63350016374BE98ff37c3Af75847"
   },
   "galileo": {
     "chainId": 16602,
@@ -22,7 +22,11 @@
     "rpcEnv": "BASE_SEPOLIA_RPC",
     "defaultRpc": "https://sepolia.base.org",
     "erc8004ReputationRegistry": "0x8004B663056A597Dffe9eCcC1965A193B7388713",
-    "escrowAddress": "0x12D2162F47AAAe1B0591e898648605daA186D644"
+    "erc8004IdentityRegistry": "0x8004A818BFB912233c491871b3d84c89A494BD9e",
+    "escrowAddress": "0x12D2162F47AAAe1B0591e898648605daA186D644",
+    "demoAgentId": "5444",
+    "demoFeedbackCount": 47,
+    "demoAverageScore": 4.77
   },
   "namespaces": {
     "who": {
@@ -32,15 +36,35 @@
     "pay": {
       "pattern": "pay.worker-NNN.<parent>",
       "addr": "fresh HD-derived payment address per resolution",
-      "textRecords": ["ai.pay.address", "ai.pay.nonce", "ai.pay.path", "ai.pay.master", "ai.pay.scheme"]
+      "textRecords": [
+        "ai.pay.address",
+        "ai.pay.nonce",
+        "ai.pay.path",
+        "ai.pay.master",
+        "ai.pay.scheme"
+      ]
     },
     "tx": {
       "pattern": "tx.<txid>.worker-NNN.<parent>",
-      "textRecords": ["ai.tx.cid", "ai.tx.intent", "ai.tx.outcome", "ai.tx.chain", "ai.tx.amount", "ai.tx.receipt"]
+      "textRecords": [
+        "ai.tx.cid",
+        "ai.tx.intent",
+        "ai.tx.outcome",
+        "ai.tx.chain",
+        "ai.tx.amount",
+        "ai.tx.receipt"
+      ]
     },
     "rep": {
       "pattern": "rep.worker-NNN.<parent>",
-      "textRecords": ["ai.rep.count", "ai.rep.average", "ai.rep.tags", "ai.rep.registry", "ai.rep.agent", "ai.rep.summary"]
+      "textRecords": [
+        "ai.rep.count",
+        "ai.rep.average",
+        "ai.rep.tags",
+        "ai.rep.registry",
+        "ai.rep.agent",
+        "ai.rep.summary"
+      ]
     },
     "mem": {
       "pattern": "mem.worker-NNN.<parent>",

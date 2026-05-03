@@ -1,10 +1,14 @@
 import { Contract, HDNodeWallet, JsonRpcProvider, getAddress } from "ethers";
 import { parseLedgerName, type ParsedName } from "./dns.js";
-import type { ReputationSummary, ResolverConfig, TxReceiptRecord } from "./config.js";
+import type {
+  ReputationSummary,
+  ResolverConfig,
+  TxReceiptRecord,
+} from "./config.js";
 
 const WORKER_INFT_ABI = [
   "function ownerOf(uint256 tokenId) view returns (address)",
-  "function getMemoryPointer(uint256 tokenId) view returns (string)"
+  "function getMemoryPointer(uint256 tokenId) view returns (string)",
 ];
 
 const payCounters = new Map<string, bigint>();
@@ -22,7 +26,7 @@ export async function resolveName(
   name: string,
   kind: ResolutionKind,
   config: ResolverConfig,
-  textKey?: string
+  textKey?: string,
 ): Promise<string> {
   if (name.toLowerCase() === config.parentName && kind === "text") {
     return resolveParentText(textKey, config);
@@ -47,7 +51,10 @@ export async function resolveName(
   throw new Error(`Unsupported resolution kind ${kind}`);
 }
 
-function resolveParentText(key: string | undefined, config: ResolverConfig): string {
+function resolveParentText(
+  key: string | undefined,
+  config: ResolverConfig,
+): string {
   if (!key) return "";
   if (key === "agent-registration" || key.startsWith("agent-registration[")) {
     return config.agentRegistrationValue;
@@ -58,16 +65,25 @@ function resolveParentText(key: string | undefined, config: ResolverConfig): str
   return "";
 }
 
-export async function resolveWho(tokenId: bigint, config: ResolverConfig): Promise<string> {
+export async function resolveWho(
+  tokenId: bigint,
+  config: ResolverConfig,
+): Promise<string> {
   if (config.mockOwnerAddress) {
     return config.mockOwnerAddress;
   }
   if (!config.workerInftAddress) {
-    throw new Error("WORKER_INFT_ADDRESS is required for live who.* resolution");
+    throw new Error(
+      "WORKER_INFT_ADDRESS is required for live who.* resolution",
+    );
   }
 
   const provider = new JsonRpcProvider(config.ogRpcUrl, config.ogChainId);
-  const contract = new Contract(config.workerInftAddress, WORKER_INFT_ABI, provider);
+  const contract = new Contract(
+    config.workerInftAddress,
+    WORKER_INFT_ABI,
+    provider,
+  );
   const owner = (await contract.ownerOf(tokenId)) as string;
   return getAddress(owner);
 }
@@ -75,7 +91,7 @@ export async function resolveWho(tokenId: bigint, config: ResolverConfig): Promi
 export function resolvePay(
   workerLabel: string,
   tokenId: bigint,
-  config: ResolverConfig
+  config: ResolverConfig,
 ): PayResolution {
   const account = getPayAccount(config);
   const nonce = nextPayNonce(workerLabel);
@@ -87,7 +103,7 @@ export function resolvePay(
     address: child.address,
     nonce,
     path,
-    masterPubkey: account.neuter().extendedKey
+    masterPubkey: account.neuter().extendedKey,
   };
   lastPayResolutions.set(workerLabel, resolution);
   return resolution;
@@ -96,9 +112,11 @@ export function resolvePay(
 export async function resolveMemoryPointer(
   workerLabel: string,
   tokenId: bigint,
-  config: ResolverConfig
+  config: ResolverConfig,
 ): Promise<string> {
-  const configured = config.memoryPointers[workerLabel] ?? config.memoryPointers[tokenId.toString()];
+  const configured =
+    config.memoryPointers[workerLabel] ??
+    config.memoryPointers[tokenId.toString()];
   if (configured) {
     return configured;
   }
@@ -107,14 +125,18 @@ export async function resolveMemoryPointer(
   }
 
   const provider = new JsonRpcProvider(config.ogRpcUrl, config.ogChainId);
-  const contract = new Contract(config.workerInftAddress, WORKER_INFT_ABI, provider);
+  const contract = new Contract(
+    config.workerInftAddress,
+    WORKER_INFT_ABI,
+    provider,
+  );
   return (await contract.getMemoryPointer(tokenId)) as string;
 }
 
 async function resolveText(
   parsed: ParsedName,
   key: string | undefined,
-  config: ResolverConfig
+  config: ResolverConfig,
 ): Promise<string> {
   if (!key) return "";
 
@@ -134,13 +156,16 @@ async function resolveText(
   }
 
   if (parsed.namespace === "rep") {
-    return resolveRepText(key, resolveRepSummary(parsed.workerLabel, parsed.tokenId, config));
+    return resolveRepText(
+      key,
+      resolveRepSummary(parsed.workerLabel, parsed.tokenId, config),
+    );
   }
 
   if (parsed.namespace === "mem") {
     return resolveMemText(
       key,
-      await resolveMemoryPointer(parsed.workerLabel, parsed.tokenId, config)
+      await resolveMemoryPointer(parsed.workerLabel, parsed.tokenId, config),
     );
   }
 
@@ -157,7 +182,7 @@ function resolvePayText(
   key: string,
   workerLabel: string,
   tokenId: bigint,
-  config: ResolverConfig
+  config: ResolverConfig,
 ): string {
   if (key === "ai.pay.address") {
     return resolvePay(workerLabel, tokenId, config).address;
@@ -185,7 +210,10 @@ function getPayAccount(config: ResolverConfig): HDNodeWallet {
   return HDNodeWallet.fromPhrase(mnemonic, undefined, config.payMasterPath);
 }
 
-function resolveTxReceipt(txId: string, config: ResolverConfig): TxReceiptRecord {
+function resolveTxReceipt(
+  txId: string,
+  config: ResolverConfig,
+): TxReceiptRecord {
   return config.txReceipts[txId] ?? {};
 }
 
@@ -211,14 +239,14 @@ function resolveTxText(key: string, receipt: TxReceiptRecord): string {
 function resolveRepSummary(
   workerLabel: string,
   tokenId: bigint,
-  config: ResolverConfig
+  config: ResolverConfig,
 ): ReputationSummary {
   return (
     config.repSummaries[workerLabel] ??
     config.repSummaries[tokenId.toString()] ?? {
       registry: config.reputationRegistryAddress,
       agentId: tokenId.toString(),
-      summary: "pending live ERC-8004 getSummary/readFeedback data"
+      summary: "pending live ERC-8004 getSummary/readFeedback data",
     }
   );
 }

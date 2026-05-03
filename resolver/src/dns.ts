@@ -36,7 +36,10 @@ export function decodeDnsName(encodedName: string): string {
   return labels.join(".");
 }
 
-export function parseLedgerName(name: string, configuredParent: string): ParsedName {
+export function parseLedgerName(
+  name: string,
+  configuredParent: string,
+): ParsedName {
   const normalized = ensNormalize(name).toLowerCase();
   const parentName = ensNormalize(configuredParent).toLowerCase();
   const parentLabels = parentName.split(".");
@@ -65,7 +68,7 @@ export function parseLedgerName(name: string, configuredParent: string): ParsedN
       txId: relative[1],
       workerLabel: relative[2],
       tokenId: tokenIdFromWorker(relative[2]),
-      parentName
+      parentName,
     };
   }
 
@@ -77,7 +80,7 @@ export function parseLedgerName(name: string, configuredParent: string): ParsedN
     namespace,
     workerLabel: relative[1],
     tokenId: tokenIdFromWorker(relative[1]),
-    parentName
+    parentName,
   };
 }
 

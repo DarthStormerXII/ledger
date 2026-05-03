@@ -5,10 +5,13 @@ import { handleGatewayRequest } from "./ens.js";
 const CORS_HEADERS = {
   "access-control-allow-origin": "*",
   "access-control-allow-methods": "GET,POST,OPTIONS",
-  "access-control-allow-headers": "content-type"
+  "access-control-allow-headers": "content-type",
 };
 
-export async function handleHttp(req: IncomingMessage, res: ServerResponse): Promise<void> {
+export async function handleHttp(
+  req: IncomingMessage,
+  res: ServerResponse,
+): Promise<void> {
   if (req.method === "OPTIONS") {
     send(res, 204, "");
     return;
@@ -18,7 +21,7 @@ export async function handleHttp(req: IncomingMessage, res: ServerResponse): Pro
     sendJson(res, 200, {
       ok: true,
       service: "ledger-ens-resolver",
-      parentName: loadConfig().parentName
+      parentName: loadConfig().parentName,
     });
     return;
   }
@@ -29,7 +32,7 @@ export async function handleHttp(req: IncomingMessage, res: ServerResponse): Pro
     sendJson(res, 200, response);
   } catch (error) {
     sendJson(res, 500, {
-      error: error instanceof Error ? error.message : "Unknown resolver error"
+      error: error instanceof Error ? error.message : "Unknown resolver error",
     });
   }
 }
@@ -43,7 +46,9 @@ function readGet(req: IncomingMessage): { sender: string; callData: string } {
   return { sender, callData };
 }
 
-async function readPost(req: IncomingMessage): Promise<{ sender: string; callData: string }> {
+async function readPost(
+  req: IncomingMessage,
+): Promise<{ sender: string; callData: string }> {
   const chunks: Buffer[] = [];
   for await (const chunk of req) {
     chunks.push(Buffer.from(chunk));
@@ -59,7 +64,11 @@ async function readPost(req: IncomingMessage): Promise<{ sender: string; callDat
   return { sender: body.sender, callData: body.data ?? body.callData ?? "" };
 }
 
-function sendJson(res: ServerResponse, statusCode: number, body: unknown): void {
+function sendJson(
+  res: ServerResponse,
+  statusCode: number,
+  body: unknown,
+): void {
   send(res, statusCode, JSON.stringify(body), "application/json");
 }
 
@@ -67,11 +76,11 @@ function send(
   res: ServerResponse,
   statusCode: number,
   body: string,
-  contentType = "text/plain"
+  contentType = "text/plain",
 ): void {
   res.writeHead(statusCode, {
     ...CORS_HEADERS,
-    "content-type": contentType
+    "content-type": contentType,
   });
   res.end(body);
 }
