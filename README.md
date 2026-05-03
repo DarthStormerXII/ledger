@@ -56,7 +56,7 @@ Use the links below as the supporting implementation/proof fanout for each ETHGl
 
 - Track A framework runtime: [`agents/ledger-agent-kit/src/runtime.ts#L17`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/src/runtime.ts#L17) — `LedgerAgentRuntime` loads ownership, ENS capabilities, memory, reasoning, and AXL transport through swappable adapters.
 - Track A adapter layer: [`agents/ledger-agent-kit/src/adapters.ts#L30`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/src/adapters.ts#L30) — 0G Storage, 0G Compute, ENS, iNFT ownership, and AXL adapter factories.
-- Working example agent: [`agents/ledger-agent-kit/examples/research-worker-agent.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/examples/research-worker-agent.ts) — creates a real bid from the framework.
+- Working example agent: [`agents/ledger-agent-kit/examples/research-worker-agent.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/ledger-agent-kit/examples/research-worker-agent.ts) — creates a valid Ledger AXL `BID` payload after strict ENS/WorkerINFT consistency checks.
 - Worker iNFT transfer path: [`contracts/src/WorkerINFT.sol#L60`](https://github.com/DarthStormerXII/ledger-v1/blob/main/contracts/src/WorkerINFT.sol#L60) — ERC-7857-style transfer with sealed-key and proof arguments.
 - 0G Storage memory client: [`agents/0g-storage/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-storage/src/index.ts) — encrypted memory upload/download wrapper.
 - 0G Compute client: [`agents/0g-compute/src/index.ts`](https://github.com/DarthStormerXII/ledger-v1/blob/main/agents/0g-compute/src/index.ts) — sealed inference and attestation digest verification.
