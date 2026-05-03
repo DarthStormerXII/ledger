@@ -1,348 +1,451 @@
-# Ledger Demo Video — Remaining Screenplay
+# Ledger Demo Video - Remaining Screenplay
 
-Current cut: approximately 3:32 total.
+Updated: 2026-05-03.
 
-This file describes the remaining real app/demo footage that still needs to be recorded and inserted into the Remotion video. The opening, thesis section, sponsor proof section, and outro are already handled.
+Canonical production URL: `https://ledger-open-agents.vercel.app`
 
-## What Is Already Complete
+Current Remotion cut: approximately 3:31. The opening, thesis cards, sponsor proof grid, and outro are already handled. What remains is app footage for `0:29-2:55`.
 
-### 0:00-0:09 — Cinematic Open
+## Current Live Proof State
 
-Visual: `cinematic-open.mp4`
+Use the stable production surfaces, not a risky fresh live transaction take.
 
-Audio:
+- Demo worker: `worker-001.ledger.eth`
+- Demo task ID: `0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604`
+- WorkerINFT: `0xd4d74E089DD9A09FF768be95d732081bd542E498`
+- LedgerEscrow: `0x83dF0Ed0b4f3D1D057cB56494b8c7eE417265489`
+- LedgerIdentityRegistry: `0x9581490E530Da772Af332EBCe3f35D27d5e8377F`
+- MockTEEOracle: `0x306919805Eed1aD4772d92e18d00A1c132b07C19`
+- ENS resolver: `0xd94cC429058E5495a57953c7896661542648E1B3`
+- ERC-8004 ReputationRegistry: `0x8004B663056A597Dffe9eCcC1965A193B7388713`
 
-"AI agents now have wallets. They have identity. They have reputation. But they still do not have a marketplace."
+Do not show or mention any previous unverified escrow address.
 
-Status: Done.
+## Already Complete
 
-### 0:09-0:22 — Thesis Market Gap
+### 0:00-0:09 - Cinematic Open
 
-Visual:
+Visual: `video/public/cinematic-open.mp4`
 
-`thesis-background.mp4` starts at 0:09. Remotion adds the right-side black data panel with:
+Status: done.
+
+### 0:09-0:22 - Thesis Market Gap
+
+Visual: `video/public/thesis-background.mp4` plus Remotion right-side data panel:
 
 - `21,000+ agents`
 - `100M+ agent payments`
-- "But there are still zero places where these agents can really hire each other."
+- `But there are still zero places where these agents can really hire each other.`
 
-Status: Done.
+Status: done.
 
-### 0:22-0:28 — Ledger Thesis Card
+### 0:22-0:28 - Ledger Thesis Card
 
-Visual:
+Visual: Remotion product-unveil Ledger card.
 
-Remotion product-unveil Ledger card.
+Status: done.
 
-Audio:
+### 2:56-3:21 - Sponsor Proof Callouts
 
-"Ledger is the hiring hall for AI agents, and the workers themselves are the assets."
-
-Status: Done.
-
-### 2:56-3:21 — Sponsor Proof Callouts
-
-Visual:
-
-Remotion 2x2 sponsor proof grid:
+Visual: Remotion 2x2 sponsor proof grid:
 
 - 0G
 - ERC-7857 + ERC-8004
 - ENS
 - Gensyn AXL
 
-Status: Done.
+Status: done.
 
-### 3:21-3:31 — Closing
+### 3:21-3:31 - Closing
 
-Visual: `outro.mp4`
+Visual: `video/public/outro.mp4`
 
-Audio:
+Status: done.
 
-"This is Ledger. A market where AI workers can be hired, verified, transferred, and owned. Live on testnet today."
+## Recording Settings
 
-Status: Done.
+Record 16:9 full-screen browser footage, ideally 1920x1080 at 30 fps or higher.
 
-## What Still Needs To Be Recorded
+Before recording:
 
-### 0:29-0:41 — Worker Part 1: Buyer Posts Work
+- Hide browser bookmarks/sidebar.
+- Silence notifications.
+- Use the production URL above unless a local server is explicitly needed.
+- Keep the Ledger nav/logo visible when possible.
+- Use slow cursor movement. Hold the start and end frame of every clip for 1 second.
+- Do not open random external explorer tabs in the main recording. The in-app proof links are enough.
+- If text feels too small on your monitor, use browser zoom `90%` or `80%`, but keep it consistent across all clips.
 
-Goal:
+## Record These Clips Now
 
-Show Ledger as a labor market where agents hire agents.
+Record these as separate files so they can be placed cleanly in Remotion. Add 1-2 seconds of handle at the beginning and end of each clip.
 
-Screen recording:
+### Clip 01 - Market + Posted Task
 
-Start on the Ledger market/dashboard. Show a buyer agent creating or viewing a task. The task should feel concrete, for example "Reconcile invoice ledger" or "Verify payment records." Show budget, requirements, deadline, and required capabilities.
+Target slot: `0:29-0:41`
 
-Then show worker agents appearing as bidders. Ideally the screen shows multiple worker cards with names, skills, ratings, and bid amounts.
+Target recording length: 14-16 seconds.
 
-What must be visible:
+Start URL:
 
-- `Buyer Agent`
-- Task title
-- Budget/payment
-- Worker bidders
-- Bid status
+`https://ledger-open-agents.vercel.app/jobs`
 
-Pacing:
+Action:
 
-- Hold the task screen for 3-4 seconds.
-- Move to bidders for 5-6 seconds.
-- Do not click too fast.
+1. Start on `/jobs`.
+2. Hold the `Live jobs.` header for 2 seconds.
+3. Let the settled task card be readable: `SETTLED`, `PAYOUT 0.0005 0G`, `WINNING BID 0.0003 0G bid`, `BIDS 1`.
+4. Move cursor slowly to `Open auction`.
+5. Click into the task.
+6. Hold the auction header for 2 seconds.
 
-### 0:41-1:04 — Worker Part 2: Worker Is An Ownable Asset
+Must be visible:
 
-Goal:
+- `Live jobs.`
+- `Every row is an on-chain LedgerEscrow task on 0G Galileo`
+- `SETTLED`
+- payout and winning bid
+- `LedgerEscrow` link using `0x83dF...5489`
 
-Prove the worker is not just an app profile.
+Do not:
 
-Screen recording:
+- Use `/post` for this rushed final take unless you already have wallet/network ready. The existing settled task is the safer live proof.
 
-Open one worker detail page. Show the worker identity card first: name, owner wallet, token ID, and asset standard. Then scroll or switch to a proof/details area showing ERC-7857 iNFT, encrypted memory, 0G storage/memory reference, compute proof/TEE attestation, and transferability.
+Suggested filename:
 
-This section should feel like:
+`app-01-market-posted-task.mp4`
 
-"This worker has state, memory, proofs, and ownership."
+### Clip 02 - Worker Is The Ownable Asset
 
-What must be visible:
+Target slot: `0:41-1:04`
 
-- `ERC-7857 iNFT`
-- Token ID
-- Owner address
-- Encrypted memory / memory CID
-- Compute proof / attestation
-- 0G reference
+Target recording length: 25-27 seconds.
 
-Pacing:
+Start URL:
 
-- First 5 seconds: worker identity.
-- Next 8-10 seconds: memory/proof panel.
-- Final 5 seconds: ownership/transfer asset framing.
+`https://ledger-open-agents.vercel.app/agent/worker-001.ledger.eth`
 
-### 1:04-1:25 — Worker Part 3: Reputation Is Market Data
+Action:
 
-Goal:
+1. Start at the top of the worker page.
+2. Hold the settlement strip for 2 seconds: `0G ESCROW RELEASE`, `REPUTATION REGISTRY`, `0G STORAGE CID`.
+3. Hold the hero: `worker-001.ledger.eth`, `47 JOBS`, `4.77`, `0.0003 0G REALIZED`.
+4. Show the pills: `ERC-7857 · 0G iNFT DRAFT`, `0G GALILEO · 16602`, `ACTIVE`.
+5. Move down to the owner and capability tree.
+6. Hold `WHO.*`, `PAY.*`, `TX.*`, `REP.*`, `MEM.*`.
+7. End with `0G COMPUTE - TEE SHIM DISCLOSED` / `MockTEEOracle`.
 
-Show ERC-8004 reputation is used to choose the winning worker.
+Must be visible:
 
-Screen recording:
+- worker name
+- owner address `0x664122...600b`
+- `ERC-7857 · 0G iNFT DRAFT`
+- `0G GALILEO · 16602`
+- `MEM.*` with the `0g://...` memory pointer
+- `MockTEEOracle` disclosure
 
-Stay on the selected worker, or open a reputation tab. Show completed jobs, average rating, feedback records, and maybe signed/verifiable reputation entries. Then return to the bid list and show this worker being selected because it is qualified.
+Suggested filename:
 
-What must be visible:
+`app-02-worker-ownable-asset.mp4`
 
-- `47 completed jobs`
-- `4.7` or `4.77 rating`
-- Feedback records
-- Reputation standard / ERC-8004
-- Selected/winner state
+### Clip 03 - Reputation Becomes Market Data
 
-Pacing:
+Target slot: `1:04-1:25`
 
-Hold reputation stats long enough to read. Then show market selection. The important idea is that reputation is not decoration; it affects who wins work.
+Target recording length: 23-25 seconds.
 
-### 1:26-1:45 — ENS Capability Identity Part 1
+Start URL:
 
-Goal:
+`https://ledger-open-agents.vercel.app/agent/worker-001.ledger.eth`
 
-Show ENS as the stable name and capability interface.
+Action:
 
-Screen recording:
+1. Start on the worker hero or scroll directly to the stats grid.
+2. Hold `JOBS COMPLETED 47`, `AVG RATING 4.77`, `TOTAL REALIZED 0.0003`.
+3. Scroll gently to `REPUTATION HISTORY`.
+4. Hold the chart for 3 seconds.
+5. Scroll to `RECENT JOBS - LAST 10`.
+6. Hold the settled job row showing employer, realized `0.0003 0G`, and rating `4.77`.
+7. Optional last 3 seconds: cut or navigate to the task page and show `PAYOUT RECIPIENT worker-001.ledger.eth` with `47 jobs · 4.77`.
 
-Open a capability/ENS identity screen for `worker-001.ledger.eth`. The name should be large and obvious. Under it, show records or resolved fields.
+Must be visible:
 
-What must be visible:
+- `47`
+- `4.77`
+- `REPUTATION HISTORY`
+- `RECENT JOBS`
+- ERC-8004 is better shown in Clip 04/08, so do not over-scroll here.
+
+Suggested filename:
+
+`app-03-reputation-market-data.mp4`
+
+### Clip 04 - ENS Capability Identity
+
+Target slot: `1:26-1:45`
+
+Target recording length: 21-23 seconds.
+
+Start URL:
+
+`https://ledger-open-agents.vercel.app/agent/worker-001.ledger.eth`
+
+Action:
+
+1. Start with `worker-001.ledger.eth` visible.
+2. Move to the capability tree.
+3. Click `Verify` on `WHO.*`; hold the JSON resolution source.
+4. Click `Verify` on `PAY.*`; hold the two payment addresses.
+5. Click `Verify` on `REP.*`; hold `47 ERC-8004 RECORDS`.
+6. Click `Verify` on `MEM.*`; hold the `0g://...` memory CID.
+
+Must be visible:
 
 - `worker-001.ledger.eth`
-- Owner
-- Payment address
-- Current task
-- Reputation
-- Memory location
+- `WHO.*`, `PAY.*`, `TX.*`, `REP.*`, `MEM.*`
+- `CCIP-Read resolves live ownerOf(tokenId)`
+- `HD-derived receive address rotates by nonce`
+- `47 ERC-8004 RECORDS`
+- `WorkerINFT.getMetadata().memoryCID`
 
-Ideal screen structure:
+Suggested filename:
 
-- Left side: worker name and identity.
-- Right side: resolved capability recor
+`app-04-ens-capability-tree.mp4`
 
+### Clip 05 - Stable Name, Changing Answers
 
-ds.
-- Bottom or side: status showing these are live/resolved values.
+Target slot: `1:45-1:57.19`
 
-Pacing:
+Target recording length: 14-15 seconds.
 
-Do not scroll too much. This should look like a clean identity inspector. The judge should immediately understand that ENS is being used as a stable agent interface.
+Start URL:
 
-### 1:45-1:57.19 — ENS Capability Identity Part 2
+`https://ledger-open-agents.vercel.app/proof#ens`
 
-Goal:
+Action:
 
-Show the name stays stable while state changes.
+1. Start on the ENS section of `/proof`.
+2. Hold the ENS blurb if visible.
+3. Scroll or position so these rows are readable:
+   - `who.worker-001.ledger.eth`
+   - `pay.worker-001.ledger.eth (rotation 0)`
+   - `pay.worker-001.ledger.eth (rotation 1)`
+   - `rep.worker-001.ledger.eth`
+   - `mem.worker-001.ledger.eth`
+4. End on the line that says ownership flips without a new ENS transaction.
 
-Screen recording:
+Must be visible:
 
-Keep `worker-001.ledger.eth` visible. Change or refresh the resolved values: task changes, owner/payment/memory/reputation values update, or show before/after states. The name must remain fixed on screen.
+- same stable name: `worker-001.ledger.eth`
+- changing records: owner, payment, reputation, memory
+- `CCIP-Read` / no ENS transaction language
 
-What must be visible:
+Suggested filename:
 
-- Same ENS name
-- Changed underlying records
-- Transition toward labor market
+`app-05-ens-stable-changing.mp4`
 
-Pacing:
+### Clip 06 - One-Second Pause
 
-Use this as a bridge. Start calm, then move toward the task/bid flow. At the end, land on a market/task screen ready for the next section.
+Target slot: `1:57.19-1:58.19`
 
-### 1:57.19-1:58.19 — One-Second Pause
+No separate recording needed.
 
-Goal:
+Use a 1-second held frame from the end of Clip 05 or the beginning of Clip 07.
 
-Create a beat before the market mechanics.
+### Clip 07 - Market Mechanics + Gensyn AXL
 
-Visual requirement:
+Target slot: `1:58.19-2:16`
 
-Do not record a separate complex action. Either hold the previous screen, hold a clean market screen, or use a subtle Remotion transition.
+Target recording length: 20-22 seconds.
 
-Best option:
+Start URL:
 
-Hold on a task card or market overview with no fast movement.
+`https://ledger-open-agents.vercel.app/jobs/0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604`
 
-### 1:58.19-2:16 — Market Mechanics + Gensyn AXL
+Action:
 
-Goal:
+1. Start on the task page.
+2. Hold the top status: `SETTLED · PAID`, `Released 0.0003 0G`, task ID.
+3. Hold the `PAYOUT RECIPIENT` card showing `worker-001.ledger.eth`.
+4. Hold the `ON-CHAIN TRAIL` card showing `postTask`, `LedgerEscrow 0x83dF...5489`, and `ERC-8004 feedback registry`.
+5. Move down/right to the AXL topology.
+6. Hold `AXL TOPOLOGY`, the three-node graph, and the mesh log/captured proof state.
 
-Show the full labor-market loop.
+Must be visible:
 
-Screen recording:
+- `postTask`
+- `LedgerEscrow 0x83dF...5489`
+- `PAYOUT RECIPIENT worker-001.ledger.eth`
+- `47 jobs · 4.77`
+- `AXL TOPOLOGY`
+- `Fly sjc`, `Fly fra`, `NAT laptop`
 
-Start with a task going out. Show workers discovering it. Then show bids arriving. Then show a winner selected. If you have an AXL proof/log/topology screen, cut to it briefly or show it side-by-side.
+Suggested filename:
 
-What must be visible:
+`app-07-market-axl-mechanics.mp4`
 
-- Task broadcast
-- Workers discover
-- Worker bids
-- Winner chosen
-- Gensyn AXL message/log/mesh proof
+### Clip 08 - Transfer Begins
 
-Ideal sequence:
+Target slot: `2:16-2:21`
 
-1. Task card appears as "broadcasted."
-2. Worker list updates to "discovered."
-3. Bids appear with amounts/ratings.
-4. Best worker becomes "winner."
-5. AXL proof/log confirms job and bid messages moved peer to peer.
+Target recording length: 7-8 seconds.
 
-Pacing:
+Start URL:
 
-This is a mechanics section, so motion is useful, but keep it readable. Each state should hold for at least 2 seconds.
+`https://ledger-open-agents.vercel.app/proof#0g`
 
-### 2:16-2:21 — Inheritance Part 1: Transfer Begins
+Action:
 
-Goal:
+1. Start in the 0G section of `/proof`.
+2. Position around `Transfer tx (Owner_A -> Owner_B)`.
+3. Hold the transfer row and the caption about ownerOf flipping.
 
-Introduce ownership transfer.
+Must be visible:
 
-Screen recording:
+- `Transfer tx (Owner_A -> Owner_B)`
+- Owner_A `0x6B9a...`
+- Owner_B `0x6641...`
+- transfer tx hash
 
-Open the same worker asset page. Click or show transfer action. Show old owner and new owner.
+Suggested filename:
 
-What must be visible:
+`app-08-transfer-begins.mp4`
 
-- Worker name
-- Current owner
-- New owner
-- Transfer action
+### Clip 09 - Same Worker After Transfer
 
-Pacing:
+Target slot: `2:21-2:25`
 
-Short and direct. This is setup, not the whole explanation.
+Target recording length: 6-7 seconds.
 
-### 2:21-2:25 — Inheritance Part 2: Same Worker
+Start URL:
 
-Goal:
+`https://ledger-open-agents.vercel.app/agent/worker-001.ledger.eth`
 
-Prove transfer does not reset the worker.
+Action:
 
-Screen recording:
+1. Hold the hero page.
+2. Make sure `worker-001.ledger.eth`, `47 JOBS`, `4.77`, and owner `0x6641...600b` are visible.
 
-Show before/after comparison or same worker profile after transfer.
+Must be visible:
 
-What must be visible:
+- same worker name
+- same reputation
+- new owner
 
-- Same worker name
-- Same reputation
-- Same completed jobs
-- New owner
+Suggested filename:
 
-Pacing:
+`app-09-same-worker-new-owner.mp4`
 
-Hold a clean before/after visual. This should feel like continuity.
+### Clip 10 - ENS Owner Flip
 
-### 2:26-2:45 — Inheritance Part 3: ENS Owner Flip
+Target slot: `2:26-2:45`
 
-Goal:
+Target recording length: 21-23 seconds.
 
-Show ownership changes through ENS resolution.
+Start URL:
 
-Screen recording:
+`https://ledger-open-agents.vercel.app/proof#ens`
 
-Open ENS resolution panel for `who.worker-001.ledger.eth`. Show before owner wallet, then after transfer show new owner wallet. The key line in narration says no ENS transaction, so if the UI can show "resolved dynamically" or "CCIP-read/live resolver," include that.
+Action:
 
-What must be visible:
+1. Start on the ENS section.
+2. Hold `Resolver contract` and `Gateway URL` briefly if visible.
+3. Position on `who.worker-001.ledger.eth`.
+4. Hold the caption: `Reads ownerOf(1) on Galileo... Ownership flips without a new ENS transaction.`
+5. Move to `rep.worker-001.ledger.eth` and `mem.worker-001.ledger.eth`.
+6. End on `ledger.eth ENSIP-25 text record` if visible.
+
+Must be visible:
 
 - `who.worker-001.ledger.eth`
-- Old wallet
-- New wallet
-- No ENS transaction / dynamic resolution if available
+- current owner `0x664122...600b`
+- `Ownership flips without a new ENS transaction`
+- `rep.worker-001.ledger.eth`
+- `mem.worker-001.ledger.eth`
+- `ENSIP-25`
 
-Pacing:
+Suggested filename:
 
-This is the most technical part. Make it visually simple: name at top, old owner/new owner, resolved result.
+`app-10-ens-owner-flip.mp4`
 
-### 2:45-2:55 — Inheritance Part 4: Earnings Flow
+### Clip 11 - Earnings Flow To New Owner
+
+Target slot: `2:45-2:55`
+
+Target recording length: 12-13 seconds.
+
+Start URL:
+
+`https://ledger-open-agents.vercel.app/jobs/0x005ecb1bf6cd06a9d1c7240ab1365aebedbe8104d1b530a892fd0af228c1e604`
+
+Action:
+
+1. Start on the task receipt panel.
+2. Hold `PAYOUT RECIPIENT worker-001.ledger.eth`.
+3. Hold the new owner wallet `0x664122...600b`.
+4. Hold `RELEASED 0.0003 0G`.
+5. Hold the `LedgerEscrow 0x83dF...5489` and `ERC-8004 feedback registry` links.
+
+Must be visible:
+
+- payout recipient
+- released amount
+- current owner address
+- `LedgerEscrow 0x83dF...5489`
+- ERC-8004 feedback registry
+
+Suggested filename:
+
+`app-11-earnings-flow.mp4`
+
+## Optional Backup Clip
+
+Only record this if there is time and the above is complete.
+
+URL:
+
+`https://ledger-open-agents.vercel.app/pitch`
 
 Goal:
 
-Final product punchline before sponsor proof.
+Scroll to `How The Inheritance actually works.` and record the three explanatory steps:
 
-Screen recording:
+- `transferFrom on 0G Galileo with sealed-key re-keying`
+- `ENS resolution flips automatically via CCIP-Read`
+- `Earnings flip on the next payment`
 
-Show escrow/payment screen. A new job pays the worker. The escrow checks current owner and routes earnings to the new owner.
+Use this as fallback if the proof page feels too dense on video.
 
-What must be visible:
+Suggested filename:
 
-- Escrow
-- Payment amount
-- Current owner check
-- Earnings routed to new owner
+`app-12-pitch-inheritance-backup.mp4`
 
-Pacing:
+## Final Recording Order
 
-This should feel satisfying. Show the payment moving to the new owner and hold the final state for a second.
+Record in this order:
 
-## Overall Recording Rules
+1. `app-01-market-posted-task.mp4`
+2. `app-02-worker-ownable-asset.mp4`
+3. `app-03-reputation-market-data.mp4`
+4. `app-04-ens-capability-tree.mp4`
+5. `app-05-ens-stable-changing.mp4`
+6. `app-07-market-axl-mechanics.mp4`
+7. `app-08-transfer-begins.mp4`
+8. `app-09-same-worker-new-owner.mp4`
+9. `app-10-ens-owner-flip.mp4`
+10. `app-11-earnings-flow.mp4`
 
-Record clean 16:9 full-screen footage.
+Clip 06 is just a held frame. Do not record it separately.
 
-Avoid:
+## Quality Bar
 
-- Browser tabs
-- Dev tools
-- Notifications
-- Messy local URLs if possible
-- Fast cursor movement
-- Over-scrolling
+The footage is good if a judge can pause at any point and read one concrete proof:
 
-Prefer:
+- a live task or receipt
+- an iNFT owner
+- an ENS capability record
+- a reputation number
+- an AXL topology/proof row
+- an escrow payment to the new owner
 
-- Ledger branding visible in the app
-- Slow, deliberate cursor movement
-- Stable first and last frames for every clip
-- One clear idea per clip
-- Readable values, addresses, task titles, and proof labels
-
-The strongest visual story is:
-
-Task posted -> worker bids -> worker is an iNFT asset -> worker has reputation -> ENS gives stable identity -> AXL coordinates bids -> ownership transfers -> earnings follow the new owner.
+The footage is bad if it only shows fast scrolling, unreadable addresses, wallet connection setup, or generic marketing screens.

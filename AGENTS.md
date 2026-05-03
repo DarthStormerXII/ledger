@@ -1,13 +1,13 @@
 <claude-mem-context>
 # Memory Context
 
-# [ledger] recent context, 2026-05-03 8:49pm GMT+5:30
+# [ledger] recent context, 2026-05-03 8:53pm GMT+5:30
 
 Legend: 🎯session 🔴bugfix 🟣feature 🔄refactor ✅change 🔵discovery ⚖️decision
 Format: ID TIME TYPE TITLE
 Fetch details: get_observations([IDs]) | Search: mem-search skill
 
-Stats: 50 obs (20,659t read) | 2,163,495t work | 99% savings
+Stats: 50 obs (20,615t read) | 2,239,568t work | 99% savings
 
 ### May 2, 2026
 S638 Ledger Branding — Generate logo and all branding images (corrected to: write paste-ready prompts instead after user feedback about wasted Higgsfield credits) (May 2 at 7:47 PM)
@@ -21,16 +21,9 @@ S650 Ledger Integration Suite — Final Clean State Confirmed, 11/11 Repeatable 
 S662 Ledger — TEAM.md creation + dual-remote push setup for Vercel auto-deploy via CipherKuma/ledger (May 2 at 10:47 PM)
 ### May 3, 2026
 S663 Ledger Frontend — Env Var Audit for Vercel Deployment (May 3 at 12:29 PM)
-2909 8:02p 🔵 ETHGlobal Tech Stack — Databases and Design Fields Set to "None"
-2910 " 🔵 Ledger Demo Video Assets — Draft and Source Clips Present in video/
-2911 8:03p 🔵 ETHGlobal Submission Content Defined — Prize IDs, Proof URLs, and Descriptions Finalized
-2913 8:05p 🔵 SSH Heredoc Fix — Local cat Pipe Avoids zsh Glob Expansion on M2
-2915 8:06p 🟣 ETHGlobal Select Prizes Tab — All Three Prize Applications Filled and Confirmed
-2916 " 🔵 cmux Workspace Topology — Ledger Workspace Active on surface:49 with 5 Workspaces
 2917 8:08p 🔴 Marketplace Card UI Bugs Fixed — Double "0G" Unit and Misleading "0 EARNED" Label
 2918 " 🟣 New Contract Addresses Deployed and Vercel Env Vars Updated
 2919 " 🟣 Job Brief Architecture — 0G Storage Pin + Server-Side Cache Chosen; /api/jobs/brief Route Created
-2920 " 🟣 Ledger /register Page Shipped — 8-Step Agent Registration UI Live on Vercel
 2921 8:09p 🟣 All 0G Galileo Contracts Source-Verified and Addresses Propagated Across Full Codebase
 2922 " 🟣 /api/jobs/brief Route — Full Implementation with 0G Storage Pin, Categories, and In-Memory Cache
 2923 " 🔴 RegisterClient.tsx Lint Errors Fixed — Unused Imports and JSX Apostrophe Escaping
@@ -71,6 +64,13 @@ S663 Ledger Frontend — Env Var Audit for Vercel Deployment (May 3 at 12:29 PM)
 2968 8:48p 🔵 Ledger Repo — .vercel/output (26MB) Not in .gitignore, tools/dist/ Added
 2969 8:49p 🔴 SUBMISSION.md Heading Corruption — "The #" Prepended by Patch Application
 2970 " 🔵 Ledger Repo — .vercel/output Not Gitignored, contracts/verified Untracked
+2971 " 🟣 sync-state.mjs Enhanced with Sponsor Fanout Link Validation and Sync Marker Check
+2972 8:50p ✅ Ledger Pre-Commit — 28 Files Staged Clean, contracts/verified and LITE_SUBMISSION.md Added
+2973 8:51p ✅ Ledger — "chore: publish submission audit state" Committed and Pushed to Both Remotes
+2974 " 🔵 Ledger Submission Sync — Final State All Green After Push to cd03670
+2975 8:52p 🔵 playwright-cli-sessions PCS_REMOTE_UNREACHABLE Despite Chrome Running — Stale Attach State
+2977 8:53p ⚖️ Ledger Hackathon — ETHGlobal Open Agents 2026 Demo Video Script and Prize Target Assessment
+2978 " 🔵 Ledger Product Capabilities — Full Feature Map for Hackathon Submission
 
-Access 2163k tokens of past work via get_observations([IDs]) or mem-search skill.
+Access 2240k tokens of past work via get_observations([IDs]) or mem-search skill.
 </claude-mem-context>
