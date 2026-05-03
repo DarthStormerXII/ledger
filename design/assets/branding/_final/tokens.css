@@ -1,0 +1,217 @@
+/* Ledger — D1 Auction House — Design Tokens
+ *
+ * Single source of truth for the Ledger brand color, typography, and motion system.
+ * Drop into your stylesheet root or import from Tailwind config.
+ *
+ * Aesthetic: an auction house catalogue for AI agents.
+ * Marketing surfaces: paper-cream. Product UI: ink-deep. One brand, two surface modes.
+ */
+
+:root {
+  /* === COLOR: Light surfaces (marketing, README, OG, app onboarding) === */
+  --ledger-paper: #f5f1e8; /* primary page bg — catalogue paper */
+  --ledger-paper-warm: #eae4d5; /* zebra rows, secondary surfaces */
+  --ledger-paper-dim: #d9d2bf; /* hover, dividers */
+
+  /* === COLOR: Dark surfaces (product UI — auction room, capability tree, profile) === */
+  --ledger-ink-deep: #0a0a0e; /* product page bg */
+  --ledger-ink: #0f0f12; /* primary text on paper, surface fill on dark */
+  --ledger-ink-elevated: #18181e; /* cards, modals on dark */
+  --ledger-ink-soft: #2a2a30; /* secondary text on paper */
+  --ledger-ink-muted: #6e6e76; /* labels, captions, metadata */
+
+  /* === COLOR: Brand accents (use sparingly) === */
+  --ledger-oxblood: #9c2a2a; /* SOLD / active / primary buttons / live-bid indicator */
+  --ledger-oxblood-dim: #7a1f1f; /* hover, pressed */
+  --ledger-gold-leaf: #c8a85c; /* RECORD price, "premium" pill — max 2 per screen */
+  --ledger-gold-dim: #a88b40;
+
+  /* === COLOR: Semantic === */
+  --ledger-success: #4a6b3a; /* moss green — settled */
+  --ledger-warning: #b8843a; /* burnt amber — pending */
+  --ledger-danger: #8c2a2a; /* venous red — failed */
+
+  /* === TYPE: Families === */
+  --ledger-font-display:
+    "Fraunces", ui-serif, Georgia, "Times New Roman", serif;
+  --ledger-font-body:
+    "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --ledger-font-mono: "DM Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  /* === TYPE: Scale === */
+  --ledger-text-display-xl: 128px; /* hero "Ledger" / hero number */
+  --ledger-text-display-lg: 96px; /* worker name on profile */
+  --ledger-text-display-md: 64px; /* stat values */
+  --ledger-text-display-sm: 40px; /* card titles, modal headers */
+  --ledger-text-body-lg: 18px; /* prominent labels */
+  --ledger-text-body-md: 16px; /* default body — bumped from 14, catalogues breathe */
+  --ledger-text-body-sm: 13px; /* captions */
+  --ledger-text-mono-md: 14px; /* hashes */
+  --ledger-text-mono-sm: 12px; /* truncated hashes */
+  --ledger-text-caps-md: 11px; /* "LOT 047" labels */
+  --ledger-text-caps-sm: 10px; /* status pills */
+
+  /* === TYPE: Weights === */
+  --ledger-weight-regular: 400;
+  --ledger-weight-medium: 500;
+  --ledger-weight-semibold: 600;
+  --ledger-weight-bold: 700;
+  --ledger-weight-black: 900;
+
+  /* === TYPE: Tracking === */
+  --ledger-tracking-display-xl: -0.04em;
+  --ledger-tracking-display-lg: -0.03em;
+  --ledger-tracking-display-md: -0.02em;
+  --ledger-tracking-display-sm: -0.01em;
+  --ledger-tracking-caps-md: 0.12em;
+  --ledger-tracking-caps-sm: 0.14em;
+
+  /* === RADIUS === */
+  --ledger-radius-zero: 0px; /* default — catalogues have crisp edges */
+  --ledger-radius-md: 8px; /* modals — subtle hierarchy */
+  --ledger-radius-ios: 22%; /* app icon only */
+
+  /* === BORDER === */
+  --ledger-border-width: 1px;
+  --ledger-border-soft: rgba(15, 15, 18, 0.3); /* on paper */
+  --ledger-border-on-dark: rgba(245, 241, 232, 0.16); /* on ink */
+
+  /* === MOTION === */
+  --ledger-duration-fast: 250ms; /* default */
+  --ledger-duration-roll: 500ms; /* digit-roll for tickers */
+  --ledger-duration-hammer: 800ms; /* "hammer fall" — sale ceremony */
+  --ledger-duration-ceremony: 1800ms; /* iNFT transfer */
+  --ledger-easing-default: ease-out;
+
+  /* === GRID === */
+  --ledger-grid-columns: 12;
+  --ledger-grid-gutter-max: 80px;
+  --ledger-page-padding: 40px; /* catalogues breathe — bumped from 24 */
+}
+
+/* Global defaults — paper surfaces */
+body {
+  background: var(--ledger-paper);
+  color: var(--ledger-ink);
+  font-family: var(--ledger-font-body);
+  font-size: var(--ledger-text-body-md);
+  font-feature-settings: "tnum"; /* tabular figures by default */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark mode — product UI surfaces (apply at the layout level: <body class="ledger-dark"> or via media query) */
+.ledger-dark,
+body.ledger-dark {
+  background: var(--ledger-ink-deep);
+  color: var(--ledger-paper);
+}
+.ledger-dark .ledger-card {
+  border-color: var(--ledger-border-on-dark);
+}
+
+/* === DISPLAY-CLASS HELPERS === */
+
+/* Italic serif — the brand voice */
+.ledger-display,
+.ledger-money,
+.ledger-stat {
+  font-family: var(--ledger-font-display);
+  font-style: italic; /* ITALIC IS DEFAULT for display */
+  font-weight: var(--ledger-weight-black);
+  font-feature-settings: "tnum";
+  letter-spacing: var(--ledger-tracking-display-md);
+}
+
+.ledger-money-sold {
+  color: var(--ledger-oxblood);
+} /* realized sale price */
+.ledger-money-record {
+  color: var(--ledger-gold-leaf);
+} /* record-high — RARE */
+.ledger-money {
+  color: var(--ledger-ink);
+} /* default monetary value */
+
+.ledger-mono {
+  font-family: var(--ledger-font-mono);
+}
+
+.ledger-caps-md {
+  font-family: var(--ledger-font-body);
+  font-weight: var(--ledger-weight-medium);
+  font-size: var(--ledger-text-caps-md);
+  text-transform: uppercase;
+  letter-spacing: var(--ledger-tracking-caps-md);
+  color: var(--ledger-ink-muted);
+}
+
+.ledger-caps-sm {
+  font-family: var(--ledger-font-body);
+  font-weight: var(--ledger-weight-medium);
+  font-size: var(--ledger-text-caps-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--ledger-tracking-caps-sm);
+}
+
+/* Lot plate — the auction-house unit of identity */
+.ledger-lot-plate {
+  border: var(--ledger-border-width) solid var(--ledger-ink);
+  background: transparent;
+  border-radius: var(--ledger-radius-zero);
+  padding: 24px;
+  font-family: var(--ledger-font-body);
+}
+.ledger-lot-plate .lot-number {
+  font-size: var(--ledger-text-caps-md);
+  font-weight: var(--ledger-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--ledger-tracking-caps-md);
+  color: var(--ledger-ink);
+}
+.ledger-lot-plate .lot-title {
+  font-family: var(--ledger-font-display);
+  font-style: italic;
+  font-weight: var(--ledger-weight-black);
+  letter-spacing: var(--ledger-tracking-display-md);
+  color: var(--ledger-ink);
+}
+
+/* Rule line — the typographic divider, paired with the wordmark */
+.ledger-rule {
+  border: 0;
+  border-top: var(--ledger-border-width) solid var(--ledger-ink);
+  width: 100%;
+  margin: 0;
+}
+.ledger-rule-oxblood {
+  border-top-color: var(--ledger-oxblood);
+}
+
+/* Buttons */
+.ledger-btn-primary {
+  background: var(--ledger-oxblood);
+  color: var(--ledger-paper);
+  border: 0;
+  border-radius: var(--ledger-radius-zero);
+  padding: 12px 24px;
+  font-family: var(--ledger-font-body);
+  font-weight: var(--ledger-weight-medium);
+  font-size: var(--ledger-text-body-md);
+  cursor: pointer;
+  transition: background var(--ledger-duration-fast)
+    var(--ledger-easing-default);
+}
+.ledger-btn-primary:hover {
+  background: var(--ledger-oxblood-dim);
+}
+
+.ledger-btn-secondary {
+  background: transparent;
+  color: var(--ledger-oxblood);
+  border: var(--ledger-border-width) solid var(--ledger-oxblood);
+  border-radius: var(--ledger-radius-zero);
+  padding: 12px 24px;
+  font-family: var(--ledger-font-body);
+  font-weight: var(--ledger-weight-medium);
+}
