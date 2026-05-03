@@ -1,0 +1,74 @@
+{
+  "scenario": "04_worker_timeout_bond_slash",
+  "pass": true,
+  "reasons": [],
+  "durationMs": 49,
+  "artifacts": {
+    "taskId": "0x4ec963bf36aaf4d72282c7b409d619a94212b87c5501ac5c9309edb0026c09dd",
+    "slashTx": "0x7c9a01c300ab798933d8bb536e041aac165615112e4fbf92cfd96e34a520a7b4",
+    "finalStatus": "Slashed",
+    "buyerBalanceDelta": "100000",
+    "bondAmount": "100000",
+    "eventCounts": {
+      "BidReceived": 1,
+      "TaskPosted": 1,
+      "BidAccepted": 2,
+      "Slashed": 1
+    }
+  },
+  "events": [
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x4ec963bf36aaf4d72282c7b409d619a94212b87c5501ac5c9309edb0026c09dd",
+        "worker": "0x1111111111111111111111111111111111111111",
+        "workerINFTId": "1",
+        "workerPeerId": "wp-1",
+        "bidAmount": "900000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 47,
+          "avgRating": 4.800000000000004
+        },
+        "bidExpiresAt": 1777742293
+      },
+      "receivedAt": 1777742233
+    },
+    {
+      "type": "TaskPosted",
+      "task": {
+        "taskId": "0x4ec963bf36aaf4d72282c7b409d619a94212b87c5501ac5c9309edb0026c09dd",
+        "title": "Summarize the latest 0G changelog",
+        "description": "Return a 200-word executive summary suitable for an AI buyer.",
+        "outputSchema": "{ summary: string }",
+        "payment": "1000000",
+        "bondRequirement": "100000",
+        "deadlineSeconds": 300,
+        "minReputation": 4
+      },
+      "postedAt": 1777742233,
+      "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb"
+    },
+    {
+      "type": "BidAccepted",
+      "taskId": "0x4ec963bf36aaf4d72282c7b409d619a94212b87c5501ac5c9309edb0026c09dd",
+      "worker": "0x1111111111111111111111111111111111111111",
+      "bidAmount": "900000",
+      "acceptedAt": 1777742233
+    },
+    {
+      "type": "BidAccepted",
+      "taskId": "0x4ec963bf36aaf4d72282c7b409d619a94212b87c5501ac5c9309edb0026c09dd",
+      "worker": "0x1111111111111111111111111111111111111111",
+      "bidAmount": "900000",
+      "acceptedAt": 1777742233
+    },
+    {
+      "type": "Slashed",
+      "taskId": "0x4ec963bf36aaf4d72282c7b409d619a94212b87c5501ac5c9309edb0026c09dd",
+      "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb",
+      "bondAmount": "100000",
+      "slashedAt": 1777742233
+    }
+  ]
+}

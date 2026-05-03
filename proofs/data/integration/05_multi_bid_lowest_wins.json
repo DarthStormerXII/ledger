@@ -1,0 +1,99 @@
+{
+  "scenario": "05_multi_bid_lowest_wins",
+  "pass": true,
+  "reasons": [],
+  "durationMs": 19,
+  "artifacts": {
+    "taskId": "0x014dd68441ec0bcebaf6372d36f07a7216491f851de0c2ff83fc33bbe5a754f2",
+    "bids": [
+      {
+        "worker": "0x3333333333333333333333333333333333333333",
+        "bid": "450000"
+      },
+      {
+        "worker": "0x2222222222222222222222222222222222222222",
+        "bid": "460000"
+      },
+      {
+        "worker": "0x1111111111111111111111111111111111111111",
+        "bid": "480000"
+      }
+    ],
+    "winner": {
+      "worker": "0x3333333333333333333333333333333333333333",
+      "bid": "450000"
+    },
+    "eventCounts": {
+      "BidReceived": 3,
+      "TaskPosted": 1
+    }
+  },
+  "events": [
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x014dd68441ec0bcebaf6372d36f07a7216491f851de0c2ff83fc33bbe5a754f2",
+        "worker": "0x3333333333333333333333333333333333333333",
+        "workerINFTId": "3",
+        "workerPeerId": "wp-3",
+        "bidAmount": "450000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 20,
+          "avgRating": 4.5
+        },
+        "bidExpiresAt": 1777742293
+      },
+      "receivedAt": 1777742233
+    },
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x014dd68441ec0bcebaf6372d36f07a7216491f851de0c2ff83fc33bbe5a754f2",
+        "worker": "0x2222222222222222222222222222222222222222",
+        "workerINFTId": "2",
+        "workerPeerId": "wp-2",
+        "bidAmount": "460000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 30,
+          "avgRating": 4.599999999999997
+        },
+        "bidExpiresAt": 1777742293
+      },
+      "receivedAt": 1777742233
+    },
+    {
+      "type": "BidReceived",
+      "bid": {
+        "taskId": "0x014dd68441ec0bcebaf6372d36f07a7216491f851de0c2ff83fc33bbe5a754f2",
+        "worker": "0x1111111111111111111111111111111111111111",
+        "workerINFTId": "1",
+        "workerPeerId": "wp-1",
+        "bidAmount": "480000",
+        "estimatedCompletionSeconds": 30,
+        "reputation": {
+          "jobCount": 47,
+          "avgRating": 4.800000000000004
+        },
+        "bidExpiresAt": 1777742293
+      },
+      "receivedAt": 1777742233
+    },
+    {
+      "type": "TaskPosted",
+      "task": {
+        "taskId": "0x014dd68441ec0bcebaf6372d36f07a7216491f851de0c2ff83fc33bbe5a754f2",
+        "title": "Summarize the latest 0G changelog",
+        "description": "Return a 200-word executive summary suitable for an AI buyer.",
+        "outputSchema": "{ summary: string }",
+        "payment": "500000",
+        "bondRequirement": "50000",
+        "deadlineSeconds": 300,
+        "minReputation": 4
+      },
+      "postedAt": 1777742233,
+      "buyer": "0xbBBBbBBbbBbbBbBBBBBBBBbBBbBbbbbBBbbBBBbb"
+    }
+  ]
+}
