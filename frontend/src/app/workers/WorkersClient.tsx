@@ -122,15 +122,20 @@ export function WorkersClient({
 
   const lots = useMemo(() => {
     let list = [...all];
-    if (marketplaceOnly || filter === "listed")
-      list = list.filter((l) => l.listed);
-    else if (filter === "top") list.sort((a, b) => b.earnedNum - a.earnedNum);
+    // /marketplace renders ONLY real on-chain listings (liveListings map).
+    // The manifest's `listed` flag is no longer trusted as a marketplace
+    // surface — it's just metadata for a worker that's been advertised.
+    if (marketplaceOnly) {
+      list = list.filter((l) => liveListings[l.lot]?.active === true);
+    } else if (filter === "listed") {
+      list = list.filter((l) => liveListings[l.lot]?.active === true);
+    } else if (filter === "top") list.sort((a, b) => b.earnedNum - a.earnedNum);
     else if (filter === "recent")
       list.sort((a, b) => b.daysActive - a.daysActive);
     if (sort === "realized") list.sort((a, b) => b.earnedNum - a.earnedNum);
     if (sort === "rating") list.sort((a, b) => b.rating - a.rating);
     return list;
-  }, [all, filter, sort, marketplaceOnly]);
+  }, [all, filter, sort, marketplaceOnly, liveListings]);
 
   const title = marketplaceOnly ? "The marketplace." : "The catalogue.";
   const meta = marketplaceOnly

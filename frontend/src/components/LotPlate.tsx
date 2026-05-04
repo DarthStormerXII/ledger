@@ -61,7 +61,7 @@ export function LotPlate({
       >
         <span className="lot-num">LOT {lot.lot}</span>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          {onChainListed ? (
+          {onChainListed && (
             <span
               className="caps-sm"
               style={{ color: "var(--ledger-success)" }}
@@ -69,15 +69,7 @@ export function LotPlate({
             >
               ● ON-CHAIN
             </span>
-          ) : lot.listed ? (
-            <span
-              className="caps-sm"
-              style={{ color: "var(--ledger-oxblood)" }}
-              title="Demo listing — not yet posted to the marketplace contract"
-            >
-              ○ DEMO LISTING
-            </span>
-          ) : null}
+          )}
           <InspectPill onClick={() => setInspectOpen(true)} />
         </div>
       </div>
@@ -90,7 +82,7 @@ export function LotPlate({
         {lot.jobs} JOBS · {lot.rating} ★ ·{" "}
         {lot.earnedNum > 0 ? <>{lot.earned} 0G EARNED</> : <>ERC-8004 SEEDED</>}
       </div>
-      {showPrice && (lot.listed || onChainListed) && displayPrice && (
+      {showPrice && onChainListed && displayPrice && (
         <div
           style={{
             display: "flex",
@@ -107,8 +99,8 @@ export function LotPlate({
         </div>
       )}
 
-      {/* Marketplace inline actions — only on /marketplace surface */}
-      {marketplace && (lot.listed || onChainListed) && (
+      {/* Marketplace inline actions — only when there's a real on-chain listing */}
+      {marketplace && onChainListed && (
         <div className="lot-marketplace-actions" onClick={stop}>
           <button
             className="lot-buy-btn"
