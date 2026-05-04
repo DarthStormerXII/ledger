@@ -23,7 +23,10 @@ export default async function MarketplacePage() {
     }
   > = {};
   for (const [tid, l] of liveListings.entries()) {
-    listingsRecord[tid] = {
+    // Key by the same `lot` string that LotPlate uses (zero-padded "006")
+    // — this is what WorkersClient's filter looks up.
+    const lotKey = String(Number(tid)).padStart(3, "0");
+    listingsRecord[lotKey] = {
       seller: l.seller,
       askPriceWei: l.askPriceWei.toString(),
       askPriceFormatted: l.askPriceFormatted,
