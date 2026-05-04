@@ -23,7 +23,7 @@ export const LEDGER_IDENTITY_REGISTRY_ADDRESS: Address =
 // Deployed 2026-05-04 in tx 0x8b69c94e5bafd60fa26cb23d87f2ef2f730af38653b4b7cc3cecb97226e947ab
 export const LEDGER_MARKETPLACE_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_LEDGER_MARKETPLACE_ADDRESS as Address | undefined) ??
-  "0xa96aAaED5e545C5412545208Fc3c1a278b63fF87";
+  "0xA96aaaEd5e545c5412545208Fc3c1A278B63ff87";
 
 // The TEE proof string the MockTEEOracle accepts. Frontend uses it when
 // constructing `list()` calls so the marketplace can call WorkerINFT.transfer
