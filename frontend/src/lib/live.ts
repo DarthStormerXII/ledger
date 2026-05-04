@@ -63,6 +63,14 @@ const AVATAR_BY_TOKEN_ID: Record<string, string> = {
   "4": "/assets/avatars/ledger_lot_050.png",
   "5": "/assets/avatars/ledger_lot_050.png",
   "6": "/assets/avatars/ledger_lot_047.png",
+  "7": "/assets/avatars/ledger_lot_048.png",
+  "8": "/assets/avatars/ledger_lot_049.png",
+  "9": "/assets/avatars/ledger_lot_050.png",
+  "10": "/assets/avatars/ledger_lot_047.png",
+  "11": "/assets/avatars/ledger_lot_048.png",
+  "12": "/assets/avatars/ledger_lot_049.png",
+  "13": "/assets/avatars/ledger_lot_050.png",
+  "14": "/assets/avatars/ledger_lot_047.png",
 };
 
 function avatarForTokenId(tokenId: bigint): string {

@@ -2,13 +2,12 @@ import type { Address } from "viem";
 
 /* === Live deployed contracts (live testnet stack) === */
 
-// Canonical WorkerINFT for the live demo. Bound to the deployed resolver
-// (run-resolver.sh) and the LedgerMarketplace (constructor-bound). The
-// older 0xd4d74E0…E498 deployment is a mirror but isn't where new mints
-// land (worker-006+) — we treat 0x48B0…ad62 as the source of truth.
+// Canonical WorkerINFT — wired to the deployed escrow, the worker-001
+// auction lifecycle on M2 launchd, and the upstream Privy/watchdog config.
+// All new mints (workers 6-14, the marketplace listing batch) land here.
 export const WORKER_INFT_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_WORKER_INFT_ADDRESS as Address | undefined) ??
-  "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62";
+  "0xd4d74E089DD9A09FF768be95d732081bd542E498";
 
 export const LEDGER_ESCROW_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_LEDGER_ESCROW_ADDRESS as Address | undefined) ??
@@ -23,7 +22,7 @@ export const LEDGER_IDENTITY_REGISTRY_ADDRESS: Address =
 // Deployed 2026-05-04 in tx 0x8b69c94e5bafd60fa26cb23d87f2ef2f730af38653b4b7cc3cecb97226e947ab
 export const LEDGER_MARKETPLACE_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_LEDGER_MARKETPLACE_ADDRESS as Address | undefined) ??
-  "0xA96aaaEd5e545c5412545208Fc3c1A278B63ff87";
+  "0x939168D3131C549D6Cbc473d233851EAC5f42790";
 
 // The TEE proof string the MockTEEOracle accepts. Frontend uses it when
 // constructing `list()` calls so the marketplace can call WorkerINFT.transfer

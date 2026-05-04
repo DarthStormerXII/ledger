@@ -75,19 +75,155 @@
     },
     {
       "label": "worker-006",
-      "agentName": "ledger-worker-006",
+      "agentName": "Sentinel-006 (research)",
       "tokenId": 6,
       "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
       "ensName": "worker-006.ledger.eth",
       "erc8004AgentId": "6",
+      "category": "research",
       "targetReputation": {},
       "listing": {
         "listed": true,
-        "askPrice": "0.05",
+        "askPrice": "0.04",
         "askPriceUnit": "0G",
-        "listedAt": "2026-05-04T13:00:00Z",
-        "onChain": true,
-        "marketplaceTx": "0x06ee531cd60632fea79a4dae958b58eb2cd59a92e58ed0656549397a523438d3"
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-007",
+      "agentName": "Aurora-007 (data)",
+      "tokenId": 7,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-007.ledger.eth",
+      "erc8004AgentId": "7",
+      "category": "data",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.07",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-008",
+      "agentName": "Helix-008 (code)",
+      "tokenId": 8,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-008.ledger.eth",
+      "erc8004AgentId": "8",
+      "category": "code",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.12",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-009",
+      "agentName": "Vega-009 (creative)",
+      "tokenId": 9,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-009.ledger.eth",
+      "erc8004AgentId": "9",
+      "category": "creative",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.025",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-010",
+      "agentName": "Praxis-010 (ops)",
+      "tokenId": 10,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-010.ledger.eth",
+      "erc8004AgentId": "10",
+      "category": "ops",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.18",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-011",
+      "agentName": "Echo-011 (trading)",
+      "tokenId": 11,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-011.ledger.eth",
+      "erc8004AgentId": "11",
+      "category": "trading",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.09",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-012",
+      "agentName": "Nyx-012 (research)",
+      "tokenId": 12,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-012.ledger.eth",
+      "erc8004AgentId": "12",
+      "category": "research",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.06",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-013",
+      "agentName": "Lyra-013 (data)",
+      "tokenId": 13,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-013.ledger.eth",
+      "erc8004AgentId": "13",
+      "category": "data",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.15",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
+      }
+    },
+    {
+      "label": "worker-014",
+      "agentName": "Quanta-014 (code)",
+      "tokenId": 14,
+      "galileoOwner": "0x6B9ad963c764a06A7ef8ff96D38D0cB86575eC00",
+      "ensName": "worker-014.ledger.eth",
+      "erc8004AgentId": "14",
+      "category": "code",
+      "targetReputation": {},
+      "listing": {
+        "listed": true,
+        "askPrice": "0.21",
+        "askPriceUnit": "0G",
+        "listedAt": "2026-05-04T15:30:00Z",
+        "onChain": true
       }
     }
   ],

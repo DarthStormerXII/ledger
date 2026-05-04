@@ -38,6 +38,46 @@ export function WorkerProfileClient({
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  // Live marketplace listing for this worker — drives the "Buy now" CTA so
+  // it disappears the moment the iNFT is bought (instead of trusting the
+  // stale manifest flag).
+  const [liveListing, setLiveListing] = useState<{
+    seller: string;
+    askPriceFormatted: string;
+    active: boolean;
+  } | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const { LEDGER_MARKETPLACE_ADDRESS, LEDGER_MARKETPLACE_ABI } =
+          await import("@/lib/contracts");
+        const { galileoClient } = await import("@/lib/clients");
+        const { formatEther } = await import("viem");
+        const r = (await galileoClient.readContract({
+          address: LEDGER_MARKETPLACE_ADDRESS,
+          abi: LEDGER_MARKETPLACE_ABI,
+          functionName: "getListing",
+          args: [BigInt(liveProof.tokenId)],
+        })) as readonly [`0x${string}`, bigint, bigint, boolean];
+        if (cancelled) return;
+        setLiveListing({
+          seller: r[0],
+          askPriceFormatted: formatEther(r[1]),
+          active: r[3],
+        });
+      } catch {
+        /* best-effort */
+      }
+    };
+    load();
+    const id = window.setInterval(load, 6000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(id);
+    };
+  }, [liveProof.tokenId]);
+
   // Fetch briefs once on mount + every 8s. Used to enrich recent-jobs rows
   // with the actual pinned title in place of "(no title pinned)".
   const [briefs, setBriefs] = useState<BriefMap>(new Map());
@@ -164,16 +204,16 @@ export function WorkerProfileClient({
           >
             {liveOwner ?? liveProof.owner}
           </div>
-          {lot.listed && (
+          {liveListing?.active && (
             <>
               <div className="caps-md muted" style={{ marginBottom: 6 }}>
-                LISTED FOR SALE
+                LISTED FOR SALE · ON-CHAIN
               </div>
               <div
                 className="italic-num text-oxblood"
                 style={{ fontSize: 32, marginBottom: 18 }}
               >
-                {lot.askPrice} 0G
+                {liveListing.askPriceFormatted} 0G
               </div>
               <button
                 className="btn btn-tall btn-italic"
