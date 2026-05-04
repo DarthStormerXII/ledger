@@ -503,8 +503,13 @@ export async function getAllLots(): Promise<LiveLot[]> {
         earned: earnedNum.toFixed(4),
         avatar: avatarForTokenId(tokenId),
       });
-    } catch {
-      // skip token if any read fails
+    } catch (err) {
+      // Loud failure rather than silent skip — silent swallow hid an
+      // earlier bug where worker-006 was dropped because of a stale
+      // `WORKERS` lookup. Log + keep going so the rest of the page works.
+      console.warn(
+        `[getAllLots] skipped token ${tokenId}: ${(err as Error).message ?? err}`,
+      );
     }
   }
   return lots;

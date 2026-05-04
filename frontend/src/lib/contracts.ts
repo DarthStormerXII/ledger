@@ -2,9 +2,13 @@ import type { Address } from "viem";
 
 /* === Live deployed contracts (live testnet stack) === */
 
+// Canonical WorkerINFT for the live demo. Bound to the deployed resolver
+// (run-resolver.sh) and the LedgerMarketplace (constructor-bound). The
+// older 0xd4d74E0…E498 deployment is a mirror but isn't where new mints
+// land (worker-006+) — we treat 0x48B0…ad62 as the source of truth.
 export const WORKER_INFT_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_WORKER_INFT_ADDRESS as Address | undefined) ??
-  "0xd4d74E089DD9A09FF768be95d732081bd542E498";
+  "0x48B051F3e565E394ED8522ac453d87b3Fa40ad62";
 
 export const LEDGER_ESCROW_ADDRESS: Address =
   (process.env.NEXT_PUBLIC_LEDGER_ESCROW_ADDRESS as Address | undefined) ??
